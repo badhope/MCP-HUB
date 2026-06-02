@@ -289,8 +289,15 @@ stats = {
     "total_servers": market_config.get("total_servers", len(servers_list)),
     "total_categories": market_config.get("total_categories", 21),
     "last_sync": market_config.get("last_sync", "2026-05-31"),
-    "source_types": dict(source_types_count),
+    # Source-types breakdown is only meaningful for the curated sample;
+    # the full 4403-server registry does not have a verified official/community
+    # split. We surface the sample counts with a `sample_size` hint so the UI
+    # can render them honestly.
+    "sample_source_types": dict(source_types_count),
+    "sample_size": len(servers_list),
+    # Full-registry category counts (per-category server counts from market-config).
     "categories": market_config.get("categories", {}),
+    "features": market_config.get("features", []),
 }
 write_json(OUT_DIR / "stats.json", stats)
 

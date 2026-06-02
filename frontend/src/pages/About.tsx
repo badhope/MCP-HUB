@@ -38,7 +38,7 @@ const About = React.memo(() => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {[
-              { icon: Server, title: '4,400+ Servers', desc: 'Comprehensive collection of MCP servers from around the world' },
+              { icon: Server, title: '4,403+ Servers', desc: 'Comprehensive collection of MCP servers from around the world' },
               { icon: Star, title: 'Quality Scores', desc: 'Multi-dimensional quality scoring to help you find the best servers' },
               { icon: Users, title: 'Community Driven', desc: 'Open source and community-contributed server submissions' },
             ].map((item, i) => {

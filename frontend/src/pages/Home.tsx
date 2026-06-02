@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Github, Code2, Zap, BookOpen } from 'lucide-react';
+import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Github, Code2, Zap, BookOpen, Info } from 'lucide-react';
 import { useServers } from '../hooks/useServers';
+import { useStats } from '../hooks/useStats';
 import { ServerCard } from '../components/server/ServerCard';
 
 const CompanyLogos: React.FC = () => {
@@ -37,6 +38,7 @@ const CompanyLogos: React.FC = () => {
 
 const Home = React.memo(() => {
   const { data: serverData, isLoading } = useServers();
+  const { data: stats } = useStats();
 
   const servers = useMemo(() => serverData?.servers || [], [serverData?.servers]);
 
@@ -52,10 +54,20 @@ const Home = React.memo(() => {
       .slice(0, 4);
   }, [servers]);
 
-  const totalServers = serverData?.total || servers.length;
-  const officialCount = servers.filter((s) => s.source_type === 'official').length;
-  const categoryCount = new Set(servers.flatMap((s) => s.categories)).size;
-  const companyCount = new Set(servers.map((s) => s.owner)).size;
+  // Prefer the canonical totals from /stats over a recomputation against the
+  // 50-server sample. The catalog is wider than what the demo surfaces, so
+  // "5 official" derived from the sample would be misleading next to the
+  // 4,403 registry total.
+  const totalServers = stats?.total_servers || serverData?.total || 0;
+  const totalCategories = stats?.total_categories || 0;
+  const sampleSourceTypes = stats?.sample_source_types;
+  const sampleSize = stats?.sample_size || 0;
+  const curatedOfficial = sampleSourceTypes?.official || 0;
+  // Companies shown: from the curated sample (only the demo can show this).
+  const companyCount = useMemo(
+    () => new Set(servers.map((s) => s.owner)).size,
+    [servers]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -107,9 +119,9 @@ const Home = React.memo(() => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { icon: Database, label: 'Total Servers', value: totalServers.toLocaleString(), color: 'from-primary-500 to-violet-500' },
-            { icon: Shield, label: 'Official', value: `${officialCount}`, color: 'from-emerald-500 to-teal-500' },
-            { icon: Code2, label: 'Categories', value: `${categoryCount}`, color: 'from-blue-500 to-cyan-500' },
-            { icon: Building2, label: 'Companies', value: `${companyCount}`, color: 'from-amber-500 to-orange-500' },
+            { icon: Shield, label: 'Official (curated)', value: `${curatedOfficial}/${sampleSize || servers.length}`, color: 'from-emerald-500 to-teal-500' },
+            { icon: Code2, label: 'Categories', value: totalCategories.toLocaleString(), color: 'from-blue-500 to-cyan-500' },
+            { icon: Building2, label: 'Companies (curated)', value: `${companyCount}`, color: 'from-amber-500 to-orange-500' },
           ].map((stat, i) => {
             const Icon = stat.icon;
             return (
@@ -125,6 +137,14 @@ const Home = React.memo(() => {
             );
           })}
         </div>
+        {sampleSize > 0 && totalServers > sampleSize && (
+          <p className="mt-3 text-xs text-gray-500 flex items-center gap-1.5">
+            <Info size={12} className="text-gray-400" />
+            Star counts and per-server metadata below reflect the {sampleSize}-server curated
+            sample. The wider {totalServers.toLocaleString()}-server registry is indexed
+            at the <Link to="/servers" className="text-primary-600 hover:underline">full list</Link>.
+          </p>
+        )}
       </section>
 
       <section className="container mx-auto px-4 mt-12">

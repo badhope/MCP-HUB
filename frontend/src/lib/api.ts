@@ -155,10 +155,6 @@ class ApiClient {
     return response.json();
   }
 
-  async getHealth() {
-    return this.request<{ status: string; name: string; version: string }>('/');
-  }
-
   async getStats(): Promise<StatsResponse> {
     return this.requestWithFallback('/stats', () => fetchStaticJson<StatsResponse>('stats.json'));
   }

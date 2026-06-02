@@ -51,6 +51,11 @@ export interface StatsResponse {
   total_servers: number;
   total_categories: number;
   last_sync: string;
-  source_types: Record<string, number>;
+  // Curated-sample source-types breakdown. The full registry does not have a
+  // verified official/community split, so we surface this only for the
+  // sample subset and annotate with sample_size.
+  sample_source_types?: Record<string, number>;
+  sample_size?: number;
   categories: Record<string, number>;
+  features?: string[];
 }

@@ -2,10 +2,11 @@
   "total_servers": 4403,
   "total_categories": 21,
   "last_sync": "2026-05-31",
-  "source_types": {
+  "sample_source_types": {
     "community": 45,
     "official": 5
   },
+  "sample_size": 50,
   "categories": {
     "ai-llm": 4392,
     "development": 3194,
@@ -28,5 +29,16 @@
     "map-geo": 139,
     "bio-medical": 116,
     "music-audio": 107
-  }
+  },
+  "features": [
+    "REST API (api.py)",
+    "Query interface (query.py)",
+    "CLI tool (market.py)",
+    "Bilingual README",
+    "Auto sync from awesome-mcp",
+    "Star ratings",
+    "Source tracing (100%)",
+    "English categories",
+    "Enhanced category inference"
+  ]
 }

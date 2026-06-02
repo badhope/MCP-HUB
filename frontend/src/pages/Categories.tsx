@@ -1,34 +1,43 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Database, AlertCircle, Code } from 'lucide-react';
+import { Database, AlertCircle, Code, Info } from 'lucide-react';
 import { useServers } from '../hooks/useServers';
+import { useStats } from '../hooks/useStats';
 
 const Categories = React.memo(() => {
   const { data: serverData, isLoading, error } = useServers();
-  const [localLoading, setLocalLoading] = useState(true);
+  const { data: stats } = useStats();
+
   const servers = useMemo(() => serverData?.servers || [], [serverData?.servers]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setLocalLoading(false);
-    }
-  }, [isLoading]);
-
-  const categories = useMemo(() => {
-    const catMap = new Map<string, number>();
+  const categoryStats = useMemo(() => {
+    const counts = new Map<string, number>();
     servers.forEach((server) => {
-      server.categories.forEach((cat) => {
-        catMap.set(cat, (catMap.get(cat) || 0) + 1);
+      (server.categories || []).forEach((cat) => {
+        counts.set(cat, (counts.get(cat) || 0) + 1);
       });
     });
-    return Array.from(catMap.entries())
-      .sort((a, b) => b[1] - a[1]);
-  }, [servers]);
+    // Merge with the full-registry category list (from /stats) so the page
+    // can show all 21 categories even though only 17 of them have at least
+    // one curated server in the sample. The bar visual compares against the
+    // full count to keep proportions honest.
+    const registry = stats?.categories || {};
+    const merged = new Map<string, { name: string; curated: number; total: number }>();
+    for (const [name, total] of Object.entries(registry)) {
+      merged.set(name, { name, curated: counts.get(name) || 0, total: Number(total) || 0 });
+    }
+    // Include any sample-only categories not in the registry (shouldn't happen,
+    // but keep the page safe if the data drifts).
+    for (const [name, curated] of counts.entries()) {
+      if (!merged.has(name)) {
+        merged.set(name, { name, curated, total: curated });
+      }
+    }
+    return Array.from(merged.values()).sort((a, b) => b.total - a.total);
+  }, [servers, stats]);
 
-  const loading = isLoading || localLoading;
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <Helmet>
@@ -58,7 +67,7 @@ const Categories = React.memo(() => {
     );
   }
 
-  if (error && categories.length === 0) {
+  if (error && categoryStats.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <Helmet>
@@ -79,7 +88,7 @@ const Categories = React.memo(() => {
     );
   }
 
-  if (categories.length === 0) {
+  if (categoryStats.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <Helmet>
@@ -103,6 +112,9 @@ const Categories = React.memo(() => {
     );
   }
 
+  const maxCount = Math.max(...categoryStats.map((c) => c.total), 1);
+  const sampleSize = stats?.sample_size || 0;
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <Helmet>
@@ -115,24 +127,38 @@ const Categories = React.memo(() => {
             <Database size={32} className="text-primary-600" />
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Browse Categories</h1>
           </div>
-          <p className="text-gray-600">Explore {categories.length} categories of MCP servers</p>
+          <p className="text-gray-600">
+            Explore {categoryStats.length} categories of MCP servers
+            {sampleSize > 0 && (
+              <span className="text-gray-400">
+                {' '}
+                · {servers.length} curated in this demo
+              </span>
+            )}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {categories.map(([category, count], index) => (
+          {categoryStats.map((cat, index) => (
             <Link
-              key={category}
-              to={`/servers?category=${encodeURIComponent(category)}`}
+              key={cat.name}
+              to={`/servers?category=${encodeURIComponent(cat.name)}`}
               className="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-primary-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 card-border"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-semibold text-slate-900 group-hover:text-primary-600 transition-colors text-base">
-                    {category}
+                    {cat.name}
                   </h3>
                   <p className="text-sm text-slate-500 mt-1">
-                    {count} server{count !== 1 ? 's' : ''}
+                    {cat.total.toLocaleString()} server{cat.total !== 1 ? 's' : ''}
+                    {sampleSize > 0 && cat.curated > 0 && cat.curated < cat.total && (
+                      <span className="text-slate-400">
+                        {' '}
+                        · {cat.curated} curated
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-accent-100 flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
@@ -142,12 +168,19 @@ const Categories = React.memo(() => {
               <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-300"
-                  style={{ width: `${Math.min((count / (categories[0]?.[1] ?? 1)) * 100, 100)}%` }}
+                  style={{ width: `${Math.min((cat.total / maxCount) * 100, 100)}%` }}
                 />
               </div>
             </Link>
           ))}
         </div>
+        {sampleSize > 0 && (
+          <p className="mt-6 text-xs text-gray-500 flex items-center gap-1.5">
+            <Info size={12} className="text-gray-400" />
+            Bar widths are proportional to the full {stats?.total_servers.toLocaleString()}-server registry
+            count, not the curated sample.
+          </p>
+        )}
       </div>
     </div>
   );
