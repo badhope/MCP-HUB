@@ -181,18 +181,24 @@ Point your agent's tool-search step at the live API and stop maintaining your ow
 
 ## 📚 Documentation
 
-| Doc | Purpose |
-|---|---|
-| [README.md](README.md) | This file |
-| [README_CN.md](README_CN.md) | 中文文档 |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards |
-| [SECURITY.md](SECURITY.md) | Security policy & threat model |
-| [SUPPORT.md](SUPPORT.md) | Where to get help |
-| [CHANGELOG.md](CHANGELOG.md) | Release history |
-| [AGENTS.md](AGENTS.md) | Conventions for AI coding agents |
-| [docs/API.md](docs/API.md) | Full REST API reference |
-| [docs/QUICKSTART.md](docs/QUICKSTART.md) | 5-minute local setup |
+| Doc | Purpose | Language |
+|---|---|---|
+| [README.md](README.md) | This file — overview, features, quick start | 🇬🇧 English |
+| [README_CN.md](README_CN.md) | 中文文档 · 总览、特性、快速上手 | 🇨🇳 中文 |
+| [docs/USER_GUIDE.md](docs/USER_GUIDE.md) | **Complete user guide** — 5 real workflows (install / discover / agent-consume / submit / self-host), CLI tools, troubleshooting, FAQ | 🇬🇧 English |
+| [docs/USER_GUIDE_CN.md](docs/USER_GUIDE_CN.md) | **完整用户指南** — 5 个真实使用场景（安装 / 检索 / Agent 接入 / 提交 / 私有化）、CLI 工具、故障排查、FAQ | 🇨🇳 中文 |
+| [docs/QUICKSTART.md](docs/QUICKSTART.md) | 5-minute local setup | 🇬🇧 English |
+| [docs/QUICKSTART_CN.md](docs/QUICKSTART_CN.md) | 5 分钟本地启动 | 🇨🇳 中文 |
+| [docs/API.md](docs/API.md) | Full REST API reference (auto-generated from OpenAPI) | 🇬🇧 English |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute (dev workflow, coding standards, PR checklist) | 🇨🇳 中文 |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards | 🇬🇧 English |
+| [CODE_OF_CONDUCT_CN.md](CODE_OF_CONDUCT_CN.md) | 社区行为准则 | 🇨🇳 中文 |
+| [SECURITY.md](SECURITY.md) | Security policy & threat model | 🇬🇧 English |
+| [SECURITY_CN.md](SECURITY_CN.md) | 安全与隐私策略 | 🇨🇳 中文 |
+| [SUPPORT.md](SUPPORT.md) | Where to get help | 🇬🇧 English |
+| [SUPPORT_CN.md](SUPPORT_CN.md) | 寻求帮助 | 🇨🇳 中文 |
+| [CHANGELOG.md](CHANGELOG.md) | Release history | 🇬🇧 English |
+| [AGENTS.md](AGENTS.md) | Conventions for AI coding agents | 🇬🇧 English |
 
 ---
 

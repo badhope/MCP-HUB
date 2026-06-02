@@ -180,18 +180,24 @@ config = requests.get("https://mcp-hub.example.com/config/github-mcp-server").js
 
 ## 📚 文档
 
-| 文档 | 用途 |
-|---|---|
-| [README.md](README.md) | 英文主文档 |
-| [README_CN.md](README_CN.md) | 本文件 |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献指南 |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | 社区公约 |
-| [SECURITY.md](SECURITY.md) | 安全策略与威胁模型 |
-| [SUPPORT.md](SUPPORT.md) | 获取帮助 |
-| [CHANGELOG.md](CHANGELOG.md) | 发布历史 |
-| [AGENTS.md](AGENTS.md) | 面向 AI 编码 Agent 的约定 |
-| [docs/API.md](docs/API.md) | 完整 REST API 参考 |
-| [docs/QUICKSTART.md](docs/QUICKSTART.md) | 5 分钟本地搭建 |
+| 文档 | 说明 | 语言 |
+|---|---|---|
+| [README_CN.md](README_CN.md) | 本文件 · 总览、特性、快速上手 | 🇨🇳 中文 |
+| [README.md](README.md) | Overview, features, quick start | 🇬🇧 English |
+| [docs/USER_GUIDE_CN.md](docs/USER_GUIDE_CN.md) | **完整用户指南** — 5 个真实使用场景（安装 / 检索 / Agent 接入 / 提交 / 私有化部署）、CLI 工具、故障排查、FAQ | 🇨🇳 中文 |
+| [docs/USER_GUIDE.md](docs/USER_GUIDE.md) | **Complete user guide** — 5 real workflows (install / discover / agent-consume / submit / self-host), CLI tools, troubleshooting, FAQ | 🇬🇧 English |
+| [docs/QUICKSTART_CN.md](docs/QUICKSTART_CN.md) | 5 分钟本地启动 | 🇨🇳 中文 |
+| [docs/QUICKSTART.md](docs/QUICKSTART.md) | 5-minute local setup | 🇬🇧 English |
+| [docs/API.md](docs/API.md) | 完整 REST API 参考（自动从 OpenAPI 生成） | 🇬🇧 English |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 如何贡献（开发流程、代码规范、PR 检查清单） | 🇨🇳 中文 |
+| [CODE_OF_CONDUCT_CN.md](CODE_OF_CONDUCT_CN.md) | 社区行为准则 | 🇨🇳 中文 |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards | 🇬🇧 English |
+| [SECURITY_CN.md](SECURITY_CN.md) | 安全与隐私策略 | 🇨🇳 中文 |
+| [SECURITY.md](SECURITY.md) | Security policy & threat model | 🇬🇧 English |
+| [SUPPORT_CN.md](SUPPORT_CN.md) | 寻求帮助 | 🇨🇳 中文 |
+| [SUPPORT.md](SUPPORT.md) | Where to get help | 🇬🇧 English |
+| [CHANGELOG.md](CHANGELOG.md) | 版本历史 | 🇨🇳 / 🇬🇧 |
+| [AGENTS.md](AGENTS.md) | 给 AI 编程 Agent 的约定 | 🇬🇧 English |
 
 ---
 
