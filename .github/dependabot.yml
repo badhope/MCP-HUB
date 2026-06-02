@@ -1,0 +1,58 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "frontend"
+    commit-message:
+      prefix: "deps(frontend)"
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "root"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "backend"
+    commit-message:
+      prefix: "deps(backend)"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "ci"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 2
+    labels:
+      - "dependencies"
+      - "docker"

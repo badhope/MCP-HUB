@@ -1,0 +1,116 @@
+# ─── Environment & Secrets ────────────────────────────────────────────────
+# Local environment files (NEVER commit real values)
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# Secret / credential files
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.asc
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.gpg
+.gpg/
+.gnupg/
+
+# Auth helpers
+.git_askpass_tmp.sh
+.netrc
+.htpasswd
+.secrets
+
+# IDE / tool secrets
+.vscode/settings.json
+.idea/workspace.xml
+
+# Cloud / provider credentials
+.aws/
+.azure/
+.gcp/
+.gcloud/
+.kube/
+.kubectl/
+
+# ─── Python ───────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# ─── Node.js ──────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# ─── MCP servers (skip for size) ──────────────────────────────────────────
+servers/
+awesome-mcp-list/
+
+# ─── Frontend build outputs ───────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ─── IDE ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# ─── OS ───────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ─── Generated files ──────────────────────────────────────────────────────
+# NOTE: servers-index.json and market-index.json are .gitignore'd because
+# they are rebuilt by tools/update_index.py / tools/sync_index.py and bloat
+# the repo. The first `git clone` won't have them — run `python tools/update_index.py`
+# to fetch the latest snapshot from the upstream registry.
+servers-index.json
+market-index.json
+user-data.json
+submissions.json
+.pytest_cache/
+.coverage
+htmlcov/
+.coverage.*
+
+# ─── TRAE / AI IDE specific ───────────────────────────────────────────────
+.trae/
+
+# ─── Cache files ──────────────────────────────────────────────────────────
+*.cache
+.pytest_cache/
+.mypy_cache/
+.pytype/
+ruff_cache/
+.eslintcache
+.parcel-cache/
+
+# ─── Logs ─────────────────────────────────────────────────────────────────
+*.log
+logs/
+

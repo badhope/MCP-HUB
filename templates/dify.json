@@ -1,0 +1,36 @@
+{
+  "name": "dify",
+  "display_name": "Dify",
+  "description": "Production-ready platform for agentic workflow development.",
+  "source": "https://github.com/langgenius/dify",
+  "language": "typescript",
+  "stars": 142779,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-dify"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "dify": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-dify"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "development",
+    "memory-rag"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

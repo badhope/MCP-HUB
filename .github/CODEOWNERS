@@ -1,0 +1,35 @@
+# .github/CODEOWNERS
+# Auto-assign reviewers for changes in specific paths.
+# Owners listed here are auto-requested as reviewers for PRs touching
+# matching files. Add yourself to the appropriate area below.
+
+# Default owners for everything
+*       @badhope
+
+# Backend
+/main.py             @badhope
+/api.py              @badhope
+/services.py         @badhope
+/user_data.py        @badhope
+/core/               @badhope
+/templates/          @badhope
+/tools/              @badhope
+
+# Frontend
+/frontend/           @badhope
+
+# Build & deployment
+/Dockerfile          @badhope
+/docker-compose.yml  @badhope
+/.github/workflows/  @badhope
+/requirements.txt    @badhope
+/pyproject.toml      @badhope
+/package.json        @badhope
+
+# Security-critical files (require extra scrutiny)
+/SECURITY.md         @badhope
+/.gitignore          @badhope
+/.env.example        @badhope
+/frontend/.env.example  @badhope
+/tools/secret_scanner.py  @badhope
+/tools/pre-commit    @badhope

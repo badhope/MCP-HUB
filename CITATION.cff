@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: |
+  If you use MCP Hub in academic work, please cite it as below.
+title: "MCP Hub: A Universal Marketplace for Model Context Protocol Servers"
+type: software
+date-released: 2026-05-21
+license: MIT
+repository-code: "https://github.com/badhope/MCP-HUB"
+url: "https://github.com/badhope/MCP-HUB"
+authors:
+  - family-names: "badhope"
+    given-names: "Maintainer"
+    affiliation: "MCP Hub"
+    orcid: ""
+keywords:
+  - mcp
+  - model-context-protocol
+  - ai-agents
+  - mcp-servers
+  - claude
+  - llm
+  - tools
+  - marketplace
+  - registry
+  - open-source
+references:
+  - type: standard
+    title: "Model Context Protocol Specification"
+    url: "https://modelcontextprotocol.io/"
+  - type: software
+    title: "awesome-mcp-servers (upstream data source)"
+    url: "https://github.com/punkpeye/awesome-mcp-servers"

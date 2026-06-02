@@ -1,0 +1,36 @@
+import React from 'react';
+
+interface BadgeProps {
+  children: React.ReactNode;
+  variant?: 'default' | 'primary' | 'accent' | 'success' | 'warning' | 'violet';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+export const Badge = React.memo<BadgeProps>(({
+  children,
+  variant = 'default',
+  size = 'md',
+  className = '',
+}) => {
+  const variantClasses = {
+    default: 'bg-slate-100 text-slate-700 border border-slate-200',
+    primary: 'bg-primary-50 text-primary-700 border border-primary-100',
+    accent: 'bg-accent-50 text-accent-700 border border-accent-100',
+    success: 'bg-green-50 text-green-700 border border-green-100',
+    warning: 'bg-amber-50 text-amber-700 border border-amber-100',
+    violet: 'bg-violet-50 text-violet-700 border border-violet-100',
+  };
+
+  const sizeClasses = {
+    sm: 'px-2.5 py-1 text-xs font-medium',
+    md: 'px-3 py-1.5 text-sm font-medium',
+    lg: 'px-4 py-2 text-base font-medium',
+  };
+
+  return (
+    <span className={`inline-flex items-center rounded-full transition-colors ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}>
+      {children}
+    </span>
+  );
+});

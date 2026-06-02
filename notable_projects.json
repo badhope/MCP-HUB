@@ -1,0 +1,566 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-05-28T10:44:34.827780",
+  "total_projects": 26,
+  "categories": {
+    "🏢 大厂官方 MCP": {
+      "description": "各大厂官方提供的 MCP Server 和工具",
+      "projects": [
+        {
+          "name": "GitHub MCP Server",
+          "repo": "github/github-mcp-server",
+          "stars": 30000,
+          "description": "GitHub 官方 MCP Server，支持仓库、Issue、PR 管理",
+          "language": "Go",
+          "url": "https://github.com/github/github-mcp-server",
+          "categories": [
+            "代码平台",
+            "DevOps"
+          ],
+          "features": [
+            "仓库管理",
+            "Issue管理",
+            "PR管理",
+            "Actions触发"
+          ],
+          "install": "npx -y @github/mcp-server",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        },
+        {
+          "name": "Anthropic MCP",
+          "repo": "modelcontextprotocol",
+          "stars": 10000,
+          "description": "Anthropic 官方 MCP 协议和 SDK",
+          "language": "Python/TypeScript",
+          "url": "https://github.com/modelcontextprotocol",
+          "categories": [
+            "协议",
+            "框架"
+          ],
+          "features": [
+            "MCP协议",
+            "Python SDK",
+            "TypeScript SDK"
+          ],
+          "install": "pip install mcp",
+          "is_downloadable": true,
+          "is_mcp_server": false
+        },
+        {
+          "name": "Stripe MCP",
+          "repo": "stripe/stripe-mcp",
+          "stars": 1200,
+          "description": "Stripe 官方 MCP Server，支持支付、客户管理",
+          "language": "TypeScript",
+          "url": "https://github.com/stripe/stripe-mcp",
+          "categories": [
+            "支付",
+            "金融"
+          ],
+          "features": [
+            "支付处理",
+            "客户管理",
+            "产品管理"
+          ],
+          "install": "npx -y @stripe/mcp",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        },
+        {
+          "name": "Notion MCP",
+          "repo": "makeswift/notion-mcp",
+          "stars": 3600,
+          "description": "Notion 官方 MCP Server，支持笔记、数据库读写",
+          "language": "TypeScript",
+          "url": "https://github.com/makeswift/notion-mcp",
+          "categories": [
+            "笔记",
+            "协作"
+          ],
+          "features": [
+            "页面读写",
+            "数据库操作",
+            "搜索"
+          ],
+          "install": "npx -y @makeswift/notion-mcp",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        },
+        {
+          "name": "Microsoft Playwright MCP",
+          "repo": "microsoft/playwright-mcp",
+          "stars": 33000,
+          "description": "微软官方浏览器自动化 MCP Server",
+          "language": "TypeScript",
+          "url": "https://github.com/microsoft/playwright-mcp",
+          "categories": [
+            "浏览器自动化",
+            "测试"
+          ],
+          "features": [
+            "浏览器控制",
+            "网页抓取",
+            "自动化测试"
+          ],
+          "install": "npx -y @executeautomation/playwright-mcp-server",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        },
+        {
+          "name": "Docker MCP",
+          "repo": "modelcontextprotocol/server-docker",
+          "stars": 2000,
+          "description": "Docker 官方 MCP Server，支持容器管理",
+          "language": "Python",
+          "url": "https://github.com/modelcontextprotocol/server-docker",
+          "categories": [
+            "DevOps",
+            "容器"
+          ],
+          "features": [
+            "容器管理",
+            "镜像操作",
+            "日志查看"
+          ],
+          "install": "npx -y @modelcontextprotocol/server-docker",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        }
+      ]
+    },
+    "🌟 明星项目": {
+      "description": "GitHub 上最受欢迎的 MCP 相关项目",
+      "projects": [
+        {
+          "name": "n8n",
+          "repo": "n8n-io/n8n",
+          "stars": 189000,
+          "description": "开源工作流自动化平台，支持 MCP 集成",
+          "language": "TypeScript",
+          "url": "https://github.com/n8n-io/n8n",
+          "categories": [
+            "自动化",
+            "工作流"
+          ],
+          "features": [
+            "可视化工作流",
+            "800+ 集成",
+            "自托管"
+          ],
+          "install": "docker run -it --name n8n -p 5678:5678 n8nio/n8n",
+          "is_downloadable": true,
+          "is_mcp_server": false,
+          "mcp_support": true
+        },
+        {
+          "name": "Dify",
+          "repo": "langgenius/dify",
+          "stars": 142000,
+          "description": "开源 LLM 应用开发平台，支持 MCP 协议",
+          "language": "Python",
+          "url": "https://github.com/langgenius/dify",
+          "categories": [
+            "AI应用",
+            "LLMOps"
+          ],
+          "features": [
+            "LLM应用开发",
+            "RAG",
+            "工作流",
+            "Agent"
+          ],
+          "install": "docker run -it -p 80:80 -p 443:443 dify-community/dify-community",
+          "is_downloadable": true,
+          "is_mcp_server": false,
+          "mcp_support": true
+        },
+        {
+          "name": "Open WebUI",
+          "repo": "open-webui/open-webui",
+          "stars": 138000,
+          "description": "开源自托管 WebUI，支持 MCP 工具调用",
+          "language": "Python",
+          "url": "https://github.com/open-webui/open-webui",
+          "categories": [
+            "AI界面",
+            "LLM"
+          ],
+          "features": [
+            "ChatGPT界面",
+            "多模型支持",
+            "工具调用"
+          ],
+          "install": "docker run -d -p 3000:8080 -v open-webui:/app/backend/data ghcr.io/open-webui/open-webui:main",
+          "is_downloadable": true,
+          "is_mcp_server": false,
+          "mcp_support": true
+        },
+        {
+          "name": "MindsDB",
+          "repo": "mindsdb/mindsdb",
+          "stars": 28000,
+          "description": "开源 ML 数据库，AI 和数据库的桥梁",
+          "language": "Python",
+          "url": "https://github.com/mindsdb/mindsdb",
+          "categories": [
+            "数据库",
+            "机器学习"
+          ],
+          "features": [
+            "AutoML",
+            "预测分析",
+            "数据集成"
+          ],
+          "install": "pip install mindsdb",
+          "is_downloadable": true,
+          "is_mcp_server": false
+        },
+        {
+          "name": "1Panel",
+          "repo": "1Panel-dev/1Panel",
+          "stars": 32000,
+          "description": "现代化 Linux 服务器管理面板，支持 MCP",
+          "language": "Go",
+          "url": "https://github.com/1Panel-dev/1Panel",
+          "categories": [
+            "运维",
+            "服务器管理"
+          ],
+          "features": [
+            "容器管理",
+            "网站管理",
+            "数据库管理",
+            "LLM集成"
+          ],
+          "install": "curl -sSL https://resource.fit2cloud.com/1panel.sh | bash",
+          "is_downloadable": true,
+          "is_mcp_server": false,
+          "mcp_support": true
+        }
+      ]
+    },
+    "🎮 游戏相关": {
+      "description": "游戏引擎和游戏相关的 MCP 项目",
+      "projects": [
+        {
+          "name": "Unity MCP",
+          "repo": "CoplayDev/unity-mcp",
+          "stars": 4500,
+          "description": "Unity 编辑器 MCP Server，支持场景、对象、资产控制",
+          "language": "C#",
+          "url": "https://github.com/CoplayDev/unity-mcp",
+          "categories": [
+            "游戏引擎",
+            "Unity"
+          ],
+          "features": [
+            "场景控制",
+            "对象操作",
+            "资产管理",
+            "编辑器自动化"
+          ],
+          "install": "从 Unity Asset Store 下载",
+          "is_downloadable": false,
+          "is_mcp_server": true
+        },
+        {
+          "name": "Unreal Engine MCP",
+          "repo": "tncbtth/UE-MCP",
+          "stars": 1200,
+          "description": "Unreal Engine MCP Server，通过蓝图调用 AI",
+          "language": "C++",
+          "url": "https://github.com/tncbtth/UE-MCP",
+          "categories": [
+            "游戏引擎",
+            "Unreal"
+          ],
+          "features": [
+            "蓝图集成",
+            "AI对话",
+            "场景管理"
+          ],
+          "install": "从 GitHub 下载插件",
+          "is_downloadable": false,
+          "is_mcp_server": true
+        },
+        {
+          "name": "Godot MCP",
+          "repo": "godot-mcp/godot-mcp",
+          "stars": 800,
+          "description": "Godot 游戏引擎 MCP Server",
+          "language": "GDScript/Python",
+          "url": "https://github.com/godot-mcp/godot-mcp",
+          "categories": [
+            "游戏引擎",
+            "Godot"
+          ],
+          "features": [
+            "节点控制",
+            "场景操作",
+            "信号系统"
+          ],
+          "install": "pip install godot-mcp",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        }
+      ]
+    },
+    "🛠️ 开发框架": {
+      "description": "MCP 开发框架和 SDK",
+      "projects": [
+        {
+          "name": "FastMCP",
+          "repo": "modelcontextprotocol/fastmcp",
+          "stars": 8100,
+          "description": "Python MCP 开发框架，简洁易用",
+          "language": "Python",
+          "url": "https://github.com/modelcontextprotocol/fastmcp",
+          "categories": [
+            "框架",
+            "Python"
+          ],
+          "features": [
+            "装饰器语法",
+            "自动文档",
+            "热重载"
+          ],
+          "install": "pip install fastmcp",
+          "is_downloadable": true,
+          "is_mcp_server": false
+        },
+        {
+          "name": "MCP Go SDK",
+          "repo": "modelcontextprotocol/go-sdk",
+          "stars": 4500,
+          "description": "官方 Go 语言 MCP SDK",
+          "language": "Go",
+          "url": "https://github.com/modelcontextprotocol/go-sdk",
+          "categories": [
+            "框架",
+            "Go"
+          ],
+          "features": [
+            "高性能",
+            "类型安全",
+            "Google维护"
+          ],
+          "install": "go get github.com/modelcontextprotocol/go-sdk",
+          "is_downloadable": true,
+          "is_mcp_server": false
+        },
+        {
+          "name": "MCP TypeScript SDK",
+          "repo": "modelcontextprotocol/typescript-sdk",
+          "stars": 3500,
+          "description": "官方 TypeScript MCP SDK",
+          "language": "TypeScript",
+          "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+          "categories": [
+            "框架",
+            "TypeScript"
+          ],
+          "features": [
+            "类型完整",
+            "Promise支持",
+            "VS Code插件"
+          ],
+          "install": "npm install @modelcontextprotocol/sdk",
+          "is_downloadable": true,
+          "is_mcp_server": false
+        },
+        {
+          "name": "PyMCP",
+          "repo": "uranus-public/pymcp",
+          "stars": 1500,
+          "description": "Python MCP 服务开发框架",
+          "language": "Python",
+          "url": "https://github.com/uranus-public/pymcp",
+          "categories": [
+            "框架",
+            "Python"
+          ],
+          "features": [
+            "异步支持",
+            "依赖注入",
+            "中间件"
+          ],
+          "install": "pip install pymcp",
+          "is_downloadable": true,
+          "is_mcp_server": false
+        }
+      ]
+    },
+    "🇨🇳 国内大厂": {
+      "description": "国内大厂提供的 MCP 相关产品和服务",
+      "projects": [
+        {
+          "name": "阿里云 MCP",
+          "repo": "aliyun",
+          "stars": 0,
+          "description": "阿里云提供的一系列 MCP 服务",
+          "language": "多语言",
+          "url": "https://help.aliyun.com/",
+          "categories": [
+            "云服务",
+            "国内"
+          ],
+          "features": [
+            "云API集成",
+            "OSS存储",
+            "函数计算"
+          ],
+          "install": "参考阿里云文档",
+          "is_downloadable": false,
+          "is_mcp_server": false
+        },
+        {
+          "name": "腾讯云 MCP",
+          "repo": "tencentcloud",
+          "stars": 0,
+          "description": "腾讯云 MCP 服务集成",
+          "language": "多语言",
+          "url": "https://cloud.tencent.com/",
+          "categories": [
+            "云服务",
+            "国内"
+          ],
+          "features": [
+            "COS存储",
+            "SCF函数",
+            "API网关"
+          ],
+          "install": "参考腾讯云文档",
+          "is_downloadable": false,
+          "is_mcp_server": false
+        },
+        {
+          "name": "百度文心 MCP",
+          "repo": "baidu/ernie-mcp",
+          "stars": 12000,
+          "description": "百度文心一言 MCP Server",
+          "language": "Python",
+          "url": "https://github.com/baidu/ernie-mcp",
+          "categories": [
+            "AI",
+            "国内"
+          ],
+          "features": [
+            "文心一言",
+            "知识库",
+            "文档处理"
+          ],
+          "install": "pip install ernie-mcp",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        },
+        {
+          "name": "钉钉 MCP",
+          "repo": "dingtalk/dingtalk-mcp",
+          "stars": 9000,
+          "description": "钉钉官方 MCP Server，企业办公集成",
+          "language": "TypeScript",
+          "url": "https://github.com/dingtalk/dingtalk-mcp",
+          "categories": [
+            "企业应用",
+            "OA",
+            "国内"
+          ],
+          "features": [
+            "日程管理",
+            "任务创建",
+            "消息通知",
+            "审批流程"
+          ],
+          "install": "npx -y dingtalk-mcp",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        },
+        {
+          "name": "网易云信 MCP",
+          "repo": "netease-im/yunxin-mcp-server",
+          "stars": 5500,
+          "description": "网易云信 IM/RTC MCP Server",
+          "language": "Python",
+          "url": "https://github.com/netease-im/yunxin-mcp-server",
+          "categories": [
+            "通讯",
+            "IM",
+            "RTC",
+            "国内"
+          ],
+          "features": [
+            "即时通讯",
+            "音视频",
+            "实时互动"
+          ],
+          "install": "pip install yunxin-mcp",
+          "is_downloadable": true,
+          "is_mcp_server": true
+        }
+      ]
+    },
+    "📚 资源汇总": {
+      "description": "MCP 相关的awesome列表和资源收集",
+      "projects": [
+        {
+          "name": "awesome-mcp-servers",
+          "repo": "punkpeye/awesome-mcp-servers",
+          "stars": 73000,
+          "description": "最全面的 MCP Server 资源汇总，收录 2700+ 项目",
+          "language": "Markdown",
+          "url": "https://github.com/punkpeye/awesome-mcp-servers",
+          "categories": [
+            "资源",
+            "awesome"
+          ],
+          "features": [
+            "2700+ MCP Server",
+            "20+ 分类",
+            "持续更新"
+          ],
+          "is_downloadable": false,
+          "is_mcp_server": false
+        },
+        {
+          "name": "awesome-mcp",
+          "repo": "appcypher/awesome-mcp",
+          "stars": 5800,
+          "description": "另一个 MCP 资源awesome列表",
+          "language": "Markdown",
+          "url": "https://github.com/appcypher/awesome-mcp",
+          "categories": [
+            "资源",
+            "awesome"
+          ],
+          "features": [
+            "MCP客户端",
+            "MCP服务器",
+            "框架"
+          ],
+          "is_downloadable": false,
+          "is_mcp_server": false
+        },
+        {
+          "name": "MCP Registry",
+          "repo": "modelcontextprotocol/registry",
+          "stars": 6800,
+          "description": "官方 MCP Server 注册中心",
+          "language": "TypeScript",
+          "url": "https://github.com/modelcontextprotocol/registry",
+          "categories": [
+            "资源",
+            "官方"
+          ],
+          "features": [
+            "官方认证",
+            "持续更新",
+            "质量保证"
+          ],
+          "is_downloadable": false,
+          "is_mcp_server": false
+        }
+      ]
+    }
+  }
+}

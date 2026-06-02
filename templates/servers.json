@@ -1,0 +1,34 @@
+{
+  "name": "servers",
+  "display_name": "Servers",
+  "description": "Model Context Protocol Servers",
+  "source": "https://github.com/modelcontextprotocol/servers",
+  "language": "typescript",
+  "stars": 86294,
+  "source_type": "official",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-servers"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "servers": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-servers"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "other"
+  ],
+  "quality_score": 75,
+  "quality_level": "A",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

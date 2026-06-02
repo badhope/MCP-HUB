@@ -1,0 +1,36 @@
+{
+  "name": "mcp-hub",
+  "version": "2.0.1",
+  "description": "The Universal MCP Hub - Browse, Search, and Download Model Context Protocol Server Configurations",
+  "main": "index.js",
+  "scripts": {
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:preview": "cd frontend && npm run preview",
+    "frontend:test": "cd frontend && npm run test",
+    "dev": "python main.py --reload",
+    "start": "python main.py",
+    "test": "pytest tests/",
+    "test:cov": "pytest tests/ --cov=. --cov-report=html",
+    "lint": "flake8 . || true",
+    "format": "black . || true"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "tools",
+    "marketplace",
+    "claude",
+    "cursor",
+    "chatgpt",
+    "deepseek",
+    "automation",
+    "open-source"
+  ],
+  "author": "badhope",
+  "license": "MIT",
+  "engines": {
+    "python": ">=3.9"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "CowAgent",
+  "display_name": "Cowagent",
+  "description": "Open-source super AI assistant & Agent Harness. Plans tasks, runs tools and skills, autonomously grows with memory and knowledge. Multi-model, multi-channel. Lightweight, extensible, one-line install (formerly chatgpt-on-wechat).",
+  "source": "https://github.com/zhayujie/CowAgent",
+  "language": "python",
+  "stars": 44875,
+  "source_type": "community",
+  "install_command": "uvx",
+  "install_args": [
+    "--from",
+    "git+https://github.com/zhayujie/CowAgent"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "CowAgent": {
+        "command": "uvx",
+        "args": [
+          "--from",
+          "git+https://github.com/zhayujie/CowAgent"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "development",
+    "learning-research",
+    "social-communication"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

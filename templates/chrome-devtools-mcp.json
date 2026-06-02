@@ -1,0 +1,36 @@
+{
+  "name": "chrome-devtools-mcp",
+  "display_name": "Chrome Devtools Mcp",
+  "description": "Chrome DevTools for coding agents",
+  "source": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+  "language": "typescript",
+  "stars": 41887,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-chrome-devtools-mcp"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "chrome-devtools-mcp": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-chrome-devtools-mcp"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "browser-web",
+    "development"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

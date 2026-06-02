@@ -1,0 +1,36 @@
+{
+  "name": "lobehub",
+  "display_name": "Lobehub",
+  "description": "🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling, and reporting on your entire AI team.",
+  "source": "https://github.com/lobehub/lobehub",
+  "language": "typescript",
+  "stars": 77760,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-lobehub"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "lobehub": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-lobehub"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "calendar-time",
+    "learning-research"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

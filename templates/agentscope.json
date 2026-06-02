@@ -1,0 +1,36 @@
+{
+  "name": "agentscope",
+  "display_name": "Agentscope",
+  "description": "Build and run agents you can see, understand and trust.",
+  "source": "https://github.com/agentscope-ai/agentscope",
+  "language": "python",
+  "stars": 25711,
+  "source_type": "community",
+  "install_command": "uvx",
+  "install_args": [
+    "--from",
+    "git+https://github.com/agentscope-ai/agentscope"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "agentscope": {
+        "command": "uvx",
+        "args": [
+          "--from",
+          "git+https://github.com/agentscope-ai/agentscope"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "art-design",
+    "social-communication"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

@@ -1,0 +1,38 @@
+{
+  "name": "PDFMathTranslate",
+  "display_name": "Pdfmathtranslate",
+  "description": "[EMNLP 2025 Demo] PDF scientific paper translation with preserved formats - 基于 AI 完整保留排版的 PDF 文档全文双语翻译，支持 Google/DeepL/Ollama/OpenAI 等服务，提供 CLI/GUI/MCP/Docker/Zotero",
+  "source": "https://github.com/PDFMathTranslate/PDFMathTranslate",
+  "language": "python",
+  "stars": 34088,
+  "source_type": "community",
+  "install_command": "uvx",
+  "install_args": [
+    "--from",
+    "git+https://github.com/PDFMathTranslate/PDFMathTranslate"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "PDFMathTranslate": {
+        "command": "uvx",
+        "args": [
+          "--from",
+          "git+https://github.com/PDFMathTranslate/PDFMathTranslate"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "art-design",
+    "cloud-devops",
+    "document-notes",
+    "terminal-system"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

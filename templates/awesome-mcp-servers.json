@@ -1,0 +1,34 @@
+{
+  "name": "awesome-mcp-servers",
+  "display_name": "Awesome Mcp Servers",
+  "description": "A collection of MCP servers.",
+  "source": "https://github.com/punkpeye/awesome-mcp-servers",
+  "language": "unknown",
+  "stars": 87968,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-awesome-mcp-servers"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "awesome-mcp-servers": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-awesome-mcp-servers"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

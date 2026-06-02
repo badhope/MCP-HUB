@@ -1,0 +1,47 @@
+#!/bin/sh
+# Pre-commit hook: scan staged changes for accidentally committed secrets.
+#
+# Install with:
+#   ln -sf ../../tools/pre-commit .git/hooks/pre-commit
+# Or use it in CI by calling tools/secret_scanner.py directly.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+SCANNER="$REPO_ROOT/tools/secret_scanner.py"
+
+if [ ! -f "$SCANNER" ]; then
+    echo "pre-commit: secret_scanner.py not found at $SCANNER" >&2
+    exit 0  # Don't block commit if scanner is missing
+fi
+
+# Collect staged file paths (added, copied, modified, renamed)
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null)
+if [ -z "$STAGED" ]; then
+    exit 0
+fi
+
+# Run scanner on a temp directory with only the staged files staged-as-content
+# (simpler: run scanner on entire repo but only fail on findings in staged files)
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "$TMPDIR"' EXIT
+
+# Materialize staged versions into tmp
+echo "$STAGED" | while IFS= read -r path; do
+    [ -z "$path" ] && continue
+    [ -f "$REPO_ROOT/$path" ] || continue
+    mkdir -p "$TMPDIR/$(dirname "$path")"
+    git show ":$path" > "$TMPDIR/$path" 2>/dev/null || cp "$REPO_ROOT/$path" "$TMPDIR/$path"
+done
+
+echo "pre-commit: scanning staged changes for secrets..."
+if ! python3 "$SCANNER" "$TMPDIR" --quiet; then
+    echo "" >&2
+    echo "pre-commit: ABORTED — secrets detected in staged files." >&2
+    echo "  • Review the findings above and remove the credentials." >&2
+    echo "  • If the value is a false positive, edit the PATTERNS list in the scanner." >&2
+    echo "  • To bypass in an emergency: git commit --no-verify" >&2
+    exit 1
+fi
+
+exit 0

@@ -1,0 +1,36 @@
+{
+  "name": "ai-engineering-hub",
+  "display_name": "Ai Engineering Hub",
+  "description": "In-depth tutorials on LLMs, RAGs and real-world AI agent applications.",
+  "source": "https://github.com/patchy631/ai-engineering-hub",
+  "language": "jupyter",
+  "stars": 35304,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-ai-engineering-hub"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "ai-engineering-hub": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-ai-engineering-hub"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "learning-research",
+    "memory-rag"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

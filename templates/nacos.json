@@ -1,0 +1,36 @@
+{
+  "name": "nacos",
+  "display_name": "Nacos",
+  "description": "an easy-to-use dynamic service discovery, configuration and service management platform for building AI cloud native applications.",
+  "source": "https://github.com/alibaba/nacos",
+  "language": "java",
+  "stars": 32971,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-nacos"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "nacos": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-nacos"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "art-design",
+    "cloud-devops"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

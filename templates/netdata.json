@@ -1,0 +1,36 @@
+{
+  "name": "netdata",
+  "display_name": "Netdata",
+  "description": "The fastest path to AI-powered full stack observability, even for lean teams.",
+  "source": "https://github.com/netdata/netdata",
+  "language": "c",
+  "stars": 78944,
+  "source_type": "community",
+  "install_command": "npx",
+  "install_args": [
+    "-y",
+    "@modelcontextprotocol/server-netdata"
+  ],
+  "install_env": {},
+  "config": {
+    "mcpServers": {
+      "netdata": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-netdata"
+        ]
+      }
+    }
+  },
+  "categories": [
+    "ai-llm",
+    "cloud-devops",
+    "database"
+  ],
+  "quality_score": 65,
+  "quality_level": "B",
+  "download_status": "pending",
+  "download_path": null,
+  "last_updated": null
+}

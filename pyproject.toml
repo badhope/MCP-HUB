@@ -1,0 +1,58 @@
+[project]
+name = "mcp-hub"
+version = "2.0.1"
+description = "The Universal MCP Hub - Browse, Search, and Download Model Context Protocol Server Configurations for Claude, Cursor, ChatGPT, and More"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+  {name = "badhope"},
+]
+keywords = ["mcp", "model-context-protocol", "ai", "marketplace", "claude", "cursor"]
+dependencies = [
+  "fastapi>=0.109.0",
+  "uvicorn[standard]>=0.27.0",
+  "pydantic>=2.5.0",
+  "httpx>=0.24.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-cov",
+  "pytest-asyncio",
+]
+dev = [
+  "mypy",
+  "black",
+  "flake8",
+  "isort",
+  "pytest",
+]
+
+[tool.setuptools]
+packages = ["core"]
+
+[tool.setuptools.package-data]
+core = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+# Pre-existing tech debt: many helpers use `json.load()` and Pydantic v2 model
+# `.model_dump()` returns Any. Don't fail CI on these — track them separately.
+disable_error_code = [
+  "no-any-return",
+  "var-annotated",
+]
+follow_imports = "silent"
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.isort]
+profile = "black"
+line-length = 100

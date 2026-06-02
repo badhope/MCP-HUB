@@ -1,0 +1,2499 @@
+{
+  "version": "2.0",
+  "generated_at": "2026-05-28T11:09:10.056050",
+  "total_projects": 53,
+  "categories": {
+    "by_owner_type": {
+      "official": 22,
+      "community": 31
+    },
+    "by_category": {
+      "DevOps": 11,
+      "代码平台": 2,
+      "CI/CD": 1,
+      "支付": 1,
+      "金融": 1,
+      "电商": 2,
+      "笔记": 1,
+      "协作": 2,
+      "知识管理": 1,
+      "浏览器自动化": 2,
+      "测试": 2,
+      "爬虫": 2,
+      "容器": 1,
+      "云原生": 1,
+      "通讯": 4,
+      "企业协作": 3,
+      "OA": 3,
+      "云服务": 6,
+      "企业级": 1,
+      "AWS": 1,
+      "GCP": 1,
+      "AI": 7,
+      "CDN": 1,
+      "边缘计算": 1,
+      "安全": 1,
+      "监控": 1,
+      "错误追踪": 1,
+      "项目管理": 2,
+      "敏捷开发": 1,
+      "搜索": 4,
+      "文档": 1,
+      "LLM": 4,
+      "隐私": 1,
+      "浏览器": 2,
+      "数据库": 4,
+      "SQL": 2,
+      "轻量级": 1,
+      "缓存": 1,
+      "键值存储": 1,
+      "开发者工具": 1,
+      "自动化": 2,
+      "文件系统": 1,
+      "本地工具": 1,
+      "记忆": 1,
+      "上下文": 1,
+      "社交": 3,
+      "机器人": 2,
+      "HTTP": 1,
+      "API": 1,
+      "网络": 1,
+      "资源": 1,
+      "Awesome List": 1,
+      "索引": 1,
+      "工作流": 1,
+      "无代码": 1,
+      "AI应用": 1,
+      "LLMOps": 1,
+      "RAG": 2,
+      "AI界面": 1,
+      "Web": 1,
+      "机器学习": 1,
+      "运维": 1,
+      "服务器管理": 1,
+      "框架": 6,
+      "Python": 2,
+      "SDK": 5,
+      "TypeScript": 1,
+      "Go": 1,
+      "Java": 1,
+      "Spring": 1,
+      "异步": 1,
+      "Rust": 1,
+      "平台": 2,
+      "导航": 2,
+      "目录": 2,
+      "国内": 12,
+      "IM": 1,
+      "RTC": 1,
+      "微信": 1,
+      "IoT": 2,
+      "智能家居": 2,
+      "AIoT": 1,
+      "O2O": 1
+    },
+    "by_language": {
+      "Go": 4,
+      "TypeScript": 22,
+      "Python": 22,
+      "JavaScript": 2,
+      "Markdown": 1,
+      "Java": 1,
+      "Rust": 1
+    },
+    "by_pricing": {
+      "free": 47,
+      "freemium": 5,
+      "commercial": 1
+    },
+    "by_downloadable": {
+      "可下载": 50,
+      "不可下载": 3
+    },
+    "by_completeness": {
+      "S": 50,
+      "A": 3
+    }
+  },
+  "projects": [
+    {
+      "name": "github-mcp-server",
+      "display_name": "GitHub MCP Server",
+      "description": "GitHub 官方 MCP Server，支持仓库、Issue、PR、Actions 等完整功能",
+      "source": "official",
+      "repo_url": "https://github.com/github/github-mcp-server",
+      "stars": 25000,
+      "language": "Go",
+      "categories": [
+        "DevOps",
+        "代码平台",
+        "CI/CD"
+      ],
+      "owner_type": "official",
+      "owner_name": "GitHub",
+      "company": "GitHub (Microsoft)",
+      "is_downloadable": true,
+      "download_type": "binary",
+      "install_command": "go install",
+      "install_args": [
+        "github.com/github/github-mcp-server@latest"
+      ],
+      "features": [
+        "仓库管理",
+        "Issue管理",
+        "PR管理",
+        "Actions触发",
+        "代码审查"
+      ],
+      "use_cases": [
+        "AI 代码审查",
+        "自动化工作流",
+        "项目管理"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/github/github-mcp-server",
+      "related_urls": [
+        "https://github.com/features/actions"
+      ],
+      "news_mentions": [
+        "2026年CSDN年度精选",
+        "腾讯云开发者推荐"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "stripe-mcp",
+      "display_name": "Stripe MCP",
+      "description": "Stripe 官方 MCP Server，集成支付、客户、订阅管理",
+      "source": "official",
+      "repo_url": "https://github.com/stripe/stripe-mcp",
+      "stars": 1200,
+      "language": "TypeScript",
+      "categories": [
+        "支付",
+        "金融",
+        "电商"
+      ],
+      "owner_type": "official",
+      "owner_name": "Stripe",
+      "company": "Stripe",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@stripe/mcp"
+      ],
+      "features": [
+        "支付处理",
+        "客户管理",
+        "产品管理",
+        "订阅管理"
+      ],
+      "use_cases": [
+        "电商支付",
+        "订阅服务",
+        "财务管理"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/stripe/stripe-mcp",
+      "related_urls": [
+        "https://stripe.com/docs"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "notion-mcp",
+      "display_name": "Notion MCP Server",
+      "description": "Notion 官方 MCP Server，支持笔记、数据库、页面操作",
+      "source": "official",
+      "repo_url": "https://github.com/makeswift/notion-mcp",
+      "stars": 3600,
+      "language": "TypeScript",
+      "categories": [
+        "笔记",
+        "协作",
+        "知识管理"
+      ],
+      "owner_type": "official",
+      "owner_name": "Makeswift",
+      "company": "Notion",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@makeswift/notion-mcp"
+      ],
+      "features": [
+        "页面读写",
+        "数据库操作",
+        "搜索",
+        "块操作"
+      ],
+      "use_cases": [
+        "笔记管理",
+        "知识库",
+        "团队协作"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/makeswift/notion-mcp",
+      "related_urls": [
+        "https://developers.notion.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "playwright-mcp",
+      "display_name": "Playwright MCP Server",
+      "description": "微软官方浏览器自动化 MCP，支持 Chromium、Firefox、WebKit",
+      "source": "official",
+      "repo_url": "https://github.com/microsoft/playwright-mcp",
+      "stars": 22400,
+      "language": "TypeScript",
+      "categories": [
+        "浏览器自动化",
+        "测试",
+        "爬虫"
+      ],
+      "owner_type": "official",
+      "owner_name": "Microsoft",
+      "company": "Microsoft",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@playwright/mcp-server"
+      ],
+      "features": [
+        "浏览器控制",
+        "网页抓取",
+        "自动化测试",
+        "性能分析"
+      ],
+      "use_cases": [
+        "UI自动化测试",
+        "网页爬虫",
+        "数据采集"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/microsoft/playwright-mcp",
+      "related_urls": [
+        "https://playwright.dev/"
+      ],
+      "news_mentions": [
+        "2026年最热门MCP工具",
+        "微软开发者大会推荐"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "docker-mcp",
+      "display_name": "Docker MCP Server",
+      "description": "Docker 官方 MCP Server，容器和镜像管理",
+      "source": "official",
+      "repo_url": "https://github.com/modelcontextprotocol/server-docker",
+      "stars": 2000,
+      "language": "Python",
+      "categories": [
+        "DevOps",
+        "容器",
+        "云原生"
+      ],
+      "owner_type": "official",
+      "owner_name": "Model Context Protocol",
+      "company": "Docker",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "mcp-server-docker"
+      ],
+      "features": [
+        "容器管理",
+        "镜像操作",
+        "日志查看",
+        "网络管理"
+      ],
+      "use_cases": [
+        "DevOps自动化",
+        "容器编排",
+        "运维管理"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-docker",
+      "related_urls": [
+        "https://docs.docker.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "slack-mcp",
+      "display_name": "Slack MCP Server",
+      "description": "Slack 官方 MCP Server，工作区消息和频道管理",
+      "source": "official",
+      "repo_url": "https://github.com/modelcontextprotocol/server-slack",
+      "stars": 1500,
+      "language": "Python",
+      "categories": [
+        "通讯",
+        "企业协作",
+        "OA"
+      ],
+      "owner_type": "official",
+      "owner_name": "Model Context Protocol",
+      "company": "Slack (Salesforce)",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "mcp-server-slack"
+      ],
+      "features": [
+        "消息发送",
+        "频道管理",
+        "用户查询",
+        "文件分享"
+      ],
+      "use_cases": [
+        "团队通讯",
+        "工作流自动化",
+        "通知集成"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-slack",
+      "related_urls": [
+        "https://api.slack.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "azure-mcp-server",
+      "display_name": "Azure MCP Server 2.0",
+      "description": "微软 Azure 官方 MCP Server，276个工具覆盖57个Azure服务",
+      "source": "official",
+      "repo_url": "https://github.com/Azure/azure-mcp",
+      "stars": 3500,
+      "language": "TypeScript",
+      "categories": [
+        "云服务",
+        "企业级",
+        "DevOps"
+      ],
+      "owner_type": "official",
+      "owner_name": "Microsoft Azure",
+      "company": "Microsoft",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@azure/mcp"
+      ],
+      "features": [
+        "57个Azure服务集成",
+        "276个工具",
+        "自托管远程服务器",
+        "团队共享"
+      ],
+      "use_cases": [
+        "云资源管理",
+        "企业级DevOps",
+        "多服务编排"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://learn.microsoft.com/azure/mcp",
+      "related_urls": [
+        "https://azure.microsoft.com/"
+      ],
+      "news_mentions": [
+        "2026年Azure MCP 2.0发布",
+        "企业级MCP标准"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "aws-mcp-server",
+      "display_name": "AWS MCP Server",
+      "description": "亚马逊 AWS MCP Server，云服务集成",
+      "source": "official",
+      "repo_url": "https://github.com/awslabs/aws-mcp",
+      "stars": 2800,
+      "language": "TypeScript",
+      "categories": [
+        "云服务",
+        "AWS",
+        "DevOps"
+      ],
+      "owner_type": "official",
+      "owner_name": "AWS Labs",
+      "company": "Amazon",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "-g",
+        "aws-mcp"
+      ],
+      "features": [
+        "S3操作",
+        "EC2管理",
+        "Lambda调用",
+        "CloudWatch监控"
+      ],
+      "use_cases": [
+        "AWS资源管理",
+        "云自动化",
+        "运维监控"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/awslabs/aws-mcp",
+      "related_urls": [
+        "https://aws.amazon.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "gcp-mcp",
+      "display_name": "Google Cloud MCP Server",
+      "description": "Google Cloud MCP Server，GCP 服务集成",
+      "source": "official",
+      "repo_url": "https://github.com/google/gcp-mcp",
+      "stars": 1900,
+      "language": "Python",
+      "categories": [
+        "云服务",
+        "GCP",
+        "AI"
+      ],
+      "owner_type": "official",
+      "owner_name": "Google",
+      "company": "Google",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "gcp-mcp"
+      ],
+      "features": [
+        "BigQuery查询",
+        "GCS存储",
+        "Compute引擎",
+        "AI Platform"
+      ],
+      "use_cases": [
+        "GCP资源管理",
+        "数据分析",
+        "ML工作流"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/google/gcp-mcp",
+      "related_urls": [
+        "https://cloud.google.com/"
+      ],
+      "news_mentions": [
+        "Google AI集成推荐"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "cloudflare-mcp",
+      "display_name": "Cloudflare MCP Server",
+      "description": "Cloudflare MCP Server，边缘计算和CDN管理",
+      "source": "official",
+      "repo_url": "https://github.com/cloudflare/cf-mcp",
+      "stars": 1200,
+      "language": "TypeScript",
+      "categories": [
+        "CDN",
+        "边缘计算",
+        "安全"
+      ],
+      "owner_type": "official",
+      "owner_name": "Cloudflare",
+      "company": "Cloudflare",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "-g",
+        "@cloudflare/cf-mcp"
+      ],
+      "features": [
+        "Workers部署",
+        "CDN管理",
+        "D1数据库",
+        "R2存储"
+      ],
+      "use_cases": [
+        "边缘计算",
+        "CDN优化",
+        "Serverless部署"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/cloudflare/cf-mcp",
+      "related_urls": [
+        "https://developers.cloudflare.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "sentry-mcp",
+      "display_name": "Sentry MCP Server",
+      "description": "Sentry 官方 MCP Server，错误追踪和性能监控",
+      "source": "official",
+      "repo_url": "https://github.com/getsentry/sentry-mcp",
+      "stars": 4500,
+      "language": "TypeScript",
+      "categories": [
+        "监控",
+        "DevOps",
+        "错误追踪"
+      ],
+      "owner_type": "official",
+      "owner_name": "Sentry",
+      "company": "Sentry",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@sentry/mcp"
+      ],
+      "features": [
+        "错误追踪",
+        "性能监控",
+        "版本管理",
+        "告警配置"
+      ],
+      "use_cases": [
+        "应用监控",
+        "错误分析",
+        "性能优化"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/getsentry/sentry-mcp",
+      "related_urls": [
+        "https://sentry.io/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "linear-mcp",
+      "display_name": "Linear MCP Server",
+      "description": "Linear 官方 MCP Server，项目管理和 Issue 追踪",
+      "source": "official",
+      "repo_url": "https://github.com/linear/linear-mcp",
+      "stars": 2800,
+      "language": "TypeScript",
+      "categories": [
+        "项目管理",
+        "DevOps",
+        "敏捷开发"
+      ],
+      "owner_type": "official",
+      "owner_name": "Linear",
+      "company": "Linear",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "-g",
+        "@linear/mcp"
+      ],
+      "features": [
+        "Issue管理",
+        "项目追踪",
+        "里程碑管理",
+        "团队协作"
+      ],
+      "use_cases": [
+        "项目管理",
+        "敏捷开发",
+        "任务追踪"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/linear/linear-mcp",
+      "related_urls": [
+        "https://linear.app/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "context7",
+      "display_name": "Context7 MCP Server",
+      "description": "最新技术文档检索，支持 NPM、PyPI 等包的实时文档",
+      "source": "community",
+      "repo_url": "https://github.com/upstash/context7",
+      "stars": 35000,
+      "language": "JavaScript",
+      "categories": [
+        "AI",
+        "搜索",
+        "文档"
+      ],
+      "owner_type": "community",
+      "owner_name": "Upstash",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "features": [
+        "NPM文档检索",
+        "PyPI文档检索",
+        "实时同步",
+        "向量搜索"
+      ],
+      "use_cases": [
+        "AI编程辅助",
+        "文档查询",
+        "代码生成"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/upstash/context7",
+      "related_urls": [
+        "https://upstash.com/"
+      ],
+      "news_mentions": [
+        "2026年开发者必备工具",
+        "AI编程效率提升300%"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "tavily-mcp",
+      "display_name": "Tavily MCP Server",
+      "description": "AI 搜索引擎，提供精准的实时网络搜索",
+      "source": "community",
+      "repo_url": "https://github.com/tavily/tavily-mcp",
+      "stars": 5800,
+      "language": "Python",
+      "categories": [
+        "AI",
+        "搜索",
+        "LLM"
+      ],
+      "owner_type": "community",
+      "owner_name": "Tavily",
+      "company": "Tavily",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "tavily-mcp"
+      ],
+      "features": [
+        "实时搜索",
+        "深度搜索",
+        "内容提取",
+        "多语言支持"
+      ],
+      "use_cases": [
+        "AI搜索增强",
+        "实时信息获取",
+        "RAG应用"
+      ],
+      "pricing": "freemium",
+      "license": "MIT",
+      "documentation_url": "https://github.com/tavily/tavily-mcp",
+      "related_urls": [
+        "https://tavily.com/"
+      ],
+      "news_mentions": [
+        "RAG应用首选工具"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "brave-search-mcp",
+      "display_name": "Brave Search MCP",
+      "description": "注重隐私的搜索引擎集成",
+      "source": "community",
+      "repo_url": "https://github.com/brave/brave-mcp",
+      "stars": 4200,
+      "language": "TypeScript",
+      "categories": [
+        "搜索",
+        "隐私",
+        "浏览器"
+      ],
+      "owner_type": "community",
+      "owner_name": "Brave",
+      "company": "Brave",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "features": [
+        "隐私搜索",
+        "网页搜索",
+        "图片搜索",
+        "新闻搜索"
+      ],
+      "use_cases": [
+        "隐私保护搜索",
+        "内容聚合",
+        "市场调研"
+      ],
+      "pricing": "free",
+      "license": "MPL-2.0",
+      "documentation_url": "https://github.com/brave/brave-mcp",
+      "related_urls": [
+        "https://api.search.brave.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "perplexity-mcp",
+      "display_name": "Perplexity MCP Server",
+      "description": "接入 Perplexity AI 搜索能力",
+      "source": "community",
+      "repo_url": "https://github.com/perplexitylabs/pplx-mcp",
+      "stars": 3500,
+      "language": "Python",
+      "categories": [
+        "AI",
+        "搜索",
+        "LLM"
+      ],
+      "owner_type": "community",
+      "owner_name": "Perplexity",
+      "company": "Perplexity AI",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "perplexity-mcp"
+      ],
+      "features": [
+        "AI搜索",
+        "实时问答",
+        "深度研究",
+        "源引用"
+      ],
+      "use_cases": [
+        "学术研究",
+        "市场分析",
+        "AI增强搜索"
+      ],
+      "pricing": "freemium",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/perplexitylabs/pplx-mcp",
+      "related_urls": [
+        "https://perplexity.ai/"
+      ],
+      "news_mentions": [
+        "2026年AI搜索新星"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "postgres-mcp",
+      "display_name": "PostgreSQL MCP Server",
+      "description": "PostgreSQL 数据库操作 MCP Server",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-postgres",
+      "stars": 3800,
+      "language": "Python",
+      "categories": [
+        "数据库",
+        "SQL"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "mcp-server-postgres"
+      ],
+      "features": [
+        "SQL查询",
+        "表操作",
+        "索引管理",
+        "事务支持"
+      ],
+      "use_cases": [
+        "数据库管理",
+        "数据分析",
+        "后端开发"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-postgres",
+      "related_urls": [
+        "https://www.postgresql.org/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "sqlite-mcp",
+      "display_name": "SQLite MCP Server",
+      "description": "轻量级 SQLite 数据库 MCP Server",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-sqlite",
+      "stars": 3200,
+      "language": "Python",
+      "categories": [
+        "数据库",
+        "SQL",
+        "轻量级"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "mcp-server-sqlite"
+      ],
+      "features": [
+        "SQL查询",
+        "表操作",
+        "轻量级",
+        "文件数据库"
+      ],
+      "use_cases": [
+        "本地存储",
+        "原型开发",
+        "小型应用"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-sqlite",
+      "related_urls": [
+        "https://www.sqlite.org/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "redis-mcp",
+      "display_name": "Redis MCP Server",
+      "description": "Redis 键值存储 MCP Server",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-redis",
+      "stars": 2100,
+      "language": "Python",
+      "categories": [
+        "数据库",
+        "缓存",
+        "键值存储"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "mcp-server-redis"
+      ],
+      "features": [
+        "键值操作",
+        "缓存管理",
+        "发布订阅",
+        "流处理"
+      ],
+      "use_cases": [
+        "缓存系统",
+        "会话存储",
+        "实时应用"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-redis",
+      "related_urls": [
+        "https://redis.io/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "chrome-devtools-mcp",
+      "display_name": "Chrome DevTools MCP",
+      "description": "Chrome 开发者工具 MCP，支持性能分析和网络监控",
+      "source": "community",
+      "repo_url": "https://github.com/iflow/chrome-devtools-mcp",
+      "stars": 1800,
+      "language": "TypeScript",
+      "categories": [
+        "浏览器",
+        "开发者工具",
+        "自动化"
+      ],
+      "owner_type": "community",
+      "owner_name": "iFlow",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "chrome-devtools-mcp"
+      ],
+      "features": [
+        "页面控制",
+        "性能分析",
+        "网络监控",
+        "控制台日志"
+      ],
+      "use_cases": [
+        "Web开发调试",
+        "性能优化",
+        "自动化测试"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/iflow/chrome-devtools-mcp",
+      "related_urls": [
+        "https://developers.google.com/web/tools/chrome-devtools"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "puppeteer-mcp",
+      "display_name": "Puppeteer MCP Server",
+      "description": "Puppeteer 浏览器自动化 MCP",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-puppeteer",
+      "stars": 4500,
+      "language": "TypeScript",
+      "categories": [
+        "浏览器自动化",
+        "爬虫",
+        "测试"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
+      "features": [
+        "浏览器控制",
+        "网页抓取",
+        "PDF生成",
+        "截图"
+      ],
+      "use_cases": [
+        "Web爬虫",
+        "自动化测试",
+        "页面截图"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-puppeteer",
+      "related_urls": [
+        "https://pptr.dev/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "filesystem-mcp",
+      "display_name": "Filesystem MCP Server",
+      "description": "本地文件系统访问 MCP Server",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-filesystem",
+      "stars": 5600,
+      "language": "TypeScript",
+      "categories": [
+        "文件系统",
+        "本地工具"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem"
+      ],
+      "features": [
+        "文件读写",
+        "目录操作",
+        "路径解析",
+        "文件搜索"
+      ],
+      "use_cases": [
+        "本地文件管理",
+        "代码编辑",
+        "文档处理"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-filesystem",
+      "related_urls": [],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "memory-mcp",
+      "display_name": "Memory MCP Server",
+      "description": "持久化记忆存储，让 AI 记住跨会话信息",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-memory",
+      "stars": 4200,
+      "language": "TypeScript",
+      "categories": [
+        "AI",
+        "记忆",
+        "上下文"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "features": [
+        "持久化存储",
+        "会话记忆",
+        "知识图谱",
+        "向量检索"
+      ],
+      "use_cases": [
+        "长期记忆",
+        "上下文管理",
+        "个性化AI"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-memory",
+      "related_urls": [],
+      "news_mentions": [
+        "AI记忆系统必备"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "discord-mcp",
+      "display_name": "Discord MCP Server",
+      "description": "Discord 机器人 MCP Server",
+      "source": "community",
+      "repo_url": "https://github.com/Discord-MCP/server-discord",
+      "stars": 1900,
+      "language": "TypeScript",
+      "categories": [
+        "通讯",
+        "社交",
+        "机器人"
+      ],
+      "owner_type": "community",
+      "owner_name": "Discord MCP Community",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "-g",
+        "discord-mcp"
+      ],
+      "features": [
+        "消息发送",
+        "频道管理",
+        "用户交互",
+        "权限控制"
+      ],
+      "use_cases": [
+        "社区管理",
+        "聊天机器人",
+        "通知系统"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/Discord-MCP/server-discord",
+      "related_urls": [
+        "https://discord.com/developers/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "telegram-mcp",
+      "display_name": "Telegram MCP Server",
+      "description": "Telegram 机器人 MCP Server",
+      "source": "community",
+      "repo_url": "https://github.com/Base64/telegram-mcp",
+      "stars": 2200,
+      "language": "Python",
+      "categories": [
+        "通讯",
+        "社交",
+        "机器人"
+      ],
+      "owner_type": "community",
+      "owner_name": "Base64",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "telegram-mcp"
+      ],
+      "features": [
+        "消息发送",
+        "群组管理",
+        "机器人交互",
+        "文件分享"
+      ],
+      "use_cases": [
+        "通知推送",
+        "聊天机器人",
+        "自动化通讯"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/Base64/telegram-mcp",
+      "related_urls": [
+        "https://core.telegram.org/bots"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "fetch-mcp",
+      "display_name": "Fetch MCP Server",
+      "description": "Anthropic 官方 HTTP 请求工具",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/server-fetch",
+      "stars": 801000,
+      "language": "TypeScript",
+      "categories": [
+        "HTTP",
+        "API",
+        "网络"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": "Anthropic",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ],
+      "features": [
+        "HTTP GET",
+        "HTTP POST",
+        "请求头配置",
+        "响应解析"
+      ],
+      "use_cases": [
+        "API调用",
+        "数据获取",
+        "Webhook处理"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/server-fetch",
+      "related_urls": [],
+      "news_mentions": [
+        "MCP官方推荐工具"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "awesome-mcp-servers",
+      "display_name": "Awesome MCP Servers",
+      "description": "最全面的 MCP Server 索引，收录 2700+ 项目",
+      "source": "community",
+      "repo_url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "stars": 73600,
+      "language": "Markdown",
+      "categories": [
+        "资源",
+        "Awesome List",
+        "索引"
+      ],
+      "owner_type": "community",
+      "owner_name": "punkpeye",
+      "company": null,
+      "is_downloadable": false,
+      "download_type": "git",
+      "install_command": null,
+      "install_args": null,
+      "features": [
+        "2700+ MCP Server",
+        "20+ 分类",
+        "持续更新"
+      ],
+      "use_cases": [
+        "寻找MCP Server",
+        "资源导航",
+        "学习参考"
+      ],
+      "pricing": "free",
+      "license": "CC0-1.0",
+      "documentation_url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "related_urls": [
+        "https://mcp.so/",
+        "https://www.pulsemcp.com/"
+      ],
+      "news_mentions": [
+        "MCP生态必备资源",
+        "开发者收藏必备"
+      ],
+      "completeness_score": 70,
+      "completeness_level": "A"
+    },
+    {
+      "name": "n8n",
+      "display_name": "n8n Workflow Automation",
+      "description": "开源工作流自动化平台，支持 MCP 集成",
+      "source": "community",
+      "repo_url": "https://github.com/n8n-io/n8n",
+      "stars": 189000,
+      "language": "TypeScript",
+      "categories": [
+        "自动化",
+        "工作流",
+        "无代码"
+      ],
+      "owner_type": "community",
+      "owner_name": "n8n-io",
+      "company": "n8n",
+      "is_downloadable": true,
+      "download_type": "binary",
+      "install_command": "docker run",
+      "install_args": [
+        "-it",
+        "--name",
+        "n8n",
+        "-p",
+        "5678:5678",
+        "n8nio/n8n"
+      ],
+      "features": [
+        "可视化工作流",
+        "800+ 集成",
+        "自托管",
+        "MCP支持"
+      ],
+      "use_cases": [
+        "工作流自动化",
+        "业务流程",
+        "数据集成"
+      ],
+      "pricing": "free",
+      "license": "Sustainable Use License",
+      "documentation_url": "https://docs.n8n.io/",
+      "related_urls": [
+        "https://n8n.io/"
+      ],
+      "news_mentions": [
+        "2026年最佳自动化平台",
+        "企业数字化转型推荐"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "dify",
+      "display_name": "Dify AI 应用开发平台",
+      "description": "开源 LLM 应用开发平台，支持 MCP 协议",
+      "source": "community",
+      "repo_url": "https://github.com/langgenius/dify",
+      "stars": 142779,
+      "language": "Python",
+      "categories": [
+        "AI应用",
+        "LLMOps",
+        "RAG"
+      ],
+      "owner_type": "community",
+      "owner_name": "langgenius",
+      "company": "langgenius",
+      "is_downloadable": true,
+      "download_type": "docker",
+      "install_command": "docker run",
+      "install_args": [
+        "-it",
+        "-p",
+        "80:80",
+        "-p",
+        "443:443",
+        "difycommunity/dify-community"
+      ],
+      "features": [
+        "LLM应用开发",
+        "RAG",
+        "工作流",
+        "Agent",
+        "MCP支持"
+      ],
+      "use_cases": [
+        "AI应用开发",
+        "知识库",
+        "聊天机器人"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://docs.dify.ai/",
+      "related_urls": [
+        "https://dify.ai/"
+      ],
+      "news_mentions": [
+        "2026年最火AI开发平台",
+        "GitHub Star 突破10万"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "open-webui",
+      "display_name": "Open WebUI",
+      "description": "开源自托管 WebUI，支持 MCP 工具调用",
+      "source": "community",
+      "repo_url": "https://github.com/open-webui/open-webui",
+      "stars": 138801,
+      "language": "Python",
+      "categories": [
+        "AI界面",
+        "LLM",
+        "Web"
+      ],
+      "owner_type": "community",
+      "owner_name": "open-webui",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "docker",
+      "install_command": "docker run",
+      "install_args": [
+        "-d",
+        "-p",
+        "3000:8080",
+        "-v",
+        "open-webui:/app/backend/data",
+        "ghcr.io/open-webui/open-webui:main"
+      ],
+      "features": [
+        "ChatGPT界面",
+        "多模型支持",
+        "工具调用",
+        "MCP支持"
+      ],
+      "use_cases": [
+        "本地AI界面",
+        "模型管理",
+        "AI助手"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://docs.openwebui.com/",
+      "related_urls": [
+        "https://openwebui.com/"
+      ],
+      "news_mentions": [
+        "2026年最佳开源AI界面",
+        "Ollama最佳搭档"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "mindsdb",
+      "display_name": "MindsDB",
+      "description": "开源 ML 数据库，AI 和数据库的桥梁",
+      "source": "community",
+      "repo_url": "https://github.com/mindsdb/mindsdb",
+      "stars": 28000,
+      "language": "Python",
+      "categories": [
+        "数据库",
+        "机器学习",
+        "RAG"
+      ],
+      "owner_type": "community",
+      "owner_name": "mindsdb",
+      "company": "MindsDB",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "mindsdb"
+      ],
+      "features": [
+        "AutoML",
+        "预测分析",
+        "数据集成",
+        "向量存储"
+      ],
+      "use_cases": [
+        "预测分析",
+        "时序数据",
+        "ML应用"
+      ],
+      "pricing": "free",
+      "license": "GPL-3.0",
+      "documentation_url": "https://docs.mindsdb.com/",
+      "related_urls": [
+        "https://mindsdb.com/"
+      ],
+      "news_mentions": [
+        "数据库+AI融合标杆"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "1panel",
+      "display_name": "1Panel",
+      "description": "现代化 Linux 服务器管理面板，支持 MCP",
+      "source": "community",
+      "repo_url": "https://github.com/1Panel-dev/1Panel",
+      "stars": 32000,
+      "language": "Go",
+      "categories": [
+        "运维",
+        "服务器管理",
+        "DevOps"
+      ],
+      "owner_type": "community",
+      "owner_name": "1Panel-dev",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "binary",
+      "install_command": "curl -sSL",
+      "install_args": [
+        "https://resource.fit2cloud.com/1panel.sh",
+        "|",
+        "bash"
+      ],
+      "features": [
+        "容器管理",
+        "网站管理",
+        "数据库管理",
+        "LLM集成",
+        "MCP支持"
+      ],
+      "use_cases": [
+        "服务器运维",
+        "网站托管",
+        "DevOps"
+      ],
+      "pricing": "free",
+      "license": "GPL-3.0",
+      "documentation_url": "https://1panel.cn/",
+      "related_urls": [
+        "https://fit2cloud.com/"
+      ],
+      "news_mentions": [
+        "2026年最佳运维工具",
+        "国产开源骄傲"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "fastmcp",
+      "display_name": "FastMCP",
+      "description": "Python MCP 开发框架，装饰器语法简洁易用",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/fastmcp",
+      "stars": 8100,
+      "language": "Python",
+      "categories": [
+        "框架",
+        "Python",
+        "SDK"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": "Anthropic",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "fastmcp"
+      ],
+      "features": [
+        "装饰器语法",
+        "自动文档",
+        "热重载",
+        "类型安全"
+      ],
+      "use_cases": [
+        "MCP Server开发",
+        "快速原型",
+        "Python项目"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/fastmcp",
+      "related_urls": [
+        "https://modelcontextprotocol.io/"
+      ],
+      "news_mentions": [
+        "Python开发者首选框架",
+        "5行代码开发MCP"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "mcp-typescript-sdk",
+      "display_name": "MCP TypeScript SDK",
+      "description": "官方 TypeScript MCP SDK",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/typescript-sdk",
+      "stars": 3500,
+      "language": "TypeScript",
+      "categories": [
+        "框架",
+        "TypeScript",
+        "SDK"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": "Anthropic",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "@modelcontextprotocol/sdk"
+      ],
+      "features": [
+        "Promise支持",
+        "类型完整",
+        "VS Code插件",
+        "完整类型定义"
+      ],
+      "use_cases": [
+        "MCP Server开发",
+        "TypeScript项目",
+        "前端集成"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/typescript-sdk",
+      "related_urls": [
+        "https://modelcontextprotocol.io/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "mcp-go-sdk",
+      "display_name": "MCP Go SDK",
+      "description": "官方 Go 语言 MCP SDK",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/go-sdk",
+      "stars": 4500,
+      "language": "Go",
+      "categories": [
+        "框架",
+        "Go",
+        "SDK"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": "Anthropic",
+      "is_downloadable": true,
+      "download_type": "go",
+      "install_command": "go get",
+      "install_args": [
+        "github.com/modelcontextprotocol/go-sdk"
+      ],
+      "features": [
+        "高性能",
+        "类型安全",
+        "Google维护",
+        "并发支持"
+      ],
+      "use_cases": [
+        "MCP Server开发",
+        "Go项目",
+        "高性能应用"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/go-sdk",
+      "related_urls": [
+        "https://modelcontextprotocol.io/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "mcp-java-sdk",
+      "display_name": "MCP Java SDK",
+      "description": "官方 Java 语言 MCP SDK (v1.0.0)",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/java-sdk",
+      "stars": 2200,
+      "language": "Java",
+      "categories": [
+        "框架",
+        "Java",
+        "SDK",
+        "Spring"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": "Anthropic",
+      "is_downloadable": true,
+      "download_type": "maven",
+      "install_command": "mvn dependency",
+      "install_args": [
+        "com.modelcontextprotocol:java-sdk:1.0.0"
+      ],
+      "features": [
+        "生产级稳定",
+        "Spring集成",
+        "企业支持",
+        "Jakarta EE"
+      ],
+      "use_cases": [
+        "MCP Server开发",
+        "Java项目",
+        "企业应用"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/java-sdk",
+      "related_urls": [
+        "https://spring.io/projects/spring-ai"
+      ],
+      "news_mentions": [
+        "Java企业级MCP标准",
+        "2026年生产级稳定版发布"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "pymcp",
+      "display_name": "PyMCP",
+      "description": "Python MCP 服务开发框架",
+      "source": "community",
+      "repo_url": "https://github.com/uranus-public/pymcp",
+      "stars": 1500,
+      "language": "Python",
+      "categories": [
+        "框架",
+        "Python",
+        "异步"
+      ],
+      "owner_type": "community",
+      "owner_name": "uranus-public",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "pymcp"
+      ],
+      "features": [
+        "异步支持",
+        "依赖注入",
+        "中间件",
+        "自动注册"
+      ],
+      "use_cases": [
+        "MCP Server开发",
+        "异步应用",
+        "微服务"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/uranus-public/pymcp",
+      "related_urls": [],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "mcp-rust-sdk",
+      "display_name": "MCP Rust SDK",
+      "description": "官方 Rust 语言 MCP SDK",
+      "source": "community",
+      "repo_url": "https://github.com/modelcontextprotocol/rust-sdk",
+      "stars": 2800,
+      "language": "Rust",
+      "categories": [
+        "框架",
+        "Rust",
+        "SDK"
+      ],
+      "owner_type": "community",
+      "owner_name": "Model Context Protocol",
+      "company": "Anthropic",
+      "is_downloadable": true,
+      "download_type": "cargo",
+      "install_command": "cargo add",
+      "install_args": [
+        "mcp"
+      ],
+      "features": [
+        "高性能",
+        "内存安全",
+        "异步运行时",
+        "零成本抽象"
+      ],
+      "use_cases": [
+        "MCP Server开发",
+        "Rust项目",
+        "高性能场景"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/modelcontextprotocol/rust-sdk",
+      "related_urls": [
+        "https://www.rust-lang.org/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "pulsemcp",
+      "display_name": "PulseMCP",
+      "description": "每日更新的 MCP 服务器目录",
+      "source": "platform",
+      "repo_url": "https://github.com/pulsemcp/pulsemcp",
+      "stars": 1200,
+      "language": "TypeScript",
+      "categories": [
+        "平台",
+        "导航",
+        "目录"
+      ],
+      "owner_type": "community",
+      "owner_name": "PulseMCP",
+      "company": null,
+      "is_downloadable": false,
+      "download_type": "web",
+      "install_command": null,
+      "install_args": null,
+      "features": [
+        "4290+ MCP Server",
+        "每日更新",
+        "搜索过滤",
+        "统计数据"
+      ],
+      "use_cases": [
+        "MCP发现",
+        "资源导航",
+        "趋势分析"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://www.pulsemcp.com/",
+      "related_urls": [
+        "https://github.com/pulsemcp"
+      ],
+      "news_mentions": [
+        "MCP生态导航站",
+        "开发者必备工具"
+      ],
+      "completeness_score": 65,
+      "completeness_level": "A"
+    },
+    {
+      "name": "glama-mcp",
+      "display_name": "Glama MCP Directory",
+      "description": "MCP 服务器目录，验证每个服务器的许可证",
+      "source": "platform",
+      "repo_url": "https://github.com/glama-ai/mcp-directory",
+      "stars": 1800,
+      "language": "TypeScript",
+      "categories": [
+        "平台",
+        "导航",
+        "目录"
+      ],
+      "owner_type": "community",
+      "owner_name": "Glama",
+      "company": null,
+      "is_downloadable": false,
+      "download_type": "web",
+      "install_command": null,
+      "install_args": null,
+      "features": [
+        "5000+ MCP Server",
+        "许可证验证",
+        "手动审核",
+        "Discord集成"
+      ],
+      "use_cases": [
+        "MCP发现",
+        "合规检查",
+        "社区交流"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://glama.ai/mcp/servers",
+      "related_urls": [
+        "https://glama.ai/mcp/discord"
+      ],
+      "news_mentions": [],
+      "completeness_score": 65,
+      "completeness_level": "A"
+    },
+    {
+      "name": "taskade-mcp",
+      "display_name": "Taskade MCP",
+      "description": "工作区管理和团队协作 MCP",
+      "source": "platform",
+      "repo_url": "https://github.com/taskade/mcp",
+      "stars": 950,
+      "language": "TypeScript",
+      "categories": [
+        "项目管理",
+        "协作",
+        "AI"
+      ],
+      "owner_type": "community",
+      "owner_name": "Taskade",
+      "company": "Taskade",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "-g",
+        "@taskade/mcp"
+      ],
+      "features": [
+        "项目管理",
+        "团队协作",
+        "AI工作流",
+        "思维导图"
+      ],
+      "use_cases": [
+        "任务管理",
+        "团队协作",
+        "头脑风暴"
+      ],
+      "pricing": "freemium",
+      "license": "Apache-2.0",
+      "documentation_url": "https://www.taskade.com/",
+      "related_urls": [
+        "https://taskade.com/"
+      ],
+      "news_mentions": [],
+      "completeness_score": 90,
+      "completeness_level": "S"
+    },
+    {
+      "name": "feishu-mcp",
+      "display_name": "飞书 MCP Server",
+      "description": "飞书官方 MCP Server，企业协作集成",
+      "source": "official",
+      "repo_url": "https://github.com/justinyoo/Feishu-MCP",
+      "stars": 2800,
+      "language": "TypeScript",
+      "categories": [
+        "企业协作",
+        "OA",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "justinyoo",
+      "company": "飞书 (字节跳动)",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "-g",
+        "feishu-mcp"
+      ],
+      "features": [
+        "消息发送",
+        "日历管理",
+        "文档操作",
+        "审批流程"
+      ],
+      "use_cases": [
+        "企业协作",
+        "OA自动化",
+        "团队管理"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/justinyoo/Feishu-MCP",
+      "related_urls": [
+        "https://open.feishu.cn/"
+      ],
+      "news_mentions": [
+        "字节跳动官方支持"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "dingtalk-mcp",
+      "display_name": "钉钉 MCP Server",
+      "description": "钉钉官方 MCP Server，企业办公集成",
+      "source": "official",
+      "repo_url": "https://github.com/dingtalk/dingtalk-mcp",
+      "stars": 9000,
+      "language": "TypeScript",
+      "categories": [
+        "企业协作",
+        "OA",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "钉钉",
+      "company": "钉钉 (阿里巴巴)",
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npx",
+      "install_args": [
+        "-y",
+        "dingtalk-mcp"
+      ],
+      "features": [
+        "日程管理",
+        "任务创建",
+        "消息通知",
+        "审批流程",
+        "10大API类"
+      ],
+      "use_cases": [
+        "企业办公",
+        "OA自动化",
+        "团队协作"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/dingtalk/dingtalk-mcp",
+      "related_urls": [
+        "https://open.dingtalk.com/"
+      ],
+      "news_mentions": [
+        "阿里钉钉官方发布",
+        "2026年企业级MCP"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "baidu-ernie-mcp",
+      "display_name": "百度文心 MCP Server",
+      "description": "百度文心一言 MCP Server",
+      "source": "official",
+      "repo_url": "https://github.com/baidu/ernie-mcp",
+      "stars": 12000,
+      "language": "Python",
+      "categories": [
+        "AI",
+        "LLM",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "百度",
+      "company": "百度",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "ernie-mcp"
+      ],
+      "features": [
+        "文心一言",
+        "知识库",
+        "文档处理",
+        "AI对话"
+      ],
+      "use_cases": [
+        "AI对话",
+        "知识管理",
+        "文档处理"
+      ],
+      "pricing": "freemium",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/baidu/ernie-mcp",
+      "related_urls": [
+        "https://cloud.baidu.com/"
+      ],
+      "news_mentions": [
+        "百度AI集成",
+        "文心一言生态"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "yunxin-mcp",
+      "display_name": "网易云信 MCP Server",
+      "description": "网易云信 IM/RTC MCP Server",
+      "source": "official",
+      "repo_url": "https://github.com/netease-im/yunxin-mcp-server",
+      "stars": 5500,
+      "language": "Python",
+      "categories": [
+        "通讯",
+        "IM",
+        "RTC",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "netease-im",
+      "company": "网易",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "yunxin-mcp"
+      ],
+      "features": [
+        "即时通讯",
+        "音视频",
+        "实时互动",
+        "IM集成"
+      ],
+      "use_cases": [
+        "社交应用",
+        "在线教育",
+        "游戏通讯"
+      ],
+      "pricing": "freemium",
+      "license": "MIT",
+      "documentation_url": "https://github.com/netease-im/yunxin-mcp-server",
+      "related_urls": [
+        "https://yunxin.163.com/"
+      ],
+      "news_mentions": [
+        "网易官方IM集成"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "wechat-mcp",
+      "display_name": "微信 MCP Server",
+      "description": "微信相关 MCP Server，支持消息处理",
+      "source": "community",
+      "repo_url": "https://github.com/zhayujie/chatgpt-on-wechat",
+      "stars": 42900,
+      "language": "Python",
+      "categories": [
+        "社交",
+        "微信",
+        "国内"
+      ],
+      "owner_type": "community",
+      "owner_name": "zhayujie",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "git",
+      "install_command": "git clone",
+      "install_args": [
+        "https://github.com/zhayujie/chatgpt-on-wechat"
+      ],
+      "features": [
+        "微信消息",
+        "ChatGPT集成",
+        "群聊管理",
+        "自动回复"
+      ],
+      "use_cases": [
+        "微信机器人",
+        "社群运营",
+        "自动客服"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/zhayujie/chatgpt-on-wechat",
+      "related_urls": [],
+      "news_mentions": [
+        "42k Star 国产明星项目",
+        "微信AI集成标杆"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "xiaoi-mcp",
+      "display_name": "小爱音箱 MCP",
+      "description": "小爱音箱语音通知工具",
+      "source": "community",
+      "repo_url": "https://github.com/idootop/xiaoi-mcp",
+      "stars": 7500,
+      "language": "JavaScript",
+      "categories": [
+        "IoT",
+        "智能家居",
+        "国内"
+      ],
+      "owner_type": "community",
+      "owner_name": "idootop",
+      "company": null,
+      "is_downloadable": true,
+      "download_type": "npm",
+      "install_command": "npm install",
+      "install_args": [
+        "@idootop/xiaoi-mcp"
+      ],
+      "features": [
+        "小爱音箱",
+        "语音通知",
+        "智能家居",
+        "TTS"
+      ],
+      "use_cases": [
+        "语音通知",
+        "智能家居控制",
+        "IoT集成"
+      ],
+      "pricing": "free",
+      "license": "MIT",
+      "documentation_url": "https://github.com/idootop/xiaoi-mcp",
+      "related_urls": [],
+      "news_mentions": [
+        "小米生态集成"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "miloco",
+      "display_name": "Miloco 小米AIoT框架",
+      "description": "小米官方端侧大模型智能体框架",
+      "source": "official",
+      "repo_url": "https://github.com/xiaomi/Miloco",
+      "stars": 15000,
+      "language": "Python",
+      "categories": [
+        "IoT",
+        "AIoT",
+        "智能家居",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "小米",
+      "company": "小米",
+      "is_downloadable": true,
+      "download_type": "git",
+      "install_command": "git clone",
+      "install_args": [
+        "https://github.com/xiaomi/Miloco"
+      ],
+      "features": [
+        "AIoT集成",
+        "端侧大模型",
+        "设备控制",
+        "MCP协议"
+      ],
+      "use_cases": [
+        "智能家居",
+        "IoT自动化",
+        "AI控制"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://github.com/xiaomi/Miloco",
+      "related_urls": [
+        "https://iot.mi.com/"
+      ],
+      "news_mentions": [
+        "小米官方AIoT框架",
+        "15k Star"
+      ],
+      "completeness_score": 100,
+      "completeness_level": "S"
+    },
+    {
+      "name": "aliyun-mcp",
+      "display_name": "阿里云 MCP Server",
+      "description": "阿里云服务 MCP 集成",
+      "source": "official",
+      "repo_url": "https://github.com/aliyun/aliyun-mcp",
+      "stars": 3200,
+      "language": "Python",
+      "categories": [
+        "云服务",
+        "国内",
+        "DevOps"
+      ],
+      "owner_type": "official",
+      "owner_name": "阿里云",
+      "company": "阿里巴巴",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "aliyun-mcp"
+      ],
+      "features": [
+        "OSS存储",
+        "函数计算",
+        "API网关",
+        "数据库"
+      ],
+      "use_cases": [
+        "云资源管理",
+        "自动化运维",
+        "Serverless"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://help.aliyun.com/",
+      "related_urls": [
+        "https://www.aliyun.com/"
+      ],
+      "news_mentions": [
+        "阿里云官方集成"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "tencentcloud-mcp",
+      "display_name": "腾讯云 MCP Server",
+      "description": "腾讯云服务 MCP 集成",
+      "source": "official",
+      "repo_url": "https://github.com/tencentcloud/tencentcloud-mcp",
+      "stars": 2800,
+      "language": "Python",
+      "categories": [
+        "云服务",
+        "国内",
+        "DevOps"
+      ],
+      "owner_type": "official",
+      "owner_name": "腾讯云",
+      "company": "腾讯",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "tencentcloud-mcp"
+      ],
+      "features": [
+        "COS存储",
+        "SCF函数",
+        "API网关",
+        "数据库"
+      ],
+      "use_cases": [
+        "云资源管理",
+        "自动化运维",
+        "Serverless"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://cloud.tencent.com/document",
+      "related_urls": [
+        "https://cloud.tencent.com/"
+      ],
+      "news_mentions": [
+        "腾讯云官方集成"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "gitee-mcp",
+      "display_name": "Gitee MCP Server",
+      "description": "Gitee 官方 MCP Server，国内代码平台",
+      "source": "official",
+      "repo_url": "https://gitee.com/oschina/mcp-gitee",
+      "stars": 1800,
+      "language": "Go",
+      "categories": [
+        "代码平台",
+        "DevOps",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "开源中国",
+      "company": "开源中国",
+      "is_downloadable": true,
+      "download_type": "binary",
+      "install_command": "go install",
+      "install_args": [
+        "gitee.com/oschina/mcp-gitee@latest"
+      ],
+      "features": [
+        "仓库管理",
+        "Issue管理",
+        "PR管理",
+        "私有化部署"
+      ],
+      "use_cases": [
+        "代码管理",
+        "项目管理",
+        "CI/CD"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://gitee.com/oschina/mcp-gitee",
+      "related_urls": [
+        "https://gitee.com/"
+      ],
+      "news_mentions": [
+        "Gitee官方支持",
+        "国内代码平台首选"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "huawei-cloud-mcp",
+      "display_name": "华为云 MCP Server",
+      "description": "华为云服务 MCP 集成",
+      "source": "official",
+      "repo_url": "https://github.com/huaweicloud/huaweicloud-mcp",
+      "stars": 2100,
+      "language": "Python",
+      "categories": [
+        "云服务",
+        "国内",
+        "DevOps"
+      ],
+      "owner_type": "official",
+      "owner_name": "华为云",
+      "company": "华为",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "huaweicloud-mcp"
+      ],
+      "features": [
+        "OBS存储",
+        "函数工作流",
+        "云数据库",
+        "IoT"
+      ],
+      "use_cases": [
+        "云资源管理",
+        "企业DevOps",
+        "IoT集成"
+      ],
+      "pricing": "free",
+      "license": "Apache-2.0",
+      "documentation_url": "https://support.huaweicloud.com/",
+      "related_urls": [
+        "https://www.huaweicloud.com/"
+      ],
+      "news_mentions": [
+        "华为云官方集成"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    },
+    {
+      "name": "meituan-mcp",
+      "display_name": "美团 MCP Server",
+      "description": "美团外卖和到店业务 API 集成",
+      "source": "official",
+      "repo_url": "https://github.com/meituan/meituan-mcp",
+      "stars": 1500,
+      "language": "Python",
+      "categories": [
+        "电商",
+        "O2O",
+        "国内"
+      ],
+      "owner_type": "official",
+      "owner_name": "美团",
+      "company": "美团",
+      "is_downloadable": true,
+      "download_type": "pip",
+      "install_command": "pip install",
+      "install_args": [
+        "meituan-mcp"
+      ],
+      "features": [
+        "外卖API",
+        "到店API",
+        "订单管理",
+        "配送追踪"
+      ],
+      "use_cases": [
+        "O2O自动化",
+        "电商集成",
+        "生活服务"
+      ],
+      "pricing": "commercial",
+      "license": "Proprietary",
+      "documentation_url": "https://open.meituan.com/",
+      "related_urls": [
+        "https://www.meituan.com/"
+      ],
+      "news_mentions": [
+        "美团官方API集成"
+      ],
+      "completeness_score": 95,
+      "completeness_level": "S"
+    }
+  ]
+}
