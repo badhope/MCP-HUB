@@ -22,14 +22,17 @@ const handleError = (error: unknown) => {
 };
 
 export default function App() {
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const handleReset = () => {
+    const target = basename ? `${basename}/` : "/";
+    window.location.href = target;
+  };
   return (
-    <Router>
+    <Router basename={basename || undefined}>
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
         onError={handleError}
-        onReset={() => {
-          window.location.href = "/";
-        }}
+        onReset={handleReset}
       >
         <div className="min-h-screen flex flex-col">
           <Navbar />
