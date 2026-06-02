@@ -91,9 +91,11 @@ PLACEHOLDER_HINTS = (
 # Files where example-looking secrets legitimately appear (documentation, tests).
 # These must remain tracked in git so the scanner can self-verify, but should
 # never cause CI to fail. Add to this list only with justification.
+# The match is a substring check on the full path, so the bare stem ("SECURITY")
+# covers both the English ("SECURITY.md") and Chinese ("SECURITY_CN.md") copies.
 DOCUMENTATION_FILE_HINTS = (
-    "SECURITY.md",     # pattern reference table
-    "CHANGELOG.md",    # historical incident references
+    "SECURITY",         # SECURITY.md + SECURITY_CN.md pattern reference table
+    "CHANGELOG.md",     # historical incident references
     "tests/test_secret_scanner.py",  # test fixtures
     "tools/secret_scanner.py",       # pattern definitions
 )
