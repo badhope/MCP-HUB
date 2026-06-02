@@ -99,10 +99,15 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, index = 0, sele
             </div>
           </div>
           
-          {/* Stars Badge */}
-          <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-100 text-amber-600 px-2.5 py-1.5 rounded-xl group-hover:bg-amber-100 transition-colors">
-            <Star className="w-4 h-4 fill-current" />
-            <span className="text-sm font-semibold">{server.stars.toLocaleString()}</span>
+          {/* Stars Badge — marked as snapshot to keep the demo honest about freshness */}
+          <div className="flex flex-col items-end space-y-0.5">
+            <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-100 text-amber-600 px-2.5 py-1.5 rounded-xl group-hover:bg-amber-100 transition-colors">
+              <Star className="w-4 h-4 fill-current" />
+              <span className="text-sm font-semibold">{server.stars.toLocaleString()}</span>
+            </div>
+            <span className="text-[10px] uppercase tracking-wide text-amber-700/70 font-medium pr-1">
+              snapshot
+            </span>
           </div>
         </div>
 

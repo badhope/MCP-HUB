@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
-import { Info, X, Github, BookOpen } from 'lucide-react';
+import { Info, X, Github, BookOpen, Clock } from 'lucide-react';
+import { useStats } from '../../hooks/useStats';
+
+const formatSnapshotDate = (iso: string): string => {
+  if (!iso) return 'unknown';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
 
 export const StaticDemoBanner: React.FC = () => {
   const [dismissed, setDismissed] = useState(false);
+  const { data: stats } = useStats();
   if (dismissed) return null;
+
+  const snapshotDate = stats?.data_snapshot_date
+    ? formatSnapshotDate(stats.data_snapshot_date)
+    : null;
 
   return (
     <div
@@ -18,6 +31,12 @@ export const StaticDemoBanner: React.FC = () => {
           browsing 50 curated MCP servers with full metadata, no live backend. Search,
           filter, and inspect configs work; sign-in, favorites, ratings, and submissions
           are disabled until the FastAPI backend is connected.
+          {snapshotDate && (
+            <span className="hidden sm:inline-flex items-center gap-1 ml-2 text-amber-800/90">
+              <Clock className="w-3 h-3" aria-hidden="true" />
+              <span>Data last synced {snapshotDate}.</span>
+            </span>
+          )}
         </p>
         <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
           <a

@@ -289,6 +289,11 @@ stats = {
     "total_servers": market_config.get("total_servers", len(servers_list)),
     "total_categories": market_config.get("total_categories", 21),
     "last_sync": market_config.get("last_sync", "2026-05-31"),
+    # When the static snapshot was generated. The UI surfaces this next to
+    # any per-server metric (stars, license, etc.) so the demo can clearly
+    # label itself as a snapshot rather than a live feed. The FastAPI
+    # backend overwrites this with `datetime.utcnow()` on every scrape.
+    "data_snapshot_date": "2026-05-31",
     # Source-types breakdown is only meaningful for the curated sample;
     # the full 4403-server registry does not have a verified official/community
     # split. We surface the sample counts with a `sample_size` hint so the UI

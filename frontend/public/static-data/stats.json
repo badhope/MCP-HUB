@@ -2,6 +2,7 @@
   "total_servers": 4403,
   "total_categories": 21,
   "last_sync": "2026-05-31",
+  "data_snapshot_date": "2026-05-31",
   "sample_source_types": {
     "community": 45,
     "official": 5

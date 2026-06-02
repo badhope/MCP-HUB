@@ -51,6 +51,10 @@ export interface StatsResponse {
   total_servers: number;
   total_categories: number;
   last_sync: string;
+  // ISO-style date the static snapshot was generated. Surfaced next to
+  // per-server metrics so the demo is clearly labelled as a snapshot,
+  // not a live feed. FastAPI backend overwrites this on every scrape.
+  data_snapshot_date: string;
   // Curated-sample source-types breakdown. The full registry does not have a
   // verified official/community split, so we surface this only for the
   // sample subset and annotate with sample_size.

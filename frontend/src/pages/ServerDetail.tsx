@@ -14,6 +14,7 @@ import { CommentSection } from '../components/user/CommentSection';
 import { useServers } from '../hooks/useServers';
 import { useServerConfig } from '../hooks/useServerDetail';
 import { useDownloadConfig } from '../hooks/useExport';
+import { useStats } from '../hooks/useStats';
 import { apiClient } from '../lib/api';
 
 const getQualityScore = (s: Server): number => {
@@ -45,6 +46,7 @@ const ServerDetail = React.memo(() => {
   const decodedName = decodeURIComponent(name || '');
   const { data: serverData } = useServers();
   const { data: configData, isLoading: loadingConfig } = useServerConfig(decodedName);
+  const { data: stats } = useStats();
 
   const [copied, setCopied] = useState(false);
   const [config, setConfig] = useState<ServerConfig | null>(null);
@@ -191,6 +193,9 @@ const ServerDetail = React.memo(() => {
                         <div className="flex items-center text-amber-600">
                           <Star size={18} className="fill-current mr-1.5" />
                           <span className="font-bold text-lg">{server.stars.toLocaleString()}</span>
+                          <span className="ml-1.5 text-[10px] uppercase tracking-wide font-medium text-amber-700/70 self-start mt-1.5">
+                            snapshot
+                          </span>
                         </div>
                         <div className="flex items-center text-gray-400">
                           <Clock size={16} className="mr-1.5" />
@@ -281,6 +286,10 @@ const ServerDetail = React.memo(() => {
                     </div>
                   ))}
                 </div>
+                <p className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400 flex items-center gap-1.5">
+                  <Clock size={12} aria-hidden="true" />
+                  <span>Snapshot data — last synced {stats?.data_snapshot_date ? new Date(stats.data_snapshot_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'unknown'}. Scores are derived from the snapshot and will refresh once the FastAPI backend is connected.</span>
+                </p>
               </CardContent>
             </Card>
 
