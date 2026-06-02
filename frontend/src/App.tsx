@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
+import { StaticDemoBanner } from "./components/layout/StaticDemoBanner";
 import { ErrorFallback } from "./components/shared/ErrorFallback";
 import { PageSkeleton } from "./components/shared/PageSkeleton";
+import { isStaticDemo } from "./lib/api";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const ServerList = React.lazy(() => import("./pages/ServerList"));
@@ -35,6 +37,7 @@ export default function App() {
         onReset={handleReset}
       >
         <div className="min-h-screen flex flex-col">
+          {isStaticDemo && <StaticDemoBanner />}
           <Navbar />
           <main className="flex-1">
             <Suspense fallback={<PageSkeleton variant="default" />}>

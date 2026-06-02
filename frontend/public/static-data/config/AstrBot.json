@@ -1,0 +1,21 @@
+{
+  "name": "AstrBot",
+  "mcpServers": {
+    "AstrBot": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/AstrBotDevs/AstrBot"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/AstrBotDevs/AstrBot"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/AstrBotDevs/AstrBot"
+  }
+}

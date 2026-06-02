@@ -1,0 +1,21 @@
+{
+  "name": "dify",
+  "mcpServers": {
+    "dify": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-dify"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-dify"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-dify"
+  }
+}

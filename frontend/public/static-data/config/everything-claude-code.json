@@ -1,0 +1,21 @@
+{
+  "name": "everything-claude-code",
+  "mcpServers": {
+    "everything-claude-code": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-everything-claude-code"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-everything-claude-code"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-everything-claude-code"
+  }
+}

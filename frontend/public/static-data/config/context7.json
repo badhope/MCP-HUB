@@ -1,0 +1,21 @@
+{
+  "name": "context7",
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-context7"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-context7"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-context7"
+  }
+}

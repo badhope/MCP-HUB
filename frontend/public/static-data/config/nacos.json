@@ -1,0 +1,21 @@
+{
+  "name": "nacos",
+  "mcpServers": {
+    "nacos": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-nacos"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-nacos"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-nacos"
+  }
+}

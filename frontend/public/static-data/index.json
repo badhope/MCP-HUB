@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-06-02T11:24:54.807067+00:00",
+  "endpoints": {
+    "servers": "/static-data/servers.json",
+    "stats": "/static-data/stats.json",
+    "popular": "/static-data/popular.json",
+    "recent": "/static-data/recent.json",
+    "curated": "/static-data/curated.json",
+    "categories": "/static-data/categories.json",
+    "companies": "/static-data/companies.json",
+    "config": "/static-data/config/{name}.json"
+  },
+  "counts": {
+    "servers_with_metadata": 50,
+    "configs": 50,
+    "categories": 21,
+    "companies": 42,
+    "total_indexed": 4403
+  }
+}

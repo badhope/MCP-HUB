@@ -1,0 +1,21 @@
+{
+  "name": "goose",
+  "mcpServers": {
+    "goose": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-goose"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-goose"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-goose"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "mindsdb",
+  "mcpServers": {
+    "mindsdb": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/mindsdb/mindsdb"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/mindsdb/mindsdb"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/mindsdb/mindsdb"
+  }
+}

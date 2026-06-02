@@ -1,0 +1,21 @@
+{
+  "name": "ruflo",
+  "mcpServers": {
+    "ruflo": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-ruflo"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-ruflo"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-ruflo"
+  }
+}

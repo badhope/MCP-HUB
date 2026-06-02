@@ -1,0 +1,21 @@
+{
+  "name": "TrendRadar",
+  "mcpServers": {
+    "TrendRadar": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/sansan0/TrendRadar"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/sansan0/TrendRadar"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/sansan0/TrendRadar"
+  }
+}

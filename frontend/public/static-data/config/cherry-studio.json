@@ -1,0 +1,21 @@
+{
+  "name": "cherry-studio",
+  "mcpServers": {
+    "cherry-studio": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-cherry-studio"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-cherry-studio"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-cherry-studio"
+  }
+}

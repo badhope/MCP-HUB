@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Heart } from 'lucide-react';
-import { apiClient } from '../../lib/api';
+import { Heart, Lock } from 'lucide-react';
+import { apiClient, isStaticDemo } from '../../lib/api';
 
 interface FavoritesButtonProps {
   serverName: string;
@@ -30,6 +30,7 @@ export const FavoritesButton = React.memo<FavoritesButtonProps>(({
   }, [serverName, userId]);
 
   const toggleFavorite = async () => {
+    if (isStaticDemo) return;
     setLoading(true);
     try {
       if (isFavorite) {
@@ -46,6 +47,15 @@ export const FavoritesButton = React.memo<FavoritesButtonProps>(({
     }
     setLoading(false);
   };
+
+  if (isStaticDemo) {
+    return (
+      <div className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed" title="Favorites are disabled in the static demo. Connect a backend to enable them.">
+        <Lock size={18} />
+        <span className="font-medium">Favorite (offline)</span>
+      </div>
+    );
+  }
 
   return (
     <button

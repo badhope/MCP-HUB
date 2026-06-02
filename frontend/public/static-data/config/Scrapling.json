@@ -1,0 +1,21 @@
+{
+  "name": "Scrapling",
+  "mcpServers": {
+    "Scrapling": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/D4Vinci/Scrapling"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/D4Vinci/Scrapling"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/D4Vinci/Scrapling"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "xiaozhi-esp32",
+  "mcpServers": {
+    "xiaozhi-esp32": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-xiaozhi-esp32"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-xiaozhi-esp32"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-xiaozhi-esp32"
+  }
+}

@@ -1,0 +1,1046 @@
+{
+  "total": 4403,
+  "servers": [
+    {
+      "name": "ECC",
+      "full_name": "affaan-m/ECC",
+      "source": "https://github.com/affaan-m/ECC",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "learning-research",
+        "security"
+      ],
+      "language": "javascript",
+      "stars": 194750,
+      "owner": "ECC",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "n8n",
+      "full_name": "n8n-io/n8n",
+      "source": "https://github.com/n8n-io/n8n",
+      "description": "n8n — workflow automation platform with MCP nodes.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "development",
+        "integration",
+        "terminal-system"
+      ],
+      "language": "typescript",
+      "stars": 189000,
+      "owner": "n8n-io",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "Sustainable Use License"
+    },
+    {
+      "name": "everything-claude-code",
+      "full_name": "affaan-m/everything-claude-code",
+      "source": "https://github.com/affaan-m/everything-claude-code",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "learning-research",
+        "security"
+      ],
+      "language": "javascript",
+      "stars": 185825,
+      "owner": "everything-claude-code",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "JavaGuide",
+      "full_name": "Snailclimb/JavaGuide",
+      "source": "https://github.com/Snailclimb/JavaGuide",
+      "description": "JavaGuide",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "database",
+        "development"
+      ],
+      "language": "javascript",
+      "stars": 155896,
+      "owner": "JavaGuide",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "dify",
+      "full_name": "langgenius/dify",
+      "source": "https://github.com/langgenius/dify",
+      "description": "Production-ready platform for agentic workflow development.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "memory-rag"
+      ],
+      "language": "python",
+      "stars": 142779,
+      "owner": "langgenius",
+      "topics": [
+        "RAG",
+        "Agent"
+      ],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "open-webui",
+      "full_name": "open-webui/open-webui",
+      "source": "https://github.com/open-webui/open-webui",
+      "description": "Open WebUI — self-hosted AI chat interface.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "integration",
+        "memory-rag"
+      ],
+      "language": "python",
+      "stars": 138801,
+      "owner": "open-webui",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "gemini-cli",
+      "full_name": "google-gemini/gemini-cli",
+      "source": "https://github.com/google-gemini/gemini-cli",
+      "description": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+      "source_type": "official",
+      "categories": [
+        "ai-llm",
+        "integration",
+        "terminal-system"
+      ],
+      "language": "typescript",
+      "stars": 104634,
+      "owner": "gemini-cli",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "servers",
+      "full_name": "modelcontextprotocol/servers",
+      "source": "https://github.com/modelcontextprotocol/servers",
+      "description": "Model Context Protocol Servers",
+      "source_type": "official",
+      "categories": [
+        "other"
+      ],
+      "language": "typescript",
+      "stars": 86294,
+      "owner": "servers",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "cc-switch",
+      "full_name": "farion1231/cc-switch",
+      "source": "https://github.com/farion1231/cc-switch",
+      "description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "development",
+        "terminal-system"
+      ],
+      "language": "rust",
+      "stars": 81968,
+      "owner": "cc-switch",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "netdata",
+      "full_name": "netdata/netdata",
+      "source": "https://github.com/netdata/netdata",
+      "description": "The fastest path to AI-powered full stack observability, even for lean teams.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "cloud-devops",
+        "database"
+      ],
+      "language": "c",
+      "stars": 78944,
+      "owner": "netdata",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "ragflow",
+      "full_name": "infiniflow/ragflow",
+      "source": "https://github.com/infiniflow/ragflow",
+      "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "document-notes",
+        "learning-research",
+        "memory-rag"
+      ],
+      "language": "python",
+      "stars": 78943,
+      "owner": "ragflow",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "lobehub",
+      "full_name": "lobehub/lobehub",
+      "source": "https://github.com/lobehub/lobehub",
+      "description": "🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling, and reporting on your entire AI team.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "calendar-time",
+        "learning-research"
+      ],
+      "language": "typescript",
+      "stars": 77760,
+      "owner": "lobehub",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "awesome-mcp-servers",
+      "full_name": "punkpeye/awesome-mcp-servers",
+      "source": "https://github.com/punkpeye/awesome-mcp-servers",
+      "description": "Curated list of awesome MCP servers.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm"
+      ],
+      "language": "markdown",
+      "stars": 73600,
+      "owner": "punkpeye",
+      "topics": [
+        "2700+ MCP Server"
+      ],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "lobe-chat",
+      "full_name": "lobehub/lobe-chat",
+      "source": "https://github.com/lobehub/lobe-chat",
+      "description": ":exploding_head: LobeHub - The ultimate space for work and life — to find, build, and collaborate with agent teammates that grow with you. We are taking agent harness to the next level — enabling multi-agent collaboration, effortless agent team design, and introducing agents as the unit of work inte...",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "learning-research"
+      ],
+      "language": "typescript",
+      "stars": 70553,
+      "owner": "lobe-chat",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "awesome-claude-skills",
+      "full_name": "ComposioHQ/awesome-claude-skills",
+      "source": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "description": "A curated list of awesome Claude Skills, resources, and tools for customizing Claude AI workflows",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "terminal-system"
+      ],
+      "language": "python",
+      "stars": 61999,
+      "owner": "awesome-claude-skills",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "anything-llm",
+      "full_name": "Mintplex-Labs/anything-llm",
+      "source": "https://github.com/Mintplex-Labs/anything-llm",
+      "description": "The all-in-one AI productivity accelerator. On device and privacy first with no annoying setup or configuration.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "browser-web",
+        "database",
+        "development",
+        "integration",
+        "memory-rag"
+      ],
+      "language": "javascript",
+      "stars": 60651,
+      "owner": "anything-llm",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "TrendRadar",
+      "full_name": "sansan0/TrendRadar",
+      "source": "https://github.com/sansan0/TrendRadar",
+      "description": "TrendRadar",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "social-communication"
+      ],
+      "language": "python",
+      "stars": 58403,
+      "owner": "TrendRadar",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "ruflo",
+      "full_name": "ruvnet/ruflo",
+      "source": "https://github.com/ruvnet/ruflo",
+      "description": "🌊 The leading agent orchestration platform for Claude. Deploy intelligent multi-agent swarms, coordinate autonomous workflows, and build conversational AI systems. Features    enterprise-grade architecture, self-learning swarm intelligence, RAG integration, and native Claude Code / Codex Integration",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "development",
+        "memory-rag"
+      ],
+      "language": "typescript",
+      "stars": 55546,
+      "owner": "ruflo",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "Scrapling",
+      "full_name": "D4Vinci/Scrapling",
+      "source": "https://github.com/D4Vinci/Scrapling",
+      "description": "🕷️ An adaptive Web Scraping framework that handles everything from a single request to a full-scale crawl!",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "browser-web",
+        "integration"
+      ],
+      "language": "python",
+      "stars": 54383,
+      "owner": "Scrapling",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "mempalace",
+      "full_name": "MemPalace/mempalace",
+      "source": "https://github.com/MemPalace/mempalace",
+      "description": "The best-benchmarked open-source AI memory system. And it's free.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "memory-rag"
+      ],
+      "language": "python",
+      "stars": 52888,
+      "owner": "mempalace",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "LocalAI",
+      "full_name": "mudler/LocalAI",
+      "source": "https://github.com/mudler/LocalAI",
+      "description": "LocalAI is the open-source AI engine. Run any model - LLMs, vision, voice, image, video - on any hardware. No GPU required.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "development",
+        "integration",
+        "music-audio",
+        "video-media"
+      ],
+      "language": "go",
+      "stars": 46484,
+      "owner": "LocalAI",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "JeecgBoot",
+      "full_name": "jeecgboot/JeecgBoot",
+      "source": "https://github.com/jeecgboot/JeecgBoot",
+      "description": "JeecgBoot",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "cloud-devops",
+        "development",
+        "memory-rag",
+        "terminal-system"
+      ],
+      "language": "java",
+      "stars": 46453,
+      "owner": "JeecgBoot",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "goose",
+      "full_name": "aaif-goose/goose",
+      "source": "https://github.com/aaif-goose/goose",
+      "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development"
+      ],
+      "language": "rust",
+      "stars": 45922,
+      "owner": "goose",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "CowAgent",
+      "full_name": "zhayujie/CowAgent",
+      "source": "https://github.com/zhayujie/CowAgent",
+      "description": "Open-source super AI assistant & Agent Harness. Plans tasks, runs tools and skills, autonomously grows with memory and knowledge. Multi-model, multi-channel. Lightweight, extensible, one-line install (formerly chatgpt-on-wechat).",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "learning-research",
+        "social-communication"
+      ],
+      "language": "python",
+      "stars": 44875,
+      "owner": "CowAgent",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "kong",
+      "full_name": "Kong/kong",
+      "source": "https://github.com/Kong/kong",
+      "description": "🦍 The API and AI Gateway",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "integration"
+      ],
+      "language": "lua",
+      "stars": 43449,
+      "owner": "kong",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "chatgpt-on-wechat",
+      "full_name": "zhayujie/chatgpt-on-wechat",
+      "source": "https://github.com/zhayujie/chatgpt-on-wechat",
+      "description": "ChatGPT-on-WeChat — bridge ChatGPT to WeChat.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "social-communication"
+      ],
+      "language": "python",
+      "stars": 42983,
+      "owner": "chatgpt-on-wechat",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "minds-platform",
+      "full_name": "mindsdb/minds-platform",
+      "source": "https://github.com/mindsdb/minds-platform",
+      "description": "Platform dedicated to building an open foundation for applied Artificial Intelligence, designed for people seeking production-ready AI systems they can truly control, extend and deploy anywhere.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "database",
+        "memory-rag"
+      ],
+      "language": "python",
+      "stars": 39207,
+      "owner": "minds-platform",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "antigravity-awesome-skills",
+      "full_name": "sickn33/antigravity-awesome-skills",
+      "source": "https://github.com/sickn33/antigravity-awesome-skills",
+      "description": "Installable GitHub library of 1,400+ agentic skills for Claude Code, Cursor, Codex CLI, Gemini CLI, Antigravity, and more. Includes installer CLI, bundles, workflows, and official/community skill collections.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "cloud-devops",
+        "development",
+        "terminal-system"
+      ],
+      "language": "python",
+      "stars": 38834,
+      "owner": "antigravity-awesome-skills",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "LibreChat",
+      "full_name": "danny-avila/LibreChat",
+      "source": "https://github.com/danny-avila/LibreChat",
+      "description": "Enhanced ChatGPT Clone: Features Agents, MCP, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter, langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Pre...",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "development",
+        "integration",
+        "security"
+      ],
+      "language": "typescript",
+      "stars": 37537,
+      "owner": "LibreChat",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "cherry-studio",
+      "full_name": "CherryHQ/cherry-studio",
+      "source": "https://github.com/CherryHQ/cherry-studio",
+      "description": "Cherry Studio boosts your productivity with unified AI access, Agent capabilities, and 300+ assistants in one desktop application.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "social-communication",
+        "terminal-system"
+      ],
+      "language": "typescript",
+      "stars": 37347,
+      "owner": "cherry-studio",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "agents",
+      "full_name": "wshobson/agents",
+      "source": "https://github.com/wshobson/agents",
+      "description": "Multi-harness agentic plugin marketplace for Claude Code, Codex CLI, Cursor, OpenCode, and Gemini CLI",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "terminal-system"
+      ],
+      "language": "python",
+      "stars": 36000,
+      "owner": "agents",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "UI-TARS-desktop",
+      "full_name": "bytedance/UI-TARS-desktop",
+      "source": "https://github.com/bytedance/UI-TARS-desktop",
+      "description": "The Open-Source Multimodal AI Agent Stack: Connecting Cutting-Edge AI Models and Agent Infra",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "browser-web"
+      ],
+      "language": "typescript",
+      "stars": 35411,
+      "owner": "UI-TARS-desktop",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "ai-engineering-hub",
+      "full_name": "patchy631/ai-engineering-hub",
+      "source": "https://github.com/patchy631/ai-engineering-hub",
+      "description": "In-depth tutorials on LLMs, RAGs and real-world AI agent applications.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "learning-research",
+        "memory-rag"
+      ],
+      "language": "jupyter",
+      "stars": 35304,
+      "owner": "ai-engineering-hub",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "context7",
+      "full_name": "upstash/context7",
+      "source": "https://github.com/upstash/context7",
+      "description": "Context7 — up-to-date library docs for LLMs.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "development",
+        "document-notes"
+      ],
+      "language": "javascript",
+      "stars": 35000,
+      "owner": "Upstash",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "PDFMathTranslate",
+      "full_name": "PDFMathTranslate/PDFMathTranslate",
+      "source": "https://github.com/PDFMathTranslate/PDFMathTranslate",
+      "description": "PDFMathTranslate",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "document-notes",
+        "terminal-system"
+      ],
+      "language": "python",
+      "stars": 34088,
+      "owner": "PDFMathTranslate",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "AstrBot",
+      "full_name": "AstrBotDevs/AstrBot",
+      "source": "https://github.com/AstrBotDevs/AstrBot",
+      "description": "AI Agent Assistant & development framework that integrates lots of IM platforms, LLMs, plugins and AI feature, and can be your openclaw alternative. ✨",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "cloud-devops",
+        "development",
+        "social-communication"
+      ],
+      "language": "python",
+      "stars": 33184,
+      "owner": "AstrBot",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "nacos",
+      "full_name": "alibaba/nacos",
+      "source": "https://github.com/alibaba/nacos",
+      "description": "an easy-to-use dynamic service discovery, configuration and service management platform for building AI cloud native applications.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops"
+      ],
+      "language": "java",
+      "stars": 32971,
+      "owner": "nacos",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "1Panel",
+      "full_name": "1Panel-dev/1Panel",
+      "source": "https://github.com/1Panel-dev/1Panel",
+      "description": "1Panel",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "database",
+        "development",
+        "terminal-system"
+      ],
+      "language": "go",
+      "stars": 32000,
+      "owner": "1Panel-dev",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "GPL-3.0"
+    },
+    {
+      "name": "composio",
+      "full_name": "ComposioHQ/composio",
+      "source": "https://github.com/ComposioHQ/composio",
+      "description": "Composio powers 1000+ toolkits, tool search, context management, authentication, and a sandboxed workbench to help you build AI agents that turn intent into action.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "security"
+      ],
+      "language": "typescript",
+      "stars": 28477,
+      "owner": "composio",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "FastGPT",
+      "full_name": "labring/FastGPT",
+      "source": "https://github.com/labring/FastGPT",
+      "description": "FastGPT is a knowledge-based platform built on the LLMs, offers a comprehensive suite of out-of-the-box capabilities such as data processing, RAG retrieval, and visual AI workflow orchestration, letting you easily develop and deploy complex question-answering systems without the need for extensive s...",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "learning-research",
+        "memory-rag"
+      ],
+      "language": "typescript",
+      "stars": 28158,
+      "owner": "FastGPT",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "claude-plugins-official",
+      "full_name": "anthropics/claude-plugins-official",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "description": "Official, Anthropic-managed directory of high quality Claude Code Plugins.",
+      "source_type": "official",
+      "categories": [
+        "ai-llm",
+        "cloud-devops",
+        "development"
+      ],
+      "language": "python",
+      "stars": 28029,
+      "owner": "claude-plugins-official",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "mindsdb",
+      "full_name": "mindsdb/mindsdb",
+      "source": "https://github.com/mindsdb/mindsdb",
+      "description": "MindsDB — federated query engine with ML in-database.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "database",
+        "memory-rag",
+        "security"
+      ],
+      "language": "python",
+      "stars": 28000,
+      "owner": "mindsdb",
+      "topics": [
+        "AutoML"
+      ],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "GPL-3.0"
+    },
+    {
+      "name": "gpt-researcher",
+      "full_name": "assafelovic/gpt-researcher",
+      "source": "https://github.com/assafelovic/gpt-researcher",
+      "description": "An autonomous agent that conducts deep research on any data using any LLM providers",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "browser-web",
+        "development",
+        "integration",
+        "learning-research"
+      ],
+      "language": "python",
+      "stars": 27329,
+      "owner": "gpt-researcher",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "xiaozhi-esp32",
+      "full_name": "78/xiaozhi-esp32",
+      "source": "https://github.com/78/xiaozhi-esp32",
+      "description": "Xiaozhi ESP32 — open-source AI chat hardware firmware.",
+      "source_type": "community",
+      "categories": [
+        "social-communication"
+      ],
+      "language": "cpp",
+      "stars": 26769,
+      "owner": "xiaozhi-esp32",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "agentscope",
+      "full_name": "agentscope-ai/agentscope",
+      "source": "https://github.com/agentscope-ai/agentscope",
+      "description": "Build and run agents you can see, understand and trust.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "social-communication"
+      ],
+      "language": "python",
+      "stars": 25711,
+      "owner": "agentscope",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "kratos",
+      "full_name": "go-kratos/kratos",
+      "source": "https://github.com/go-kratos/kratos",
+      "description": "Your ultimate Go microservices framework for the cloud-native era.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "browser-web",
+        "cloud-devops"
+      ],
+      "language": "go",
+      "stars": 25691,
+      "owner": "kratos",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "repomix",
+      "full_name": "yamadashy/repomix",
+      "source": "https://github.com/yamadashy/repomix",
+      "description": "📦 Repomix is a powerful tool that packs your entire repository into a single, AI-friendly file. Perfect for when you need to feed your codebase to Large Language Models (LLMs) or other AI tools like Claude, ChatGPT, DeepSeek, Perplexity, Gemini, Gemma, Llama, Grok, and more.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "art-design",
+        "cloud-devops",
+        "development",
+        "social-communication",
+        "terminal-system"
+      ],
+      "language": "typescript",
+      "stars": 25595,
+      "owner": "repomix",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "github-mcp-server",
+      "full_name": "github/github-mcp-server",
+      "source": "https://github.com/github/github-mcp-server",
+      "description": "GitHub MCP Server — official GitHub integration.",
+      "source_type": "official",
+      "categories": [
+        "cloud-devops"
+      ],
+      "language": "go",
+      "stars": 25000,
+      "owner": "GitHub",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    },
+    {
+      "name": "playwright-mcp",
+      "full_name": "microsoft/playwright-mcp",
+      "source": "https://github.com/microsoft/playwright-mcp",
+      "description": "Playwright MCP — browser automation for AI agents.",
+      "source_type": "official",
+      "categories": [
+        "browser-web"
+      ],
+      "language": "typescript",
+      "stars": 22400,
+      "owner": "Microsoft",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "chrome-devtools-mcp",
+      "full_name": "iflow/chrome-devtools-mcp",
+      "source": "https://github.com/iflow/chrome-devtools-mcp",
+      "description": "Chrome DevTools MCP server — control Chrome from AI agents.",
+      "source_type": "community",
+      "categories": [
+        "ai-llm",
+        "browser-web",
+        "development"
+      ],
+      "language": "typescript",
+      "stars": 1800,
+      "owner": "iFlow",
+      "topics": [],
+      "updated_at": "2026-05-15T00:00:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "archived": false,
+      "license": "MIT"
+    }
+  ],
+  "sample_count": 50,
+  "note": "Showing 50 curated servers with full metadata. Full registry has 4403+ entries. Visit the GitHub repository for the complete index."
+}

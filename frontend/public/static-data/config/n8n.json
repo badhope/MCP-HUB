@@ -1,0 +1,21 @@
+{
+  "name": "n8n",
+  "mcpServers": {
+    "n8n": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-n8n"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-n8n"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-n8n"
+  }
+}

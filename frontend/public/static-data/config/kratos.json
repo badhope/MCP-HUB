@@ -1,0 +1,21 @@
+{
+  "name": "kratos",
+  "mcpServers": {
+    "kratos": {
+      "command": "go",
+      "args": [
+        "install",
+        "github.com/go-kratos/kratos@latest"
+      ]
+    }
+  },
+  "commands": {
+    "go": [
+      "install",
+      "github.com/go-kratos/kratos@latest"
+    ]
+  },
+  "install": {
+    "npm": "go install github.com/go-kratos/kratos@latest"
+  }
+}

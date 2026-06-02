@@ -1,0 +1,21 @@
+{
+  "name": "anything-llm",
+  "mcpServers": {
+    "anything-llm": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-anything-llm"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-anything-llm"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-anything-llm"
+  }
+}
