@@ -28,6 +28,9 @@
 - `index.html` 的 `og:image` / `og:url` / `twitter:image` 改为指向 GitHub Pages CDN（`https://badhope.github.io/MCP-HUB/...`）而非 `raw.githubusercontent.com`
 - 18 个 `tools/*.py` 文件中 234 个 `print(...)` 调用替换为模块级 `_LOG = logging.getLogger(__name__)` + `_LOG.info(...))`。CLI 用 `print(..., file=sys.stderr)` 输出错误的代码段保持原样（logger 没有 `file=` 关键字参数）。`tools/secret_scanner.py` 的 "OK: no secrets detected." 仍然走 stdout，保证 `test_scanner_clean_directory_verbose` 继续通过
 - 新增 `.flake8`（max-line-length=100，排除 `servers/`、`frontend/`、构建目录）— 与 black 26.5.1 + isort 8 已用的 100 字符预算对齐，让 linter 和 formatter 不再相互打架
+- `Makefile` 的 `deploy-ghpages` 目标 — 原本手动 `git worktree + git push` 那套换成一条提示，指向新的 GitHub Actions 部署。`gh-pages` 分支已删除；部署由 `actions/deploy-pages@v4` + Pages artifact 上传器完成
+- `.github/workflows/frontend-deploy.yml` — 从 `peaceiris/actions-gh-pages@v4`（推到 gh-pages 分支）改为 `actions/configure-pages@v5` + `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4`（Pages workflow）。SPA fallback（`cp index.html 404.html`）和 `.nojekyll` 仍在 build 阶段内联生成。仓库 Pages source 切到 `build_type: workflow`
+- 仓库分支 — `gh-pages` 已删除，仓库现在只剩 `main` 一根分支。https://badhope.github.io/MCP-HUB/ 站点继续在线并随 `main` 每次 push 自动更新，只是改由 Pages CDN 直接服务，不再走分支
 
 ### 修复
 - Demo 上的星数现在明确标注为 snapshot，消除了之前"看起来是实时但实际数据陈旧"的风险

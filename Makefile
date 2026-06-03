@@ -98,22 +98,10 @@ build-frontend:  ## Build the Vite SPA into frontend/dist.
 
 build-data: data  ## Alias for `make data`.
 
-deploy-ghpages: build  ## Publish frontend/dist/ to the gh-pages branch.
-	@if [ -z "$$GITHUB_TOKEN" ] && [ -z "$$GH_TOKEN" ]; then \
-	  echo "ERROR: set GITHUB_TOKEN (with repo: write) to deploy" >&2; exit 1; \
-	fi
-	@tmpdir=$$(mktemp -d) && \
-	git worktree add $$tmpdir origin/gh-pages && \
-	cd $$tmpdir && \
-	git checkout gh-pages && \
-	find . -maxdepth 1 -mindepth 1 ! -name '.git' -exec rm -rf {} + && \
-	cp -r $(CURDIR)/frontend/dist/. . && \
-	git add -A && \
-	git -c user.name='github-actions[bot]' -c user.email='github-actions[bot]@users.noreply.github.com' \
-	  commit -m "deploy: $$(date -u +%Y-%m-%dT%H:%M:%SZ)" && \
-	git push https://x-access-token:$${GITHUB_TOKEN:-$$GH_TOKEN}@github.com/badhope/MCP-HUB.git gh-pages
-	git worktree remove $$tmpdir --force
-	git worktree prune
+deploy-ghpages: build  ## Trigger the Pages deploy workflow (Actions tab).
+	@echo "Frontend deploy is now handled by .github/workflows/frontend-deploy.yml"
+	@echo "(actions/deploy-pages — no gh-pages branch involved)."
+	@echo "Trigger: push to main, or Actions tab → Run workflow."
 
 deploy: deploy-ghpages  ## Alias for `make deploy-ghpages`.
 

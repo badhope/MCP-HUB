@@ -48,6 +48,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `docs/internal/IMPROVEMENT_PLAN.md`: `🔴高` / `🟡中` / `🟢低` priority labels replaced with `Priority: high` / `medium` / `low`.
 - 234 `print(...)` calls across 18 `tools/*.py` files replaced with module-level `_LOG = logging.getLogger(__name__)` + `_LOG.info(...)`. CLI error output that uses `print(..., file=sys.stderr)` is preserved (logger has no `file=` kwarg). `tools/secret_scanner.py`'s "OK: no secrets detected." stays on stdout so `test_scanner_clean_directory_verbose` keeps passing.
 - Added `.flake8` (max-line-length=100, exclude `servers/`, `frontend/`, build dirs) — gives the same 100-char budget that black 26.5.1 + isort 8 already enforce, so the linter / formatter can no longer disagree.
+- `Makefile` `deploy-ghpages` target — replaced the manual `git worktree + git push` dance with a pointer to the new GitHub Actions deploy. The gh-pages branch no longer exists; deploys are handled by `actions/deploy-pages@v4` and the Pages artifact uploader.
+- `.github/workflows/frontend-deploy.yml` — switched from `peaceiris/actions-gh-pages@v4` (push to gh-pages branch) to `actions/configure-pages@v5` + `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4` (Pages workflow). The SPA fallback (`cp index.html 404.html`) and `.nojekyll` are still produced inline. Repo Pages source switched to `build_type: workflow`.
+- Repository branches — `gh-pages` deleted. The repo now has only `main`. Public site at https://badhope.github.io/MCP-HUB/ is still live and continues to update on every push to `main`, just served directly by the Pages CDN instead of from a branch.
 
 ### Fixed
 - `tools/sync_index.py` F601 — removed three duplicate dict keys (`html`, `notion`, `arxiv`); the canonical definitions in the `document-notes` block are the ones that survive
