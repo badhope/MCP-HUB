@@ -31,6 +31,7 @@
 - `Makefile` 的 `deploy-ghpages` 目标 — 原本手动 `git worktree + git push` 那套换成一条提示，指向新的 GitHub Actions 部署。`gh-pages` 分支已删除；部署由 `actions/deploy-pages@v4` + Pages artifact 上传器完成
 - `.github/workflows/frontend-deploy.yml` — 从 `peaceiris/actions-gh-pages@v4`（推到 gh-pages 分支）改为 `actions/configure-pages@v5` + `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4`（Pages workflow）。SPA fallback（`cp index.html 404.html`）和 `.nojekyll` 仍在 build 阶段内联生成。仓库 Pages source 切到 `build_type: workflow`
 - 仓库分支 — `gh-pages` 已删除，仓库现在只剩 `main` 一根分支。https://badhope.github.io/MCP-HUB/ 站点继续在线并随 `main` 每次 push 自动更新，只是改由 Pages CDN 直接服务，不再走分支
+- **回滚** — 上面那两条（actions/deploy-pages 切换、`gh-pages` 删除）都已回退。`gh-pages` 分支重新作为 Pages 源（`build_type: legacy`，`source: gh-pages /`）。workflow 恢复用 `peaceiris/actions-gh-pages@v4` 推到 `gh-pages`。最终状态与 `b210884` 原始设置一致，叠加了 #14 那次 flake8 清理，部署出来的站点是 lint-clean 后的前端
 
 ### 修复
 - Demo 上的星数现在明确标注为 snapshot，消除了之前"看起来是实时但实际数据陈旧"的风险
