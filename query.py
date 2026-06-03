@@ -106,7 +106,10 @@ def cmd_categories(args):
 
 def cmd_popular(args):
     """列出热门服务器"""
-    limit = int(args[0]) if args else 10
+    try:
+        limit = int(args[0]) if args else 10
+    except (ValueError, IndexError):
+        limit = 10
     servers = list_popular(limit)
     print(f"热门 MCP 服务器 (前 {limit} 个):\n")
     for s in servers:
@@ -125,7 +128,10 @@ def cmd_popular(args):
 
 def cmd_recent(args):
     """列出最近更新的服务器"""
-    limit = int(args[0]) if args else 10
+    try:
+        limit = int(args[0]) if args else 10
+    except (ValueError, IndexError):
+        limit = 10
     servers = list_recent(limit)
     print(f"最近更新的 MCP 服务器 (前 {limit} 个):\n")
     for s in servers:

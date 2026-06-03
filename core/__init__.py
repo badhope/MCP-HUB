@@ -210,37 +210,23 @@ class MCPHub:
         return results
 
     def search(self, keyword: str) -> List[MCPServer]:
-        """搜索服务器（名称、描述、分类、topics、owner）"""
-        keyword = keyword.lower()
-        results = []
-
+        """Search servers by keyword across name/description/category/owner/topic."""
+        kw = keyword.lower().strip()
+        if not kw:
+            return []
+        results: List[MCPServer] = []
         for server in self.servers.values():
-            # 搜索名称
-            if keyword in server.name.lower():
+            if kw in server.name.lower() or kw in server.description.lower():
                 results.append(server)
                 continue
-
-            # 搜索描述
-            if keyword in server.description.lower():
+            if any(kw in cat.lower() for cat in server.categories):
                 results.append(server)
                 continue
-
-            # 搜索分类
-            for cat in server.categories:
-                if keyword in cat.lower():
-                    results.append(server)
-                    break
-            else:
-                # 搜索 topics
-                for topic in server.topics:
-                    if keyword in topic.lower():
-                        results.append(server)
-                        break
-                else:
-                    # 搜索 owner
-                    if keyword in server.owner.lower():
-                        results.append(server)
-
+            if kw in server.owner.lower():
+                results.append(server)
+                continue
+            if any(kw in topic.lower() for topic in server.topics):
+                results.append(server)
         return results
 
     def get_server(self, name: str) -> Optional[MCPServer]:

@@ -301,13 +301,33 @@ def review_submission(submission_id: str, status: str, reviewer: str, comment: O
 # ======================================
 
 def get_user_stats(user_id: str) -> Dict:
-    """获取用户统计"""
+    """Get statistics for a user"""
     favorites = get_favorites(user_id)
+    ratings = get_ratings_count_for_user(user_id)
+    comments = get_comments_count_for_user(user_id)
     return {
         "favorites_count": len(favorites),
-        "ratings_count": 0,  # Could expand
-        "comments_count": 0,  # Could expand
+        "ratings_count": ratings,
+        "comments_count": comments,
     }
+
+
+def get_ratings_count_for_user(user_id: str) -> int:
+    """Count ratings written by a user across all servers."""
+    data = load_user_data()
+    count = 0
+    for ratings in data.get("ratings", {}).values():
+        count += sum(1 for r in ratings if r.get("user_id") == user_id)
+    return count
+
+
+def get_comments_count_for_user(user_id: str) -> int:
+    """Count comments written by a user across all servers."""
+    data = load_user_data()
+    count = 0
+    for comments in data.get("comments", {}).values():
+        count += sum(1 for c in comments if c.get("user_id") == user_id)
+    return count
 
 
 def get_server_stats(server_name: str) -> Dict:

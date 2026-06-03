@@ -36,7 +36,12 @@ export const Navbar = React.memo(() => {
     setIsOpen(false);
   }, [location]);
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return (
+      location.pathname === path || location.pathname.startsWith(path + '/')
+    );
+  };
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${

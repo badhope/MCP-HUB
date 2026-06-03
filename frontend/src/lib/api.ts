@@ -680,7 +680,7 @@ class ApiClient {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ server_names: _serverNames }),
     });
-    if (!response.text) {
+    if (!response.ok) {
       throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }
     return response.text();

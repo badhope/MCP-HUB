@@ -193,11 +193,11 @@ class MCPHubAPI(BaseHTTPRequestHandler):
         elif path == "/recommend":
             if "scene" not in query:
                 self._error_response("Missing 'scene' parameter", 400)
-            else:
-                result = recommend_by_scene(query["scene"][0])
-                self._json_response(
-                    {"scene": query["scene"][0], "recommendations": result}
-                )
+                return
+            result = recommend_by_scene(query["scene"][0])
+            self._json_response(
+                {"scene": query["scene"][0], "recommendations": result}
+            )
 
         # Config
         elif path.startswith("/config/"):

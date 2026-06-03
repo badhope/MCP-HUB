@@ -521,15 +521,31 @@ async def get_server_config(name: str, data: Dict[str, Any] = Depends(get_app_da
     # Generate install commands based on repository content
     install = {}
     source = server.get("source", "")
-    
+    language = (server.get("language") or "").lower()
+    description = (server.get("description") or "").lower()
+
     # NPM
-    if "npm" in source.lower() or "npmjs" in source.lower():
+    if (
+        "npm" in source.lower()
+        or "npmjs" in source.lower()
+        or language in {"javascript", "typescript", "nodejs", "node", "ts", "js"}
+    ):
         install["npm"] = f"npm install -g {repo_name}"
-    
-    # Pip
-    if "pypi" in source.lower() or "pyproject.toml" in str(data):
+
+    # Pip — only suggest when the repo is a Python project. Earlier this
+    # branch was guarded by `"pyproject.toml" in str(data)` which is
+    # nonsense: it serialised the whole index and matched any project
+    # whose description mentioned the string, so every server ended up
+    # with a `pip install` hint regardless of language.
+    is_python = (
+        language in {"python", "py"}
+        or "pypi.org" in source.lower()
+        or "pyproject.toml" in description
+        or "setup.py" in description
+    )
+    if is_python:
         install["pip"] = f"pip install {repo_name}"
-    
+
     # Git - general fallback
     install["git"] = f"git clone {source}.git"
     

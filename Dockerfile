@@ -21,9 +21,14 @@ FROM base as production
 COPY --from=builder /root/.local /home/mcp-hub/.local
 ENV PATH=/home/mcp-hub/.local/bin:$PATH
 
-# Copy application code
-COPY --chown=mcp-hub:mcp-hub main.py .
-COPY --chown=mcp-hub:mcp-hub servers-index.json .
+# Copy application code. The backend is a multi-file FastAPI app
+# (main.py + api.py + services.py + query.py + user_data.py + core/),
+# plus the data index and templates. All of them must be in the image
+# or `python main.py` will ImportError on first request.
+COPY --chown=mcp-hub:mcp-hub main.py api.py services.py query.py user_data.py ./
+COPY --chown=mcp-hub:mcp-hub core/ ./core/
+COPY --chown=mcp-hub:mcp-hub templates/ ./templates/
+COPY --chown=mcp-hub:mcp-hub servers-index.json market-config.json ./
 
 # Run as non-root user
 USER mcp-hub
