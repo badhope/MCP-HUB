@@ -10,6 +10,7 @@ Writes a Markdown table to stdout, suitable for pasting into
 docs/BENCHMARKS.md. The numbers here are intentionally
 reproducible — same script, same machine, same Python.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -18,22 +19,23 @@ import sys
 import time
 import urllib.request
 
-
 ENDPOINTS: list[tuple[str, str]] = [
-    ("GET /",                                              "/"),
-    ("GET /health",                                        "/health"),
-    ("GET /stats",                                         "/stats"),
-    ("GET /servers?limit=10",                              "/servers?limit=10"),
-    ("GET /servers?search=github&limit=20",                "/servers?search=github&limit=20"),
-    ("GET /servers/popular?limit=20",                      "/servers/popular?limit=20"),
-    ("GET /servers/curated",                               "/servers/curated"),
-    ("GET /servers/by-category/development?limit=20",      "/servers/by-category/development?limit=20"),
-    ("GET /servers/by-quality?min_score=85&level=S&limit=20",
-                                                          "/servers/by-quality?min_score=85&level=S&limit=20"),
-    ("GET /servers/server-1",                              "/servers/server-1"),
-    ("GET /recommend/similar?name=server-1&limit=5",       "/recommend/similar?name=server-1&limit=5"),
-    ("GET /compare?servers=server-1,server-2",             "/compare?servers=server-1,server-2"),
-    ("GET /validate/server/server-1",                      "/validate/server/server-1"),
+    ("GET /", "/"),
+    ("GET /health", "/health"),
+    ("GET /stats", "/stats"),
+    ("GET /servers?limit=10", "/servers?limit=10"),
+    ("GET /servers?search=github&limit=20", "/servers?search=github&limit=20"),
+    ("GET /servers/popular?limit=20", "/servers/popular?limit=20"),
+    ("GET /servers/curated", "/servers/curated"),
+    ("GET /servers/by-category/development?limit=20", "/servers/by-category/development?limit=20"),
+    (
+        "GET /servers/by-quality?min_score=85&level=S&limit=20",
+        "/servers/by-quality?min_score=85&level=S&limit=20",
+    ),
+    ("GET /servers/server-1", "/servers/server-1"),
+    ("GET /recommend/similar?name=server-1&limit=5", "/recommend/similar?name=server-1&limit=5"),
+    ("GET /compare?servers=server-1,server-2", "/compare?servers=server-1,server-2"),
+    ("GET /validate/server/server-1", "/validate/server/server-1"),
 ]
 
 
@@ -68,35 +70,38 @@ def sustained_rps(url: str, seconds: float) -> tuple[int, float]:
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--host", default="http://localhost:8080",
-                   help="API base URL (default: http://localhost:8080)")
-    p.add_argument("--n", type=int, default=200,
-                   help="samples per endpoint (default: 200)")
-    p.add_argument("--warmup", type=int, default=30,
-                   help="warmup requests per endpoint (default: 30)")
-    p.add_argument("--sustained-seconds", type=float, default=5.0,
-                   help="duration for sustained RPS test (default: 5s)")
+    p.add_argument(
+        "--host",
+        default="http://localhost:8080",
+        help="API base URL (default: http://localhost:8080)",
+    )
+    p.add_argument("--n", type=int, default=200, help="samples per endpoint (default: 200)")
+    p.add_argument(
+        "--warmup", type=int, default=30, help="warmup requests per endpoint (default: 30)"
+    )
+    p.add_argument(
+        "--sustained-seconds",
+        type=float,
+        default=5.0,
+        help="duration for sustained RPS test (default: 5s)",
+    )
     args = p.parse_args()
 
-    print(f"# Bench at {args.host}  (n={args.n}, warmup={args.warmup})",
-          file=sys.stderr)
+    print(f"# Bench at {args.host}  (n={args.n}, warmup={args.warmup})", file=sys.stderr)
     print(f"{'Endpoint':<62} {'p50 ms':>8} {'p95 ms':>8} {'p99 ms':>8} {'body KB':>8}")
     print("-" * 98)
     for name, path in ENDPOINTS:
-        p50, p95, p99, body_kb = bench(args.host + path,
-                                        gzip=True,
-                                        n=args.n,
-                                        warmup=args.warmup)
+        p50, p95, p99, body_kb = bench(args.host + path, gzip=True, n=args.n, warmup=args.warmup)
         print(f"{name:<62} {p50:>8.2f} {p95:>8.2f} {p99:>8.2f} {body_kb:>8.1f}")
     print()
 
     print("GZip impact on /servers?limit=200 (full catalog):")
-    p50_g, _, _, kb_g = bench(args.host + "/servers?limit=200",
-                               gzip=True, n=max(50, args.n // 4),
-                               warmup=args.warmup)
-    p50_p, _, _, kb_p = bench(args.host + "/servers?limit=200",
-                               gzip=False, n=max(50, args.n // 4),
-                               warmup=args.warmup)
+    p50_g, _, _, kb_g = bench(
+        args.host + "/servers?limit=200", gzip=True, n=max(50, args.n // 4), warmup=args.warmup
+    )
+    p50_p, _, _, kb_p = bench(
+        args.host + "/servers?limit=200", gzip=False, n=max(50, args.n // 4), warmup=args.warmup
+    )
     print(f"  with GZip:    p50 {p50_g:5.2f} ms  wire = {kb_g:6.1f} KB")
     print(f"  without GZip: p50 {p50_p:5.2f} ms  wire = {kb_p:6.1f} KB")
     if kb_g > 0:

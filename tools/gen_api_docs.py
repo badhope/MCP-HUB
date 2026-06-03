@@ -1,4 +1,5 @@
 """Generate docs/API.md from a running FastAPI server's openapi.json."""
+
 import json
 import sys
 import urllib.request

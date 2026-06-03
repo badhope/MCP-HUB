@@ -6,10 +6,10 @@ MCP Hub 自动化更新系统
 
 import json
 import subprocess
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class AutoUpdater:
@@ -17,14 +17,14 @@ class AutoUpdater:
 
     def __init__(self, base_path: Path):
         self.base_path = base_path
-        self.config_file = base_path / 'update_config.json'
-        self.last_update_file = base_path / '.last_update'
-        self.log_file = base_path / 'update.log'
+        self.config_file = base_path / "update_config.json"
+        self.last_update_file = base_path / ".last_update"
+        self.log_file = base_path / "update.log"
 
     def load_config(self) -> Dict[str, Any]:
         """加载更新配置"""
         if self.config_file.exists():
-            with open(self.config_file, 'r', encoding='utf-8') as f:
+            with open(self.config_file, "r", encoding="utf-8") as f:
                 return json.load(f)
 
         return {
@@ -35,30 +35,22 @@ class AutoUpdater:
                     "sync_index": True,
                     "update_quality_scores": True,
                     "update_notable_projects": True,
-                    "check_downloads": True
-                }
+                    "check_downloads": True,
+                },
             },
-            "notifications": {
-                "enabled": True,
-                "on_success": True,
-                "on_failure": True,
-                "email": ""
-            },
-            "backup": {
-                "enabled": True,
-                "keep_days": 7
-            }
+            "notifications": {"enabled": True, "on_success": True, "on_failure": True, "email": ""},
+            "backup": {"enabled": True, "keep_days": 7},
         }
 
     def save_config(self, config: Dict[str, Any]):
         """保存更新配置"""
-        with open(self.config_file, 'w', encoding='utf-8') as f:
+        with open(self.config_file, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
 
     def get_last_update_time(self) -> Optional[datetime]:
         """获取上次更新时间"""
         if self.last_update_file.exists():
-            with open(self.last_update_file, 'r') as f:
+            with open(self.last_update_file, "r") as f:
                 timestamp = f.read().strip()
                 try:
                     return datetime.fromisoformat(timestamp)
@@ -68,7 +60,7 @@ class AutoUpdater:
 
     def set_last_update_time(self):
         """设置上次更新时间"""
-        with open(self.last_update_file, 'w') as f:
+        with open(self.last_update_file, "w") as f:
             f.write(datetime.now().isoformat())
 
     def log(self, message: str, level: str = "INFO"):
@@ -78,14 +70,14 @@ class AutoUpdater:
 
         print(log_entry.strip())
 
-        with open(self.log_file, 'a', encoding='utf-8') as f:
+        with open(self.log_file, "a", encoding="utf-8") as f:
             f.write(log_entry)
 
     def should_update(self) -> bool:
         """检查是否应该更新"""
         config = self.load_config()
 
-        if not config['auto_update']['enabled']:
+        if not config["auto_update"]["enabled"]:
             self.log("自动更新已禁用", "INFO")
             return False
 
@@ -94,14 +86,20 @@ class AutoUpdater:
             self.log("首次运行，执行更新", "INFO")
             return True
 
-        interval_hours = config['auto_update']['interval_hours']
+        interval_hours = config["auto_update"]["interval_hours"]
         time_since_update = datetime.now() - last_update
 
         if time_since_update >= timedelta(hours=interval_hours):
-            self.log(f"距离上次更新 {time_since_update.days} 天 {time_since_update.seconds // 3600} 小时，执行更新", "INFO")
+            self.log(
+                f"距离上次更新 {time_since_update.days} 天 {time_since_update.seconds // 3600} 小时，执行更新",
+                "INFO",
+            )
             return True
 
-        self.log(f"距上次更新 {time_since_update.days} 天 {time_since_update.seconds // 3600} 小时，跳过更新", "INFO")
+        self.log(
+            f"距上次更新 {time_since_update.days} 天 {time_since_update.seconds // 3600} 小时，跳过更新",
+            "INFO",
+        )
         return False
 
     def sync_index(self) -> bool:
@@ -111,11 +109,11 @@ class AutoUpdater:
 
             # 执行同步脚本
             result = subprocess.run(
-                ['python', 'market.py', 'sync'],
+                ["python", "market.py", "sync"],
                 cwd=self.base_path,
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
             )
 
             if result.returncode == 0:
@@ -138,22 +136,22 @@ class AutoUpdater:
             self.log("📊 正在更新质量评分...")
 
             # 读取索引
-            index_file = self.base_path / 'servers-index.json'
-            with open(index_file, 'r', encoding='utf-8') as f:
+            index_file = self.base_path / "servers-index.json"
+            with open(index_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
             updated_count = 0
 
             # 更新每个服务器的质量评分
-            for server in data.get('servers', []):
+            for server in data.get("servers", []):
                 # 重新计算质量评分
                 score = self._calculate_quality_score(server)
-                server['quality_score'] = score
-                server['quality_level'] = self._get_quality_level(score)
+                server["quality_score"] = score
+                server["quality_level"] = self._get_quality_level(score)
                 updated_count += 1
 
             # 保存更新后的索引
-            with open(index_file, 'w', encoding='utf-8') as f:
+            with open(index_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
 
             self.log(f"✅ 质量评分更新完成 ({updated_count} 个服务器)", "SUCCESS")
@@ -168,15 +166,15 @@ class AutoUpdater:
         score = 0
 
         # Source 类型 (30分)
-        if server.get('source_type') == 'official':
+        if server.get("source_type") == "official":
             score += 30
-        elif server.get('source_type') == 'community':
+        elif server.get("source_type") == "community":
             score += 20
         else:
             score += 10
 
         # Star 数量 (25分)
-        stars = server.get('stars', 0)
+        stars = server.get("stars", 0)
         if stars >= 10000:
             score += 25
         elif stars >= 1000:
@@ -189,13 +187,13 @@ class AutoUpdater:
             score += 5
 
         # 分类完整性 (10分)
-        if server.get('categories'):
+        if server.get("categories"):
             score += 10
         else:
             score += 5
 
         # 归档状态 (10分)
-        if not server.get('archived', False):
+        if not server.get("archived", False):
             score += 10
         else:
             score += 3
@@ -205,15 +203,15 @@ class AutoUpdater:
     def _get_quality_level(self, score: int) -> str:
         """获取质量等级"""
         if score >= 85:
-            return 'S'
+            return "S"
         elif score >= 70:
-            return 'A'
+            return "A"
         elif score >= 55:
-            return 'B'
+            return "B"
         elif score >= 40:
-            return 'C'
+            return "C"
         else:
-            return 'D'
+            return "D"
 
     def update_notable_projects(self) -> bool:
         """更新知名项目信息"""
@@ -222,11 +220,11 @@ class AutoUpdater:
 
             # 执行导航生成脚本
             result = subprocess.run(
-                ['python', 'tools/notable_projects_navigator.py'],
+                ["python", "tools/notable_projects_navigator.py"],
                 cwd=self.base_path,
                 capture_output=True,
                 text=True,
-                timeout=60
+                timeout=60,
             )
 
             if result.returncode == 0:
@@ -245,23 +243,25 @@ class AutoUpdater:
         try:
             self.log("📥 正在检查下载状态...")
 
-            registry_file = self.base_path / 'server_registry.json'
+            registry_file = self.base_path / "server_registry.json"
             if not registry_file.exists():
                 self.log("⚠️ 下载注册表不存在，跳过", "WARNING")
                 return True
 
-            with open(registry_file, 'r', encoding='utf-8') as f:
+            with open(registry_file, "r", encoding="utf-8") as f:
                 registry = json.load(f)
 
             # 统计下载状态
-            total = len(registry.get('servers', {}))
+            total = len(registry.get("servers", {}))
             downloaded = sum(
-                1 for s in registry.get('servers', {}).values()
-                if s.get('download_status') == 'downloaded'
+                1
+                for s in registry.get("servers", {}).values()
+                if s.get("download_status") == "downloaded"
             )
             failed = sum(
-                1 for s in registry.get('servers', {}).values()
-                if s.get('download_status') == 'failed'
+                1
+                for s in registry.get("servers", {}).values()
+                if s.get("download_status") == "failed"
             )
 
             self.log(f"📊 下载统计: {downloaded}/{total} 成功, {failed} 失败", "INFO")
@@ -281,37 +281,34 @@ class AutoUpdater:
         """创建备份"""
         try:
             config = self.load_config()
-            if not config['backup']['enabled']:
+            if not config["backup"]["enabled"]:
                 return True
 
             self.log("💾 正在创建备份...")
 
-            backup_dir = self.base_path / 'backups'
+            backup_dir = self.base_path / "backups"
             backup_dir.mkdir(exist_ok=True)
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            backup_file = backup_dir / f'backup_{timestamp}.json'
+            backup_file = backup_dir / f"backup_{timestamp}.json"
 
             # 备份关键文件
-            files_to_backup = [
-                'servers-index.json',
-                'server_registry.json'
-            ]
+            files_to_backup = ["servers-index.json", "server_registry.json"]
 
             backup_data = {}
             for filename in files_to_backup:
                 filepath = self.base_path / filename
                 if filepath.exists():
-                    with open(filepath, 'r', encoding='utf-8') as f:
+                    with open(filepath, "r", encoding="utf-8") as f:
                         backup_data[filename] = json.load(f)
 
-            with open(backup_file, 'w', encoding='utf-8') as f:
+            with open(backup_file, "w", encoding="utf-8") as f:
                 json.dump(backup_data, f, indent=2, ensure_ascii=False)
 
             self.log(f"✅ 备份已创建: {backup_file.name}", "SUCCESS")
 
             # 清理旧备份
-            self._cleanup_old_backups(config['backup']['keep_days'])
+            self._cleanup_old_backups(config["backup"]["keep_days"])
 
             return True
 
@@ -321,13 +318,13 @@ class AutoUpdater:
 
     def _cleanup_old_backups(self, keep_days: int):
         """清理旧备份"""
-        backup_dir = self.base_path / 'backups'
+        backup_dir = self.base_path / "backups"
         if not backup_dir.exists():
             return
 
         cutoff_date = datetime.now() - timedelta(days=keep_days)
 
-        for backup_file in backup_dir.glob('backup_*.json'):
+        for backup_file in backup_dir.glob("backup_*.json"):
             if datetime.fromtimestamp(backup_file.stat().st_mtime) < cutoff_date:
                 backup_file.unlink()
                 self.log(f"🗑️ 已删除旧备份: {backup_file.name}", "INFO")
@@ -349,22 +346,22 @@ class AutoUpdater:
         self.create_backup()
 
         config = self.load_config()
-        tasks = config['auto_update']['tasks']
+        tasks = config["auto_update"]["tasks"]
 
         # 执行各项更新任务
-        if tasks.get('sync_index', False):
+        if tasks.get("sync_index", False):
             if not self.sync_index():
                 success = False
 
-        if tasks.get('update_quality_scores', False):
+        if tasks.get("update_quality_scores", False):
             if not self.update_quality_scores():
                 success = False
 
-        if tasks.get('update_notable_projects', False):
+        if tasks.get("update_notable_projects", False):
             if not self.update_notable_projects():
                 success = False
 
-        if tasks.get('check_downloads', False):
+        if tasks.get("check_downloads", False):
             if not self.check_downloads():
                 success = False
 
@@ -449,11 +446,11 @@ def main():
 
     cmd = sys.argv[1]
 
-    if cmd == 'run':
-        force = '--force' in sys.argv
+    if cmd == "run":
+        force = "--force" in sys.argv
         updater.run_update(force=force)
 
-    elif cmd == 'status':
+    elif cmd == "status":
         config = updater.load_config()
         last_update = updater.get_last_update_time()
 
@@ -474,13 +471,13 @@ MCP Hub 自动更新状态
 备份: {'启用' if config['backup']['enabled'] else '禁用'}
 """)
 
-    elif cmd == 'report':
+    elif cmd == "report":
         report = updater.generate_update_report()
-        report_file = base_path / 'UPDATE_REPORT.md'
-        with open(report_file, 'w', encoding='utf-8') as f:
+        report_file = base_path / "UPDATE_REPORT.md"
+        with open(report_file, "w", encoding="utf-8") as f:
             f.write(report)
         print(f"✅ 更新报告已生成: {report_file}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

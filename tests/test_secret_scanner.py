@@ -4,6 +4,7 @@ Tests for the secret scanner.
 Verifies that the scanner detects real secrets and ignores placeholders
 and binary files. Uses tmp_path fixtures to keep the test isolated.
 """
+
 import subprocess
 import sys
 from pathlib import Path
@@ -31,20 +32,30 @@ def _run_scanner(root: Path) -> subprocess.CompletedProcess:
 def test_scanner_detects_github_pat(tmp_path):
     _write(tmp_path, "leak.py", 'TOKEN = "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ab"\n')
     result = _run_scanner(tmp_path)
-    assert result.returncode == 1, f"expected exit 1, got {result.returncode}\nstderr: {result.stderr}"
+    assert (
+        result.returncode == 1
+    ), f"expected exit 1, got {result.returncode}\nstderr: {result.stderr}"
     assert "GitHub PAT" in result.stderr
     assert "leak.py" in result.stderr
 
 
 def test_scanner_detects_openai_key(tmp_path):
-    _write(tmp_path, "config.py", 'OPENAI = "sk-proj-aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789aBcDeFgHiJk"\n')
+    _write(
+        tmp_path,
+        "config.py",
+        'OPENAI = "sk-proj-aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789aBcDeFgHiJk"\n',
+    )
     result = _run_scanner(tmp_path)
     assert result.returncode == 1
     assert "OpenAI" in result.stderr
 
 
 def test_scanner_detects_private_key(tmp_path):
-    _write(tmp_path, "key.pem", "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAK...\n-----END RSA PRIVATE KEY-----\n")
+    _write(
+        tmp_path,
+        "key.pem",
+        "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAK...\n-----END RSA PRIVATE KEY-----\n",
+    )
     result = _run_scanner(tmp_path)
     assert result.returncode == 1
     assert "Private Key" in result.stderr
@@ -64,7 +75,11 @@ def test_scanner_ignores_placeholders(tmp_path):
 
 
 def test_scanner_ignores_https_urls(tmp_path):
-    _write(tmp_path, "config.py", 'GITHUB = "https://github.com/owner/repo"\nSOURCE = "https://example.com/page"\n')
+    _write(
+        tmp_path,
+        "config.py",
+        'GITHUB = "https://github.com/owner/repo"\nSOURCE = "https://example.com/page"\n',
+    )
     result = _run_scanner(tmp_path)
     assert result.returncode == 0, f"false positive:\n{result.stderr}"
 
@@ -108,13 +123,17 @@ def test_scanner_skips_node_modules(tmp_path):
 def test_scanner_skips_git_directory(tmp_path):
     gitdir = tmp_path / ".git" / "objects"
     gitdir.mkdir(parents=True)
-    _write(gitdir, "pack", 'ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ab\n')
+    _write(gitdir, "pack", "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ab\n")
     result = _run_scanner(tmp_path)
     assert result.returncode == 0
 
 
 def test_scanner_reports_line_number(tmp_path):
-    _write(tmp_path, "leak.py", "x = 1\ny = 2\nTOKEN = 'ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ab'\nz = 4\n")
+    _write(
+        tmp_path,
+        "leak.py",
+        "x = 1\ny = 2\nTOKEN = 'ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ab'\nz = 4\n",
+    )
     result = _run_scanner(tmp_path)
     assert result.returncode == 1
     assert "leak.py:3" in result.stderr

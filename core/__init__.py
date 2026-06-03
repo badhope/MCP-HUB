@@ -53,11 +53,11 @@ class MCPServer:
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         return self.data
-    
+
     def get_quality_score(self) -> int:
         """
         计算服务器质量评分 (0-100)
-        
+
         评分维度：
         - Source 类型: 30%
         - Star 数量: 25%
@@ -67,7 +67,7 @@ class MCPServer:
         - Owner 认证: 10%
         """
         score = 0
-        
+
         # 1. Source 类型 (30分)
         if self.source_type == "official":
             score += 30
@@ -75,7 +75,7 @@ class MCPServer:
             score += 20
         else:
             score += 10
-        
+
         # 2. Star 数量 (25分)
         if self.stars >= 10000:
             score += 25
@@ -87,11 +87,11 @@ class MCPServer:
             score += 10
         else:
             score += 5
-        
+
         # 3. 更新时间 (15分)
         if self.updated_at:
             try:
-                updated_date = datetime.fromisoformat(self.updated_at.replace('Z', '+00:00'))
+                updated_date = datetime.fromisoformat(self.updated_at.replace("Z", "+00:00"))
                 days_since_update = (datetime.now() - updated_date).days
                 if days_since_update <= 30:  # 1个月内
                     score += 15
@@ -107,28 +107,53 @@ class MCPServer:
                 score += 5
         else:
             score += 3
-        
+
         # 4. 分类完整性 (10分)
         if self.categories and len(self.categories) > 0:
             score += 10
         else:
             score += 5
-        
+
         # 5. 归档状态 (10分)
         if not self.archived:
             score += 10
         else:
             score += 3
-        
+
         # 6. Owner 认证 (10分)
         # 检查是否是知名大厂或官方组织
         verified_owners = {
-            'modelcontextprotocol', 'anthropic', 'openai', 'google', 'stripe',
-            'sentry', 'docker', 'notion', 'slack', 'github', 'gitlab',
-            'vercel', 'aws', 'azure', 'gcp', 'cloudflare', 'fastly',
-            'alibaba', 'aliyun', 'tencent', 'bytedance', 'byte',
-            'huawei', 'baidu', 'jd', 'meituan', 'xiaomi', 'netease',
-            'bilibili', 'feishu', 'dingtalk'
+            "modelcontextprotocol",
+            "anthropic",
+            "openai",
+            "google",
+            "stripe",
+            "sentry",
+            "docker",
+            "notion",
+            "slack",
+            "github",
+            "gitlab",
+            "vercel",
+            "aws",
+            "azure",
+            "gcp",
+            "cloudflare",
+            "fastly",
+            "alibaba",
+            "aliyun",
+            "tencent",
+            "bytedance",
+            "byte",
+            "huawei",
+            "baidu",
+            "jd",
+            "meituan",
+            "xiaomi",
+            "netease",
+            "bilibili",
+            "feishu",
+            "dingtalk",
         }
         if self.owner and self.owner.lower() in verified_owners:
             score += 10
@@ -136,10 +161,10 @@ class MCPServer:
             score += 7
         else:
             score += 3
-        
+
         # 确保分数在 0-100 之间
         return max(0, min(100, score))
-    
+
     def get_quality_level(self) -> str:
         """获取质量等级"""
         score = self.get_quality_score()
@@ -255,9 +280,7 @@ class MCPHub:
             "args": ["-y", f"@modelcontextprotocol/server-{server_name}"],
         }
 
-    def generate_claude_config(
-        self, server_names: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
+    def generate_claude_config(self, server_names: Optional[List[str]] = None) -> Dict[str, Any]:
         """生成 Claude Desktop 配置"""
         config = {"mcpServers": {}}
 

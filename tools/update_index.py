@@ -406,11 +406,7 @@ def update_index():
 
         # Convert categories to English
         cats = s.get("categories", [])
-        if (
-            cats
-            and isinstance(cats[0], str)
-            and any("\u4e00" <= c <= "\u9fff" for c in cats[0])
-        ):
+        if cats and isinstance(cats[0], str) and any("\u4e00" <= c <= "\u9fff" for c in cats[0]):
             # Has Chinese characters, convert
             eng_cats = [convert_category(c) for c in cats]
             s["categories"] = eng_cats

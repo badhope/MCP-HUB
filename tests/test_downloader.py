@@ -76,9 +76,7 @@ class TestExtractRepo:
     def test_extract_from_community_source(self):
         from tools.index_downloader import extract_repo_from_source
 
-        url = extract_repo_from_source(
-            "https://github.com/executeautomation/playwright-mcp-server"
-        )
+        url = extract_repo_from_source("https://github.com/executeautomation/playwright-mcp-server")
         assert url == "https://github.com/executeautomation/playwright-mcp-server"
 
     def test_extract_empty(self):
@@ -163,11 +161,7 @@ class TestIndexDownloaderReal:
         download_from_index(limit=2, source_types=["official"])
 
         # 验证至少有服务器被下载
-        downloaded = [
-            d
-            for d in SERVERS_DIR.iterdir()
-            if d.is_dir() and not d.name.startswith(".")
-        ]
+        downloaded = [d for d in SERVERS_DIR.iterdir() if d.is_dir() and not d.name.startswith(".")]
         assert len(downloaded) >= 2
 
     def test_download_skips_existing(self, real_servers_dir):

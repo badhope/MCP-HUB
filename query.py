@@ -48,11 +48,7 @@ def cmd_search(args):
         desc = r.get("description", "")
         stars = r.get("stars", 0)
         source_type = r.get("source_type", "unknown")
-        badge = (
-            "🏛️"
-            if source_type == "official"
-            else "👥" if source_type == "community" else "📦"
-        )
+        badge = "🏛️" if source_type == "official" else "👥" if source_type == "community" else "📦"
         star_str = _format_stars(stars)
         print(f"  {badge} ⭐{star_str:>6} {name}: {desc[:80]}")
 
@@ -75,11 +71,7 @@ def cmd_recommend(args):
         desc = r.get("description", "")
         stars = r.get("stars", 0)
         source_type = r.get("source_type", "unknown")
-        badge = (
-            "🏛️"
-            if source_type == "official"
-            else "👥" if source_type == "community" else "📦"
-        )
+        badge = "🏛️" if source_type == "official" else "👥" if source_type == "community" else "📦"
         star_str = _format_stars(stars)
         print(f"  {badge} ⭐{star_str:>6} {name}: {desc[:80]}")
 
@@ -117,11 +109,7 @@ def cmd_popular(args):
         desc = s.get("description", "")[:60]
         stars = s.get("stars", 0)
         source_type = s.get("source_type", "unknown")
-        badge = (
-            "🏛️"
-            if source_type == "official"
-            else "👥" if source_type == "community" else "📦"
-        )
+        badge = "🏛️" if source_type == "official" else "👥" if source_type == "community" else "📦"
         star_str = _format_stars(stars)
         print(f"  {badge} ⭐{star_str:>6} {name}: {desc}")
 

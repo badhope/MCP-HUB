@@ -21,8 +21,8 @@ def ensure_user_data_file():
         initial_data = {
             "version": "1.0.0",
             "favorites": {},  # user_id -> List[server_name]
-            "ratings": {},    # server_name -> List[rating_info]
-            "comments": {},   # server_name -> List[comment_info]
+            "ratings": {},  # server_name -> List[rating_info]
+            "comments": {},  # server_name -> List[comment_info]
         }
         with open(USER_DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(initial_data, f, ensure_ascii=False, indent=2)
@@ -71,6 +71,7 @@ def save_submissions(data: Dict):
 # FAVORITES (收藏功能)
 # ======================================
 
+
 def add_favorite(user_id: str, server_name: str) -> bool:
     """添加收藏
     Returns: True if added, False if already exists
@@ -78,7 +79,7 @@ def add_favorite(user_id: str, server_name: str) -> bool:
     data = load_user_data()
     favorites = data.get("favorites", {})
     user_favorites = favorites.get(user_id, [])
-    
+
     if server_name not in user_favorites:
         user_favorites.append(server_name)
         favorites[user_id] = user_favorites
@@ -95,7 +96,7 @@ def remove_favorite(user_id: str, server_name: str) -> bool:
     data = load_user_data()
     favorites = data.get("favorites", {})
     user_favorites = favorites.get(user_id, [])
-    
+
     if server_name in user_favorites:
         user_favorites.remove(server_name)
         favorites[user_id] = user_favorites
@@ -130,6 +131,7 @@ def get_favorites_count(server_name: str) -> int:
 # RATINGS (评分功能)
 # ======================================
 
+
 def add_rating(user_id: str, server_name: str, rating: int, comment: Optional[str] = None) -> Dict:
     """添加评分 (1-5)
     Returns: rating info
@@ -138,10 +140,10 @@ def add_rating(user_id: str, server_name: str, rating: int, comment: Optional[st
     data = load_user_data()
     ratings = data.get("ratings", {})
     server_ratings = ratings.get(server_name, [])
-    
+
     # Remove existing rating from this user
     server_ratings = [r for r in server_ratings if r.get("user_id") != user_id]
-    
+
     rating_info = {
         "id": str(uuid.uuid4()),
         "user_id": user_id,
@@ -154,7 +156,7 @@ def add_rating(user_id: str, server_name: str, rating: int, comment: Optional[st
     ratings[server_name] = server_ratings
     data["ratings"] = ratings
     save_user_data(data)
-    
+
     return rating_info
 
 
@@ -191,12 +193,13 @@ def get_ratings_count(server_name: str) -> int:
 # COMMENTS (评论功能)
 # ======================================
 
+
 def add_comment(user_id: str, server_name: str, text: str) -> Dict:
     """添加评论"""
     data = load_user_data()
     comments = data.get("comments", {})
     server_comments = comments.get(server_name, [])
-    
+
     comment_info = {
         "id": str(uuid.uuid4()),
         "user_id": user_id,
@@ -208,7 +211,7 @@ def add_comment(user_id: str, server_name: str, text: str) -> Dict:
     comments[server_name] = server_comments
     data["comments"] = comments
     save_user_data(data)
-    
+
     return comment_info
 
 
@@ -227,6 +230,7 @@ def get_comments_count(server_name: str) -> int:
 # SUBMISSIONS (服务器提交与审核)
 # ======================================
 
+
 def submit_server(
     user_id: str,
     name: str,
@@ -238,7 +242,7 @@ def submit_server(
     """提交新服务器"""
     data = load_submissions()
     submissions = data.get("submissions", [])
-    
+
     submission = {
         "id": str(uuid.uuid4()),
         "user_id": user_id,
@@ -253,11 +257,11 @@ def submit_server(
         "reviewer": None,
         "review_comment": None,
     }
-    
+
     submissions.append(submission)
     data["submissions"] = submissions
     save_submissions(data)
-    
+
     return submission
 
 
@@ -265,7 +269,7 @@ def get_submissions(status: Optional[str] = None) -> List[Dict]:
     """获取提交列表，可按状态过滤"""
     data = load_submissions()
     submissions = data.get("submissions", [])
-    
+
     if status:
         return [s for s in submissions if s.get("status") == status]
     return submissions
@@ -277,28 +281,31 @@ def get_user_submissions(user_id: str) -> List[Dict]:
     return [s for s in submissions if s.get("user_id") == user_id]
 
 
-def review_submission(submission_id: str, status: str, reviewer: str, comment: Optional[str] = None) -> Optional[Dict]:
+def review_submission(
+    submission_id: str, status: str, reviewer: str, comment: Optional[str] = None
+) -> Optional[Dict]:
     """审核提交 (status: approved, rejected)"""
     data = load_submissions()
     submissions = data.get("submissions", [])
-    
+
     for i, s in enumerate(submissions):
         if s.get("id") == submission_id:
             submissions[i]["status"] = status
             submissions[i]["reviewed_at"] = datetime.now(timezone.utc).isoformat()
             submissions[i]["reviewer"] = reviewer
             submissions[i]["review_comment"] = comment
-            
+
             data["submissions"] = submissions
             save_submissions(data)
             return submissions[i]
-    
+
     return None
 
 
 # ======================================
 # STATS (统计数据)
 # ======================================
+
 
 def get_user_stats(user_id: str) -> Dict:
     """Get statistics for a user"""
@@ -344,12 +351,12 @@ def get_all_stats() -> Dict:
     """获取所有统计"""
     data = load_user_data()
     submissions_data = load_submissions()
-    
+
     total_favorites = sum(len(favs) for favs in data.get("favorites", {}).values())
     total_ratings = sum(len(rats) for rats in data.get("ratings", {}).values())
     total_comments = sum(len(comms) for comms in data.get("comments", {}).values())
     total_submissions = len(submissions_data.get("submissions", []))
-    
+
     return {
         "total_users": len(data.get("favorites", {})),
         "total_favorites": total_favorites,

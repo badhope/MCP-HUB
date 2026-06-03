@@ -114,9 +114,7 @@ class TestAPIEndpoints:
         r = _get("/servers?sort=stars&limit=10")
         assert len(r["servers"]) > 1
         for i in range(len(r["servers"]) - 1):
-            assert r["servers"][i].get("stars", 0) >= r["servers"][i + 1].get(
-                "stars", 0
-            )
+            assert r["servers"][i].get("stars", 0) >= r["servers"][i + 1].get("stars", 0)
 
     def test_sort_by_updated(self, live_server):
         r = _get("/servers?sort=updated&limit=10")
@@ -201,9 +199,7 @@ class TestAPIEndpoints:
         assert len(r["popular"]) > 0
         # Should be sorted by stars desc
         for i in range(len(r["popular"]) - 1):
-            assert r["popular"][i].get("stars", 0) >= r["popular"][i + 1].get(
-                "stars", 0
-            )
+            assert r["popular"][i].get("stars", 0) >= r["popular"][i + 1].get("stars", 0)
 
     def test_popular_with_limit(self, live_server):
         r = _get("/popular?limit=5")
@@ -224,7 +220,7 @@ class TestAPIEndpoints:
 
 class TestAPICORS:
     """Test CORS - Verify CORS middleware is configured"""
-    
+
     def test_options_preflight(self, live_server):
         """OPTIONS preflight request should return 204"""
         url = f"{BASE}/servers"

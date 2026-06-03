@@ -14,6 +14,7 @@ Exit codes:
     1 - At least one potential secret detected
     2 - Scanner error
 """
+
 from __future__ import annotations
 
 import argparse
@@ -76,16 +77,48 @@ EXCLUDE_DIRS = {
 
 # File extensions that are always binary / irrelevant
 EXCLUDE_EXT = {
-    ".pyc", ".wasm", ".map", ".lock", ".png", ".jpg", ".jpeg", ".gif",
-    ".ico", ".svg", ".woff", ".woff2", ".ttf", ".eot", ".mp3", ".mp4",
-    ".webm", ".zip", ".tar", ".gz", ".bz2", ".pdf", ".bin", ".so",
-    ".dll", ".dylib", ".class", ".jar", ".exe",
+    ".pyc",
+    ".wasm",
+    ".map",
+    ".lock",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".ico",
+    ".svg",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".eot",
+    ".mp3",
+    ".mp4",
+    ".webm",
+    ".zip",
+    ".tar",
+    ".gz",
+    ".bz2",
+    ".pdf",
+    ".bin",
+    ".so",
+    ".dll",
+    ".dylib",
+    ".class",
+    ".jar",
+    ".exe",
 }
 
 # Substrings that mark a value as a placeholder (always safe to ignore)
 PLACEHOLDER_HINTS = (
-    "your_", "xxx", "changeme", "placeholder", "todo_replace",
-    "<your", "<changeme", "example_value", "<token>",
+    "your_",
+    "xxx",
+    "changeme",
+    "placeholder",
+    "todo_replace",
+    "<your",
+    "<changeme",
+    "example_value",
+    "<token>",
 )
 
 # Files where example-looking secrets legitimately appear (documentation, tests).
@@ -94,10 +127,10 @@ PLACEHOLDER_HINTS = (
 # The match is a substring check on the full path, so the bare stem ("SECURITY")
 # covers both the English ("SECURITY.md") and Chinese ("SECURITY_CN.md") copies.
 DOCUMENTATION_FILE_HINTS = (
-    "SECURITY",         # SECURITY.md + SECURITY_CN.md pattern reference table
-    "CHANGELOG.md",     # historical incident references
+    "SECURITY",  # SECURITY.md + SECURITY_CN.md pattern reference table
+    "CHANGELOG.md",  # historical incident references
     "tests/test_secret_scanner.py",  # test fixtures
-    "tools/secret_scanner.py",       # pattern definitions
+    "tools/secret_scanner.py",  # pattern definitions
 )
 
 
@@ -124,13 +157,15 @@ def scan_file(path: Path) -> List[Finding]:
             line = text.splitlines()[line_no - 1].strip() if line_no <= text.count("\n") + 1 else ""
             if is_placeholder(matched, line):
                 continue
-            findings.append(Finding(
-                file=str(path),
-                line_no=line_no,
-                pattern=name,
-                line=line[:160],
-                matched=matched[:80] + ("..." if len(matched) > 80 else ""),
-            ))
+            findings.append(
+                Finding(
+                    file=str(path),
+                    line_no=line_no,
+                    pattern=name,
+                    line=line[:160],
+                    matched=matched[:80] + ("..." if len(matched) > 80 else ""),
+                )
+            )
     return findings
 
 

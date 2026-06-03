@@ -534,9 +534,7 @@ def recommend_by_scene(scene: str, limit: int = 10) -> List[Dict]:
     # Find matching keywords
     matched_keywords = []
     for key, keywords in SCENE_RECOMMENDATIONS.items():
-        if key.lower() == scene_lower or any(
-            kw.lower() == scene_lower for kw in keywords
-        ):
+        if key.lower() == scene_lower or any(kw.lower() == scene_lower for kw in keywords):
             matched_keywords.extend(keywords)
 
     if not matched_keywords:
@@ -585,7 +583,6 @@ CURATED_SERVERS = {
         "lobe-chat",
         "cherry-studio",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 2. TOP STARRED PROJECTS (明星项目) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -599,7 +596,6 @@ CURATED_SERVERS = {
         "mempalace",
         "composio",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 3. OFFICIAL & ENTERPRISE (官方与企业) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -613,7 +609,6 @@ CURATED_SERVERS = {
         "mastra",
         "claude-plugins-official",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 4. BROWSER & WEB (浏览器与网页) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -627,7 +622,6 @@ CURATED_SERVERS = {
         "genai-toolbox",
         "fastmcp",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 5. DATABASE & STORAGE (数据库与存储) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -641,7 +635,6 @@ CURATED_SERVERS = {
         "postgres-mcp",
         "mcp-database-server",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 6. AI TOOLKIT & FRAMEWORKS (AI工具与框架) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -655,7 +648,6 @@ CURATED_SERVERS = {
         "LangBot",
         "sqlite-explorer-fastmcp-mcp-server",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 7. DOMESTIC CHINA (国内大厂) - 10 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -671,7 +663,6 @@ CURATED_SERVERS = {
         "xiaomi-iot-mcp",
         "music163-mcp",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 8. PROJECT MANAGEMENT (项目管理) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -685,7 +676,6 @@ CURATED_SERVERS = {
         "code-review-graph",
         "mcp-toolbox",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 9. SECURITY (安全) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -699,7 +689,6 @@ CURATED_SERVERS = {
         "Aegis",
         "AuditLuma",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 10. CLOUD & DEVOPS (云与DevOps) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -713,7 +702,6 @@ CURATED_SERVERS = {
         "page-agent",
         "mcp-server-cloudflare",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 11. SOCIAL & COMMUNICATION (社交与通讯) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -727,7 +715,6 @@ CURATED_SERVERS = {
         "discord-mcp",
         "telegram-search",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 12. FRAMEWORKS & TOOLS (框架与工具) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -741,7 +728,6 @@ CURATED_SERVERS = {
         "mcp-use",
         "mcp-server-cloudflare",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 13. MULTIMEDIA & CONTENT (多媒体与内容) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -755,7 +741,6 @@ CURATED_SERVERS = {
         "page-agent",
         "FunASR",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 14. DEVELOPER EXPERIENCE (开发者体验) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -769,7 +754,6 @@ CURATED_SERVERS = {
         "code-review-graph",
         "genai-toolbox",
     ],
-    
     # ═══════════════════════════════════════════════════════════════════════
     # 15. AI AGENTS (AI智能体) - 8 servers
     # ═══════════════════════════════════════════════════════════════════════
@@ -796,46 +780,46 @@ def get_curated_servers_details() -> Dict[str, List[Dict]]:
     servers = get_servers()
     server_map = {s.get("name"): s for s in servers}
     result = {}
-    
+
     for category, server_names in CURATED_SERVERS.items():
         category_servers = []
         for name in server_names:
             if name in server_map:
                 category_servers.append(server_map[name])
         result[category] = category_servers
-    
+
     return result
 
 
 def get_quality_score_for_server(server: Dict) -> int:
     """Calculate server quality score (0-100)
-    
+
     Optimized scoring dimensions:
     1. Functionality Completeness (35%) - npm package, categories, topics, description
     2. Documentation Completeness (20%) - README, description length, examples
     3. Maintenance Activity (25%) - Update recency, archive status
     4. Community Support (20%) - Stars, official verification, platform support
-    
+
     Total: 100 points
     """
     score = 0
-    
+
     # ═══════════════════════════════════════════════════════════════════════════
     # 1. FUNCTIONALITY COMPLETENESS (35 points)
     # ═══════════════════════════════════════════════════════════════════════════
-    
+
     # 1.1 Supported by topics/description (12 points) - more accessible than npm_package
     topics = server.get("topics", [])
     description = server.get("description", "")
     description_lower = description.lower()
-    
+
     # Check if server has real content
     has_content = bool(topics) or bool(description)
     if has_content:
         score += 12
     else:
         score += 0
-    
+
     # 1.2 Categories (10 points)
     categories = server.get("categories", [])
     if categories and len(categories) > 0:
@@ -845,7 +829,7 @@ def get_quality_score_for_server(server: Dict) -> int:
             score += 8
         else:
             score += 6
-    
+
     # 1.3 Topic variety (8 points)
     topic_count = len(topics) if topics else 0
     if topic_count >= 10:
@@ -856,7 +840,7 @@ def get_quality_score_for_server(server: Dict) -> int:
         score += 5
     elif topic_count >= 1:
         score += 3
-    
+
     # 1.4 Description quality (5 points)
     if description:
         desc_length = len(description)
@@ -868,13 +852,22 @@ def get_quality_score_for_server(server: Dict) -> int:
             score += 3
         else:
             score += 1
-    
+
     # ═══════════════════════════════════════════════════════════════════════════
     # 2. DOCUMENTATION COMPLETENESS (20 points)
     # ═══════════════════════════════════════════════════════════════════════════
-    
+
     # 2.1 Example keywords in description (8 points)
-    example_keywords = ["example", "usage", "install", "quick start", "demo", "tutorial", "getting started", "guide"]
+    example_keywords = [
+        "example",
+        "usage",
+        "install",
+        "quick start",
+        "demo",
+        "tutorial",
+        "getting started",
+        "guide",
+    ]
     matches = sum(1 for kw in example_keywords if kw in description_lower)
     if matches >= 4:
         score += 8
@@ -882,30 +875,31 @@ def get_quality_score_for_server(server: Dict) -> int:
         score += 6
     elif matches >= 1:
         score += 4
-    
+
     # 2.2 License (6 points)
     if server.get("license"):
         score += 6
-    
+
     # 2.3 Has README indicator (6 points) - inferred from description quality
     readme_indicators = ["readme", "documentation", "wiki", "docs"]
     has_docs = any(indicator in description_lower for indicator in readme_indicators)
     score += 6 if has_docs else 0
-    
+
     # ═══════════════════════════════════════════════════════════════════════════
     # 3. MAINTENANCE ACTIVITY (25 points)
     # ═══════════════════════════════════════════════════════════════════════════
-    
+
     # 3.1 Non-archived (12 points)
     if not server.get("archived", False):
         score += 12
-    
+
     # 3.2 Update recency (13 points)
     updated_at = server.get("updated_at", "")
     if updated_at:
         try:
             from datetime import timezone
-            updated_str = updated_at.replace('Z', '+00:00')
+
+            updated_str = updated_at.replace("Z", "+00:00")
             updated_date = datetime.fromisoformat(updated_str)
             if updated_date.tzinfo is None:
                 updated_date = updated_date.replace(tzinfo=timezone.utc)
@@ -927,11 +921,11 @@ def get_quality_score_for_server(server: Dict) -> int:
             score += 5
     else:
         score += 3
-    
+
     # ═══════════════════════════════════════════════════════════════════════════
     # 4. COMMUNITY SUPPORT (20 points)
     # ═══════════════════════════════════════════════════════════════════════════
-    
+
     # 4.1 Star count (10 points) - more granular and generous
     stars = server.get("stars", 0)
     if stars >= 50000:
@@ -952,29 +946,58 @@ def get_quality_score_for_server(server: Dict) -> int:
         score += 3
     elif stars > 0:
         score += 2
-    
+
     # 4.2 Official or verified (6 points)
     source_type = server.get("source_type", "")
     owner = server.get("owner", "").lower()
     verified_owners = {
-        'modelcontextprotocol', 'anthropic', 'openai', 'google', 'stripe',
-        'sentry', 'docker', 'notion', 'slack', 'github', 'gitlab',
-        'vercel', 'aws', 'azure', 'gcp', 'cloudflare',
-        'alibaba', 'aliyun', 'tencent', 'bytedance', 'byte',
-        'huawei', 'baidu', 'jd', 'meituan', 'xiaomi', 'netease',
-        'bilibili', 'feishu', 'dingtalk', 'microsoft', 'meta',
-        'mistralai', 'huggingface', 'ollama', 'langchain'
+        "modelcontextprotocol",
+        "anthropic",
+        "openai",
+        "google",
+        "stripe",
+        "sentry",
+        "docker",
+        "notion",
+        "slack",
+        "github",
+        "gitlab",
+        "vercel",
+        "aws",
+        "azure",
+        "gcp",
+        "cloudflare",
+        "alibaba",
+        "aliyun",
+        "tencent",
+        "bytedance",
+        "byte",
+        "huawei",
+        "baidu",
+        "jd",
+        "meituan",
+        "xiaomi",
+        "netease",
+        "bilibili",
+        "feishu",
+        "dingtalk",
+        "microsoft",
+        "meta",
+        "mistralai",
+        "huggingface",
+        "ollama",
+        "langchain",
     }
     if source_type == "official" or owner in verified_owners:
         score += 6
-    
+
     # 4.3 Platform support (4 points)
     language = server.get("language", "").lower()
-    if language in ['python', 'typescript', 'javascript', 'go', 'rust', 'java']:
+    if language in ["python", "typescript", "javascript", "go", "rust", "java"]:
         score += 4
-    elif language in ['node', 'nodejs', 'py']:
+    elif language in ["node", "nodejs", "py"]:
         score += 2
-    
+
     return max(0, min(100, score))
 
 
@@ -1000,7 +1023,7 @@ def get_quality_level_description(score: int) -> str:
         "A": "⭐ 优秀 - 功能完善，文档较好，活跃维护",
         "B": "👍 良好 - 功能基本完整，文档可接受",
         "C": "👌 一般 - 功能有限，可能需要补充文档",
-        "D": "⚠️ 待改进 - 功能或文档需要改进"
+        "D": "⚠️ 待改进 - 功能或文档需要改进",
     }
     return descriptions.get(level, "未知")
 
@@ -1016,26 +1039,26 @@ def get_domestic_companies() -> Dict[str, List[Dict]]:
         "微信": ["wechat", "weixin"],
         "飞书": ["feishu"],
     }
-    
+
     servers = get_servers()
     result = {}
-    
+
     for company, keywords in companies.items():
         company_servers = []
         for s in servers:
             name = s.get("name", "").lower()
             owner = s.get("owner", "").lower()
             full_name = s.get("full_name", "").lower()
-            
+
             for kw in keywords:
                 if kw in name or kw in owner or kw in full_name:
                     company_servers.append(s)
                     break
-        
+
         # 按 Star 排序
         company_servers.sort(key=lambda x: x.get("stars", 0), reverse=True)
         result[company] = company_servers[:20]  # 每个公司最多 20 个
-    
+
     return result
 
 
@@ -1047,7 +1070,7 @@ def get_domestic_companies() -> Dict[str, List[Dict]]:
 
 def validate_server_data(server: Dict) -> Dict[str, Any]:
     """Validate individual server data and return validation report
-    
+
     Returns:
         Dict with validation results including:
         - is_valid: bool
@@ -1058,41 +1081,41 @@ def validate_server_data(server: Dict) -> Dict[str, Any]:
     errors = []
     warnings = []
     score = 100
-    
+
     # Required fields check
-    required_fields = ['name', 'source', 'description', 'stars']
+    required_fields = ["name", "source", "description", "stars"]
     for field in required_fields:
         if not server.get(field):
             errors.append(f"Missing required field: {field}")
             score -= 20
-    
+
     # Name validation
-    name = server.get('name', '')
+    name = server.get("name", "")
     if not name:
         errors.append("Server name is empty")
     elif len(name) > 100:
         errors.append(f"Server name too long: {len(name)} chars")
         score -= 10
-    elif not name.replace('-', '').replace('_', '').isalnum():
+    elif not name.replace("-", "").replace("_", "").isalnum():
         warnings.append("Server name contains unusual characters")
         score -= 5
-    
+
     # Source validation
-    source = server.get('source', '')
+    source = server.get("source", "")
     if not source:
         errors.append("Source URL is missing")
         score -= 15
-    elif not (source.startswith('http://') or source.startswith('https://')):
+    elif not (source.startswith("http://") or source.startswith("https://")):
         errors.append("Source URL is not a valid HTTP(S) URL")
         score -= 15
-    elif 'github.com' in source and '/issues' not in source and '/pulls' not in source:
+    elif "github.com" in source and "/issues" not in source and "/pulls" not in source:
         pass  # Valid GitHub URL
-    elif 'github.com' in source and ('/issues' in source or '/pulls' in source):
+    elif "github.com" in source and ("/issues" in source or "/pulls" in source):
         warnings.append("Source points to GitHub issues or PRs instead of repository")
         score -= 10
-    
+
     # Description validation
-    description = server.get('description', '')
+    description = server.get("description", "")
     if not description:
         warnings.append("Description is empty")
         score -= 10
@@ -1102,9 +1125,9 @@ def validate_server_data(server: Dict) -> Dict[str, Any]:
     elif len(description) > 5000:
         warnings.append("Description is unusually long")
         score -= 5
-    
+
     # Stars validation
-    stars = server.get('stars', 0)
+    stars = server.get("stars", 0)
     if not isinstance(stars, int):
         errors.append("Stars count is not an integer")
         score -= 15
@@ -1114,36 +1137,55 @@ def validate_server_data(server: Dict) -> Dict[str, Any]:
     elif stars > 500000:
         warnings.append("Stars count unusually high - verify manually")
         score -= 2
-    
+
     # Categories validation
-    categories = server.get('categories', [])
+    categories = server.get("categories", [])
     if not categories:
         warnings.append("No categories assigned")
         score -= 5
     elif len(categories) > 20:
         warnings.append("Too many categories (>20)")
         score -= 3
-    
+
     # Language validation
-    language = server.get('language', '')
-    valid_languages = ['python', 'typescript', 'javascript', 'go', 'rust', 'java', 
-                      'nodejs', 'node', 'py', 'ts', 'js', 'c++', 'c#', 'ruby', 'php',
-                      'shell', 'bash', 'powershell', 'dockerfile']
+    language = server.get("language", "")
+    valid_languages = [
+        "python",
+        "typescript",
+        "javascript",
+        "go",
+        "rust",
+        "java",
+        "nodejs",
+        "node",
+        "py",
+        "ts",
+        "js",
+        "c++",
+        "c#",
+        "ruby",
+        "php",
+        "shell",
+        "bash",
+        "powershell",
+        "dockerfile",
+    ]
     if language and language.lower() not in valid_languages:
         warnings.append(f"Unusual language: {language}")
         score -= 2
-    
+
     # Archive status check
-    if server.get('archived', False):
+    if server.get("archived", False):
         warnings.append("Repository is archived")
         score -= 10
-    
+
     # Date validation - fixed to handle timezone-aware and naive datetimes
-    updated_at = server.get('updated_at', '')
+    updated_at = server.get("updated_at", "")
     if updated_at:
         try:
             from datetime import timezone
-            updated_str = updated_at.replace('Z', '+00:00')
+
+            updated_str = updated_at.replace("Z", "+00:00")
             updated_date = datetime.fromisoformat(updated_str)
             # Make datetime timezone-aware for consistent comparison
             if updated_date.tzinfo is None:
@@ -1156,18 +1198,18 @@ def validate_server_data(server: Dict) -> Dict[str, Any]:
         except (ValueError, TypeError) as e:
             warnings.append(f"Invalid date format: {e}")
             score -= 5
-    
+
     return {
-        'is_valid': len(errors) == 0,
-        'errors': errors,
-        'warnings': warnings,
-        'score': max(0, score)
+        "is_valid": len(errors) == 0,
+        "errors": errors,
+        "warnings": warnings,
+        "score": max(0, score),
     }
 
 
 def validate_all_servers(servers: Optional[List[Dict]] = None) -> Dict[str, Any]:
     """Validate all servers and return summary report
-    
+
     Returns:
         Dict with:
         - total_servers: int
@@ -1185,122 +1227,128 @@ def validate_all_servers(servers: Optional[List[Dict]] = None) -> Dict[str, Any]
     error_types = defaultdict(int)
     warning_types = defaultdict(int)
     servers_by_score = defaultdict(list)
-    
+
     for server in servers:
         result = validate_server_data(server)
-        name = server.get('name', 'unknown')
-        score = result['score']
-        
-        validation_results.append({
-            'name': name,
-            **result
-        })
-        
+        name = server.get("name", "unknown")
+        score = result["score"]
+
+        validation_results.append({"name": name, **result})
+
         servers_by_score[score].append(name)
-        
-        for error in result['errors']:
-            error_key = error.split(':')[0] if ':' in error else error
+
+        for error in result["errors"]:
+            error_key = error.split(":")[0] if ":" in error else error
             error_types[error_key] += 1
-        
-        for warning in result['warnings']:
-            warning_key = warning.split(':')[0] if ':' in warning else warning
+
+        for warning in result["warnings"]:
+            warning_key = warning.split(":")[0] if ":" in warning else warning
             warning_types[warning_key] += 1
-    
-    valid_count = sum(1 for r in validation_results if r['is_valid'])
+
+    valid_count = sum(1 for r in validation_results if r["is_valid"])
     invalid_count = len(validation_results) - valid_count
-    
+
     return {
-        'total_servers': len(servers),
-        'valid_servers': valid_count,
-        'invalid_servers': invalid_count,
-        'total_errors': sum(error_types.values()),
-        'total_warnings': sum(warning_types.values()),
-        'error_types': dict(error_types),
-        'warning_types': dict(warning_types),
-        'servers_by_validation_score': dict(servers_by_score),
-        'validation_results': validation_results
+        "total_servers": len(servers),
+        "valid_servers": valid_count,
+        "invalid_servers": invalid_count,
+        "total_errors": sum(error_types.values()),
+        "total_warnings": sum(warning_types.values()),
+        "error_types": dict(error_types),
+        "warning_types": dict(warning_types),
+        "servers_by_validation_score": dict(servers_by_score),
+        "validation_results": validation_results,
     }
 
 
-def get_low_quality_servers(threshold: int = 40, servers: Optional[List[Dict]] = None) -> List[Dict]:
+def get_low_quality_servers(
+    threshold: int = 40, servers: Optional[List[Dict]] = None
+) -> List[Dict]:
     """Get servers with validation score below threshold
-    
+
     Args:
         threshold: Minimum validation score (default: 40)
         servers: Optional pre-loaded servers list
-    
+
     Returns:
         List of servers with validation issues
     """
     if servers is None:
         servers = get_servers()
     low_quality = []
-    
+
     for server in servers:
         validation = validate_server_data(server)
-        if validation['score'] < threshold or not validation['is_valid']:
-            low_quality.append({
-                **server,
-                'validation': validation
-            })
-    
-    low_quality.sort(key=lambda x: x['validation']['score'])
+        if validation["score"] < threshold or not validation["is_valid"]:
+            low_quality.append({**server, "validation": validation})
+
+    low_quality.sort(key=lambda x: x["validation"]["score"])
     return low_quality
 
 
 def get_data_health_report(servers: Optional[List[Dict]] = None) -> Dict[str, Any]:
     """Generate comprehensive data health report
-    
+
     Returns:
         Dict with overall data quality metrics and recommendations
     """
     validation = validate_all_servers(servers=servers)
-    
+
     # Calculate health score
-    total_checks = validation['total_servers'] * 10  # Approximate checks per server
+    total_checks = validation["total_servers"] * 10  # Approximate checks per server
     health_score = 100 - (
-        (validation['total_errors'] / total_checks * 100) * 0.6 +
-        (validation['total_warnings'] / total_checks * 100) * 0.4
+        (validation["total_errors"] / total_checks * 100) * 0.6
+        + (validation["total_warnings"] / total_checks * 100) * 0.4
     )
-    
+
     # Get most common issues
-    top_errors = sorted(validation['error_types'].items(), key=lambda x: x[1], reverse=True)[:5]
-    top_warnings = sorted(validation['warning_types'].items(), key=lambda x: x[1], reverse=True)[:5]
-    
+    top_errors = sorted(validation["error_types"].items(), key=lambda x: x[1], reverse=True)[:5]
+    top_warnings = sorted(validation["warning_types"].items(), key=lambda x: x[1], reverse=True)[:5]
+
     # Recommendations
     recommendations = []
-    
-    if validation['invalid_servers'] > 0:
-        recommendations.append({
-            'priority': 'HIGH',
-            'message': f"{validation['invalid_servers']} servers have critical validation errors",
-            'action': 'Review and fix invalid server data'
-        })
-    
-    if validation['total_warnings'] > validation['total_servers'] * 0.5:
-        recommendations.append({
-            'priority': 'MEDIUM',
-            'message': 'High number of warnings detected',
-            'action': 'Consider improving server metadata quality'
-        })
-    
+
+    if validation["invalid_servers"] > 0:
+        recommendations.append(
+            {
+                "priority": "HIGH",
+                "message": f"{validation['invalid_servers']} servers have critical validation errors",
+                "action": "Review and fix invalid server data",
+            }
+        )
+
+    if validation["total_warnings"] > validation["total_servers"] * 0.5:
+        recommendations.append(
+            {
+                "priority": "MEDIUM",
+                "message": "High number of warnings detected",
+                "action": "Consider improving server metadata quality",
+            }
+        )
+
     for error_type, count in top_errors:
-        if count > validation['total_servers'] * 0.1:  # More than 10% affected
-            recommendations.append({
-                'priority': 'HIGH',
-                'message': f"Common issue: {error_type} ({count} servers affected)",
-                'action': f'Fix {error_type} across affected servers'
-            })
-    
+        if count > validation["total_servers"] * 0.1:  # More than 10% affected
+            recommendations.append(
+                {
+                    "priority": "HIGH",
+                    "message": f"Common issue: {error_type} ({count} servers affected)",
+                    "action": f"Fix {error_type} across affected servers",
+                }
+            )
+
     return {
-        'health_score': max(0, min(100, round(health_score, 2))),
-        'total_servers': validation['total_servers'],
-        'valid_percentage': round(validation['valid_servers'] / validation['total_servers'] * 100, 2),
-        'invalid_percentage': round(validation['invalid_servers'] / validation['total_servers'] * 100, 2),
-        'total_errors': validation['total_errors'],
-        'total_warnings': validation['total_warnings'],
-        'top_errors': top_errors,
-        'top_warnings': top_warnings,
-        'recommendations': recommendations,
-        'timestamp': str(datetime.now().isoformat())
+        "health_score": max(0, min(100, round(health_score, 2))),
+        "total_servers": validation["total_servers"],
+        "valid_percentage": round(
+            validation["valid_servers"] / validation["total_servers"] * 100, 2
+        ),
+        "invalid_percentage": round(
+            validation["invalid_servers"] / validation["total_servers"] * 100, 2
+        ),
+        "total_errors": validation["total_errors"],
+        "total_warnings": validation["total_warnings"],
+        "top_errors": top_errors,
+        "top_warnings": top_warnings,
+        "recommendations": recommendations,
+        "timestamp": str(datetime.now().isoformat()),
     }

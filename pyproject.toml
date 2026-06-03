@@ -86,4 +86,6 @@ target-version = ['py39', 'py310', 'py311']
 
 [tool.isort]
 profile = "black"
-line-length = 100
+# isort 8.x renamed `line-length` → `line_length`; the hyphenated form
+# now raises UnsupportedSettings on import. Use the new key.
+line_length = 100

@@ -29,9 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger("mcp-hub")
 
 
-def git_clone(
-    url: str, target: str, token: str = "", timeout: int = 180
-) -> Tuple[bool, str]:
+def git_clone(url: str, target: str, token: str = "", timeout: int = 180) -> Tuple[bool, str]:
     """
     安全克隆仓库，Token 通过环境变量传递，不拼接到 URL。
 
@@ -178,9 +176,7 @@ def parse_awesome_readme(readme_path: Path) -> List[Dict]:
             continue
         seen.add(key)
 
-        short_name = (
-            repo.lower().replace("mcp-", "").replace("-mcp", "").replace("-", "_")
-        )
+        short_name = repo.lower().replace("mcp-", "").replace("-mcp", "").replace("-", "_")
         repos.append(
             {
                 "name": _name,
@@ -244,10 +240,7 @@ def batch_download(
 def cmd_popular(servers_path: Path, token: str):
     """下载热门服务器"""
     logger.info("下载热门 MCP 服务器...")
-    repos = [
-        {"url": f"https://github.com/{r[0]}", "short_name": r[1]}
-        for r in POPULAR_SERVERS
-    ]
+    repos = [{"url": f"https://github.com/{r[0]}", "short_name": r[1]} for r in POPULAR_SERVERS]
     stats = batch_download(repos, servers_path, token, max_workers=5)
     _print_stats(stats)
 
@@ -279,9 +272,7 @@ def cmd_update(servers_path: Path):
         logger.error("servers/ 目录不存在")
         return
 
-    servers = [
-        d for d in servers_path.iterdir() if d.is_dir() and (d / ".git").exists()
-    ]
+    servers = [d for d in servers_path.iterdir() if d.is_dir() and (d / ".git").exists()]
     if not servers:
         logger.error("没有已下载的服务器")
         return
@@ -318,9 +309,7 @@ def cmd_install(servers_path: Path):
         if pkg_json.exists():
             logger.info(f"📦 {server_dir.name}: npm install")
             try:
-                subprocess.run(
-                    ["npm", "install"], cwd=server_dir, capture_output=True, timeout=120
-                )
+                subprocess.run(["npm", "install"], cwd=server_dir, capture_output=True, timeout=120)
                 logger.info("  ✅ npm install 完成")
             except Exception as e:
                 logger.warning(f"  ⚠️ npm install 失败: {e}")

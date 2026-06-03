@@ -43,9 +43,7 @@ def git_clone(repo_url: str, target_dir: Path, token: str = "") -> bool:
             askpass_script.chmod(0o700)
             env["GIT_ASKPASS"] = str(askpass_script)
             env["GIT_USERNAME"] = "x-access-token"
-            repo_url = repo_url.replace(
-                "https://github.com/", "https://x-access-token@github.com/"
-            )
+            repo_url = repo_url.replace("https://github.com/", "https://x-access-token@github.com/")
 
         result = subprocess.run(
             ["git", "clone", "--depth", "1", repo_url, str(target_dir)],

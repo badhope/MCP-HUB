@@ -5,6 +5,7 @@ Output: frontend/public/social-preview.png
 The image is hand-designed to look good both at full size and as a
 small thumbnail in GitHub's social card slot.
 """
+
 from __future__ import annotations
 
 import os
@@ -12,7 +13,6 @@ import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-
 
 WIDTH, HEIGHT = 1280, 640
 OUT_PATH = Path(__file__).resolve().parent.parent / "frontend" / "public" / "social-preview.png"
@@ -160,7 +160,9 @@ def draw_logo_mark(draw: ImageDraw.ImageDraw, cx: int, cy: int, size: int) -> No
     draw._image.paste(final, (0, 0), final)
 
 
-def draw_text_centered(draw: ImageDraw.ImageDraw, y: int, text: str, font: ImageFont.FreeTypeFont, fill) -> None:
+def draw_text_centered(
+    draw: ImageDraw.ImageDraw, y: int, text: str, font: ImageFont.FreeTypeFont, fill
+) -> None:
     bbox = draw.textbbox((0, 0), text, font=font)
     tw = bbox[2] - bbox[0]
     draw.text(((WIDTH - tw) // 2 - bbox[0], y - bbox[1]), text, font=font, fill=fill)
@@ -174,7 +176,9 @@ def draw_feature_pill(draw: ImageDraw.ImageDraw, x: int, y: int, text: str, font
     w = tw + pad_x * 2
     h = th + pad_y * 2
     r = h // 2
-    draw.rounded_rectangle([x, y, x + w, y + h], radius=r, fill=(255, 255, 255, 14), outline=accent, width=2)
+    draw.rounded_rectangle(
+        [x, y, x + w, y + h], radius=r, fill=(255, 255, 255, 14), outline=accent, width=2
+    )
     draw.text((x + pad_x - bbox[0], y + pad_y - bbox[1]), text, font=font, fill=BRAND["ink"])
 
 
@@ -194,12 +198,30 @@ def render() -> None:
     draw_text_centered(draw, title_y, "MCP Hub", f_black, BRAND["ink"])
 
     subtitle_y = 280
-    draw_text_centered(draw, subtitle_y, "The Universal Model Context Protocol Tool Market", f_bold_md, BRAND["ink_dim"])
+    draw_text_centered(
+        draw,
+        subtitle_y,
+        "The Universal Model Context Protocol Tool Market",
+        f_bold_md,
+        BRAND["ink_dim"],
+    )
 
     tagline_y = 330
-    draw_text_centered(draw, tagline_y, "Browse · Search · Download · 4,407+ curated MCP servers", f_regular, BRAND["ink_faint"])
+    draw_text_centered(
+        draw,
+        tagline_y,
+        "Browse · Search · Download · 4,407+ curated MCP servers",
+        f_regular,
+        BRAND["ink_faint"],
+    )
 
-    draw_text_centered(draw, 410, "Built for Claude  ·  Cursor  ·  ChatGPT  ·  DeepSeek  ·  and every AI agent", f_mono, BRAND["teal"])
+    draw_text_centered(
+        draw,
+        410,
+        "Built for Claude  ·  Cursor  ·  ChatGPT  ·  DeepSeek  ·  and every AI agent",
+        f_mono,
+        BRAND["teal"],
+    )
 
     pills = [
         ("REST API", BRAND["indigo"]),

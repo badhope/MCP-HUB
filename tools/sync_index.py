@@ -21,9 +21,7 @@ BASE_PATH = Path(__file__).parent.parent
 INDEX_FILE = BASE_PATH / "servers-index.json"
 CONFIG_FILE = BASE_PATH / "market-config.json"
 
-UPSTREAM_URL = (
-    "https://raw.githubusercontent.com/Rodert/awesome-mcp/main/data/projects.json"
-)
+UPSTREAM_URL = "https://raw.githubusercontent.com/Rodert/awesome-mcp/main/data/projects.json"
 
 # Topic → category 映射 - 智能匹配版
 TOPIC_CATEGORY_MAP = {
@@ -51,7 +49,6 @@ TOPIC_CATEGORY_MAP = {
     "chat": "ai-llm",
     "dialog": "ai-llm",
     "bot": "ai-llm",
-    
     # RAG & Memory
     "rag": "memory-rag",
     "retrieval": "memory-rag",
@@ -65,7 +62,6 @@ TOPIC_CATEGORY_MAP = {
     "faiss": "memory-rag",
     "pgvector": "memory-rag",
     "knowledge": "memory-rag",
-    
     # =============================================================
     # Database (数据库)
     # =============================================================
@@ -95,7 +91,6 @@ TOPIC_CATEGORY_MAP = {
     "bigquery": "database",
     "redshift": "database",
     "databricks": "database",
-    
     # =============================================================
     # Browser & Web (浏览器与网页)
     # =============================================================
@@ -114,7 +109,6 @@ TOPIC_CATEGORY_MAP = {
     "crawler": "browser-web",
     "crawling": "browser-web",
     "webdriver": "browser-web",
-    
     # =============================================================
     # Integration & APIs (集成与API)
     # =============================================================
@@ -143,7 +137,6 @@ TOPIC_CATEGORY_MAP = {
     "automation": "integration",
     "integration": "integration",
     "connector": "integration",
-    
     # =============================================================
     # Cloud & DevOps (云与DevOps)
     # =============================================================
@@ -180,7 +173,6 @@ TOPIC_CATEGORY_MAP = {
     "observability": "cloud-devops",
     "infrastructure": "cloud-devops",
     "iac": "cloud-devops",
-    
     # =============================================================
     # Security (安全)
     # =============================================================
@@ -209,7 +201,6 @@ TOPIC_CATEGORY_MAP = {
     "iam": "security",
     "rbac": "security",
     "abac": "security",
-    
     # =============================================================
     # Development Tools (开发工具)
     # =============================================================
@@ -339,7 +330,6 @@ TOPIC_CATEGORY_MAP = {
     "jscpd": "development",
     "cpd": "development",
     "detector": "development",
-    
     # =============================================================
     # Terminal & CLI (终端与命令行)
     # =============================================================
@@ -373,7 +363,6 @@ TOPIC_CATEGORY_MAP = {
     "fastboot": "terminal-system",
     "serial": "terminal-system",
     "uart": "terminal-system",
-    
     # =============================================================
     # Document & Notes (文档与笔记)
     # =============================================================
@@ -406,7 +395,6 @@ TOPIC_CATEGORY_MAP = {
     "doc": "document-notes",
     "notes": "document-notes",
     "note": "document-notes",
-    
     # =============================================================
     # Art & Design (艺术与设计)
     # =============================================================
@@ -450,7 +438,6 @@ TOPIC_CATEGORY_MAP = {
     "art": "art-design",
     "design": "art-design",
     "image": "art-design",
-    
     # =============================================================
     # Video & Media (视频与媒体)
     # =============================================================
@@ -473,7 +460,6 @@ TOPIC_CATEGORY_MAP = {
     "subtitle": "video-media",
     "caption": "video-media",
     "media": "video-media",
-    
     # =============================================================
     # Audio & Music (音频与音乐)
     # =============================================================
@@ -504,7 +490,6 @@ TOPIC_CATEGORY_MAP = {
     "audio": "music-audio",
     "sound": "music-audio",
     "voice": "music-audio",
-    
     # =============================================================
     # Finance & Crypto (金融与加密货币)
     # =============================================================
@@ -571,7 +556,6 @@ TOPIC_CATEGORY_MAP = {
     "market": "finance-crypto",
     "trade": "finance-crypto",
     "trader": "finance-crypto",
-    
     # =============================================================
     # Map & Geo (地图与地理)
     # =============================================================
@@ -608,7 +592,6 @@ TOPIC_CATEGORY_MAP = {
     "geospatial": "map-geo",
     "gis": "map-geo",
     "location": "map-geo",
-    
     # =============================================================
     # Calendar & Time (日历与时间)
     # =============================================================
@@ -646,7 +629,6 @@ TOPIC_CATEGORY_MAP = {
     "scheduling": "calendar-time",
     "task": "calendar-time",
     "todo": "calendar-time",
-    
     # =============================================================
     # Social & Communication (社交与通讯)
     # =============================================================
@@ -700,7 +682,6 @@ TOPIC_CATEGORY_MAP = {
     "communication": "social-communication",
     "messaging": "social-communication",
     "message": "social-communication",
-    
     # =============================================================
     # Game (游戏)
     # =============================================================
@@ -745,7 +726,6 @@ TOPIC_CATEGORY_MAP = {
     "games": "game",
     "play": "game",
     "playing": "game",
-    
     # =============================================================
     # Bio & Medical (生物与医疗)
     # =============================================================
@@ -822,7 +802,6 @@ TOPIC_CATEGORY_MAP = {
     "health": "bio-medical",
     "healthcare": "bio-medical",
     "medicine": "bio-medical",
-    
     # =============================================================
     # Weather & Nature (天气与自然)
     # =============================================================
@@ -864,7 +843,6 @@ TOPIC_CATEGORY_MAP = {
     "aviation-weather": "weather-nature",
     "nature": "weather-nature",
     "natural": "weather-nature",
-    
     # =============================================================
     # Learning & Research (学习与研究)
     # =============================================================
@@ -998,9 +976,7 @@ COMMUNITY_ORGS = {
 def fetch_upstream() -> dict:
     """获取上游数据"""
     print(f"📥 正在从上游获取数据: {UPSTREAM_URL}")
-    req = urllib.request.Request(
-        UPSTREAM_URL, headers={"User-Agent": "MCP-HUB-Sync/1.0"}
-    )
+    req = urllib.request.Request(UPSTREAM_URL, headers={"User-Agent": "MCP-HUB-Sync/1.0"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
@@ -1008,73 +984,78 @@ def fetch_upstream() -> dict:
 def infer_categories(topics: List[str], description: str, name: str) -> Set[str]:
     """从 topics 和 description 推断分类 - 智能版"""
     cats = set()
-    
+
     # 组合所有文本进行匹配
     text = " ".join(topics).lower() + " " + description.lower() + " " + name.lower()
-    
+
     # 智能匹配关键词
     matched_categories = []
     for topic_keyword, category in TOPIC_CATEGORY_MAP.items():
         # 检查是否包含关键词
         if topic_keyword in text:
             matched_categories.append((len(topic_keyword), category))
-    
+
     # 按关键词长度排序，优先匹配更长的关键词
     matched_categories.sort(key=lambda x: x[0], reverse=True)
-    
+
     # 去重并添加分类
     added_cats = set()
     for _, category in matched_categories:
         if category not in added_cats:
             cats.add(category)
             added_cats.add(category)
-    
+
     # 特殊规则：根据名称精确推断
     name_lower = name.lower()
-    
+
     # MCP 相关 → ai-llm（最高优先级）
     if "mcp" in name_lower or "model-context-protocol" in text or name_lower == "servers":
         cats.add("ai-llm")
-    
+
     # 有 chatbot、agent、chat 等词的 → ai-llm
-    if any(kw in text for kw in ["chatbot", "chat-bot", "agent", "ai-agent", "chatgpt", "claude", "gpt"]):
+    if any(
+        kw in text
+        for kw in ["chatbot", "chat-bot", "agent", "ai-agent", "chatgpt", "claude", "gpt"]
+    ):
         cats.add("ai-llm")
-    
+
     # 有 browser 或类似词的 → browser-web
     if any(kw in text for kw in ["browser", "chrome", "firefox", "puppeteer", "playwright"]):
         cats.add("browser-web")
-    
+
     # 有 dev、code、coding 等词的 → development
     if any(kw in text for kw in ["code", "coding", "developer", "dev-tools", "sdk", "library"]):
         cats.add("development")
-    
+
     # 有 esp32、android、ios 等硬件词的 → ai-llm（因为是MCP服务器）
     if any(kw in text for kw in ["esp32", "arduino", "iot", "hardware"]):
         cats.add("ai-llm")
         cats.add("terminal-system")
-    
+
     # 有 inspect、test、debug 等词的 → development
     if any(kw in text for kw in ["inspector", "inspect", "testing", "debug", "debugger"]):
         cats.add("development")
-    
+
     # 有 ui、component、block 等词的 → art-design 或 development
-    if any(kw in text for kw in ["ui", "user-interface", "component", "blocks", "frontend", "shadcn"]):
+    if any(
+        kw in text for kw in ["ui", "user-interface", "component", "blocks", "frontend", "shadcn"]
+    ):
         cats.add("art-design")
         cats.add("development")
-    
+
     # 有 directories、find、search 等词的 → terminal-system 或 ai-llm
     if any(kw in text for kw in ["directory", "directories", "search", "find", "lookup"]):
         cats.add("terminal-system")
         cats.add("ai-llm")
-    
+
     # 有 plugin、plugins 等词的 → ai-llm（MCP插件）
     if any(kw in text for kw in ["plugin", "plugins", "extension", "addon"]):
         cats.add("ai-llm")
-    
+
     # 确保至少有一个分类
     if not cats:
         cats.add("other")
-    
+
     return cats
 
 
@@ -1136,7 +1117,7 @@ def clean_description(desc: str, name: str) -> str:
     """清理描述文本"""
     if not desc:
         return f"MCP Server: {name} - Model Context Protocol server implementation"
-    
+
     # 清理 markdown 头部
     if desc.startswith("#"):
         lines = desc.split("\n")
@@ -1153,11 +1134,11 @@ def clean_description(desc: str, name: str) -> str:
             ):
                 clean_lines.append(stripped)
         desc = " ".join(clean_lines[:3])
-    
+
     # 限制长度
     if len(desc) > 500:
         desc = desc[:500].rsplit(" ", 1)[0] + "..."
-    
+
     return desc.strip()
 
 
@@ -1179,14 +1160,12 @@ def sync_index(
     full_sync: bool = False,
 ):
     """同步索引 - 增量更新模式"""
-    
+
     # 加载现有数据
     existing_index = load_existing_index()
-    existing_servers = {
-        s["name"]: s for s in existing_index.get("servers", [])
-    }
+    existing_servers = {s["name"]: s for s in existing_index.get("servers", [])}
     print(f"📦 现有数据: {len(existing_servers)} 个服务器")
-    
+
     # 获取上游数据
     upstream = fetch_upstream()
     projects = upstream.get("projects") or []
@@ -1238,7 +1217,7 @@ def sync_index(
         topics = p.get("topics", [])
         description = clean_description(p.get("description", ""), name)
         categories = infer_categories(topics, description, name)
-        
+
         # 检查是否是新增或更新
         is_new = name not in existing_servers
         if is_new:
@@ -1278,7 +1257,11 @@ def sync_index(
             server = {
                 "name": name,
                 "full_name": p.get("full_name", "") or existing.get("full_name", ""),
-                "description": description if description != existing.get("description", "") else existing.get("description", ""),
+                "description": (
+                    description
+                    if description != existing.get("description", "")
+                    else existing.get("description", "")
+                ),
                 "source": p.get("url", "") or existing.get("source", ""),
                 "source_type": source_type,
                 "categories": sorted(list(categories)),
@@ -1290,7 +1273,7 @@ def sync_index(
                 "created_at": p.get("created_at", "") or existing.get("created_at", ""),
                 "archived": p.get("archived", False),
             }
-        
+
         servers.append(server)
 
     # 构建索引
@@ -1354,13 +1337,13 @@ def sync_index(
     print("\n   Top 10 by stars:")
     for s in servers[:10]:
         print(f"     ⭐{s['stars']:>7} {s['name']} ({s['owner']})")
-    
+
     # 检查分类问题
     print("\n⚠️  分类检查:")
-    other_only = [s for s in servers if s.get('categories') == ['other']]
+    other_only = [s for s in servers if s.get("categories") == ["other"]]
     if other_only:
         print(f"   只有 'other' 分类的服务器: {len(other_only)} 个")
-        for s in sorted(other_only, key=lambda x: x.get('stars', 0), reverse=True)[:5]:
+        for s in sorted(other_only, key=lambda x: x.get("stars", 0), reverse=True)[:5]:
             print(f"     ⭐{s['stars']:>7} {s['name']}")
     else:
         print("   ✅ 所有服务器都已正确分类!")
@@ -1386,4 +1369,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

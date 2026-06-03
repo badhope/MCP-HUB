@@ -68,15 +68,18 @@ class MCPHubAPI(BaseHTTPRequestHandler):
     def _cors_headers(self):
         """Set CORS headers for cross-origin requests - PRODUCTION READY"""
         import os
-        allowed_origins = os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
+
+        allowed_origins = os.environ.get(
+            "CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000"
+        ).split(",")
         origin = self.headers.get("Origin")
-        
+
         if origin in allowed_origins:
             self.send_header("Access-Control-Allow-Origin", origin)
         elif os.environ.get("CORS_ALLOW_ALL", "false").lower() == "true":
             # Only for DEV environment, never use in production!
             self.send_header("Access-Control-Allow-Origin", "*")
-        
+
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Vary", "Origin")
@@ -160,9 +163,7 @@ class MCPHubAPI(BaseHTTPRequestHandler):
             if sort_by == "stars":
                 result = sorted(result, key=lambda s: s.get("stars", 0), reverse=True)
             elif sort_by == "updated":
-                result = sorted(
-                    result, key=lambda s: s.get("updated_at", ""), reverse=True
-                )
+                result = sorted(result, key=lambda s: s.get("updated_at", ""), reverse=True)
 
             # Limit results (with input validation)
             try:
@@ -195,9 +196,7 @@ class MCPHubAPI(BaseHTTPRequestHandler):
                 self._error_response("Missing 'scene' parameter", 400)
                 return
             result = recommend_by_scene(query["scene"][0])
-            self._json_response(
-                {"scene": query["scene"][0], "recommendations": result}
-            )
+            self._json_response({"scene": query["scene"][0], "recommendations": result})
 
         # Config
         elif path.startswith("/config/"):
@@ -236,10 +235,7 @@ class MCPHubAPI(BaseHTTPRequestHandler):
             category = unquote(path[9:])
             curated_details = get_curated_servers_details()
             if category in curated_details:
-                self._json_response({
-                    "category": category,
-                    "servers": curated_details[category]
-                })
+                self._json_response({"category": category, "servers": curated_details[category]})
             else:
                 self._error_response(f"Category '{category}' not found")
 
@@ -253,9 +249,10 @@ class MCPHubAPI(BaseHTTPRequestHandler):
                     "project_count": len(servers),
                     "total_stars": sum(s.get("stars", 0) for s in servers),
                     "official_count": sum(1 for s in servers if s.get("source_type") == "official"),
-                    "servers": servers[:10]  # Return top 10 for each company
+                    "servers": servers[:10],  # Return top 10 for each company
                 }
-                for name, servers in companies.items() if servers
+                for name, servers in companies.items()
+                if servers
             ]
             self._json_response({"companies": companies_list})
 
@@ -265,13 +262,17 @@ class MCPHubAPI(BaseHTTPRequestHandler):
             companies = get_domestic_companies()
             if company_name in companies:
                 servers = companies[company_name]
-                self._json_response({
-                    "name": company_name,
-                    "project_count": len(servers),
-                    "total_stars": sum(s.get("stars", 0) for s in servers),
-                    "official_count": sum(1 for s in servers if s.get("source_type") == "official"),
-                    "servers": servers
-                })
+                self._json_response(
+                    {
+                        "name": company_name,
+                        "project_count": len(servers),
+                        "total_stars": sum(s.get("stars", 0) for s in servers),
+                        "official_count": sum(
+                            1 for s in servers if s.get("source_type") == "official"
+                        ),
+                        "servers": servers,
+                    }
+                )
             else:
                 self._error_response(f"Company '{company_name}' not found")
 
@@ -283,7 +284,7 @@ class MCPHubAPI(BaseHTTPRequestHandler):
                 # 计算完整性评分
                 score = get_quality_score_for_server(server)
                 level = get_quality_level(score)
-                
+
                 # 收集详细信息
                 details = {
                     "stars": server.get("stars", 0),
@@ -298,20 +299,22 @@ class MCPHubAPI(BaseHTTPRequestHandler):
                     "description_length": len(server.get("description", "")),
                     "updated_at": server.get("updated_at", ""),
                 }
-                
-                self._json_response({
-                    "server": name,
-                    "completeness_score": score,
-                    "level": level,
-                    "description": f"{level}级 - {get_quality_level_description(score)}",
-                    "dimensions": {
-                        "functionality": "功能完整性",
-                        "documentation": "文档完整性",
-                        "maintenance": "维护活跃度",
-                        "community": "社区支持"
-                    },
-                    "details": details
-                })
+
+                self._json_response(
+                    {
+                        "server": name,
+                        "completeness_score": score,
+                        "level": level,
+                        "description": f"{level}级 - {get_quality_level_description(score)}",
+                        "dimensions": {
+                            "functionality": "功能完整性",
+                            "documentation": "文档完整性",
+                            "maintenance": "维护活跃度",
+                            "community": "社区支持",
+                        },
+                        "details": details,
+                    }
+                )
             else:
                 self._error_response(f"Server '{name}' not found")
 

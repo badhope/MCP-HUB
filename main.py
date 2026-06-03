@@ -2,25 +2,28 @@
 MCP Hub FastAPI Backend - Production Ready
 Modern, high-performance async API server with type safety and security features.
 """
-import os
+
 import json
+import os
 import threading
 import time
-import uvicorn
 from contextlib import asynccontextmanager
-from typing import Any, List, Dict, Optional
-from fastapi import FastAPI, Query, HTTPException, Request, Depends
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from pydantic import BaseModel, Field
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
-from pathlib import Path
-from pydantic import BaseModel, Field
 
 try:
     from core._version import __version__ as APP_VERSION
 except ImportError:
     APP_VERSION = "2.0.1"
+
 
 # ------------------------------
 # Pydantic Models for Type Safety
@@ -131,9 +134,8 @@ def _data_refresh_thread(app_state: Any, stop_event: threading.Event):
             # Swallow + log so a transient load error doesn't kill the daemon.
             # The next interval will retry. Don't crash the watcher.
             import logging
-            logging.getLogger("mcp_hub.refresh").warning(
-                "data refresh skipped: %s", e
-            )
+
+            logging.getLogger("mcp_hub.refresh").warning("data refresh skipped: %s", e)
         stop_event.wait(DATA_REFRESH_INTERVAL)
 
 
@@ -312,7 +314,7 @@ async def root():
         "name": "MCP Hub API",
         "version": APP_VERSION,
         "docs": "/docs",
-        "redoc": "/redoc"
+        "redoc": "/redoc",
     }
 
 
@@ -336,11 +338,16 @@ async def get_stats(data: Dict[str, Any] = Depends(get_app_data)):
         total_categories=data.get("total_categories", 0),
         last_sync=data.get("last_sync", ""),
         source_types=data.get("source_types", {}),
-        categories=data.get("categories", {})
+        categories=data.get("categories", {}),
     )
 
 
-@app.get("/servers", response_model=ServerListResponse, tags=["Servers"], summary="List servers with filters")
+@app.get(
+    "/servers",
+    response_model=ServerListResponse,
+    tags=["Servers"],
+    summary="List servers with filters",
+)
 async def list_servers(
     data: Dict[str, Any] = Depends(get_app_data),
     search: Optional[str] = Query(None, description="Search servers by name or description"),
@@ -356,40 +363,38 @@ async def list_servers(
     Results are paginated by limit parameter.
     """
     servers = data.get("servers", [])
-    
+
     filtered = servers
-    
+
     # Search filter
     if search:
         search_lower = search.lower()
         filtered = [
-            s for s in filtered 
-            if search_lower in s.get("name", "").lower() 
+            s
+            for s in filtered
+            if search_lower in s.get("name", "").lower()
             or search_lower in s.get("description", "").lower()
         ]
-    
+
     # Category filter
     if category:
         filtered = [s for s in filtered if category in s.get("categories", [])]
-    
+
     # Language filter
     if language:
         filtered = [s for s in filtered if s.get("language", "") == language]
-    
+
     # Min stars filter
     if min_stars > 0:
         filtered = [s for s in filtered if s.get("stars", 0) >= min_stars]
-    
+
     # Sort
     if sort == "updated":
         filtered.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
     else:
         filtered.sort(key=lambda x: x.get("stars", 0), reverse=True)
-    
-    return ServerListResponse(
-        total=len(filtered),
-        servers=filtered[:limit]
-    )
+
+    return ServerListResponse(total=len(filtered), servers=filtered[:limit])
 
 
 @app.get("/servers/popular", tags=["Servers"], summary="Get most popular servers")
@@ -421,12 +426,8 @@ async def get_curated(
 ):
     """A curated list of popular and useful MCP servers"""
     servers = data.get("servers", [])
-    
-    curated = [
-        s for s in servers
-        if s.get("source_type") == "official" 
-        or s.get("stars", 0) > 1000
-    ]
+
+    curated = [s for s in servers if s.get("source_type") == "official" or s.get("stars", 0) > 1000]
     curated.sort(key=lambda x: x.get("stars", 0), reverse=True)
     return ServerListResponse(total=len(curated), servers=curated[:limit])
 
@@ -443,29 +444,23 @@ async def get_servers_by_quality(
     - min_score: Minimum quality score (0-100)
     - level: Quality level (S=85+, A=70+, B=55+, C=40+, D=<40)
     """
-    from services import get_quality_score_for_server, get_quality_level
-    
+    from services import get_quality_level, get_quality_score_for_server
+
     servers = data.get("servers", [])
-    
+
     def calculate_score(server):
         return get_quality_score_for_server(server)
-    
+
     scored_servers = [(s, calculate_score(s)) for s in servers]
-    
-    filtered = [
-        (s, score) for s, score in scored_servers
-        if score >= min_score
-    ]
-    
+
+    filtered = [(s, score) for s, score in scored_servers if score >= min_score]
+
     if level:
         level = level.upper()
-        filtered = [
-            (s, score) for s, score in filtered
-            if get_quality_level(score) == level
-        ]
-    
+        filtered = [(s, score) for s, score in filtered if get_quality_level(score) == level]
+
     filtered.sort(key=lambda x: x[1], reverse=True)
-    
+
     return {
         "total": len(filtered),
         "servers": [s for s, _ in filtered[:limit]],
@@ -483,16 +478,17 @@ async def get_servers_by_category(
 ):
     """Get all servers in a specific category, optionally filtered by minimum stars"""
     servers = data.get("servers", [])
-    
+
     category_lower = category.lower()
     filtered = [
-        s for s in servers
+        s
+        for s in servers
         if any(category_lower in c.lower() for c in s.get("categories", []))
         and s.get("stars", 0) >= min_stars
     ]
-    
+
     filtered.sort(key=lambda x: x.get("stars", 0), reverse=True)
-    
+
     return ServerListResponse(total=len(filtered), servers=filtered[:limit])
 
 
@@ -500,31 +496,36 @@ async def get_servers_by_category(
 async def get_server(name: str, data: Dict[str, Any] = Depends(get_app_data)):
     """Get detailed information about a specific server by name"""
     servers = data.get("servers", [])
-    
+
     for server in servers:
         if server.get("name") == name:
             return server
-    
+
     raise HTTPException(status_code=404, detail="Server not found")
 
 
-@app.get("/config/{name:path}", response_model=ServerConfig, tags=["Configuration"], summary="Get server config")
+@app.get(
+    "/config/{name:path}",
+    response_model=ServerConfig,
+    tags=["Configuration"],
+    summary="Get server config",
+)
 async def get_server_config(name: str, data: Dict[str, Any] = Depends(get_app_data)):
     """
     Generate a configuration example for an MCP server.
     This includes installation commands, MCP config, and Docker configuration.
     """
     servers = data.get("servers", [])
-    
+
     server = None
     for s in servers:
         if s.get("name") == name:
             server = s
             break
-    
+
     if not server:
         raise HTTPException(status_code=404, detail="Server not found")
-    
+
     owner = server.get("owner", "")
     repo_name = server.get("name", "")
 
@@ -558,16 +559,11 @@ async def get_server_config(name: str, data: Dict[str, Any] = Depends(get_app_da
 
     # Git - general fallback
     install["git"] = f"git clone {source}.git"
-    
+
     config = ServerConfig(
         name=repo_name,
         install=install,
-        mcpServers={
-            repo_name: {
-                "command": "mcp-server",
-                "args": []
-            }
-        },
+        mcpServers={repo_name: {"command": "mcp-server", "args": []}},
         commands={
             "install": [
                 f"# Clone repository",
@@ -577,29 +573,14 @@ async def get_server_config(name: str, data: Dict[str, Any] = Depends(get_app_da
                 f"# Install dependencies (choose appropriate method)",
                 f"npm install",
                 f"# or",
-                f"pip install -e ."
+                f"pip install -e .",
             ],
-            "run": [
-                f"cd {repo_name}",
-                f"npm run start",
-                f"# or",
-                f"python -m {repo_name}"
-            ]
+            "run": [f"cd {repo_name}", f"npm run start", f"# or", f"python -m {repo_name}"],
         },
-        docker={
-            "image": f"{owner}/{repo_name}:latest",
-            "args": [],
-            "env": {}
-        },
+        docker={"image": f"{owner}/{repo_name}:latest", "args": [], "env": {}},
         snippets={
-            "basic": json.dumps({
-                "mcpServers": {
-                    repo_name: {
-                        "command": repo_name
-                    }
-                }
-            }, indent=2)
-        }
+            "basic": json.dumps({"mcpServers": {repo_name: {"command": repo_name}}}, indent=2)
+        },
     )
     return config
 
@@ -613,28 +594,28 @@ async def validate_server(name: str, data: Dict[str, Any] = Depends(get_app_data
     Validate a single server's data quality.
     Returns validation report with errors, warnings, and score.
     """
-    from services import validate_server_data, get_quality_score_for_server, get_quality_level
-    
+    from services import get_quality_level, get_quality_score_for_server, validate_server_data
+
     servers = data.get("servers", [])
-    
+
     server = None
     for s in servers:
         if s.get("name") == name:
             server = s
             break
-    
+
     if not server:
         raise HTTPException(status_code=404, detail="Server not found")
-    
+
     validation = validate_server_data(server)
     quality_score = get_quality_score_for_server(server)
     quality_level = get_quality_level(quality_score)
-    
+
     return {
         "server": name,
         "validation": validation,
         "quality_score": quality_score,
-        "quality_level": quality_level
+        "quality_level": quality_level,
     }
 
 
@@ -645,6 +626,7 @@ async def validate_all(data: Dict[str, Any] = Depends(get_app_data)):
     Use sparingly - this can be slow for large datasets.
     """
     from services import validate_all_servers
+
     return validate_all_servers(servers=data.get("servers", []))
 
 
@@ -654,6 +636,7 @@ async def get_health_report(data: Dict[str, Any] = Depends(get_app_data)):
     Get comprehensive data health report with recommendations.
     """
     from services import get_data_health_report
+
     return get_data_health_report(servers=data.get("servers", []))
 
 
@@ -667,12 +650,9 @@ async def get_low_quality_servers(
     Default threshold is 40.
     """
     from services import get_low_quality_servers
+
     low_quality = get_low_quality_servers(threshold, servers=data.get("servers", []))
-    return {
-        "total": len(low_quality),
-        "threshold": threshold,
-        "servers": low_quality
-    }
+    return {"total": len(low_quality), "threshold": threshold, "servers": low_quality}
 
 
 # ------------------------------
@@ -687,52 +667,68 @@ async def compare_servers(
     Compare multiple servers side by side.
     Returns detailed comparison with quality scores, features, and recommendations.
     """
-    from services import get_quality_score_for_server, get_quality_level
-    
+    from services import get_quality_level, get_quality_score_for_server
+
     all_servers = data.get("servers", [])
     server_map = {s.get("name"): s for s in all_servers}
     names = [n.strip() for n in servers.split(",")]
     comparison_data = []
-    
+
     for name in names:
         server = server_map.get(name)
         if server:
             quality_score = get_quality_score_for_server(server)
             quality_level = get_quality_level(quality_score)
-            comparison_data.append({
-                **server,
-                "quality_score": quality_score,
-                "quality_level": quality_level,
-                "comparison": {
-                    "has_npm_package": bool(server.get("npm_package")),
-                    "category_count": len(server.get("categories", [])),
-                    "topic_count": len(server.get("topics", [])),
-                    "description_length": len(server.get("description", "")),
-                    "is_archived": server.get("archived", False),
-                    "has_license": bool(server.get("license")),
+            comparison_data.append(
+                {
+                    **server,
+                    "quality_score": quality_score,
+                    "quality_level": quality_level,
+                    "comparison": {
+                        "has_npm_package": bool(server.get("npm_package")),
+                        "category_count": len(server.get("categories", [])),
+                        "topic_count": len(server.get("topics", [])),
+                        "description_length": len(server.get("description", "")),
+                        "is_archived": server.get("archived", False),
+                        "has_license": bool(server.get("license")),
+                    },
                 }
-            })
-    
+            )
+
     if not comparison_data:
         raise HTTPException(status_code=404, detail="No matching servers found")
-    
+
     # Find best server for each dimension
     best_for = {
         "stars": max(comparison_data, key=lambda x: x.get("stars", 0)),
         "quality_score": max(comparison_data, key=lambda x: x.get("quality_score", 0)),
         "category_count": max(comparison_data, key=lambda x: x["comparison"]["category_count"]),
-        "description_length": max(comparison_data, key=lambda x: x["comparison"]["description_length"]),
+        "description_length": max(
+            comparison_data, key=lambda x: x["comparison"]["description_length"]
+        ),
     }
-    
+
     return {
         "total": len(comparison_data),
         "servers": comparison_data,
         "best_for": {
-            "stars": {"name": best_for["stars"]["name"], "value": best_for["stars"].get("stars", 0)},
-            "quality": {"name": best_for["quality_score"]["name"], "value": best_for["quality_score"].get("quality_score", 0)},
-            "categories": {"name": best_for["category_count"]["name"], "value": best_for["category_count"]["comparison"]["category_count"]},
-            "documentation": {"name": best_for["description_length"]["name"], "value": best_for["description_length"]["comparison"]["description_length"]},
-        }
+            "stars": {
+                "name": best_for["stars"]["name"],
+                "value": best_for["stars"].get("stars", 0),
+            },
+            "quality": {
+                "name": best_for["quality_score"]["name"],
+                "value": best_for["quality_score"].get("quality_score", 0),
+            },
+            "categories": {
+                "name": best_for["category_count"]["name"],
+                "value": best_for["category_count"]["comparison"]["category_count"],
+            },
+            "documentation": {
+                "name": best_for["description_length"]["name"],
+                "value": best_for["description_length"]["comparison"]["description_length"],
+            },
+        },
     }
 
 
@@ -756,48 +752,52 @@ async def get_similar_servers(
 
     if not target_server:
         raise HTTPException(status_code=404, detail="Server not found")
-    
+
     target_categories = set(target_server.get("categories", []))
     target_topics = set(target_server.get("topics", []))
     target_name = target_server.get("name", "").lower()
-    
+
     similar = []
-    
+
     for server in all_servers:
         if server.get("name") == target_name:
             continue
-        
+
         server_categories = set(server.get("categories", []))
         server_topics = set(server.get("topics", []))
-        
+
         # Calculate similarity score
         category_overlap = len(target_categories & server_categories)
         topic_overlap = len(target_topics & server_topics)
-        
+
         if category_overlap > 0 or topic_overlap > 0:
             similarity = category_overlap * 2 + topic_overlap
             quality_score = get_quality_score_for_server(server)
-            similar.append({
-                **server,
-                "similarity_score": similarity,
-                "quality_score": quality_score,
-                "matching_categories": list(target_categories & server_categories),
-                "matching_topics": list(target_topics & server_topics),
-            })
-    
+            similar.append(
+                {
+                    **server,
+                    "similarity_score": similarity,
+                    "quality_score": quality_score,
+                    "matching_categories": list(target_categories & server_categories),
+                    "matching_topics": list(target_topics & server_topics),
+                }
+            )
+
     # Sort by similarity and quality
     similar.sort(key=lambda x: (x["similarity_score"], x["quality_score"]), reverse=True)
-    
-    return {
-        "target": name,
-        "total": len(similar),
-        "similar_servers": similar[:limit]
-    }
+
+    return {"target": name, "total": len(similar), "similar_servers": similar[:limit]}
 
 
-@app.get("/recommend/for-use-case", tags=["Recommendations"], summary="Get servers for a specific use case")
+@app.get(
+    "/recommend/for-use-case",
+    tags=["Recommendations"],
+    summary="Get servers for a specific use case",
+)
 async def get_servers_for_use_case(
-    use_case: str = Query(..., description="Use case description (e.g., 'web scraping', 'database access')"),
+    use_case: str = Query(
+        ..., description="Use case description (e.g., 'web scraping', 'database access')"
+    ),
     limit: int = Query(10, ge=1, le=50, description="Number of servers to return"),
     data: Dict[str, Any] = Depends(get_app_data),
 ):
@@ -805,42 +805,44 @@ async def get_servers_for_use_case(
     Recommend servers for a specific use case.
     Uses keyword matching across name, description, categories, and topics.
     """
-    from services import search_servers, get_quality_score_for_server, get_quality_level
-    
+    from services import get_quality_level, get_quality_score_for_server, search_servers
+
     results = search_servers(use_case, servers=data.get("servers", []))
-    
+
     # Score and sort results
     scored = []
     for server in results:
         quality_score = get_quality_score_for_server(server)
         level = get_quality_level(quality_score)
-        
+
         # Boost score for exact category matches
         category_match = any(use_case.lower() in c.lower() for c in server.get("categories", []))
         topic_match = any(use_case.lower() in t.lower() for t in server.get("topics", []))
-        
+
         boosted_score = quality_score
         if category_match:
             boosted_score += 20
         if topic_match:
             boosted_score += 10
-        
-        scored.append({
-            **server,
-            "quality_score": quality_score,
-            "quality_level": level,
-            "match_boost": (20 if category_match else 0) + (10 if topic_match else 0),
-            "final_score": min(boosted_score, 100),
-        })
-    
+
+        scored.append(
+            {
+                **server,
+                "quality_score": quality_score,
+                "quality_level": level,
+                "match_boost": (20 if category_match else 0) + (10 if topic_match else 0),
+                "final_score": min(boosted_score, 100),
+            }
+        )
+
     # Sort by final score
     scored.sort(key=lambda x: x["final_score"], reverse=True)
-    
+
     return {
         "use_case": use_case,
         "total_found": len(scored),
         "servers": scored[:limit],
-        "tip": "Use 'quality_score' for reliability, 'final_score' for use-case relevance"
+        "tip": "Use 'quality_score' for reliability, 'final_score' for use-case relevance",
     }
 
 
@@ -848,16 +850,18 @@ async def get_servers_for_use_case(
 # User Function Endpoints (Favorites, Ratings, Comments)
 # ------------------------------
 
+
 @app.post("/favorites/add", tags=["User Functions"], summary="Add server to favorites")
 async def add_favorite_endpoint(request: FavoriteRequest):
     """Add a server to user's favorites"""
     import user_data
+
     success = user_data.add_favorite(request.user_id, request.server_name)
     return {
         "success": success,
         "user_id": request.user_id,
         "server_name": request.server_name,
-        "message": "Added to favorites" if success else "Already in favorites"
+        "message": "Added to favorites" if success else "Already in favorites",
     }
 
 
@@ -865,12 +869,13 @@ async def add_favorite_endpoint(request: FavoriteRequest):
 async def remove_favorite_endpoint(request: FavoriteRequest):
     """Remove a server from user's favorites"""
     import user_data
+
     success = user_data.remove_favorite(request.user_id, request.server_name)
     return {
         "success": success,
         "user_id": request.user_id,
         "server_name": request.server_name,
-        "message": "Removed from favorites" if success else "Not found in favorites"
+        "message": "Removed from favorites" if success else "Not found in favorites",
     }
 
 
@@ -878,189 +883,159 @@ async def remove_favorite_endpoint(request: FavoriteRequest):
 async def get_favorites_endpoint(user_id: str):
     """Get list of server names in user's favorites"""
     import user_data
+
     favorites = user_data.get_favorites(user_id)
-    return {
-        "user_id": user_id,
-        "favorites": favorites,
-        "count": len(favorites)
-    }
+    return {"user_id": user_id, "favorites": favorites, "count": len(favorites)}
 
 
-@app.get("/favorites/check/{user_id}/{server_name}", tags=["User Functions"], summary="Check if favorited")
+@app.get(
+    "/favorites/check/{user_id}/{server_name}",
+    tags=["User Functions"],
+    summary="Check if favorited",
+)
 async def is_favorite_endpoint(user_id: str, server_name: str):
     """Check if a server is in user's favorites"""
     import user_data
+
     is_fav = user_data.is_favorite(user_id, server_name)
-    return {
-        "user_id": user_id,
-        "server_name": server_name,
-        "is_favorite": is_fav
-    }
+    return {"user_id": user_id, "server_name": server_name, "is_favorite": is_fav}
 
 
-@app.get("/favorites/count/{server_name}", tags=["User Functions"], summary="Get favorite count for server")
+@app.get(
+    "/favorites/count/{server_name}",
+    tags=["User Functions"],
+    summary="Get favorite count for server",
+)
 async def get_favorites_count_endpoint(server_name: str):
     """Get total number of users who have favorited this server"""
     import user_data
+
     count = user_data.get_favorites_count(server_name)
-    return {
-        "server_name": server_name,
-        "favorites_count": count
-    }
+    return {"server_name": server_name, "favorites_count": count}
 
 
 @app.post("/ratings/add", tags=["User Functions"], summary="Add or update rating")
 async def add_rating_endpoint(request: RatingRequest):
     """Add or update a user's rating for a server"""
     import user_data
+
     rating_info = user_data.add_rating(
-        request.user_id, 
-        request.server_name, 
-        request.rating, 
-        request.comment
+        request.user_id, request.server_name, request.rating, request.comment
     )
-    return {
-        "success": True,
-        "rating": rating_info
-    }
+    return {"success": True, "rating": rating_info}
 
 
 @app.get("/ratings/{server_name}", tags=["User Functions"], summary="Get ratings for server")
 async def get_ratings_endpoint(server_name: str):
     """Get all ratings for a server"""
     import user_data
+
     ratings = user_data.get_ratings(server_name)
     avg_rating = user_data.get_average_rating(server_name)
     return {
         "server_name": server_name,
         "ratings": ratings,
         "average_rating": avg_rating,
-        "count": len(ratings)
+        "count": len(ratings),
     }
 
 
-@app.get("/ratings/user/{user_id}/{server_name}", tags=["User Functions"], summary="Get user's rating")
+@app.get(
+    "/ratings/user/{user_id}/{server_name}", tags=["User Functions"], summary="Get user's rating"
+)
 async def get_user_rating_endpoint(user_id: str, server_name: str):
     """Get a specific user's rating for a server"""
     import user_data
+
     rating = user_data.get_user_rating(user_id, server_name)
-    return {
-        "user_id": user_id,
-        "server_name": server_name,
-        "rating": rating
-    }
+    return {"user_id": user_id, "server_name": server_name, "rating": rating}
 
 
 @app.post("/comments/add", tags=["User Functions"], summary="Add comment")
 async def add_comment_endpoint(request: CommentRequest):
     """Add a comment to a server"""
     import user_data
-    comment = user_data.add_comment(
-        request.user_id,
-        request.server_name,
-        request.text
-    )
-    return {
-        "success": True,
-        "comment": comment
-    }
+
+    comment = user_data.add_comment(request.user_id, request.server_name, request.text)
+    return {"success": True, "comment": comment}
 
 
 @app.get("/comments/{server_name}", tags=["User Functions"], summary="Get comments for server")
 async def get_comments_endpoint(server_name: str):
     """Get all comments for a server"""
     import user_data
+
     comments = user_data.get_comments(server_name)
-    return {
-        "server_name": server_name,
-        "comments": comments,
-        "count": len(comments)
-    }
+    return {"server_name": server_name, "comments": comments, "count": len(comments)}
 
 
 @app.get("/server-stats/{server_name}", tags=["User Functions"], summary="Get server stats")
 async def get_server_stats_endpoint(server_name: str):
     """Get comprehensive stats for a server (favorites, ratings, comments)"""
     import user_data
+
     stats = user_data.get_server_stats(server_name)
-    return {
-        "server_name": server_name,
-        "stats": stats
-    }
+    return {"server_name": server_name, "stats": stats}
 
 
 @app.get("/user-stats/{user_id}", tags=["User Functions"], summary="Get user stats")
 async def get_user_stats_endpoint(user_id: str):
     """Get statistics for a user"""
     import user_data
+
     stats = user_data.get_user_stats(user_id)
-    return {
-        "user_id": user_id,
-        "stats": stats
-    }
+    return {"user_id": user_id, "stats": stats}
 
 
 # ------------------------------
 # Submission Endpoints
 # ------------------------------
 
+
 @app.post("/submissions/submit", tags=["Submissions"], summary="Submit a new server")
 async def submit_server_endpoint(request: SubmissionRequest):
     """Submit a new server for review"""
     import user_data
+
     submission = user_data.submit_server(
         request.user_id,
         request.name,
         request.source,
         request.description,
         request.categories,
-        request.npm_package
+        request.npm_package,
     )
-    return {
-        "success": True,
-        "submission": submission
-    }
+    return {"success": True, "submission": submission}
 
 
 @app.get("/submissions", tags=["Submissions"], summary="Get submissions")
 async def get_submissions_endpoint(status: Optional[str] = None):
     """Get all submissions, optionally filtered by status"""
     import user_data
+
     submissions = user_data.get_submissions(status)
-    return {
-        "total": len(submissions),
-        "status": status,
-        "submissions": submissions
-    }
+    return {"total": len(submissions), "status": status, "submissions": submissions}
 
 
 @app.get("/submissions/user/{user_id}", tags=["Submissions"], summary="Get user's submissions")
 async def get_user_submissions_endpoint(user_id: str):
     """Get all submissions by a user"""
     import user_data
+
     submissions = user_data.get_user_submissions(user_id)
-    return {
-        "user_id": user_id,
-        "submissions": submissions,
-        "count": len(submissions)
-    }
+    return {"user_id": user_id, "submissions": submissions, "count": len(submissions)}
 
 
 @app.post("/submissions/review", tags=["Submissions"], summary="Review submission")
 async def review_submission_endpoint(request: ReviewRequest):
     """Review a submission (approve or reject)"""
     import user_data
+
     result = user_data.review_submission(
-        request.submission_id,
-        request.status,
-        request.reviewer,
-        request.comment
+        request.submission_id, request.status, request.reviewer, request.comment
     )
     if result:
-        return {
-            "success": True,
-            "submission": result
-        }
+        return {"success": True, "submission": result}
     raise HTTPException(status_code=404, detail="Submission not found")
 
 
@@ -1068,6 +1043,7 @@ async def review_submission_endpoint(request: ReviewRequest):
 async def get_all_stats_endpoint():
     """Get overall platform statistics"""
     import user_data
+
     stats = user_data.get_all_stats()
     return stats
 
@@ -1079,7 +1055,9 @@ class BatchExportRequest(BaseModel):
 # ------------------------------
 # Export Endpoints
 # ------------------------------
-def _generate_server_markdown(server: Dict[str, Any], config: Optional[Dict[str, Any]] = None) -> str:
+def _generate_server_markdown(
+    server: Dict[str, Any], config: Optional[Dict[str, Any]] = None
+) -> str:
     lines = []
     name = server.get("name", "unknown")
     lines.append(f"# {name}")
@@ -1182,7 +1160,7 @@ def _generate_server_markdown(server: Dict[str, Any], config: Optional[Dict[str,
             docker_entry = {
                 "command": "docker",
                 "args": ["run", docker_config.get("image", ""), *(docker_config.get("args", []))],
-                "env": docker_config.get("env", {})
+                "env": docker_config.get("env", {}),
             }
             lines.append(json.dumps({"mcpServers": {name: docker_entry}}, indent=2))
             lines.append("```")
@@ -1215,26 +1193,28 @@ def _generate_server_markdown(server: Dict[str, Any], config: Optional[Dict[str,
         lines.append("## MCP Configuration")
         lines.append("")
         lines.append("```json")
-        lines.append(json.dumps({
-            "mcpServers": {
-                name: {
-                    "command": "your-command-here",
-                    "args": [],
-                    "env": {}
-                }
-            }
-        }, indent=2))
+        lines.append(
+            json.dumps(
+                {"mcpServers": {name: {"command": "your-command-here", "args": [], "env": {}}}},
+                indent=2,
+            )
+        )
         lines.append("```")
         lines.append("")
         source = server.get("source", "")
-        lines.append("> **Note:** Replace `your-command-here` with the actual command for this server.")
+        lines.append(
+            "> **Note:** Replace `your-command-here` with the actual command for this server."
+        )
         if source:
-            lines.append(f"> Check the [source repository]({source}) for installation instructions.")
+            lines.append(
+                f"> Check the [source repository]({source}) for installation instructions."
+            )
         lines.append("")
 
     lines.append("---")
     lines.append("")
     from datetime import date
+
     lines.append(f"*Generated by MCP Hub · {date.today().isoformat()}*")
     return "\n".join(lines)
 
@@ -1254,12 +1234,7 @@ def _generate_config_for_server(server: Dict[str, Any]) -> ServerConfig:
     return ServerConfig(
         name=repo_name,
         install=install,
-        mcpServers={
-            repo_name: {
-                "command": "mcp-server",
-                "args": []
-            }
-        },
+        mcpServers={repo_name: {"command": "mcp-server", "args": []}},
         commands={
             "install": [
                 f"# Clone repository",
@@ -1269,29 +1244,14 @@ def _generate_config_for_server(server: Dict[str, Any]) -> ServerConfig:
                 f"# Install dependencies (choose appropriate method)",
                 f"npm install",
                 f"# or",
-                f"pip install -e ."
+                f"pip install -e .",
             ],
-            "run": [
-                f"cd {repo_name}",
-                f"npm run start",
-                f"# or",
-                f"python -m {repo_name}"
-            ]
+            "run": [f"cd {repo_name}", f"npm run start", f"# or", f"python -m {repo_name}"],
         },
-        docker={
-            "image": f"{owner}/{repo_name}:latest",
-            "args": [],
-            "env": {}
-        },
+        docker={"image": f"{owner}/{repo_name}:latest", "args": [], "env": {}},
         snippets={
-            "basic": json.dumps({
-                "mcpServers": {
-                    repo_name: {
-                        "command": repo_name
-                    }
-                }
-            }, indent=2)
-        }
+            "basic": json.dumps({"mcpServers": {repo_name: {"command": repo_name}}}, indent=2)
+        },
     )
 
 
@@ -1316,17 +1276,18 @@ async def export_server_markdown(name: str, data: Dict[str, Any] = Depends(get_a
     markdown = _generate_server_markdown(server, config.model_dump())
 
     from fastapi.responses import PlainTextResponse
+
     return PlainTextResponse(
         content=markdown,
         media_type="text/markdown; charset=utf-8",
-        headers={
-            "Content-Disposition": f"attachment; filename={name}-mcp.md"
-        }
+        headers={"Content-Disposition": f"attachment; filename={name}-mcp.md"},
     )
 
 
 @app.post("/export/batch-json", tags=["Export"], summary="Batch export configs as JSON")
-async def export_batch_json(request: BatchExportRequest, data: Dict[str, Any] = Depends(get_app_data)):
+async def export_batch_json(
+    request: BatchExportRequest, data: Dict[str, Any] = Depends(get_app_data)
+):
     """
     Export configurations for multiple servers as a single combined JSON file.
     All mcpServers entries are merged into one configuration object.
@@ -1353,15 +1314,15 @@ async def export_batch_json(request: BatchExportRequest, data: Dict[str, Any] = 
         "total_requested": len(request.server_names),
         "total_found": len(found_servers),
         "not_found": not_found,
-        "config": {
-            "mcpServers": combined_mcp_servers
-        },
-        "servers": found_servers
+        "config": {"mcpServers": combined_mcp_servers},
+        "servers": found_servers,
     }
 
 
 @app.post("/export/batch-markdown", tags=["Export"], summary="Batch export as Markdown")
-async def export_batch_markdown(request: BatchExportRequest, data: Dict[str, Any] = Depends(get_app_data)):
+async def export_batch_markdown(
+    request: BatchExportRequest, data: Dict[str, Any] = Depends(get_app_data)
+):
     """
     Export a combined Markdown installation guide for multiple servers.
     Includes a table of contents, combined configuration, and individual server sections.
@@ -1431,12 +1392,11 @@ async def export_batch_markdown(request: BatchExportRequest, data: Dict[str, Any
     markdown = "\n".join(lines)
 
     from fastapi.responses import PlainTextResponse
+
     return PlainTextResponse(
         content=markdown,
         media_type="text/markdown; charset=utf-8",
-        headers={
-            "Content-Disposition": "attachment; filename=mcp-servers-config.md"
-        }
+        headers={"Content-Disposition": "attachment; filename=mcp-servers-config.md"},
     )
 
 

@@ -12,6 +12,7 @@ Reads from:
 Writes JSON files to frontend/public/static-data/, in the shape the
 frontend `apiClient` expects.
 """
+
 import json
 import re
 from collections import defaultdict
@@ -67,8 +68,10 @@ market_config = load_json(ROOT / "market-config.json")
 
 notable = load_json(ROOT / "notable_projects.json")
 
-print(f"Loaded {len(templates)} templates, {len(registry_servers)} registry servers, "
-      f"{len(projects)} comprehensive projects")
+print(
+    f"Loaded {len(templates)} templates, {len(registry_servers)} registry servers, "
+    f"{len(projects)} comprehensive projects"
+)
 
 # ---------------------------------------------------------------------------
 # Build a unified server list combining all sources
@@ -116,12 +119,7 @@ def to_server(name, src):
         if not categories:
             categories = ["other"]
 
-    stars = (
-        (proj.get("stars") if proj else None)
-        or src.get("stars")
-        or reg.get("stars")
-        or 0
-    )
+    stars = (proj.get("stars") if proj else None) or src.get("stars") or reg.get("stars") or 0
 
     source_type = (
         (proj.get("owner_type") if proj else None)
@@ -146,8 +144,7 @@ def to_server(name, src):
     if proj:
         features = proj.get("features", []) or []
         topics = [
-            f for f in features
-            if isinstance(f, str) and not re.search(r"[\u4e00-\u9fff]", f)
+            f for f in features if isinstance(f, str) and not re.search(r"[\u4e00-\u9fff]", f)
         ][:8]
 
     return {
@@ -246,21 +243,27 @@ for name in set(registry_servers.keys()) | set(templates.keys()):
 servers_list = list(all_servers.values())
 servers_list.sort(key=lambda s: s["stars"], reverse=True)
 
-write_json(OUT_DIR / "servers.json", {
-    "total": market_config.get("total_servers", len(servers_list)),
-    "servers": servers_list,
-    "sample_count": len(servers_list),
-    "note": f"Showing {len(servers_list)} curated servers with full metadata. "
-            f"Full registry has {market_config.get('total_servers', 0)}+ entries. "
-            "Visit the GitHub repository for the complete index.",
-})
+write_json(
+    OUT_DIR / "servers.json",
+    {
+        "total": market_config.get("total_servers", len(servers_list)),
+        "servers": servers_list,
+        "sample_count": len(servers_list),
+        "note": f"Showing {len(servers_list)} curated servers with full metadata. "
+        f"Full registry has {market_config.get('total_servers', 0)}+ entries. "
+        "Visit the GitHub repository for the complete index.",
+    },
+)
 
 # Popular: top 20 by stars
 popular = servers_list[:20]
-write_json(OUT_DIR / "popular.json", {
-    "total": len(popular),
-    "servers": popular,
-})
+write_json(
+    OUT_DIR / "popular.json",
+    {
+        "total": len(popular),
+        "servers": popular,
+    },
+)
 
 # Recent: shuffled subset of the larger servers
 recent = sorted(
@@ -270,18 +273,25 @@ recent = sorted(
         -s["stars"],
     ),
 )[:20]
-write_json(OUT_DIR / "recent.json", {
-    "total": len(recent),
-    "servers": recent,
-})
+write_json(
+    OUT_DIR / "recent.json",
+    {
+        "total": len(recent),
+        "servers": recent,
+    },
+)
 
 # Curated: 50 high-quality ones
-curated = [s for s in servers_list if s.get("source_type") == "official"][:25] + \
-          [s for s in servers_list if s.get("source_type") != "official"][:25]
-write_json(OUT_DIR / "curated.json", {
-    "total": len(curated),
-    "servers": curated,
-})
+curated = [s for s in servers_list if s.get("source_type") == "official"][:25] + [
+    s for s in servers_list if s.get("source_type") != "official"
+][:25]
+write_json(
+    OUT_DIR / "curated.json",
+    {
+        "total": len(curated),
+        "servers": curated,
+    },
+)
 
 # ---------------------------------------------------------------------------
 # Generate stats.json — matches frontend StatsResponse
@@ -319,26 +329,33 @@ write_json(OUT_DIR / "stats.json", stats)
 categories_list = []
 for name, count in market_config.get("categories", {}).items():
     sample_in_cat = [s for s in servers_list if name in (s.get("categories") or [])]
-    categories_list.append({
-        "name": name,
-        "count": count,
-        "sample_servers": [s["name"] for s in sample_in_cat[:6]],
-    })
-write_json(OUT_DIR / "categories.json", {
-    "total": len(categories_list),
-    "categories": categories_list,
-})
+    categories_list.append(
+        {
+            "name": name,
+            "count": count,
+            "sample_servers": [s["name"] for s in sample_in_cat[:6]],
+        }
+    )
+write_json(
+    OUT_DIR / "categories.json",
+    {
+        "total": len(categories_list),
+        "categories": categories_list,
+    },
+)
 
 # ---------------------------------------------------------------------------
 # Generate companies.json
 # ---------------------------------------------------------------------------
 
-companies = defaultdict(lambda: {
-    "name": "",
-    "servers": [],
-    "official_count": 0,
-    "community_count": 0,
-})
+companies = defaultdict(
+    lambda: {
+        "name": "",
+        "servers": [],
+        "official_count": 0,
+        "community_count": 0,
+    }
+)
 for p in projects:
     company = p.get("company") or p.get("owner_name") or "Community"
     if not company or re.search(r"[\u4e00-\u9fff]", company):
@@ -360,10 +377,13 @@ for c in companies.values():
     companies_list.append(c)
 companies_list.sort(key=lambda c: -c["total"])
 
-write_json(OUT_DIR / "companies.json", {
-    "total": len(companies_list),
-    "companies": companies_list,
-})
+write_json(
+    OUT_DIR / "companies.json",
+    {
+        "total": len(companies_list),
+        "companies": companies_list,
+    },
+)
 
 # ---------------------------------------------------------------------------
 # Generate per-server config files
@@ -395,35 +415,41 @@ for name, tpl in templates.items():
 # ---------------------------------------------------------------------------
 
 featured_names = [s["name"] for s in popular]
-write_json(OUT_DIR / "featured-configs.json", {
-    "names": featured_names,
-    "note": "Pre-bundled config files for the top servers. See /static-data/config/{name}.json",
-})
+write_json(
+    OUT_DIR / "featured-configs.json",
+    {
+        "names": featured_names,
+        "note": "Pre-bundled config files for the top servers. See /static-data/config/{name}.json",
+    },
+)
 
 # ---------------------------------------------------------------------------
 # Generate project index for "browse all" navigation
 # ---------------------------------------------------------------------------
 
-write_json(OUT_DIR / "index.json", {
-    "generated_at": datetime.now(timezone.utc).isoformat(),
-    "endpoints": {
-        "servers": "/static-data/servers.json",
-        "stats": "/static-data/stats.json",
-        "popular": "/static-data/popular.json",
-        "recent": "/static-data/recent.json",
-        "curated": "/static-data/curated.json",
-        "categories": "/static-data/categories.json",
-        "companies": "/static-data/companies.json",
-        "config": "/static-data/config/{name}.json",
+write_json(
+    OUT_DIR / "index.json",
+    {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "endpoints": {
+            "servers": "/static-data/servers.json",
+            "stats": "/static-data/stats.json",
+            "popular": "/static-data/popular.json",
+            "recent": "/static-data/recent.json",
+            "curated": "/static-data/curated.json",
+            "categories": "/static-data/categories.json",
+            "companies": "/static-data/companies.json",
+            "config": "/static-data/config/{name}.json",
+        },
+        "counts": {
+            "servers_with_metadata": len(servers_list),
+            "configs": len(templates),
+            "categories": len(market_config.get("categories", {})),
+            "companies": len(companies_list),
+            "total_indexed": market_config.get("total_servers", 0),
+        },
     },
-    "counts": {
-        "servers_with_metadata": len(servers_list),
-        "configs": len(templates),
-        "categories": len(market_config.get("categories", {})),
-        "companies": len(companies_list),
-        "total_indexed": market_config.get("total_servers", 0),
-    },
-})
+)
 
 print("---")
 print(f"Wrote {len(servers_list)} servers, {len(templates)} configs")

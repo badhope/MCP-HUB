@@ -10,6 +10,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 @pytest.fixture(scope="module")
 def client():
     from main import app
+
     with TestClient(app) as c:
         yield c
 
@@ -82,7 +83,9 @@ class TestExportBatchJson:
         assert data["not_found"] == ["nonexistent-xyz"]
 
     def test_export_batch_json_mixed(self, client, sample_server_name):
-        resp = client.post("/export/batch-json", json={"server_names": [sample_server_name, "nonexistent-xyz"]})
+        resp = client.post(
+            "/export/batch-json", json={"server_names": [sample_server_name, "nonexistent-xyz"]}
+        )
         assert resp.status_code == 200
         data = resp.json()
         assert data["total_requested"] == 2

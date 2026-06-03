@@ -104,9 +104,7 @@ class BatchManager:
             completed = set(batch["completed"])
             repos = [r for r in repos if r["short_name"] not in completed]
 
-        print(
-            f"📦 批次 {batch_id}: 共 {len(batch['repos'])} 个，待下载 {len(repos)} 个"
-        )
+        print(f"📦 批次 {batch_id}: 共 {len(batch['repos'])} 个，待下载 {len(repos)} 个")
 
         # 执行下载
         stats = batch_download(repos, self.servers_path, token, max_workers)
@@ -154,15 +152,11 @@ class BatchManager:
                 print(f"\n{'='*60}")
                 print(f"处理批次: {batch_id}")
                 print(f"{'='*60}")
-                results[batch_id] = self.download_batch(
-                    batch_id, token, max_workers, resume
-                )
+                results[batch_id] = self.download_batch(batch_id, token, max_workers, resume)
 
         return results
 
-    def retry_failed(
-        self, batch_id: str, token: str = "", max_workers: int = 5
-    ) -> Dict[str, int]:
+    def retry_failed(self, batch_id: str, token: str = "", max_workers: int = 5) -> Dict[str, int]:
         """重试失败的下载"""
         batch = self.state["batches"].get(batch_id)
         if not batch:
@@ -208,9 +202,7 @@ class BatchManager:
         """获取下载摘要"""
         total_batches = len(self.state["batches"])
         total_repos = sum(len(b["repos"]) for b in self.state["batches"].values())
-        total_completed = sum(
-            len(b["completed"]) for b in self.state["batches"].values()
-        )
+        total_completed = sum(len(b["completed"]) for b in self.state["batches"].values())
         total_failed = sum(len(b["failed"]) for b in self.state["batches"].values())
 
         return {

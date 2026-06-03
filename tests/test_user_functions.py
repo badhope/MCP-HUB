@@ -3,11 +3,12 @@ Test User Function Endpoints (Favorites, Ratings, Comments, Submissions)
 """
 
 import json
+import socket
 import threading
 import time
 import urllib.request
-import socket
 from pathlib import Path
+
 import pytest
 
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -29,6 +30,7 @@ TEST_SERVER_NAME = "github-mcp-server"
 def fastapi_server():
     """Launch FastAPI server in background"""
     import uvicorn
+
     from main import app
 
     def run_server():
@@ -71,10 +73,7 @@ class TestFavorites:
     """Test favorite functionality"""
 
     def test_add_favorite(self, fastapi_server):
-        result = _post("/favorites/add", {
-            "user_id": TEST_USER_ID,
-            "server_name": TEST_SERVER_NAME
-        })
+        result = _post("/favorites/add", {"user_id": TEST_USER_ID, "server_name": TEST_SERVER_NAME})
         assert result.get("success") in [True, False]
         assert "user_id" in result
         assert "server_name" in result
@@ -97,10 +96,9 @@ class TestFavorites:
         assert "favorites_count" in result
 
     def test_remove_favorite(self, fastapi_server):
-        result = _post("/favorites/remove", {
-            "user_id": TEST_USER_ID,
-            "server_name": TEST_SERVER_NAME
-        })
+        result = _post(
+            "/favorites/remove", {"user_id": TEST_USER_ID, "server_name": TEST_SERVER_NAME}
+        )
         assert result.get("success") in [True, False]
 
 
@@ -108,12 +106,15 @@ class TestRatings:
     """Test rating functionality"""
 
     def test_add_rating(self, fastapi_server):
-        result = _post("/ratings/add", {
-            "user_id": TEST_USER_ID,
-            "server_name": TEST_SERVER_NAME,
-            "rating": 5,
-            "comment": "Great server!"
-        })
+        result = _post(
+            "/ratings/add",
+            {
+                "user_id": TEST_USER_ID,
+                "server_name": TEST_SERVER_NAME,
+                "rating": 5,
+                "comment": "Great server!",
+            },
+        )
         assert result.get("success") is True
         assert "rating" in result
 
@@ -135,11 +136,14 @@ class TestComments:
     """Test comment functionality"""
 
     def test_add_comment(self, fastapi_server):
-        result = _post("/comments/add", {
-            "user_id": TEST_USER_ID,
-            "server_name": TEST_SERVER_NAME,
-            "text": "This is a test comment"
-        })
+        result = _post(
+            "/comments/add",
+            {
+                "user_id": TEST_USER_ID,
+                "server_name": TEST_SERVER_NAME,
+                "text": "This is a test comment",
+            },
+        )
         assert result.get("success") is True
         assert "comment" in result
 
@@ -177,14 +181,17 @@ class TestSubmissions:
     """Test submission functionality"""
 
     def test_submit_server(self, fastapi_server):
-        result = _post("/submissions/submit", {
-            "user_id": TEST_USER_ID,
-            "name": "test-mcp-server",
-            "source": "https://github.com/test/test-mcp-server",
-            "description": "A test MCP server",
-            "categories": ["ai", "tools"],
-            "npm_package": "test-mcp-server"
-        })
+        result = _post(
+            "/submissions/submit",
+            {
+                "user_id": TEST_USER_ID,
+                "name": "test-mcp-server",
+                "source": "https://github.com/test/test-mcp-server",
+                "description": "A test MCP server",
+                "categories": ["ai", "tools"],
+                "npm_package": "test-mcp-server",
+            },
+        )
         assert result.get("success") is True
         assert "submission" in result
 

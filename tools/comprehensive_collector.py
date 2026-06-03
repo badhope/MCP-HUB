@@ -13,15 +13,16 @@ MCP Hub 全量项目收集系统 v2.0
 """
 
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from datetime import datetime
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class MCPProject:
     """MCP 项目标准化格式"""
+
     name: str
     display_name: str
     description: str
@@ -54,7 +55,7 @@ class ComprehensiveCollector:
 
     def __init__(self, base_path: Path):
         self.base_path = base_path
-        self.output_file = base_path / 'comprehensive_mcp_projects.json'
+        self.output_file = base_path / "comprehensive_mcp_projects.json"
         self.categories = {}
 
     def collect_all(self) -> Dict[str, Any]:
@@ -84,15 +85,15 @@ class ComprehensiveCollector:
         seen = set()
         unique_projects = []
         for p in all_projects:
-            if p['repo_url'] not in seen:
-                seen.add(p['repo_url'])
+            if p["repo_url"] not in seen:
+                seen.add(p["repo_url"])
                 unique_projects.append(p)
 
         # 计算完整性评分
         for p in unique_projects:
             score, level = self._calculate_completeness(p)
-            p['completeness_score'] = score
-            p['completeness_level'] = level
+            p["completeness_score"] = score
+            p["completeness_level"] = level
 
         # 分类统计
         self.categories = self._categorize_projects(unique_projects)
@@ -102,7 +103,7 @@ class ComprehensiveCollector:
             "generated_at": datetime.now().isoformat(),
             "total_projects": len(unique_projects),
             "categories": self.categories,
-            "projects": unique_projects
+            "projects": unique_projects,
         }
 
     def _collect_official_companies(self) -> List[Dict]:
@@ -131,7 +132,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/github/github-mcp-server",
                 "related_urls": ["https://github.com/features/actions"],
-                "news_mentions": ["2026年CSDN年度精选", "腾讯云开发者推荐"]
+                "news_mentions": ["2026年CSDN年度精选", "腾讯云开发者推荐"],
             },
             {
                 "name": "stripe-mcp",
@@ -155,7 +156,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/stripe/stripe-mcp",
                 "related_urls": ["https://stripe.com/docs"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "notion-mcp",
@@ -179,7 +180,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/makeswift/notion-mcp",
                 "related_urls": ["https://developers.notion.com/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "playwright-mcp",
@@ -203,7 +204,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/microsoft/playwright-mcp",
                 "related_urls": ["https://playwright.dev/"],
-                "news_mentions": ["2026年最热门MCP工具", "微软开发者大会推荐"]
+                "news_mentions": ["2026年最热门MCP工具", "微软开发者大会推荐"],
             },
             {
                 "name": "docker-mcp",
@@ -227,7 +228,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-docker",
                 "related_urls": ["https://docs.docker.com/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "slack-mcp",
@@ -251,7 +252,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-slack",
                 "related_urls": ["https://api.slack.com/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # Azure
             {
@@ -276,7 +277,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://learn.microsoft.com/azure/mcp",
                 "related_urls": ["https://azure.microsoft.com/"],
-                "news_mentions": ["2026年Azure MCP 2.0发布", "企业级MCP标准"]
+                "news_mentions": ["2026年Azure MCP 2.0发布", "企业级MCP标准"],
             },
             # AWS
             {
@@ -301,7 +302,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/awslabs/aws-mcp",
                 "related_urls": ["https://aws.amazon.com/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # Google Cloud
             {
@@ -326,7 +327,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/google/gcp-mcp",
                 "related_urls": ["https://cloud.google.com/"],
-                "news_mentions": ["Google AI集成推荐"]
+                "news_mentions": ["Google AI集成推荐"],
             },
             # Cloudflare
             {
@@ -351,7 +352,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/cloudflare/cf-mcp",
                 "related_urls": ["https://developers.cloudflare.com/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # Sentry
             {
@@ -376,7 +377,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/getsentry/sentry-mcp",
                 "related_urls": ["https://sentry.io/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # Linear
             {
@@ -401,8 +402,8 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/linear/linear-mcp",
                 "related_urls": ["https://linear.app/"],
-                "news_mentions": []
-            }
+                "news_mentions": [],
+            },
         ]
 
     def _collect_community_projects(self) -> List[Dict]:
@@ -431,7 +432,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/upstash/context7",
                 "related_urls": ["https://upstash.com/"],
-                "news_mentions": ["2026年开发者必备工具", "AI编程效率提升300%"]
+                "news_mentions": ["2026年开发者必备工具", "AI编程效率提升300%"],
             },
             {
                 "name": "tavily-mcp",
@@ -455,7 +456,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/tavily/tavily-mcp",
                 "related_urls": ["https://tavily.com/"],
-                "news_mentions": ["RAG应用首选工具"]
+                "news_mentions": ["RAG应用首选工具"],
             },
             {
                 "name": "brave-search-mcp",
@@ -479,7 +480,7 @@ class ComprehensiveCollector:
                 "license": "MPL-2.0",
                 "documentation_url": "https://github.com/brave/brave-mcp",
                 "related_urls": ["https://api.search.brave.com/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "perplexity-mcp",
@@ -503,7 +504,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/perplexitylabs/pplx-mcp",
                 "related_urls": ["https://perplexity.ai/"],
-                "news_mentions": ["2026年AI搜索新星"]
+                "news_mentions": ["2026年AI搜索新星"],
             },
             # 数据库
             {
@@ -528,7 +529,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-postgres",
                 "related_urls": ["https://www.postgresql.org/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "sqlite-mcp",
@@ -552,7 +553,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-sqlite",
                 "related_urls": ["https://www.sqlite.org/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "redis-mcp",
@@ -576,7 +577,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-redis",
                 "related_urls": ["https://redis.io/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # 浏览器自动化
             {
@@ -601,7 +602,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/iflow/chrome-devtools-mcp",
                 "related_urls": ["https://developers.google.com/web/tools/chrome-devtools"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "puppeteer-mcp",
@@ -625,7 +626,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-puppeteer",
                 "related_urls": ["https://pptr.dev/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # 文件系统
             {
@@ -650,7 +651,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-filesystem",
                 "related_urls": [],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "memory-mcp",
@@ -674,7 +675,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-memory",
                 "related_urls": [],
-                "news_mentions": ["AI记忆系统必备"]
+                "news_mentions": ["AI记忆系统必备"],
             },
             # 通讯工具
             {
@@ -699,7 +700,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/Discord-MCP/server-discord",
                 "related_urls": ["https://discord.com/developers/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "telegram-mcp",
@@ -723,7 +724,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/Base64/telegram-mcp",
                 "related_urls": ["https://core.telegram.org/bots"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             # Fetch
             {
@@ -748,8 +749,8 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/server-fetch",
                 "related_urls": [],
-                "news_mentions": ["MCP官方推荐工具"]
-            }
+                "news_mentions": ["MCP官方推荐工具"],
+            },
         ]
 
     def _collect_popular_projects(self) -> List[Dict]:
@@ -777,7 +778,7 @@ class ComprehensiveCollector:
                 "license": "CC0-1.0",
                 "documentation_url": "https://github.com/punkpeye/awesome-mcp-servers",
                 "related_urls": ["https://mcp.so/", "https://www.pulsemcp.com/"],
-                "news_mentions": ["MCP生态必备资源", "开发者收藏必备"]
+                "news_mentions": ["MCP生态必备资源", "开发者收藏必备"],
             },
             {
                 "name": "n8n",
@@ -801,7 +802,7 @@ class ComprehensiveCollector:
                 "license": "Sustainable Use License",
                 "documentation_url": "https://docs.n8n.io/",
                 "related_urls": ["https://n8n.io/"],
-                "news_mentions": ["2026年最佳自动化平台", "企业数字化转型推荐"]
+                "news_mentions": ["2026年最佳自动化平台", "企业数字化转型推荐"],
             },
             {
                 "name": "dify",
@@ -818,14 +819,21 @@ class ComprehensiveCollector:
                 "is_downloadable": True,
                 "download_type": "docker",
                 "install_command": "docker run",
-                "install_args": ["-it", "-p", "80:80", "-p", "443:443", "difycommunity/dify-community"],
+                "install_args": [
+                    "-it",
+                    "-p",
+                    "80:80",
+                    "-p",
+                    "443:443",
+                    "difycommunity/dify-community",
+                ],
                 "features": ["LLM应用开发", "RAG", "工作流", "Agent", "MCP支持"],
                 "use_cases": ["AI应用开发", "知识库", "聊天机器人"],
                 "pricing": "free",
                 "license": "Apache-2.0",
                 "documentation_url": "https://docs.dify.ai/",
                 "related_urls": ["https://dify.ai/"],
-                "news_mentions": ["2026年最火AI开发平台", "GitHub Star 突破10万"]
+                "news_mentions": ["2026年最火AI开发平台", "GitHub Star 突破10万"],
             },
             {
                 "name": "open-webui",
@@ -842,14 +850,21 @@ class ComprehensiveCollector:
                 "is_downloadable": True,
                 "download_type": "docker",
                 "install_command": "docker run",
-                "install_args": ["-d", "-p", "3000:8080", "-v", "open-webui:/app/backend/data", "ghcr.io/open-webui/open-webui:main"],
+                "install_args": [
+                    "-d",
+                    "-p",
+                    "3000:8080",
+                    "-v",
+                    "open-webui:/app/backend/data",
+                    "ghcr.io/open-webui/open-webui:main",
+                ],
                 "features": ["ChatGPT界面", "多模型支持", "工具调用", "MCP支持"],
                 "use_cases": ["本地AI界面", "模型管理", "AI助手"],
                 "pricing": "free",
                 "license": "MIT",
                 "documentation_url": "https://docs.openwebui.com/",
                 "related_urls": ["https://openwebui.com/"],
-                "news_mentions": ["2026年最佳开源AI界面", "Ollama最佳搭档"]
+                "news_mentions": ["2026年最佳开源AI界面", "Ollama最佳搭档"],
             },
             {
                 "name": "mindsdb",
@@ -873,7 +888,7 @@ class ComprehensiveCollector:
                 "license": "GPL-3.0",
                 "documentation_url": "https://docs.mindsdb.com/",
                 "related_urls": ["https://mindsdb.com/"],
-                "news_mentions": ["数据库+AI融合标杆"]
+                "news_mentions": ["数据库+AI融合标杆"],
             },
             {
                 "name": "1panel",
@@ -897,8 +912,8 @@ class ComprehensiveCollector:
                 "license": "GPL-3.0",
                 "documentation_url": "https://1panel.cn/",
                 "related_urls": ["https://fit2cloud.com/"],
-                "news_mentions": ["2026年最佳运维工具", "国产开源骄傲"]
-            }
+                "news_mentions": ["2026年最佳运维工具", "国产开源骄傲"],
+            },
         ]
 
     def _collect_frameworks(self) -> List[Dict]:
@@ -926,7 +941,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/fastmcp",
                 "related_urls": ["https://modelcontextprotocol.io/"],
-                "news_mentions": ["Python开发者首选框架", "5行代码开发MCP"]
+                "news_mentions": ["Python开发者首选框架", "5行代码开发MCP"],
             },
             {
                 "name": "mcp-typescript-sdk",
@@ -950,7 +965,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/typescript-sdk",
                 "related_urls": ["https://modelcontextprotocol.io/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "mcp-go-sdk",
@@ -974,7 +989,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/go-sdk",
                 "related_urls": ["https://modelcontextprotocol.io/"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "mcp-java-sdk",
@@ -998,7 +1013,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/java-sdk",
                 "related_urls": ["https://spring.io/projects/spring-ai"],
-                "news_mentions": ["Java企业级MCP标准", "2026年生产级稳定版发布"]
+                "news_mentions": ["Java企业级MCP标准", "2026年生产级稳定版发布"],
             },
             {
                 "name": "pymcp",
@@ -1022,7 +1037,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/uranus-public/pymcp",
                 "related_urls": [],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "mcp-rust-sdk",
@@ -1046,8 +1061,8 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/modelcontextprotocol/rust-sdk",
                 "related_urls": ["https://www.rust-lang.org/"],
-                "news_mentions": []
-            }
+                "news_mentions": [],
+            },
         ]
 
     def _collect_platforms(self) -> List[Dict]:
@@ -1075,7 +1090,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://www.pulsemcp.com/",
                 "related_urls": ["https://github.com/pulsemcp"],
-                "news_mentions": ["MCP生态导航站", "开发者必备工具"]
+                "news_mentions": ["MCP生态导航站", "开发者必备工具"],
             },
             {
                 "name": "glama-mcp",
@@ -1099,7 +1114,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://glama.ai/mcp/servers",
                 "related_urls": ["https://glama.ai/mcp/discord"],
-                "news_mentions": []
+                "news_mentions": [],
             },
             {
                 "name": "taskade-mcp",
@@ -1123,8 +1138,8 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://www.taskade.com/",
                 "related_urls": ["https://taskade.com/"],
-                "news_mentions": []
-            }
+                "news_mentions": [],
+            },
         ]
 
     def _collect_domestic_projects(self) -> List[Dict]:
@@ -1153,7 +1168,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/justinyoo/Feishu-MCP",
                 "related_urls": ["https://open.feishu.cn/"],
-                "news_mentions": ["字节跳动官方支持"]
+                "news_mentions": ["字节跳动官方支持"],
             },
             # 钉钉
             {
@@ -1178,7 +1193,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/dingtalk/dingtalk-mcp",
                 "related_urls": ["https://open.dingtalk.com/"],
-                "news_mentions": ["阿里钉钉官方发布", "2026年企业级MCP"]
+                "news_mentions": ["阿里钉钉官方发布", "2026年企业级MCP"],
             },
             # 百度
             {
@@ -1203,7 +1218,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/baidu/ernie-mcp",
                 "related_urls": ["https://cloud.baidu.com/"],
-                "news_mentions": ["百度AI集成", "文心一言生态"]
+                "news_mentions": ["百度AI集成", "文心一言生态"],
             },
             # 网易云信
             {
@@ -1228,7 +1243,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/netease-im/yunxin-mcp-server",
                 "related_urls": ["https://yunxin.163.com/"],
-                "news_mentions": ["网易官方IM集成"]
+                "news_mentions": ["网易官方IM集成"],
             },
             # 微信相关
             {
@@ -1253,7 +1268,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/zhayujie/chatgpt-on-wechat",
                 "related_urls": [],
-                "news_mentions": ["42k Star 国产明星项目", "微信AI集成标杆"]
+                "news_mentions": ["42k Star 国产明星项目", "微信AI集成标杆"],
             },
             {
                 "name": "xiaoi-mcp",
@@ -1277,7 +1292,7 @@ class ComprehensiveCollector:
                 "license": "MIT",
                 "documentation_url": "https://github.com/idootop/xiaoi-mcp",
                 "related_urls": [],
-                "news_mentions": ["小米生态集成"]
+                "news_mentions": ["小米生态集成"],
             },
             {
                 "name": "miloco",
@@ -1301,7 +1316,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://github.com/xiaomi/Miloco",
                 "related_urls": ["https://iot.mi.com/"],
-                "news_mentions": ["小米官方AIoT框架", "15k Star"]
+                "news_mentions": ["小米官方AIoT框架", "15k Star"],
             },
             # 阿里云
             {
@@ -1326,7 +1341,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://help.aliyun.com/",
                 "related_urls": ["https://www.aliyun.com/"],
-                "news_mentions": ["阿里云官方集成"]
+                "news_mentions": ["阿里云官方集成"],
             },
             # 腾讯云
             {
@@ -1351,7 +1366,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://cloud.tencent.com/document",
                 "related_urls": ["https://cloud.tencent.com/"],
-                "news_mentions": ["腾讯云官方集成"]
+                "news_mentions": ["腾讯云官方集成"],
             },
             # Gitee
             {
@@ -1376,7 +1391,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://gitee.com/oschina/mcp-gitee",
                 "related_urls": ["https://gitee.com/"],
-                "news_mentions": ["Gitee官方支持", "国内代码平台首选"]
+                "news_mentions": ["Gitee官方支持", "国内代码平台首选"],
             },
             # 华为
             {
@@ -1401,7 +1416,7 @@ class ComprehensiveCollector:
                 "license": "Apache-2.0",
                 "documentation_url": "https://support.huaweicloud.com/",
                 "related_urls": ["https://www.huaweicloud.com/"],
-                "news_mentions": ["华为云官方集成"]
+                "news_mentions": ["华为云官方集成"],
             },
             # 美团
             {
@@ -1426,14 +1441,14 @@ class ComprehensiveCollector:
                 "license": "Proprietary",
                 "documentation_url": "https://open.meituan.com/",
                 "related_urls": ["https://www.meituan.com/"],
-                "news_mentions": ["美团官方API集成"]
-            }
+                "news_mentions": ["美团官方API集成"],
+            },
         ]
 
     def _calculate_completeness(self, project: Dict) -> tuple:
         """计算项目完整性评分"""
         score = 0
-        
+
         # 基本信息完整性
         if project.get("description"):
             score += 15
@@ -1441,13 +1456,13 @@ class ComprehensiveCollector:
             score += 15
         if project.get("categories"):
             score += 10
-        
+
         # 可用性
         if project.get("is_downloadable"):
             score += 20
         if project.get("install_command"):
             score += 10
-        
+
         # 社区指标
         stars = project.get("stars", 0)
         if stars >= 10000:
@@ -1456,7 +1471,7 @@ class ComprehensiveCollector:
             score += 10
         elif stars >= 100:
             score += 5
-        
+
         # 元数据
         if project.get("license"):
             score += 5
@@ -1464,7 +1479,7 @@ class ComprehensiveCollector:
             score += 5
         if project.get("use_cases"):
             score += 5
-        
+
         # 等级
         if score >= 80:
             level = "S"
@@ -1476,7 +1491,7 @@ class ComprehensiveCollector:
             level = "C"
         else:
             level = "D"
-        
+
         return score, level
 
     def _categorize_projects(self, projects: List[Dict]) -> Dict[str, Any]:
@@ -1487,39 +1502,43 @@ class ComprehensiveCollector:
             "by_language": {},
             "by_pricing": {},
             "by_downloadable": {},
-            "by_completeness": {}
+            "by_completeness": {},
         }
-        
+
         for p in projects:
             # 按所有者类型
             owner_type = p.get("owner_type", "unknown")
-            categories["by_owner_type"][owner_type] = categories["by_owner_type"].get(owner_type, 0) + 1
-            
+            categories["by_owner_type"][owner_type] = (
+                categories["by_owner_type"].get(owner_type, 0) + 1
+            )
+
             # 按分类
             for cat in p.get("categories", []):
                 categories["by_category"][cat] = categories["by_category"].get(cat, 0) + 1
-            
+
             # 按语言
             lang = p.get("language", "Unknown")
             categories["by_language"][lang] = categories["by_language"].get(lang, 0) + 1
-            
+
             # 按定价
             pricing = p.get("pricing", "unknown")
             categories["by_pricing"][pricing] = categories["by_pricing"].get(pricing, 0) + 1
-            
+
             # 按可下载性
             downloadable = "可下载" if p.get("is_downloadable") else "不可下载"
-            categories["by_downloadable"][downloadable] = categories["by_downloadable"].get(downloadable, 0) + 1
-            
+            categories["by_downloadable"][downloadable] = (
+                categories["by_downloadable"].get(downloadable, 0) + 1
+            )
+
             # 按完整性等级
             level = p.get("completeness_level", "D")
             categories["by_completeness"][level] = categories["by_completeness"].get(level, 0) + 1
-        
+
         return categories
 
     def save(self, data: Dict[str, Any]):
         """保存收集结果"""
-        with open(self.output_file, 'w', encoding='utf-8') as f:
+        with open(self.output_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         print(f"✅ 已保存到: {self.output_file}")
         print(f"📊 共收集 {data['total_projects']} 个项目")
@@ -1529,27 +1548,27 @@ def main():
     """主函数"""
     base_path = Path(__file__).parent.parent
     collector = ComprehensiveCollector(base_path)
-    
+
     print("🚀 开始收集全量 MCP 项目...")
     print()
-    
+
     data = collector.collect_all()
-    
+
     print()
     print("📈 收集统计:")
     print(f"  - 总项目数: {data['total_projects']}")
     print(f"  - 分类统计:")
-    
-    for category, stats in data['categories'].items():
+
+    for category, stats in data["categories"].items():
         print(f"    {category}:")
         for key, count in sorted(stats.items(), key=lambda x: -x[1])[:5]:
             print(f"      - {key}: {count}")
-    
+
     collector.save(data)
-    
+
     print()
     print("✅ 收集完成！")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

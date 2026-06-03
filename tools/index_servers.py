@@ -210,13 +210,9 @@ def analyze_readme(server_path: Path) -> Dict[str, Any]:
                     # 简单语言检测
                     if re.search(r"^import|^from|python", content, re.MULTILINE):
                         result["language"] = "python"
-                    elif re.search(
-                        r"require|module\.exports|node|npm", content, re.MULTILINE
-                    ):
+                    elif re.search(r"require|module\.exports|node|npm", content, re.MULTILINE):
                         result["language"] = "nodejs"
-                    elif re.search(
-                        r"go\.mod|^package|import \(|func main", content, re.MULTILINE
-                    ):
+                    elif re.search(r"go\.mod|^package|import \(|func main", content, re.MULTILINE):
                         result["language"] = "go"
             except (IOError, OSError, UnicodeDecodeError):
                 pass
@@ -279,9 +275,7 @@ def main():
     print("\n✅ 索引完成！")
     print(f"📦 总服务器数: {index['total_servers']}")
     print("\n📂 分类统计:")
-    for category, count in sorted(
-        index["categories"].items(), key=lambda x: x[1], reverse=True
-    ):
+    for category, count in sorted(index["categories"].items(), key=lambda x: x[1], reverse=True):
         print(f"   {category}: {count}")
 
     # 保存分类目录
@@ -299,9 +293,7 @@ def generate_catalog(index, output_path):
     md.append(f"> 收录 {index['total_servers']} 个 MCP 服务器\n")
     md.append("\n## 分类统计\n")
 
-    for category, count in sorted(
-        index["categories"].items(), key=lambda x: x[1], reverse=True
-    ):
+    for category, count in sorted(index["categories"].items(), key=lambda x: x[1], reverse=True):
         md.append(f"- {category}: {count}")
 
     md.append("\n## 服务器列表\n")
@@ -314,14 +306,10 @@ def generate_catalog(index, output_path):
                 category_map[cat] = []
             category_map[cat].append(server)
 
-    for category, servers in sorted(
-        category_map.items(), key=lambda x: len(x[1]), reverse=True
-    ):
+    for category, servers in sorted(category_map.items(), key=lambda x: len(x[1]), reverse=True):
         md.append(f"\n### {category} ({len(servers)})\n")
         for server in servers:
-            md.append(
-                f"- [{server['name']}]({server['path']}) - {server['detected_language']}"
-            )
+            md.append(f"- [{server['name']}]({server['path']}) - {server['detected_language']}")
 
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("\n".join(md))
