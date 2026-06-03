@@ -505,13 +505,12 @@ All documentation you might need:
 | [PROJECT_STRUCTURE_GUIDE.md](PROJECT_STRUCTURE_GUIDE.md) | File structure and conventions |
 | [NOTABLE_PROJECTS_GUIDE.md](NOTABLE_PROJECTS_GUIDE.md) | Notable projects showcase |
 | [DOMESTIC_COMPANIES_REPORT.md](DOMESTIC_COMPANIES_REPORT.md) | Chinese companies report |
-| [NAVIGATION_GUIDE.md](NAVIGATION_GUIDE.md) | User navigation guide |
 
 ### Chinese Documents
 
 | Document | Purpose |
 |----------|---------|
-| [README_CN.md](README_CN.md) | 中文主文档 |
+| [`README_CN.md`](../../README_CN.md) | 中文主文档 |
 
 ---
 

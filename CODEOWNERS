@@ -1,0 +1,42 @@
+# CODEOWNERS
+# GitHub auto-assigns reviewers for changes in specific paths.
+# Owners listed here are auto-requested as reviewers for PRs touching
+# matching files. The same rules are also mirrored at `.github/CODEOWNERS`
+# — root location is the canonical spot per GitHub's lookup order:
+#   1) repository root  2) docs/  3) .github/
+#
+# Add yourself to the area you maintain.
+
+# Default owners for everything
+*       @badhope
+
+# Backend
+/main.py             @badhope
+/api.py              @badhope
+/services.py         @badhope
+/user_data.py        @badhope
+/query.py            @badhope
+/core/               @badhope
+/templates/          @badhope
+/tools/              @badhope
+
+# Frontend
+/frontend/           @badhope
+
+# Build & deployment
+/Dockerfile          @badhope
+/docker-compose.yml  @badhope
+/.github/workflows/  @badhope
+/requirements.txt    @badhope
+/pyproject.toml      @badhope
+/package.json        @badhope
+/Makefile            @badhope
+
+# Security-critical files (require extra scrutiny)
+/SECURITY.md         @badhope
+/SECURITY_CN.md      @badhope
+/.gitignore          @badhope
+/.env.example        @badhope
+/frontend/.env.example  @badhope
+/tools/secret_scanner.py  @badhope
+/tools/pre-commit    @badhope

@@ -26,10 +26,10 @@
 项目自带自动化扫描器：[tools/secret_scanner.py](tools/secret_scanner.py)，能识别这些 pattern。它已经被接入：
 
 1. **Pre-commit hook**（[tools/pre-commit](tools/pre-commit)）— 每次 `git commit` 都跑
-2. **GitHub Actions**（[.github/workflows/ci.yml](../.github/workflows/ci.yml)）— 每次 push 和 PR 都跑，发现问题就 block merge
+2. **GitHub Actions**（[.github/workflows/ci.yml](.github/workflows/ci.yml)）— 每次 push 和 PR 都跑，发现问题就 block merge
 3. **手动** — `python tools/secret_scanner.py .`
 
-扫描器有独立的测试：[tests/test_secret_scanner.py](../tests/test_secret_scanner.py)。
+扫描器有独立的测试：[tests/test_secret_scanner.py](tests/test_secret_scanner.py)。
 
 ## 🛡️ 当前仓库状态（2026-06-01 验证）
 

@@ -131,8 +131,8 @@ class ApiClient {
       // Network / server error → try static
       try {
         return await fallback();
-      } catch (staticErr) {
-        // If both fail, surface the original API error
+      } catch {
+        // Static fallback also failed; surface the original API error
         throw err;
       }
     }

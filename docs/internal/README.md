@@ -15,5 +15,5 @@ that are useful for maintainers but **not intended for end users**.
 | `REPOSITORY_INTRO.md` | Original repo-introduction draft |
 | `SERVER_CATALOG.md` | Original hand-curated server catalog |
 
-If you are an end user, you probably want the [top-level README](../README.md)
-or [docs/API.md](../docs/API.md) instead.
+If you are an end user, you probably want the [top-level README](../../README.md)
+or [docs/API.md](../../docs/API.md) instead.
