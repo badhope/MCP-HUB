@@ -246,7 +246,9 @@ class TestAPIDataConsistency:
         """total 字段应该等于实际返回的服务器数量 (within limit)"""
         r = _get("/servers?limit=500")
         assert r["total"] >= len(r["servers"])
-        assert len(r["servers"]) == 500  # 请求500个应该返回500个
+        # When fewer than `limit` servers exist, all of them are returned.
+        # When the catalog is bigger, the response is capped at `limit`.
+        assert len(r["servers"]) == min(500, r["total"])
 
     def test_stats_total_matches_servers(self, live_server):
         """stats.total_servers 应该等于 /servers 的 total"""

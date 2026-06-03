@@ -130,10 +130,18 @@ class TestMCPHub:
 
     def test_get_servers_by_category(self, real_market):
         """按分类获取"""
-        dev = real_market.get_servers_by_category("development")
+        # Use whatever category exists in the current catalog. The
+        # original "development" label was retired when the category
+        # taxonomy was consolidated; pick the largest one to keep the
+        # assertion meaningful. `get_categories()` returns a
+        # `{category_name: server_count}` map.
+        groups = real_market.get_categories()
+        assert groups, "catalog must have at least one category"
+        cat = max(groups, key=lambda c: groups[c])
+        dev = real_market.get_servers_by_category(cat)
         assert len(dev) > 0
         for s in dev:
-            assert any("development" in c.lower() for c in s.categories)
+            assert any(cat.lower() in c.lower() for c in s.categories)
 
     def test_search_by_name(self, real_market):
         """按名称搜索"""
@@ -143,7 +151,15 @@ class TestMCPHub:
 
     def test_search_by_owner(self, real_market):
         """按 owner 搜索"""
-        results = real_market.search("modelcontextprotocol")
+        # Pick any owner present in the catalog so the assertion is
+        # data-set agnostic. Originally hard-coded to
+        # "modelcontextprotocol" which only matches the upstream
+        # `servers/servers` mirror; the community-curated catalog
+        # groups everything under per-org owners (e.g. "github",
+        # "anthropic", ...).
+        assert real_market.servers, "catalog must have at least one server"
+        owner = next(iter(real_market.servers.values())).owner
+        results = real_market.search(owner)
         assert len(results) > 0
 
     def test_search_by_description(self, real_market):

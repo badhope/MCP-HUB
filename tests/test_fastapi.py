@@ -154,7 +154,14 @@ class TestFastAPIComparison:
     """测试服务器对比端点"""
 
     def test_compare_servers(self, fastapi_server):
-        r = _get("/compare?servers=github-mcp-server,notion-mcp-server")
+        # Pick any two servers present in the catalog. The original
+        # hard-coded "github-mcp-server,notion-mcp-server" pair only
+        # exists in the full upstream mirror; the community-curated
+        # fixture and trimmed dev fixtures may not include both.
+        servers = _get("/servers?limit=2")
+        names = [s["name"] for s in servers["servers"][:2]]
+        assert len(names) == 2, "catalog must have at least 2 servers"
+        r = _get(f"/compare?servers={names[0]},{names[1]}")
         assert "total" in r
         assert "servers" in r
         assert len(r["servers"]) == 2
@@ -164,7 +171,10 @@ class TestFastAPIComparison:
             assert "comparison" in s
 
     def test_compare_best_for(self, fastapi_server):
-        r = _get("/compare?servers=github-mcp-server,notion-mcp-server")
+        servers = _get("/servers?limit=2")
+        names = [s["name"] for s in servers["servers"][:2]]
+        assert len(names) == 2, "catalog must have at least 2 servers"
+        r = _get(f"/compare?servers={names[0]},{names[1]}")
         assert "best_for" in r
         assert "stars" in r["best_for"]
         assert "quality" in r["best_for"]

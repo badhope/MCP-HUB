@@ -86,7 +86,7 @@ class MCPHubAPI(BaseHTTPRequestHandler):
         body = json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", len(body))
+        self.send_header("Content-Length", str(len(body)))
         self._cors_headers()
         self.end_headers()
         self.wfile.write(body)

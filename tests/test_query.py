@@ -5,10 +5,20 @@ Query 接口测试 - 真实子进程执行，无 mock
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
 QUERY_SCRIPT = PROJECT_ROOT / "query.py"
+
+# Make `core` importable so the data-agnostic category lookup works
+# without a hard-coded label.
+sys.path.insert(0, str(PROJECT_ROOT))
+from core import MCPHub  # noqa: E402
+
+
+def real_market():
+    return MCPHub(PROJECT_ROOT)
 
 
 def _run_query(*args) -> str:
@@ -102,7 +112,13 @@ class TestQueryCategories:
     def test_categories(self):
         out = _run_query("categories")
         assert "分类" in out
-        assert "development" in out
+        # `development` was a legacy label. Assert on any real category
+        # from the current catalog so the test stays in sync with the
+        # taxonomy changes.
+        groups = real_market().get_categories()
+        assert groups, "catalog must have at least one category"
+        cat = max(groups, key=lambda c: groups[c])
+        assert cat in out
 
     def test_categories_count(self):
         out = _run_query("categories")
