@@ -5,6 +5,7 @@ MCP Hub 分类和索引工具
 """
 
 import json
+import logging
 import re
 from pathlib import Path
 from typing import Any, Dict, List
@@ -214,7 +215,12 @@ def analyze_readme(server_path: Path) -> Dict[str, Any]:
                         result["language"] = "nodejs"
                     elif re.search(r"go\.mod|^package|import \(|func main", content, re.MULTILINE):
                         result["language"] = "go"
-            except (IOError, OSError, UnicodeDecodeError):
+            except (IOError, OSError, UnicodeDecodeError) as e:
+                # One bad file shouldn't kill the whole scan; log at debug so
+                # the operator can investigate without flooding stdout.
+                logging.getLogger(__name__).debug(
+                    "skipping unreadable README %s: %s", readme_path, e
+                )
                 pass
             break
 

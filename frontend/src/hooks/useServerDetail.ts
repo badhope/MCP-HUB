@@ -2,15 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../lib/api';
 import { Server } from '../types';
 
-export function useServerDetail(name: string) {
-  return useQuery({
-    queryKey: ['server', name],
-    queryFn: () => apiClient.getServer(name),
-    enabled: !!name,
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
 export function useServerConfig(name: string) {
   return useQuery({
     queryKey: ['server', 'config', name],

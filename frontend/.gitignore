@@ -12,6 +12,20 @@ dist
 dist-ssr
 *.local
 
+# Environment files (keep only .env.example tracked)
+.env
+.env.*
+!.env.example
+
+# Test coverage output
+coverage
+.nyc_output
+
+# Vite / build caches
+.vite
+.eslintcache
+.tsbuildinfo
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

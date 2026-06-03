@@ -1148,7 +1148,9 @@ def load_existing_index() -> Dict:
         try:
             with open(INDEX_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except:
+        # Narrow exception: a corrupt or unreadable index should fall back
+        # to an empty one, not swallow KeyboardInterrupt / SystemExit.
+        except (json.JSONDecodeError, OSError, UnicodeDecodeError):
             return {}
     return {}
 

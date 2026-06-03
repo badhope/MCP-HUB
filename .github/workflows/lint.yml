@@ -39,7 +39,9 @@ jobs:
         run: black --check --diff .
 
       - name: isort check
-        run: isort --check-only --diff --profile=black .
+        # --gitignore makes isort skip vendored / gitignored trees like
+        # `servers/` so a third-party file in there can't break the job.
+        run: isort --check-only --diff --profile=black --gitignore .
 
   frontend-lint:
     name: Frontend lint

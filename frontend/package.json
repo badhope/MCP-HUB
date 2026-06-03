@@ -1,8 +1,13 @@
 {
-  "name": "frontend",
+  "name": "mcp-hub-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "React SPA for the MCP Hub — browse, search, and download Model Context Protocol server configurations.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
