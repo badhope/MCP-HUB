@@ -1,0 +1,11 @@
+# robots.txt — MCP Hub GitHub Pages
+# https://github.com/ajmaltemplates/robots.txt
+
+User-agent: *
+Allow: /
+
+# Block Vite dev/build artifacts that are never deployed
+Disallow: /assets/*.map$
+
+# Sitemap location
+Sitemap: https://badhope.github.io/MCP-HUB/sitemap.xml

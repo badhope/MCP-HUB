@@ -188,6 +188,18 @@ async def root():
     }
 
 
+@app.get("/health", summary="Liveness probe", tags=["Health"])
+async def liveness():
+    """
+    Lightweight liveness/readiness probe for orchestrators (Docker HEALTHCHECK,
+    Kubernetes, load balancers). Always returns 200 OK if the process is up
+    — does not touch disk, network, or the catalog, so it is safe to poll
+    every few seconds. Use ``/validate/health`` for a deep data health
+    report.
+    """
+    return {"status": "ok"}
+
+
 @app.get("/stats", response_model=StatsResponse, tags=["Stats"], summary="Get API statistics")
 async def get_stats(data: Dict[str, Any] = Depends(get_app_data)):
     """Get overall market statistics including total servers and categories"""

@@ -22,7 +22,7 @@ Verify with:
 
 ```bash
 curl http://localhost:8080/stats
-# → {"total_servers": 4407, ...}
+# → {"total_servers": 4403, ...}
 ```
 
 ## 3. Frontend (optional, second terminal)

@@ -1,6 +1,6 @@
 # MCP Hub
 
-> **The Universal MCP Tool Market** — 4,400+ curated Model Context Protocol servers, REST API, web UI, and AI-agent friendly discovery for Claude, Cursor, ChatGPT, and every AI agent.
+> **The Universal MCP Tool Market** — 4,403+ curated Model Context Protocol servers, REST API, web UI, and AI-agent friendly discovery for Claude, Cursor, ChatGPT, and every AI agent.
 
 <p align="center">
   <a href="https://github.com/badhope/MCP-HUB/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
@@ -27,7 +27,7 @@
 
 | What you get | Count |
 |---|---|
-| Indexed MCP servers | **4,400+** |
+| Indexed MCP servers | **4,403+** |
 | Curated official servers | **51** |
 | Categories | **23** |
 | REST API endpoints | **35+** |
@@ -162,7 +162,7 @@ Point your agent's tool-search step at the live API and stop maintaining your ow
                                               ▼
                                      ┌──────────────────┐
                                      │ servers-index    │
-                                     │   .json (4,400+) │
+                                     │   .json (4,403+) │
                                      └──────────────────┘
                                               ▲
                                               │ daily

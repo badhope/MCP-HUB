@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+- `data_snapshot_date` field in `static-data/stats.json` — surfaces the snapshot's freshness next to every per-server metric so the GitHub Pages demo is clearly labelled as a snapshot, not a live feed. FastAPI backend will overwrite this with `datetime.utcnow()` on every scrape.
+- `data_snapshot_date` field on the `StatsResponse` TypeScript type
+- `Clock` icon and "Data last synced …" line in `StaticDemoBanner`
+- `snapshot` badge under every star count in `ServerCard` and `ServerDetail`
+- "Snapshot data — last synced …" footnote in `Quality Assessment` section of `ServerDetail`
+- `frontend/public/robots.txt` with sitemap pointer
+- `frontend/public/sitemap.xml` covering all top-level routes
+- `<link rel="canonical">` and JSON-LD `WebSite` + `SoftwareApplication` structured data in `frontend/index.html`
+- `CHANGELOG_CN.md` — Chinese translation of the changelog
+- `docs/API_CN.md` — Chinese translation of the API reference
+- `.github/workflows/lint.yml` — fast `black`/`isort`/`flake8`/secret-scan/TS-typecheck on every push
+- `.github/workflows/frontend-deploy.yml` — auto-build the SPA and publish `frontend/dist/` to the `gh-pages` branch (replaces the manual deploy step)
+- `.github/workflows/release.yml` — auto-draft a GitHub Release on `v*.*.*` tag push, pulling notes from `CHANGELOG.md`
+- `GET /health` liveness probe in `main.py` (lightweight, no DB/catalog touch)
+- `HEALTHCHECK` in `Dockerfile` now hits `/health` instead of `/`
+
+### Changed
+- README, README_CN, QUICKSTART, QUICKSTART_CN, USER_GUIDE, USER_GUIDE_CN: `4,400+` / `4407` → `4,403+` / `4403` to match the live registry count
+- `og:image` / `og:url` / `twitter:image` in `index.html` now point to the GitHub Pages CDN (`https://badhope.github.io/MCP-HUB/...`) instead of `raw.githubusercontent.com`
+
+### Fixed
+- Star counts on the demo are now visibly labelled as a snapshot, eliminating the previous "live-looking demo with stale data" risk
+
 ## [2.0.1] - 2026-06-01
 
 ### Added

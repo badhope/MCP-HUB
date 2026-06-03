@@ -1,0 +1,71 @@
+name: Release
+
+# Auto-drafts a GitHub Release when a semver tag like `v2.0.2` is pushed.
+# Pulls notes from CHANGELOG.md and falls back to PR titles.
+#
+# Usage:  git tag v2.0.2 && git push origin v2.0.2
+#
+# Then visit the workflow run URL to inspect the auto-generated draft.
+# Pre-releases (e.g. v2.1.0-rc1) are flagged as `prerelease: true`.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract changelog section
+        id: changelog
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          # Match the `## [VERSION] - DATE` heading through the next `## [` heading.
+          python3 - <<'PY' > /tmp/release_notes.md
+          import re, pathlib
+          text = pathlib.Path('CHANGELOG.md').read_text(encoding='utf-8')
+          version = "${VERSION}"
+          # Look for `## [version] - date` (matches our Keep-a-Changelog format)
+          pattern = re.compile(
+              r"^##\s+\[" + re.escape(version) + r"\][^\n]*\n(?P<body>.*?)(?=^##\s|\Z)",
+              re.MULTILINE | re.DOTALL,
+          )
+          m = pattern.search(text)
+          if m:
+              print(m.group(0).rstrip())
+          else:
+              print(f"## What's Changed\n\n_No changelog entry for {version} yet._\n")
+          PY
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/release_notes.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Determine if prerelease
+        id: meta
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [[ "$TAG" == *-* ]]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.notes }}
+          draft: true
+          prerelease: ${{ steps.meta.outputs.prerelease }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

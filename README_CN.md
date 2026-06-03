@@ -1,6 +1,6 @@
 # MCP Hub · 万能 MCP 中心
 
-> **收录 4,400+ MCP 服务器**，统一适配 Claude / Cursor / ChatGPT / DeepSeek 等所有 AI 平台
+> **收录 4,403+ MCP 服务器**，统一适配 Claude / Cursor / ChatGPT / DeepSeek 等所有 AI 平台
 
 <p align="center">
   <a href="https://github.com/badhope/MCP-HUB/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
@@ -26,7 +26,7 @@
 
 | 指标 | 数量 |
 |---|---|
-| 收录 MCP 服务器 | **4,400+** |
+| 收录 MCP 服务器 | **4,403+** |
 | 官方精选 | **51** |
 | 分类数 | **23** |
 | REST API 端点 | **35+** |
@@ -161,7 +161,7 @@ config = requests.get("https://mcp-hub.example.com/config/github-mcp-server").js
                                               ▼
                                      ┌──────────────────┐
                                      │ servers-index    │
-                                     │   .json (4,400+) │
+                                     │   .json (4,403+) │
                                      └──────────────────┘
                                               ▲
                                               │ daily

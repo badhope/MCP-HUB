@@ -249,7 +249,7 @@ curl http://localhost:8080/submissions | jq
                                               ▼
                                      ┌──────────────────┐
                                      │ servers-index    │
-                                     │   .json (4,400+) │
+                                     │   .json (4,403+) │
                                      └──────────────────┘
                                               ▲
                                               │ daily
