@@ -1,15 +1,15 @@
-# 🎯 MCP Hub 系统功能完整说明
+# MCP Hub 系统功能完整说明
 
-## 📖 概述
+## 概述
 
 MCP Hub 是一个功能完善的 MCP (Model Context Protocol) 生态系统导航平台，提供以下核心功能：
 
-- ✅ 服务器索引和管理
-- ✅ 下载和标准化模板
-- ✅ 知名项目导航
-- ✅ 自动化更新机制
+- 服务器索引和管理
+- 下载和标准化模板
+- 知名项目导航
+- 自动化更新机制
 
-## 🛠️ 工具系统
+## 工具系统
 
 ### 1. 下载管理器 (`tools/download_manager.py`)
 
@@ -93,7 +93,7 @@ python tools/download_manager.py list
 
 **包含分类**:
 
-#### 2.1 🏢 大厂官方 MCP
+#### 2.1 大厂官方 MCP
 - GitHub MCP Server
 - Anthropic MCP
 - Stripe MCP
@@ -101,32 +101,32 @@ python tools/download_manager.py list
 - Microsoft Playwright MCP
 - Docker MCP
 
-#### 2.2 🌟 明星项目
+#### 2.2 明星项目
 - n8n (189k⭐) - 工作流自动化
 - Dify (142k⭐) - LLM应用开发
 - Open WebUI (138k⭐) - WebUI
 - MindsDB (28k⭐) - ML数据库
 - 1Panel (32k⭐) - 服务器管理
 
-#### 2.3 🎮 游戏相关
+#### 2.3 游戏相关
 - Unity MCP (4.5k⭐)
 - Unreal Engine MCP
 - Godot MCP
 
-#### 2.4 🛠️ 开发框架
+#### 2.4 开发框架
 - FastMCP (8.1k⭐) - Python框架
 - MCP Go SDK (4.5k⭐)
 - MCP TypeScript SDK (3.5k⭐)
 - PyMCP
 
-#### 2.5 🇨🇳 国内大厂
+#### 2.5 国内大厂
 - 百度文心 MCP (12k⭐)
 - 钉钉 MCP (9k⭐)
 - 网易云信 MCP (5.5k⭐)
 - 阿里云 MCP
 - 腾讯云 MCP
 
-#### 2.6 📚 资源汇总
+#### 2.6 资源汇总
 - awesome-mcp-servers (73k⭐)
 - MCP Registry (6.8k⭐)
 - awesome-mcp (5.8k⭐)
@@ -201,7 +201,7 @@ python tools/auto_updater.py run --force
 python tools/auto_updater.py report
 ```
 
-## 📊 数据文件
+## 数据文件
 
 ### 服务器索引
 - **文件**: `servers-index.json`
@@ -221,7 +221,7 @@ python tools/auto_updater.py report
 - **格式**: JSON 分类结构
 - **生成**: 由 notable_projects_navigator.py 生成
 
-## 🎯 标准化模板系统
+## 标准化模板系统
 
 ### 模板特点
 
@@ -265,7 +265,7 @@ npm install -g @github/mcp-server
 go install github.com/owner/repo@latest
 ```
 
-## 🔄 自动化流程
+## 自动化流程
 
 ### 每日更新流程
 
@@ -289,7 +289,7 @@ go install github.com/owner/repo@latest
    - 更新成功通知
    - 失败告警
 
-## 📚 使用场景
+## 使用场景
 
 ### 场景 1: 快速搭建 MCP 环境
 
@@ -343,7 +343,7 @@ cat NAVIGATION_GUIDE.md
 cat notable_projects.json | jq '.categories | keys'
 ```
 
-## 🚀 快速开始
+## 快速开始
 
 ### 1. 基础使用
 
@@ -391,7 +391,7 @@ python tools/auto_updater.py status
 python tools/auto_updater.py run --force
 ```
 
-## 📈 统计信息
+## 统计信息
 
 - **总服务器数**: 4403+
 - **知名项目**: 40+ 个
@@ -400,7 +400,7 @@ python tools/auto_updater.py run --force
 - **自动化任务**: 4 个
 - **备份保留**: 7 天
 
-## 🔧 自定义配置
+## 自定义配置
 
 ### 修改更新间隔
 
@@ -442,7 +442,7 @@ def _calculate_quality_score(self, server: Dict) -> int:
     # ... 其他权重调整
 ```
 
-## 📝 日志和报告
+## 日志和报告
 
 ### 更新日志
 - **文件**: `update.log`
@@ -458,7 +458,7 @@ def _calculate_quality_score(self, server: Dict) -> int:
 - **生成**: `python tools/auto_updater.py report`
 - **文件**: `UPDATE_REPORT.md`
 
-## 🎓 学习资源
+## 学习资源
 
 ### 官方文档
 - [MCP 官网](https://modelcontextprotocol.io/)
@@ -470,7 +470,7 @@ def _calculate_quality_score(self, server: Dict) -> int:
 - [文心 MCP](https://github.com/baidu/ernie-mcp)
 - [网易云信](https://github.com/netease-im/yunxin-mcp-server)
 
-## 🤝 贡献指南
+## 贡献指南
 
 欢迎贡献：
 
@@ -482,7 +482,7 @@ def _calculate_quality_score(self, server: Dict) -> int:
 
 请提交 Issue 或 Pull Request！
 
-## 📄 许可证
+## 许可证
 
 本项目遵循原项目许可证。
 

@@ -1,70 +1,40 @@
 # MCP Hub
 
-> **The Universal MCP Tool Market** — 4,403+ curated Model Context Protocol servers, REST API, web UI, and AI-agent friendly discovery for Claude, Cursor, ChatGPT, and every AI agent.
+Curated registry of Model Context Protocol (MCP) servers with a FastAPI
+backend, a React/Vite SPA, and a stable JSON contract for AI agents.
 
-<p align="center">
-  <a href="https://github.com/badhope/MCP-HUB/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
-  <a href="https://github.com/badhope/MCP-HUB/actions"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/badhope/MCP-HUB/ci.yml?branch=main&style=for-the-badge&label=CI"></a>
-  <a href="https://github.com/badhope/MCP-HUB/releases"><img alt="Release" src="https://img.shields.io/github/v/release/badhope/MCP-HUB?style=for-the-badge"></a>
-  <a href="https://github.com/badhope/MCP-HUB/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/badhope/MCP-HUB?style=for-the-badge"></a>
-  <a href="https://github.com/badhope/MCP-HUB/issues"><img alt="Issues" src="https://img.shields.io/github/issues/badhope/MCP-HUB?style=for-the-badge"></a>
-  <a href="https://github.com/badhope/MCP-HUB/blob/main/README_CN.md"><img alt="中文" src="https://img.shields.io/badge/中文-切换-red?style=for-the-badge"></a>
-</p>
+> 4,403 indexed servers · 51 official · 23 categories · daily upstream sync.
+> 38 REST endpoints · open `servers-index.json` for offline use.
 
-<p align="center">
-  <img src="frontend/public/social-preview.png" alt="MCP Hub social preview" width="800">
-</p>
+[Live demo](https://badhope.github.io/MCP-HUB/) · [API docs](docs/API.md) · [中文](README_CN.md)
 
 ---
 
-## What is MCP Hub?
+## What it does
 
-**MCP Hub** is a free, open-source, community-driven **marketplace of MCP (Model Context Protocol) servers**. It is built for three audiences:
+MCP Hub indexes every public MCP server, scores it for completeness,
+and serves it through a stable API so that:
 
-1. **AI application users** — browse and download ready-to-use MCP configurations for Claude Desktop, Cursor, ChatGPT, and other MCP-compatible clients.
-2. **AI agents** — a stable, queryable REST API and a downloadable offline index of all servers, so your agent can recommend the right tool on demand.
-3. **MCP server authors** — submit your server once and reach the entire MCP ecosystem.
+- **End users** can browse the catalog and copy ready-to-paste configs
+  for Claude Desktop, Cursor, or any stdio-based MCP client.
+- **AI agents** can call `/servers`, `/servers/{name}`, `/config/{name}`,
+  `/stats`, etc. to recommend a tool without scraping anything.
+- **Server authors** can submit a server once and reach the whole
+  ecosystem.
 
-| What you get | Count |
-|---|---|
-| Indexed MCP servers | **4,403+** |
-| Curated official servers | **51** |
-| Categories | **23** |
-| REST API endpoints | **35+** |
-| Daily upstream sync | ✅ |
-| Generated configs (Claude, Cursor, …) | ✅ |
-| AI-agent discoverability | ✅ |
-
-> Data syncs daily from the upstream [awesome-mcp](https://github.com/Rodert/awesome-mcp) registry. The index is rebuilt and republished on every CI run.
+The data layer is intentionally a single static JSON file so that
+agents can ship a snapshot of the catalog with the model if they need
+a deterministic offline view.
 
 ---
 
-## ✨ Features
+## Quick start
 
-- 🔍 **Powerful discovery** — full-text search, category / language / quality / stars filters, sort by stars or last-updated
-- 🎨 **Modern web UI** — React + TypeScript + Tailwind, dark mode, mobile responsive, one-click config generator
-- ⚡ **FastAPI backend** — async, type-safe (Pydantic v2), auto Swagger / ReDoc at `/docs` and `/redoc`
-- 🤖 **AI-agent first** — every endpoint is also a stable JSON contract; ships a downloadable offline index
-- 📤 **Config generation** — ready-to-paste configs for Claude Desktop, Cursor, and any stdio-based MCP client
-- ⭐ **Quality scoring** — automatic completeness, health, and quality scoring per server
-- 🔄 **Daily auto-sync** — GitHub Actions workflow re-indexes the upstream registry and commits the result
-- 🐳 **One-command deploy** — `docker compose up` brings up the full stack
-- 🛡️ **Security** — automated secret scanning, branch protection, signed releases, no telemetry
-
----
-
-## 🚀 Quick start
-
-### Option 1 — Docker Compose (recommended)
+### Option A — Docker Compose
 
 ```bash
 git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
-
-# Build the server index (one-time, ~5 MB download)
-python tools/sync_index.py
-
-# Start the full stack
 docker compose up -d --build
 
 # Web UI  : http://localhost:5173
@@ -72,50 +42,78 @@ docker compose up -d --build
 # API docs: http://localhost:8080/docs
 ```
 
-### Option 2 — Local Python (no Docker)
+The compose file wires the backend to a hot-reloadable dev frontend.
+First boot pulls the upstream index (~5 MB) and caches it in
+`servers-index.json` (gitignored, rebuild with `python tools/sync_index.py`).
+
+### Option B — Local Python
 
 ```bash
-git clone https://github.com/badhope/MCP-HUB.git
-cd MCP-HUB
-
 pip install -r requirements.txt
-python tools/sync_index.py            # populate servers-index.json
-python main.py                        # API on :8080
+python tools/sync_index.py          # one-time, populates servers-index.json
+python main.py                      # API on :8080
 ```
 
-In another terminal, the web UI:
+In a second terminal:
 
 ```bash
 cd frontend
 npm install
-npm run dev                           # UI on :5173, talks to the API above
+npm run dev                         # UI on :5173, proxies /servers to :8080
 ```
 
-### Option 3 — REST API only (any language)
+### Option C — REST only
 
 ```bash
-# Health
-curl http://localhost:8080/
-
-# Search
+curl http://localhost:8080/health
 curl "http://localhost:8080/servers?search=github&limit=5"
-
-# Browse by category
-curl "http://localhost:8080/servers/by-category/development?limit=5"
-
-# Generate a Claude Desktop config
 curl http://localhost:8080/config/github-mcp-server
 ```
 
-The full endpoint list is at **[`/docs`](http://localhost:8080/docs)** (Swagger UI) and **[`/redoc`](http://localhost:8080/docs)** (ReDoc) once the server is running.
+`GET /health` is the only path the orchestrator needs to poll.
+Everything else is JSON.
 
 ---
 
-## 📡 REST API at a glance
+## Project layout
+
+```
+.
+├── main.py              # FastAPI app: lifespan, CORS, GZip, rate limit
+├── api.py               # route definitions (thin layer)
+├── services.py          # search, scoring, config generation
+├── query.py             # natural-language query endpoint
+├── user_data.py         # favorites, ratings, comments, submissions
+├── core/                # in-memory indexes, hashing, server model
+├── tools/               # 19 CLI utilities (sync, score, scan, export)
+├── templates/           # 50 pre-built MCP config templates
+├── tests/               # pytest suite (9 files, 130+ tests)
+├── frontend/            # Vite + React 19 + TypeScript SPA
+├── docs/                # user-facing docs (EN + CN)
+└── docs/internal/       # maintainer-only design notes
+```
+
+Run `make help` for the full task list. Highlights:
+
+```bash
+make install-dev   # backend + frontend + pre-commit
+make dev           # backend + frontend, hot reload
+make test          # pytest
+make lint          # ruff + black + isort + eslint + secret-scan
+make build         # frontend production bundle
+make docker-up     # full stack
+```
+
+---
+
+## REST API
+
+`main:app` is a single FastAPI process. The OpenAPI schema is served at
+`/openapi.json`; interactive UIs at `/docs` (Swagger) and `/redoc`.
 
 | Group | Endpoints |
 |---|---|
-| Health & stats | `GET /`, `GET /stats`, `GET /stats/all` |
+| Health & stats | `GET /`, `GET /health`, `GET /stats` |
 | Discovery | `GET /servers`, `GET /servers/{name}`, `GET /servers/popular`, `GET /servers/recent`, `GET /servers/curated`, `GET /servers/by-category/{category}`, `GET /servers/by-quality` |
 | Configuration | `GET /config/{name}`, `GET /export/markdown/{name}`, `POST /export/batch-json`, `POST /export/batch-markdown` |
 | Recommendations | `GET /recommend/for-use-case`, `GET /recommend/similar`, `GET /compare` |
@@ -123,113 +121,119 @@ The full endpoint list is at **[`/docs`](http://localhost:8080/docs)** (Swagger 
 | User | `POST/GET /favorites/*`, `POST/GET /ratings/*`, `POST/GET /comments/*` |
 | Submissions | `POST /submissions/submit`, `GET /submissions`, `POST /submissions/review` |
 
-`GET /servers` supports: `search`, `category`, `language`, `sort` (`stars` / `updated`), `min_stars`, `limit`, `offset`.
+`GET /servers` supports: `search`, `category`, `language`, `sort`
+(`stars` / `updated`), `min_stars`, `limit`, `offset`.
 
-See **[`docs/API.md`](docs/API.md)** for the full reference.
+Two pieces of cross-cutting behaviour worth knowing about — see
+[`docs/API.md`](docs/API.md) for the full reference:
+
+- **GZip**. Responses ≥ 1 KB are gzipped by FastAPI's built-in
+  middleware. `servers.json` drops from ~100 KB to <15 KB on the wire.
+- **Rate limit**. Per-IP token bucket, default 120 req / 60 s. Exempts
+  `/`, `/health`, `/docs`, `/redoc`, `/openapi.json`, and CORS
+  preflight. Tunable via `RATE_LIMIT_REQUESTS` / `RATE_LIMIT_WINDOW`
+  / `RATE_LIMIT_TRUST_PROXY` / `RATE_LIMIT_DISABLED`. For horizontal
+  scale, terminate the limit at a reverse proxy.
 
 ---
 
-## 🤖 For AI agents
+## For AI agents
 
-MCP Hub is **indexed for agent consumption**:
+Three things make this catalog agent-friendly:
 
-- The **REST API** returns pure JSON, no scraping needed.
-- A static **`servers-index.json`** ships with every release for offline use.
-- OpenAPI schema at **`/openapi.json`** is consumable by any OpenAPI-aware agent.
+1. The **REST API** is the primary interface. Every response is JSON,
+   every input is a query parameter, no scraping required.
+2. **`servers-index.json`** ships with every release so an agent can
+   embed a snapshot of the catalog with the model for deterministic
+   offline use.
+3. **`/openapi.json`** is consumable by any OpenAPI-aware tool generator
+   (LangChain, LlamaIndex, etc.).
 
 ```python
-import requests
+import httpx
 
 # Discover
-servers = requests.get("https://mcp-hub.example.com/servers", params={"search": "github"}).json()
+r = httpx.get("https://mcp-hub.example.com/servers",
+              params={"search": "github", "limit": 5}).json()
 
 # Generate a config
-config = requests.get("https://mcp-hub.example.com/config/github-mcp-server").json()
+cfg = httpx.get("https://mcp-hub.example.com/config/github-mcp-server").json()
 ```
 
-Point your agent's tool-search step at the live API and stop maintaining your own server list.
+A coding-agent-side conventions file is at [`AGENTS.md`](AGENTS.md).
+For end-user agent integrations, see
+[`docs/internal/AGENT_GUIDE.md`](docs/internal/AGENT_GUIDE.md).
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
-┌──────────────────┐    HTTP/JSON    ┌──────────────────┐
-│   React + Vite   │ ──────────────► │  FastAPI backend │
-│   Web UI (:5173) │                 │     (:8080)      │
-└──────────────────┘                 └──────────────────┘
-                                              │
-                                              ▼
-                                     ┌──────────────────┐
-                                     │ servers-index    │
-                                     │   .json (4,403+) │
-                                     └──────────────────┘
-                                              ▲
-                                              │ daily
-                                     ┌──────────────────┐
-                                     │ GitHub Actions   │
-                                     │  tools/sync_…    │
-                                     └──────────────────┘
+            HTTP / JSON
+   ┌──────────────────────┐         ┌───────────────────────┐
+   │  React + Vite SPA    │ ──────► │  FastAPI app          │
+   │  (:5173 in dev,      │         │  (main.py, Pydantic   │
+   │   gh-pages in prod)  │ ◄────── │   v2, async, lifespan)│
+   └──────────────────────┘         └───────────────────────┘
+                                                │
+                                                ▼
+                                       ┌───────────────────┐
+                                       │ servers-index.json│
+                                       │ (~5 MB, in-memory │
+                                       │  + file watch)    │
+                                       └───────────────────┘
+                                                ▲
+                                                │ tools/sync_index.py
+                                                │ (daily GitHub Action)
+                                       ┌───────────────────┐
+                                       │  upstream:        │
+                                       │  awesome-mcp +    │
+                                       │  curated sources  │
+                                       └───────────────────┘
 ```
 
-- **Backend** — single-process FastAPI app (`main.py`), Pydantic v2 models, async route handlers, lifespan-managed index cache
-- **Frontend** — Vite + React 18 + TypeScript + TanStack Query + Zustand, lazy-loaded routes, dark mode
-- **Index** — static JSON rebuilt daily from upstream [awesome-mcp](https://github.com/Rodert/awesome-mcp)
-- **CI/CD** — GitHub Actions: secret scan → backend tests → frontend build → publish release
+- The catalog is **rebuilt in CI**, not at request time, so latency is
+  bounded by in-memory dict lookups.
+- The frontend is a **static SPA on GitHub Pages**. When the API is
+  unavailable it falls back to a committed `static-data/*.json` snapshot
+  with a `data_snapshot_date` banner, so demos always render.
+- All write paths (`favorites`, `ratings`, `comments`, `submissions`)
+  go to a single `user_data.py` module backed by a local JSON file
+  that is gitignored. Swap it for Postgres in
+  `core/_version.py:USER_DATA_BACKEND` without touching the routes.
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full design
+notes, decision log, and trade-offs.
 
 ---
 
-## 📚 Documentation
+## Contributing
 
-| Doc | Purpose | Language |
-|---|---|---|
-| [README.md](README.md) | This file — overview, features, quick start | 🇬🇧 English |
-| [README_CN.md](README_CN.md) | 中文文档 · 总览、特性、快速上手 | 🇨🇳 中文 |
-| [docs/USER_GUIDE.md](docs/USER_GUIDE.md) | **Complete user guide** — 5 real workflows (install / discover / agent-consume / submit / self-host), CLI tools, troubleshooting, FAQ | 🇬🇧 English |
-| [docs/USER_GUIDE_CN.md](docs/USER_GUIDE_CN.md) | **完整用户指南** — 5 个真实使用场景（安装 / 检索 / Agent 接入 / 提交 / 私有化）、CLI 工具、故障排查、FAQ | 🇨🇳 中文 |
-| [docs/QUICKSTART.md](docs/QUICKSTART.md) | 5-minute local setup | 🇬🇧 English |
-| [docs/QUICKSTART_CN.md](docs/QUICKSTART_CN.md) | 5 分钟本地启动 | 🇨🇳 中文 |
-| [docs/API.md](docs/API.md) | Full REST API reference (auto-generated from OpenAPI) | 🇬🇧 English |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute (dev workflow, coding standards, PR checklist) | 🇨🇳 中文 |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards | 🇬🇧 English |
-| [CODE_OF_CONDUCT_CN.md](CODE_OF_CONDUCT_CN.md) | 社区行为准则 | 🇨🇳 中文 |
-| [SECURITY.md](SECURITY.md) | Security policy & threat model | 🇬🇧 English |
-| [SECURITY_CN.md](SECURITY_CN.md) | 安全与隐私策略 | 🇨🇳 中文 |
-| [SUPPORT.md](SUPPORT.md) | Where to get help | 🇬🇧 English |
-| [SUPPORT_CN.md](SUPPORT_CN.md) | 寻求帮助 | 🇨🇳 中文 |
-| [CHANGELOG.md](CHANGELOG.md) | Release history | 🇬🇧 English |
-| [AGENTS.md](AGENTS.md) | Conventions for AI coding agents | 🇬🇧 English |
+Bug reports, feature requests, server submissions, and security
+disclosures each have a dedicated issue template — pick the right one
+from the **New issue** dropdown.
+
+- Bug report → `.github/ISSUE_TEMPLATE/bug_report.md`
+- Feature request → `.github/ISSUE_TEMPLATE/feature_request.md`
+- Server submission → `.github/ISSUE_TEMPLATE/server_submission.md`
+  (or call `POST /submissions/submit` if you want a PR-free path)
+- Question → `.github/ISSUE_TEMPLATE/question.md`
+- Security issue → read [`SECURITY.md`](SECURITY.md) first, **do not**
+  open a public issue
+
+The dev workflow, coding standards, and PR checklist live in
+[`CONTRIBUTING.md`](CONTRIBUTING.md). The two things that will get
+your PR merged fastest are a passing `make test && make lint` and a
+[`CHANGELOG.md`](CHANGELOG.md) entry.
 
 ---
 
-## 🤝 Contributing
+## License
 
-We welcome issues and pull requests. The fastest ways to help:
+[MIT](LICENSE).
 
-- 🐛 **Report a bug** — use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md)
-- 💡 **Request a feature** — use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md)
-- 🆕 **Submit a server** — use the [server submission template](.github/ISSUE_TEMPLATE/server_submission.md) **or** call `POST /submissions/submit`
-- ❓ **Ask a question** — use the [Q&A template](.github/ISSUE_TEMPLATE/question.md)
-- 🔒 **Report a security issue** — see [SECURITY.md](SECURITY.md), **do not** open a public issue
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the dev workflow, coding standards, and PR checklist.
-
----
-
-## 📄 License
-
-[MIT](LICENSE) © MCP Hub contributors.
-
----
-
-## 🙏 Acknowledgments
-
-- [awesome-mcp](https://github.com/Rodert/awesome-mcp) — the upstream registry that powers the daily index sync
-- [Model Context Protocol](https://modelcontextprotocol.io) — the standard that makes it all possible
-- Every MCP server author and contributor — this market is nothing without your work
-
----
-
-<p align="center">
-  <sub>Built with care for the MCP community. <a href="https://github.com/badhope/MCP-HUB/discussions">Join the discussion →</a></sub>
-</p>
+Upstream data is synced from
+[awesome-mcp](https://github.com/Rodert/awesome-mcp) and from each
+curated source's public GitHub API; see
+[`docs/internal/SERVER_CATALOG.md`](docs/internal/SERVER_CATALOG.md)
+for the per-source attribution.

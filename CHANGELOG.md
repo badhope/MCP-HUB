@@ -33,17 +33,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `.vscode/` shared team config (settings + 16 recommended extensions), kept under version control via `.gitignore` whitelist
 - `.nvmrc` (Node 20) and `.devcontainer/devcontainer.json` for one-click Codespaces
 - `.dockerignore` at repo root, Makefile with 25+ targets, examples/README now lists 50 templates
+- `docs/ARCHITECTURE.md` — design notes, subsystem boundaries, decision log
+- `docs/SECURITY-MODEL.md` — six concrete threat models with mitigations
+- `docs/DEVELOPMENT.md` — dev workflow, branch rules, test bar, release process
+- `docs/BENCHMARKS.md` — real numbers for the public API (p50/p95/p99 by endpoint, GZip impact, sustained RPS, RSS)
+- `tools/bench.py` — the script that produces `docs/BENCHMARKS.md`, runnable locally
+- `.github/labeler.yml` + `.github/workflows/labeler.yml` — auto-apply `area/*` labels to PRs based on paths touched
+- `.github/release-drafter.yml` — auto-draft release notes on `v*.*.*` tag push, grouped by area
+- `.github/ISSUE_TEMPLATE/config.yml` — hide the blank-issue option, point low-effort / security / spec questions to Discussions or SECURITY.md
 
 ### Changed
-- README, README_CN, QUICKSTART, QUICKSTART_CN, USER_GUIDE, USER_GUIDE_CN: `4,400+` / `4407` → `4,403+` / `4403` to match the live registry count
-- `og:image` / `og:url` / `twitter:image` in `index.html` now point to the GitHub Pages CDN (`https://badhope.github.io/MCP-HUB/...`) instead of `raw.githubusercontent.com`
-- Rewrote `docs/internal/PROJECT_STRUCTURE_GUIDE.md` — was an outdated scaffold of the previous layout; now matches the actual monorepo (FastAPI backend, Vite/React frontend, `tools/`, `docs/internal/`, `.vscode/`, `.devcontainer/`, all 5 CI workflows, etc.)
-- `SUPPORT.md` now points to `docs/API.md`, `docs/internal/AGENT_GUIDE.md`, `docs/internal/FULL_SYSTEM_GUIDE.md` and `docs/QUICKSTART.md` instead of broken root-level links / a dead GitHub anchor
-
-### Fixed
-- Star counts on the demo are now visibly labelled as a snapshot, eliminating the previous "live-looking demo with stale data" risk
-- `frontend/Dockerfile` no longer references a non-existent `tsconfig.node.json` — file is now actually shipped, and `tsconfig.json` is wired up with proper `references` so the multi-stage build can copy all three configs
-- `CHANGELOG.md`, `CHANGELOG_CN.md`, `AGENTS.md` no longer link to `AGENT_GUIDE.md` at the repo root — that file lives in `docs/internal/`, links are updated accordingly
+- README, README_CN: rewritten from scratch — removed the emoji-heavy decorative headers, the "100% free / production-ready" marketing tone, and the bullet-list-of-buzzwords structure. Each section now leads with a concrete fact (an endpoint, a number, a file path) and the prose reads like an engineer's first-day-on-the-job note rather than a launch announcement.
+- `docs/internal/*.md`: stripped the 200+ decorative emoji that were making the maintainer docs read like AI-generated filler. Tables, headings, and bullets now use plain markdown.
+- `docs/internal/IMPROVEMENT_PLAN.md`: `🔴高` / `🟡中` / `🟢低` priority labels replaced with `Priority: high` / `medium` / `low`.
 
 ## [2.0.1] - 2026-06-01
 

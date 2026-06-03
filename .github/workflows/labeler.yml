@@ -1,0 +1,33 @@
+name: Label PRs
+
+# Auto-applies area/* labels to PRs based on the files they touch,
+# using .github/labeler.yml. Skips dependabot and bot PRs because
+# those should not pick up human-review labels.
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    name: Apply area labels
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'github-actions[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Label PR
+        uses: actions/labeler@v5
+        with:
+          configuration-path: .github/labeler.yml
+          fail-on-invalid-config: true

@@ -1,0 +1,97 @@
+# Labeler rules for actions/labeler (https://github.com/actions/labeler).
+# Add a `pull-request-labeler` workflow that uses this file to keep
+# PRs auto-labelled by area. The labels themselves need to exist in
+# the repo first; create them under Settings → Labels with the
+# matching colors below.
+
+version: 2
+
+labels:
+  - name: area/backend
+    color: 1d76db
+    description: Touches the FastAPI service (main.py, api.py, services.py, core/, user_data.py)
+    paths:
+      - main.py
+      - api.py
+      - services.py
+      - query.py
+      - user_data.py
+      - core/**
+
+  - name: area/frontend
+    color: 1d76db
+    description: Touches the React/Vite SPA
+    paths:
+      - frontend/src/**
+      - frontend/public/**
+      - frontend/index.html
+      - frontend/vite.config.ts
+      - frontend/vitest.config.ts
+      - frontend/eslint.config.js
+      - frontend/tailwind.config.js
+      - frontend/postcss.config.js
+      - frontend/package.json
+      - frontend/tsconfig*.json
+
+  - name: area/data
+    color: 1d76db
+    description: Touches the catalog index, score, or sync tools
+    paths:
+      - tools/sync_index.py
+      - tools/update_index.py
+      - tools/index_servers.py
+      - tools/completeness_scoring.py
+      - tools/comprehensive_collector.py
+      - tools/notable_projects_navigator.py
+      - server_registry.json
+      - market-config.json
+      - comprehensive_mcp_projects.json
+      - notable_projects.json
+      - templates/**
+
+  - name: area/infra
+    color: fbca04
+    description: Docker, CI, or repo configuration
+    paths:
+      - Dockerfile
+      - docker-compose.yml
+      - .dockerignore
+      - .github/workflows/**
+      - .github/ISSUE_TEMPLATE/**
+      - .github/PULL_REQUEST_TEMPLATE*.md
+      - .github/CODEOWNERS
+      - .github/dependabot.yml
+      - .github/FUNDING.yml
+      - Makefile
+      - .pre-commit-config.yaml
+      - pyproject.toml
+      - requirements.txt
+      - pytest.ini
+      - .editorconfig
+      - .gitattributes
+      - .gitignore
+      - .nvmrc
+      - .vscode/**
+      - .devcontainer/**
+
+  - name: area/docs
+    color: 0e8a16
+    description: Documentation only
+    paths:
+      - "**/*.md"
+      - docs/**
+
+  - name: area/tests
+    color: 5319e7
+    description: Adds or modifies tests
+    paths:
+      - tests/**
+      - frontend/src/test/**
+
+  - name: breaking-change
+    color: b60205
+    description: Breaks the public API or the data file schema
+
+  - name: security
+    color: b60205
+    description: Security fix or hardening

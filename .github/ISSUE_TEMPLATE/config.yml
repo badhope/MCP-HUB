@@ -1,0 +1,14 @@
+# Settings for the New Issue page. Hides the bare "Open a blank
+# issue" option so contributors pick a template, and points
+# low-effort / off-topic conversations to Discussions.
+blank_issues_enabled: false
+contact_links:
+  - name: "General questions & ideas"
+    url: https://github.com/badhope/MCP-HUB/discussions
+    about: "Open a Discussion thread for usage questions, feature ideas, or show-and-tell."
+  - name: "Security disclosure"
+    url: https://github.com/badhope/MCP-HUB/blob/main/SECURITY.md
+    about: "Read SECURITY.md first. Do not file a public issue for security bugs."
+  - name: "Upstream MCP specification"
+    url: https://modelcontextprotocol.io
+    about: "For questions about the MCP protocol itself, not this catalog."

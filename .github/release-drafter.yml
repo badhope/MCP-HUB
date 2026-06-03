@@ -1,0 +1,60 @@
+# release-drafter configuration.
+# See https://github.com/release-drafter/release-drafter for the schema.
+# Wired up by .github/workflows/release.yml on push of v*.*.* tags.
+name-template: "v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+version-template: "$MAJOR.$MINOR.$PATCH"
+categories:
+  - title: "Breaking changes"
+    labels:
+      - "breaking-change"
+    collapse-after: 5
+  - title: "Security"
+    labels:
+      - "security"
+  - title: "Backend"
+    labels:
+      - "area/backend"
+  - title: "Frontend"
+    labels:
+      - "area/frontend"
+  - title: "Data & catalog"
+    labels:
+      - "area/data"
+  - title: "Infrastructure & CI"
+    labels:
+      - "area/infra"
+  - title: "Documentation"
+    labels:
+      - "area/docs"
+  - title: "Tests"
+    labels:
+      - "area/tests"
+  - title: "Other changes"
+    labels:
+      - "*"
+    exclude:
+      - "area/backend"
+      - "area/frontend"
+      - "area/data"
+      - "area/infra"
+      - "area/docs"
+      - "area/tests"
+      - "breaking-change"
+      - "security"
+change-template: "- $TITLE (#$NUMBER) @$AUTHOR"
+template: |
+  ## Changes
+
+  $CHANGES
+
+  ## Contributors
+
+  $CONTRIBUTORS
+
+  ---
+
+  Full diff: <https://github.com/badhope/MCP-HUB/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION>
+exclude-contributors:
+  - "dependabot[bot]"
+  - "github-actions[bot]"

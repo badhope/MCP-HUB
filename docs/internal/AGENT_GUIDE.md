@@ -1,6 +1,6 @@
-# 🤖 AI Agent Guide - MCP Hub
+# AI Agent Guide - MCP Hub
 
-> **📖 Complete guide for AI agents** - Everything an AI needs to know to use MCP Hub effectively
+> **Complete guide for AI agents** - Everything an AI needs to know to use MCP Hub effectively
 > 
 > [![AI Agent Ready](https://img.shields.io/badge/AI_Agent-Ready-purple?style=for-the-badge)](README.md)
 > [![Main README](https://img.shields.io/badge/Main-README-blue?style=for-the-badge)](README.md)
@@ -8,38 +8,38 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [🎯 Overview](#overview)
-- [🚀 Quick Start](#quick-start)
-- [📊 API Endpoints](#api-endpoints)
-- [🔍 Searching & Filtering](#searching--filtering)
-- [🏆 Curated Servers](#curated-servers)
-- [🌏 Domestic Companies](#domestic-companies)
-- [⭐ Quality Scoring](#quality-scoring)
-- [⚙️ Config Generation](#config-generation)
-- [💡 Usage Scenarios](#usage-scenarios)
-- [📁 Direct File Access](#direct-file-access)
-- [📚 Documentation Index](#documentation-index)
-- [✅ Best Practices](#best-practices)
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [API Endpoints](#api-endpoints)
+- [Searching & Filtering](#searching--filtering)
+- [Curated servers](#curated-servers)
+- [Domestic Companies](#domestic-companies)
+- [Quality Scoring](#quality-scoring)
+- [Config Generation](#config-generation)
+- [Usage Scenarios](#usage-scenarios)
+- [Direct File Access](#direct-file-access)
+- [Documentation Index](#documentation-index)
+- [Best Practices](#best-practices)
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This repository is **AI Agent First** - designed specifically with AI agents in mind. When a user asks for an MCP server, this guide contains everything you need to know.
 
 **Key Features for AI Agents:**
-- ✅ **REST API** - Easy HTTP API for any language
-- ✅ **Direct JSON Access** - Read files directly for simpler use cases
-- ✅ **Structured Data** - All data in standard JSON format
-- ✅ **Quality Scoring** - Smart scoring for better recommendations
-- ✅ **Curated Lists** - Hand-picked, high-quality servers
-- ✅ **Domestic Coverage** - Complete coverage of Chinese tech companies
+- **REST API** - Easy HTTP API for any language
+- **Direct JSON Access** - Read files directly for simpler use cases
+- **Structured Data** - All data in standard JSON format
+- **Quality Scoring** - Smart scoring for better recommendations
+- **Curated Lists** - Hand-picked, high-quality servers
+- **Domestic Coverage** - Complete coverage of Chinese tech companies
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: REST API (Recommended for Agents)
 
@@ -70,7 +70,7 @@ with open('comprehensive_mcp_projects.json', 'r', encoding='utf-8') as f:
 
 ---
 
-## 📊 API Endpoints
+## API Endpoints
 
 ### Core Server Operations
 
@@ -123,7 +123,7 @@ Available scenes for `/recommend?scene=xxx`:
 
 ---
 
-## 🔍 Searching & Filtering
+## Searching & Filtering
 
 ### Search Examples
 
@@ -188,7 +188,7 @@ All API responses follow this format:
 
 ---
 
-## 🏆 Curated Servers
+## Curated Servers
 
 Curated servers are **50+ hand-picked, high-quality MCP servers** organized into 9 categories.
 
@@ -220,7 +220,7 @@ curl "http://localhost:8080/curated/Domestic"
 
 ---
 
-## 🌏 Domestic Companies
+## Domestic Companies
 
 **100% coverage of major Chinese tech companies**. Perfect for Chinese users or international users doing business in China.
 
@@ -240,19 +240,19 @@ curl "http://localhost:8080/companies/Huawei"
 
 | Company | Status | Key Projects |
 |---------|--------|--------------|
-| **Alibaba** (阿里巴巴) | ✅ Complete | Dingtalk, Aliyun |
-| **Tencent** (腾讯) | ✅ Complete | WeChat, Tencent Cloud |
-| **Baidu** (百度) | ✅ Complete | Ernie (文心一言) |
-| **Huawei** (华为) | ✅ Complete | Huawei Cloud, HarmonyOS |
-| **ByteDance** (字节跳动) | ✅ Complete | Feishu, Douyin |
-| **Xiaomi** (小米) | ✅ Complete | Miloco, Xiaomi Home |
-| **NetEase** (网易) | ✅ Complete | NetEase Cloud, Yunxin |
-| **Meituan** (美团) | ✅ Complete | Meituan APIs |
-| **Gitee** (开源中国) | ✅ Complete | Gitee MCP |
+| **Alibaba** (阿里巴巴) | Complete | Dingtalk, Aliyun |
+| **Tencent** (腾讯) | Complete | WeChat, Tencent Cloud |
+| **Baidu** (百度) | Complete | Ernie (文心一言) |
+| **Huawei** (华为) | Complete | Huawei Cloud, HarmonyOS |
+| **ByteDance** (字节跳动) | Complete | Feishu, Douyin |
+| **Xiaomi** (小米) | Complete | Miloco, Xiaomi Home |
+| **NetEase** (网易) | Complete | NetEase Cloud, Yunxin |
+| **Meituan** (美团) | Complete | Meituan APIs |
+| **Gitee** (开源中国) | Complete | Gitee MCP |
 
 ---
 
-## ⭐ Quality Scoring
+## Quality Scoring
 
 Quality scoring evaluates servers based on **completeness and functionality**, not just popularity.
 
@@ -296,15 +296,15 @@ curl http://localhost:8080/quality/github-mcp-server
 
 | Level | Score | Description | Recommendation |
 |-------|-------|-------------|----------------|
-| **S** | 85-100 | 🌟 Excellent - Complete and documented | STRONG RECOMMEND |
-| **A** | 70-84 | ⭐ Good - Complete and usable | RECOMMEND |
-| **B** | 55-69 | 👍 OK - Basic but functional | OK to use |
-| **C** | 40-54 | 👌 Basic - Limited features | Use if no alternatives |
-| **D** | <40 | ⚠️ Needs improvement | Not recommended |
+| **S** | 85-100 | Excellent - Complete and documented | STRONG RECOMMEND |
+| **A** | 70-84 | Good - Complete and usable | RECOMMEND |
+| **B** | 55-69 | OK - Basic but functional | OK to use |
+| **C** | 40-54 | Basic - Limited features | Use if no alternatives |
+| **D** | <40 | Needs improvement | Not recommended |
 
 ---
 
-## ⚙️ Config Generation
+## Config Generation
 
 Generate ready-to-use MCP configs for Claude Desktop, Cursor, VS Code, and more.
 
@@ -345,7 +345,7 @@ curl http://localhost:8080/config/github-mcp-server
 
 ---
 
-## 💡 Usage Scenarios
+## Usage Scenarios
 
 ### Scenario 1: User asks for browser automation
 
@@ -417,7 +417,7 @@ curl http://localhost:8080/curated
 
 ---
 
-## 📁 Direct File Access
+## Direct File Access
 
 For simpler use cases, you can read JSON files directly without running the API server.
 
@@ -485,7 +485,7 @@ with open('comprehensive_mcp_projects.json', 'r', encoding='utf-8') as f:
 
 ---
 
-## 📚 Documentation Index
+## Documentation Index
 
 All documentation you might need:
 
@@ -493,10 +493,10 @@ All documentation you might need:
 
 | Document | Purpose | For AI Agents |
 |----------|---------|---------------|
-| [README.md](README.md) | Main documentation | ✅ Quick reference |
-| [AGENT_GUIDE.md](AGENT_GUIDE.md) | **THIS FILE** - Complete AI guide | ✅ Primary resource |
-| [FULL_SYSTEM_GUIDE.md](FULL_SYSTEM_GUIDE.md) | Full system details | ✅ Deep dive |
-| [COMPLETENESS_SCORING_GUIDE.md](COMPLETENESS_SCORING_GUIDE.md) | Quality scoring explained | ✅ For scoring |
+| [README.md](README.md) | Main documentation | Quick reference |
+| [AGENT_GUIDE.md](AGENT_GUIDE.md) | **THIS FILE** - Complete AI guide | Primary resource |
+| [FULL_SYSTEM_GUIDE.md](FULL_SYSTEM_GUIDE.md) | Full system details | Deep dive |
+| [COMPLETENESS_SCORING_GUIDE.md](COMPLETENESS_SCORING_GUIDE.md) | Quality scoring explained | For scoring |
 
 ### Reference Documents
 
@@ -515,7 +515,7 @@ All documentation you might need:
 
 ---
 
-## ✅ Best Practices
+## Best Practices
 
 ### 1. Prioritize Curated Servers
 
@@ -554,7 +554,7 @@ The `/recommend?scene=xxx` endpoint is optimized for common use cases.
 
 ---
 
-## 📋 Quick Reference Cheat Sheet
+## Quick Reference Cheat Sheet
 
 ### Common Commands
 
@@ -585,28 +585,28 @@ The `/recommend?scene=xxx` endpoint is optimized for common use cases.
 
 ---
 
-## 🎯 Final Checklist
+## Final Checklist
 
 Before helping a user:
 
-✅ **1. Check the request type** (search, recommendation, config generation)
+**1. Check the request type** (search, recommendation, config generation)
 
-✅ **2. Use appropriate endpoint** (API vs direct file access)
+**2. Use appropriate endpoint** (API vs direct file access)
 
-✅ **3. Check quality scores** (prefer S/A level)
+**3. Check quality scores** (prefer S/A level)
 
-✅ **4. Provide complete info** (name, description, stars, install command, config)
+**4. Provide complete info** (name, description, stars, install command, config)
 
-✅ **5. Give multiple options** (3-5 suggestions)
+**5. Give multiple options** (3-5 suggestions)
 
-✅ **6. Show curated first** (prioritize curated servers)
+**6. Show curated first** (prioritize curated servers)
 
-✅ **7. Respect user's language** (Chinese vs international)
+**7. Respect user's language** (Chinese vs international)
 
 ---
 
-**📌 Remember:** The goal is to help users find and configure MCP servers easily!
+**Remember:** The goal is to help users find and configure MCP servers easily!
 
 <p align="center">
-  <strong>Made with 💝 for AI agents</strong>
+  <strong>Maintained for the AI agent ecosystem</strong>
 </p>

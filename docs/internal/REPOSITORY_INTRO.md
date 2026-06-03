@@ -1,10 +1,10 @@
-# 🏛️ Repository Introduction - MCP Hub
+# Repository Introduction - MCP Hub
 
 > **Official Repository: https://github.com/badhope/mcp-hub**
 
 ---
 
-## 📢 Repository Description (for GitHub Settings)
+## Repository Description (for GitHub Settings)
 
 **MCP Hub** - The Universal MCP Tool Marketplace for AI agents. Curated MCP servers, quality scoring, AI-ready APIs, and comprehensive documentation. Built for developers worldwide.
 
@@ -12,22 +12,22 @@
 
 ---
 
-## 🎯 About This Project
+## About This Project
 
 MCP Hub is a comprehensive, community-driven marketplace of MCP (Model Context Protocol) servers.
 
 **What makes this project special:**
 
-- 🌐 **International Coverage** - Support for English and Chinese
-- 🎯 **Curated Collection** - Hand-picked, high-quality servers
-- 🧪 **Production Tested** - Comprehensive test suite ensures reliability
-- 🤖 **AI Agent Ready** - Complete guide for AI integration
-- ⭐ **Quality Scoring** - Completeness and functionality ratings
-- 🇨🇳 **Global Companies** - Support for major tech companies worldwide
+- **International Coverage** - Support for English and Chinese
+- **Curated Collection** - Hand-picked, high-quality servers
+- **Production Tested** - Comprehensive test suite ensures reliability
+- **AI Agent Ready** - Complete guide for AI integration
+- **Quality Scoring** - Completeness and functionality ratings
+- **Global Companies** - Support for major tech companies worldwide
 
 ---
 
-## 📊 Repository Statistics
+## Repository Statistics
 
 | Metric | Value |
 |--------|-------|
@@ -40,7 +40,7 @@ MCP Hub is a comprehensive, community-driven marketplace of MCP (Model Context P
 
 ---
 
-## 🏷️ Badges & Labels
+## Badges & Labels
 
 ### GitHub Badges (in README)
 - MCP Servers Count
@@ -62,7 +62,7 @@ MCP Hub is a comprehensive, community-driven marketplace of MCP (Model Context P
 
 ---
 
-## 📚 Documentation Structure
+## Documentation Structure
 
 ### Primary Guides (English)
 - **README.md** - Main documentation
@@ -83,7 +83,7 @@ MCP Hub is a comprehensive, community-driven marketplace of MCP (Model Context P
 
 ---
 
-## 🔍 GitHub Topic Tags (Recommended)
+## GitHub Topic Tags (Recommended)
 
 Add these topics to your GitHub repository settings:
 
@@ -106,9 +106,9 @@ tools
 
 ---
 
-## 📖 Repository Setup Guide
+## Repository Setup Guide
 
-### 1. Configure Repository Settings (Gear Icon → ⚙️ Settings)
+### 1. Configure Repository Settings (Gear Icon → Settings)
 
 **Repository Name:**
 ```
@@ -131,12 +131,12 @@ mcp, model-context-protocol, ai, llm, claude, cursor, openai, developer-tools, p
 ```
 
 **Repository Features:**
-- ✅ Discussions
-- ✅ Issues
-- ✅ Pull requests
-- ✅ Projects
-- ✅ Wiki
-- ✅ Packages
+- Discussions
+- Issues
+- Pull requests
+- Projects
+- Wiki
+- Packages
 
 **Default Branch:**
 - `main`
@@ -149,7 +149,7 @@ mcp, model-context-protocol, ai, llm, claude, cursor, openai, developer-tools, p
 
 ---
 
-## 🎨 GitHub Repository Page Tips
+## GitHub Repository Page Tips
 
 ### Profile / Organization Setup
 
@@ -174,20 +174,20 @@ mcp, model-context-protocol, ai, llm, claude, cursor, openai, developer-tools, p
 
 ---
 
-## 🚀 Post-Upload Steps
+## Post-Upload Steps
 
 After pushing to GitHub:
 
-1. ✅ **Verify GitHub Actions** - Check that CI runs automatically
-2. ✅ **Update Topics** - Add the topic tags above
-3. ✅ **Update Repo Description** - Copy from this file
-4. ✅ **Check README** - Verify it displays correctly
-5. ✅ **Add Discussions** - Enable if you want
-6. ✅ **Test Links** - Make sure all internal links work
+1. **Verify GitHub Actions** - Check that CI runs automatically
+2. **Update Topics** - Add the topic tags above
+3. **Update Repo Description** - Copy from this file
+4. **Check README** - Verify it displays correctly
+5. **Add Discussions** - Enable if you want
+6. **Test Links** - Make sure all internal links work
 
 ---
 
-## 📞 How Users Can Get Started
+## How Users Can Get Started
 
 ### For Developers
 ```bash
@@ -204,7 +204,7 @@ python api.py
 
 ---
 
-## 🌟 Project Highlights
+## Project Highlights
 
 - **No external dependencies** - Uses only Python standard library
 - **Complete documentation** - Complete documentation
@@ -214,18 +214,18 @@ python api.py
 
 ---
 
-## 📋 Final Checks Before Upload
+## Final Checks Before Upload
 
-1. ✅ License file (MIT)
-2. ✅ Complete documentation
-3. ✅ Tests passing
-4. ✅ .gitignore correctly configured
-5. ✅ No secrets or .env files committed
-6. ✅ Repository description ready
-7. ✅ Topic tags prepared
+1. License file (MIT)
+2. Complete documentation
+3. Tests passing
+4. .gitignore correctly configured
+5. No secrets or .env files committed
+6. Repository description ready
+7. Topic tags prepared
 
 ---
 
 <p align="center">
-  <strong>🎉 Ready for GitHub! 🎉</strong>
+  <strong>Ready for GitHub!</strong>
 </p>

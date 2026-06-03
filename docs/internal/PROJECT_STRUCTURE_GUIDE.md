@@ -131,7 +131,7 @@ mcp-market/
 | `market-config.json` | 市场配置 | 手工维护 | **commit** |
 | `frontend/public/static-data/*.json` | 前端静态数据快照 | `python tools/gen_static_data.py` | **commit**（已 build 也 deploy） |
 
-> ⚠️ 首次 `git clone` 后 `servers-index.json` 缺失属正常 — 运行 `python tools/update_index.py` 拉取上游最新快照。
+> **Note**: 首次 `git clone` 后 `servers-index.json` 缺失属正常 — 运行 `python tools/update_index.py` 拉取上游最新快照。
 
 ---
 
@@ -252,10 +252,10 @@ pre-commit run --all-files
 
 ## 安全规范
 
-- ❌ 硬编码 token / API key
-- ✅ `.env` + 环境变量
-- ✅ `tools/secret_scanner.py` 强制 pre-commit 扫描
-- ✅ `.gitattributes` 标记二进制文件，避免误扫描
+- **DO NOT** hardcode tokens / API keys
+- **DO** use `.env` + environment variables
+- **DO** run `tools/secret_scanner.py` via the pre-commit framework (already wired up in `.pre-commit-config.yaml`)
+- **DO** mark binary files in `.gitattributes` so the scanner does not get false positives on encoded payloads
 
 ---
 
