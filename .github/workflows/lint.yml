@@ -23,7 +23,10 @@ jobs:
           cache: 'pip'
 
       - name: Install dev tools
-        run: pip install flake8==3.3.2 black isort mypy
+        # flake8 3.3.2 was pinned historically but that version was never
+        # published to PyPI (it jumped 3.0.4 → 3.4.0), causing the lint
+        # job to fail at install time. Pin to a real released version.
+        run: pip install 'flake8>=7,<8' black isort mypy
 
       - name: Secret scan (fast fail)
         run: python tools/secret_scanner.py .

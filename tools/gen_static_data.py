@@ -18,7 +18,13 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-ROOT = Path("/workspace/mcp-market")
+# Resolve the repo root relative to this script so the same code works
+# in the dev sandbox (where the project lives at /workspace/mcp-market)
+# and on the GitHub Actions runner (where the checkout lives at
+# /home/runner/work/<repo>/<repo>/). Hard-coding an absolute path
+# was the previous bug — on the runner it would try to mkdir /workspace
+# and fail with PermissionError.
+ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = ROOT / "templates"
 OUT_DIR = ROOT / "frontend" / "public" / "static-data"
 CONFIG_OUT_DIR = OUT_DIR / "config"
