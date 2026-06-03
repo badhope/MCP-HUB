@@ -20,6 +20,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+_LOG = logging.getLogger(__name__)
+
 # ─── 日志配置 ───────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
@@ -340,7 +342,7 @@ def _print_stats(stats: Dict[str, int]):
 # ─── 入口 ──────────────────────────────────────────────────
 def main():
     if len(sys.argv) < 2:
-        print(__doc__)
+        _LOG.info(__doc__)
         return
 
     base_path = Path(__file__).parent.parent
@@ -362,7 +364,7 @@ def main():
         commands[command]()
     else:
         logger.error(f"未知命令: {command}")
-        print(__doc__)
+        _LOG.info(__doc__)
 
 
 if __name__ == "__main__":

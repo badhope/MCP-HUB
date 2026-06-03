@@ -566,16 +566,16 @@ async def get_server_config(name: str, data: Dict[str, Any] = Depends(get_app_da
         mcpServers={repo_name: {"command": "mcp-server", "args": []}},
         commands={
             "install": [
-                f"# Clone repository",
+                "# Clone repository",
                 f"git clone {source}.git",
                 f"cd {repo_name}",
                 "",
-                f"# Install dependencies (choose appropriate method)",
-                f"npm install",
-                f"# or",
-                f"pip install -e .",
+                "# Install dependencies (choose appropriate method)",
+                "npm install",
+                "# or",
+                "pip install -e .",
             ],
-            "run": [f"cd {repo_name}", f"npm run start", f"# or", f"python -m {repo_name}"],
+            "run": [f"cd {repo_name}", "npm run start", "# or", f"python -m {repo_name}"],
         },
         docker={"image": f"{owner}/{repo_name}:latest", "args": [], "env": {}},
         snippets={
@@ -1237,16 +1237,16 @@ def _generate_config_for_server(server: Dict[str, Any]) -> ServerConfig:
         mcpServers={repo_name: {"command": "mcp-server", "args": []}},
         commands={
             "install": [
-                f"# Clone repository",
+                "# Clone repository",
                 f"git clone {source}.git",
                 f"cd {repo_name}",
                 "",
-                f"# Install dependencies (choose appropriate method)",
-                f"npm install",
-                f"# or",
-                f"pip install -e .",
+                "# Install dependencies (choose appropriate method)",
+                "npm install",
+                "# or",
+                "pip install -e .",
             ],
-            "run": [f"cd {repo_name}", f"npm run start", f"# or", f"python -m {repo_name}"],
+            "run": [f"cd {repo_name}", "npm run start", "# or", f"python -m {repo_name}"],
         },
         docker={"image": f"{owner}/{repo_name}:latest", "args": [], "env": {}},
         snippets={
@@ -1412,7 +1412,6 @@ def cli() -> None:
     a real CLI command on their ``$PATH``.
     """
     import argparse
-    import sys
 
     parser = argparse.ArgumentParser(
         prog="mcp-hub",

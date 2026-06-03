@@ -8,11 +8,13 @@ small thumbnail in GitHub's social card slot.
 
 from __future__ import annotations
 
+import logging
 import os
-import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
+
+_LOG = logging.getLogger(__name__)
 
 WIDTH, HEIGHT = 1280, 640
 OUT_PATH = Path(__file__).resolve().parent.parent / "frontend" / "public" / "social-preview.png"
@@ -118,10 +120,6 @@ def draw_logo_mark(draw: ImageDraw.ImageDraw, cx: int, cy: int, size: int) -> No
     grad_rgba = grad.convert("RGBA")
     mask = Image.new("L", (size, size), 0)
     mdraw = ImageDraw.Draw(mask)
-    min_x = min(p[0] for p in pts) - cx + r
-    min_y = min(p[1] for p in pts) - cy + r
-    max_x = max(p[0] for p in pts) - cx + r
-    max_y = max(p[1] for p in pts) - cy + r
     mdraw.polygon(
         [(p[0] - cx + r, p[1] - cy + r) for p in pts],
         fill=255,
@@ -187,7 +185,6 @@ def render() -> None:
     draw = ImageDraw.Draw(img, "RGBA")
 
     f_black = find_font(font_paths()["black"], 132)
-    f_bold_lg = find_font(font_paths()["bold"], 44)
     f_bold_md = find_font(font_paths()["bold"], 28)
     f_regular = find_font(font_paths()["regular"], 26)
     f_mono = find_font(font_paths()["mono"], 22)
@@ -250,7 +247,7 @@ def render() -> None:
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     img.save(OUT_PATH, "PNG", optimize=True)
-    print(f"wrote {OUT_PATH} ({OUT_PATH.stat().st_size} bytes)")
+    _LOG.info(f"wrote {OUT_PATH} ({OUT_PATH.stat().st_size} bytes)")
 
 
 if __name__ == "__main__":

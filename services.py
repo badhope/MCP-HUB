@@ -1312,7 +1312,7 @@ def get_data_health_report(servers: Optional[List[Dict]] = None) -> Dict[str, An
         recommendations.append(
             {
                 "priority": "HIGH",
-                "message": f"{validation['invalid_servers']} servers have critical validation errors",
+                "message": f"{validation['invalid_servers']} servers have critical errors",
                 "action": "Review and fix invalid server data",
             }
         )

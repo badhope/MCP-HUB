@@ -5,12 +5,15 @@ MCP Hub - 服务器有效性自动检查工具
 """
 
 import json
+import logging
 import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
+
+_LOG = logging.getLogger(__name__)
 
 BASE_PATH = Path(__file__).parent.parent
 INDEX_FILE = BASE_PATH / "servers-index.json"
@@ -136,7 +139,7 @@ class ServerHealthChecker:
     def check_all_servers(self, limit: int = 100) -> List[Dict[str, Any]]:
         """检查所有服务器"""
         if not INDEX_FILE.exists():
-            print("❌ Index file not found!")
+            _LOG.info("❌ Index file not found!")
             return []
 
         with open(INDEX_FILE, "r", encoding="utf-8") as f:
@@ -145,12 +148,12 @@ class ServerHealthChecker:
         servers = index_data.get("servers", [])[:limit]
         results = []
 
-        print(f"Checking {len(servers)} servers...")
+        _LOG.info(f"Checking {len(servers)} servers...")
 
         for i, server in enumerate(servers, 1):
-            print(f"  [{i}/{len(servers)}] Checking {server.get('name')}...", end=" ")
+            _LOG.info(f"  [{i}/{len(servers)}] Checking {server.get('name')}...", end=" ")
             result = self.check_server(server)
-            print(result["status"])
+            _LOG.info(result["status"])
             results.append(result)
 
             # 避免 API 限流
@@ -232,7 +235,7 @@ def update_index_with_results(results: List[Dict]):
         with open(INDEX_FILE, "w", encoding="utf-8") as f:
             json.dump(index_data, f, ensure_ascii=False, indent=2)
 
-        print(f"\n✓ Updated {updated_count} servers in index")
+        _LOG.info(f"\n✓ Updated {updated_count} servers in index")
 
     return updated_count
 
@@ -255,46 +258,46 @@ def main():
     parser.add_argument("--report", "-r", action="store_true", help="Save detailed report to file")
     args = parser.parse_args()
 
-    print("=" * 60)
-    print("MCP Hub - 服务器有效性检查工具")
-    print("=" * 60)
+    _LOG.info("=" * 60)
+    _LOG.info("MCP Hub - 服务器有效性检查工具")
+    _LOG.info("=" * 60)
 
     checker = ServerHealthChecker()
     results = checker.check_all_servers(limit=args.limit)
 
     if results:
         # 打印摘要
-        print("\n" + "=" * 60)
-        print("检查摘要")
-        print("=" * 60)
-        print(f"总检查数: {checker.stats['total_checked']}")
-        print(f"有效: {checker.stats['valid']}")
-        print(f"无效: {checker.stats['invalid']}")
-        print(f"已归档: {checker.stats['archived']}")
-        print(f"需要更新: {checker.stats['updated']}")
+        _LOG.info("\n" + "=" * 60)
+        _LOG.info("检查摘要")
+        _LOG.info("=" * 60)
+        _LOG.info(f"总检查数: {checker.stats['total_checked']}")
+        _LOG.info(f"有效: {checker.stats['valid']}")
+        _LOG.info(f"无效: {checker.stats['invalid']}")
+        _LOG.info(f"已归档: {checker.stats['archived']}")
+        _LOG.info(f"需要更新: {checker.stats['updated']}")
 
         # 生成报告
         report = checker.generate_report(results)
 
         if report["issues_summary"]:
-            print("\n问题摘要:")
+            _LOG.info("\n问题摘要:")
             for issue, count in report["issues_summary"].items():
-                print(f"  - {issue}: {count}")
+                _LOG.info(f"  - {issue}: {count}")
 
         # 更新索引
         if args.update:
-            print("\n正在更新索引...")
+            _LOG.info("\n正在更新索引...")
             update_index_with_results(results)
 
         # 保存报告
         if args.report:
             with open(REPORT_FILE, "w", encoding="utf-8") as f:
                 json.dump(report, f, ensure_ascii=False, indent=2)
-            print(f"\n✓ Report saved to {REPORT_FILE}")
+            _LOG.info(f"\n✓ Report saved to {REPORT_FILE}")
 
-    print("\n" + "=" * 60)
-    print("检查完成!")
-    print("=" * 60)
+    _LOG.info("\n" + "=" * 60)
+    _LOG.info("检查完成!")
+    _LOG.info("=" * 60)
 
 
 if __name__ == "__main__":

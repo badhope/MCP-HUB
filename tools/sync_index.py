@@ -11,11 +11,14 @@
 """
 
 import json
+import logging
 import urllib.request
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Set
+
+_LOG = logging.getLogger(__name__)
 
 BASE_PATH = Path(__file__).parent.parent
 INDEX_FILE = BASE_PATH / "servers-index.json"
@@ -105,10 +108,13 @@ TOPIC_CATEGORY_MAP = {
     "firefox": "browser-web",
     "webkit": "browser-web",
     "web": "browser-web",
-    "html": "browser-web",
+    # NOTE: "html" lives in the document-notes section (line ~382) — that's
+    # the latter definition and the one that wins, so don't re-add it here.
     "crawler": "browser-web",
     "crawling": "browser-web",
     "webdriver": "browser-web",
+    # NOTE: "html" lives in the document-notes section (line ~382) — that's
+    # the latter definition and the one that wins, so don't re-add it here.
     # =============================================================
     # Integration & APIs (集成与API)
     # =============================================================
@@ -117,22 +123,14 @@ TOPIC_CATEGORY_MAP = {
     "graphql": "integration",
     "grpc": "integration",
     "webhook": "integration",
-    "notion": "integration",
-    "slack": "integration",
-    "discord": "integration",
-    "telegram": "integration",
-    "wechat": "integration",
-    "dingtalk": "integration",
-    "lark": "integration",
-    "linear": "integration",
-    "asana": "integration",
-    "trello": "integration",
-    "jira": "integration",
+    # NOTE: "notion" / "slack" / "discord" / "telegram" / "wechat" /
+    # "dingtalk" / "lark" / "linear" / "asana" / "trello" / "jira" /
+    # "github" / "gitlab" / "bitbucket" all have more specific homes in
+    # later sections (calendar-time / social-communication / development),
+    # so they're listed there and not here. Listing them here too would
+    # mean the latter definition silently wins, which is the F601 trap.
     "confluence": "integration",
     "atlassian": "integration",
-    "github": "integration",
-    "gitlab": "integration",
-    "bitbucket": "integration",
     "workflow": "integration",
     "automation": "integration",
     "integration": "integration",
@@ -380,7 +378,8 @@ TOPIC_CATEGORY_MAP = {
     "toml": "document-notes",
     "xml": "document-notes",
     "html": "document-notes",
-    "notion": "document-notes",
+    # NOTE: "notion" lives in the calendar-time section (later in this dict) —
+    # the latter definition wins, so we list it only there.
     "obsidian": "document-notes",
     "evernote": "document-notes",
     "onenote": "document-notes",
@@ -389,7 +388,8 @@ TOPIC_CATEGORY_MAP = {
     "jupyter": "document-notes",
     "colab": "document-notes",
     "notebook": "document-notes",
-    "arxiv": "document-notes",
+    # NOTE: "arxiv" lives in the learning-research section (later in this
+    # dict) — the latter definition wins, so we list it only there.
     "document": "document-notes",
     "documentation": "document-notes",
     "doc": "document-notes",
@@ -443,9 +443,7 @@ TOPIC_CATEGORY_MAP = {
     # =============================================================
     "ffmpeg": "video-media",
     "video": "video-media",
-    "youtube": "video-media",
     "bilibili": "video-media",
-    "tiktok": "video-media",
     "douyin": "video-media",
     "twitch": "video-media",
     "vimeo": "video-media",
@@ -975,7 +973,7 @@ COMMUNITY_ORGS = {
 
 def fetch_upstream() -> dict:
     """获取上游数据"""
-    print(f"📥 正在从上游获取数据: {UPSTREAM_URL}")
+    _LOG.info(f"📥 正在从上游获取数据: {UPSTREAM_URL}")
     req = urllib.request.Request(UPSTREAM_URL, headers={"User-Agent": "MCP-HUB-Sync/1.0"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read().decode("utf-8"))
@@ -1166,33 +1164,33 @@ def sync_index(
     # 加载现有数据
     existing_index = load_existing_index()
     existing_servers = {s["name"]: s for s in existing_index.get("servers", [])}
-    print(f"📦 现有数据: {len(existing_servers)} 个服务器")
+    _LOG.info(f"📦 现有数据: {len(existing_servers)} 个服务器")
 
     # 获取上游数据
     upstream = fetch_upstream()
     projects = upstream.get("projects") or []
     if not isinstance(projects, list):
-        print("   ⚠️ 上游数据格式异常: projects 不是列表")
+        _LOG.info("   ⚠️ 上游数据格式异常: projects 不是列表")
         return
     total_upstream = upstream.get("total", len(projects))
 
-    print(f"   上游共 {total_upstream} 个项目")
+    _LOG.info(f"   上游共 {total_upstream} 个项目")
 
     # 过滤
     if servers_only:
         projects = [p for p in projects if p.get("category") == "servers"]
-        print(f"   过滤为 servers: {len(projects)} 个")
+        _LOG.info(f"   过滤为 servers: {len(projects)} 个")
 
     if min_stars > 0:
         projects = [p for p in projects if (p.get("stars") or 0) >= min_stars]
-        print(f"   过滤 star>={min_stars}: {len(projects)} 个")
+        _LOG.info(f"   过滤 star>={min_stars}: {len(projects)} 个")
 
     # 按 star 排序
     projects.sort(key=lambda p: p.get("stars", 0), reverse=True)
 
     if limit:
         projects = projects[:limit]
-        print(f"   限制为 {limit} 个")
+        _LOG.info(f"   限制为 {limit} 个")
 
     # 去重 (同名项目保留 star 最高的)
     seen = set()
@@ -1204,7 +1202,7 @@ def sync_index(
             unique.append(p)
     projects = unique
 
-    print(f"   去重后: {len(projects)} 个\n")
+    _LOG.info(f"   去重后: {len(projects)} 个\n")
 
     # 转换并合并
     servers = []
@@ -1319,36 +1317,36 @@ def sync_index(
         json.dump(config, f, ensure_ascii=False, indent=2)
 
     # 打印统计
-    print("✅ 同步完成!")
-    print(f"   总计: {len(servers)} 个服务器")
-    print(f"   新增: {new_count} 个")
-    print(f"   更新: {updated_count} 个")
-    print(f"   分类: {len(cat_counts)} 个")
-    print("   来源: 100% 有 GitHub 链接")
-    print("\n   Source types:")
+    _LOG.info("✅ 同步完成!")
+    _LOG.info(f"   总计: {len(servers)} 个服务器")
+    _LOG.info(f"   新增: {new_count} 个")
+    _LOG.info(f"   更新: {updated_count} 个")
+    _LOG.info(f"   分类: {len(cat_counts)} 个")
+    _LOG.info("   来源: 100% 有 GitHub 链接")
+    _LOG.info("\n   Source types:")
     for st, count in source_counts.most_common():
         pct = count / len(servers) * 100
-        print(f"     {st}: {count} ({pct:.1f}%)")
-    print("\n   Top 10 分类:")
+        _LOG.info(f"     {st}: {count} ({pct:.1f}%)")
+    _LOG.info("\n   Top 10 分类:")
     for cat, count in cat_counts.most_common(10):
         pct = count / len(servers) * 100
-        print(f"     {cat}: {count} ({pct:.1f}%)")
-    print("\n   Top 10 语言:")
+        _LOG.info(f"     {cat}: {count} ({pct:.1f}%)")
+    _LOG.info("\n   Top 10 语言:")
     for lang, count in lang_counts.most_common(10):
-        print(f"     {lang}: {count}")
-    print("\n   Top 10 by stars:")
+        _LOG.info(f"     {lang}: {count}")
+    _LOG.info("\n   Top 10 by stars:")
     for s in servers[:10]:
-        print(f"     ⭐{s['stars']:>7} {s['name']} ({s['owner']})")
+        _LOG.info(f"     ⭐{s['stars']:>7} {s['name']} ({s['owner']})")
 
     # 检查分类问题
-    print("\n⚠️  分类检查:")
+    _LOG.info("\n⚠️  分类检查:")
     other_only = [s for s in servers if s.get("categories") == ["other"]]
     if other_only:
-        print(f"   只有 'other' 分类的服务器: {len(other_only)} 个")
+        _LOG.info(f"   只有 'other' 分类的服务器: {len(other_only)} 个")
         for s in sorted(other_only, key=lambda x: x.get("stars", 0), reverse=True)[:5]:
-            print(f"     ⭐{s['stars']:>7} {s['name']}")
+            _LOG.info(f"     ⭐{s['stars']:>7} {s['name']}")
     else:
-        print("   ✅ 所有服务器都已正确分类!")
+        _LOG.info("   ✅ 所有服务器都已正确分类!")
 
 
 def main():

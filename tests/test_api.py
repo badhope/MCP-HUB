@@ -4,6 +4,7 @@ API 集成测试 - 真实 HTTP 服务器，真实请求，无 mock
 """
 
 import json
+import socket
 import threading
 import time
 import urllib.error
@@ -13,9 +14,6 @@ from pathlib import Path
 import pytest
 
 PROJECT_ROOT = Path(__file__).parent.parent
-
-# 找一个空闲端口
-import socket
 
 
 def _free_port():

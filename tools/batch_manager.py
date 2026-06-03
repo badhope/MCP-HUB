@@ -5,12 +5,15 @@ MCP 服务器分批下载管理器
 """
 
 import json
+import logging
 import os
 import time
 from pathlib import Path
 from typing import Dict, List, Optional
 
 from downloader import batch_download
+
+_LOG = logging.getLogger(__name__)
 
 
 class BatchManager:
@@ -87,11 +90,11 @@ class BatchManager:
         """
         batch = self.state["batches"].get(batch_id)
         if not batch:
-            print(f"❌ 批次 {batch_id} 不存在")
+            _LOG.info(f"❌ 批次 {batch_id} 不存在")
             return {"success": 0, "failed": 0, "skipped": 0}
 
         if batch["status"] == "completed":
-            print(f"✅ 批次 {batch_id} 已完成")
+            _LOG.info(f"✅ 批次 {batch_id} 已完成")
             return {"success": len(batch["completed"]), "failed": 0, "skipped": 0}
 
         batch["status"] = "running"
@@ -104,7 +107,7 @@ class BatchManager:
             completed = set(batch["completed"])
             repos = [r for r in repos if r["short_name"] not in completed]
 
-        print(f"📦 批次 {batch_id}: 共 {len(batch['repos'])} 个，待下载 {len(repos)} 个")
+        _LOG.info(f"📦 批次 {batch_id}: 共 {len(batch['repos'])} 个，待下载 {len(repos)} 个")
 
         # 执行下载
         stats = batch_download(repos, self.servers_path, token, max_workers)
@@ -135,7 +138,7 @@ class BatchManager:
         batch["updated_at"] = time.time()
         self._save_state()
 
-        print(f"✅ 批次 {batch_id} 完成: {stats}")
+        _LOG.info(f"✅ 批次 {batch_id} 完成: {stats}")
         return stats
 
     def download_all_pending(
@@ -149,9 +152,9 @@ class BatchManager:
 
         for batch_id, batch in self.state["batches"].items():
             if batch["status"] in ["pending", "partial", "failed"]:
-                print(f"\n{'='*60}")
-                print(f"处理批次: {batch_id}")
-                print(f"{'='*60}")
+                _LOG.info(f"\n{'='*60}")
+                _LOG.info(f"处理批次: {batch_id}")
+                _LOG.info(f"{'='*60}")
                 results[batch_id] = self.download_batch(batch_id, token, max_workers, resume)
 
         return results
@@ -171,10 +174,10 @@ class BatchManager:
         failed_repos = [r for r in batch["repos"] if r["short_name"] in failed_names]
 
         if not failed_repos:
-            print(f"✅ 批次 {batch_id} 没有失败的项")
+            _LOG.info(f"✅ 批次 {batch_id} 没有失败的项")
             return {"success": 0, "failed": 0, "skipped": 0}
 
-        print(f"🔄 重试批次 {batch_id} 的 {len(failed_repos)} 个失败项")
+        _LOG.info(f"🔄 重试批次 {batch_id} 的 {len(failed_repos)} 个失败项")
 
         # 重新下载
         stats = batch_download(failed_repos, self.servers_path, token, max_workers)
@@ -219,15 +222,15 @@ def main():
     import sys
 
     if len(sys.argv) < 2:
-        print("用法: python batch_manager.py <命令> [参数]")
-        print("")
-        print("命令:")
-        print("  list                          列出所有批次")
-        print("  status <batch_id>             查看批次状态")
-        print("  download <batch_id>           下载指定批次")
-        print("  download-all                  下载所有待处理批次")
-        print("  retry <batch_id>              重试失败的下载")
-        print("  summary                       显示下载摘要")
+        _LOG.info("用法: python batch_manager.py <命令> [参数]")
+        _LOG.info("")
+        _LOG.info("命令:")
+        _LOG.info("  list                          列出所有批次")
+        _LOG.info("  status <batch_id>             查看批次状态")
+        _LOG.info("  download <batch_id>           下载指定批次")
+        _LOG.info("  download-all                  下载所有待处理批次")
+        _LOG.info("  retry <batch_id>              重试失败的下载")
+        _LOG.info("  summary                       显示下载摘要")
         return
 
     base_path = Path(__file__).parent.parent
@@ -242,24 +245,24 @@ def main():
 
     if cmd == "list":
         batches = manager.list_batches()
-        print(f"共有 {len(batches)} 个批次:")
+        _LOG.info(f"共有 {len(batches)} 个批次:")
         for bid, batch in batches.items():
             total = len(batch["repos"])
             done = len(batch["completed"])
             status = batch["status"]
-            print(f"  {bid}: {done}/{total} ({status})")
+            _LOG.info(f"  {bid}: {done}/{total} ({status})")
 
     elif cmd == "status" and args:
         batch_id = args[0]
         status = manager.get_batch_status(batch_id)
         if status:
-            print(f"批次 {batch_id}:")
-            print(f"  状态: {status['status']}")
-            print(f"  总数: {len(status['repos'])}")
-            print(f"  完成: {len(status['completed'])}")
-            print(f"  失败: {len(status['failed'])}")
+            _LOG.info(f"批次 {batch_id}:")
+            _LOG.info(f"  状态: {status['status']}")
+            _LOG.info(f"  总数: {len(status['repos'])}")
+            _LOG.info(f"  完成: {len(status['completed'])}")
+            _LOG.info(f"  失败: {len(status['failed'])}")
         else:
-            print(f"批次 {batch_id} 不存在")
+            _LOG.info(f"批次 {batch_id} 不存在")
 
     elif cmd == "download" and args:
         batch_id = args[0]
@@ -274,12 +277,12 @@ def main():
 
     elif cmd == "summary":
         summary = manager.get_summary()
-        print("下载摘要:")
+        _LOG.info("下载摘要:")
         for key, value in summary.items():
-            print(f"  {key}: {value}")
+            _LOG.info(f"  {key}: {value}")
 
     else:
-        print(f"未知命令: {cmd}")
+        _LOG.info(f"未知命令: {cmd}")
 
 
 if __name__ == "__main__":

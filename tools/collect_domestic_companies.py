@@ -5,12 +5,14 @@ MCP Hub - 补充国内大厂项目工具
 """
 
 import json
-import re
+import logging
 import time
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
+
+_LOG = logging.getLogger(__name__)
 
 BASE_PATH = Path(__file__).parent.parent
 INDEX_FILE = BASE_PATH / "servers-index.json"
@@ -77,7 +79,7 @@ class DomesticCompanyCollector:
                             results.append(self._parse_github_repo(repo))
                 time.sleep(0.5)  # 避免 API 限流
             except Exception as e:
-                print(f"  Error searching '{keyword}': {e}")
+                _LOG.info(f"  Error searching '{keyword}': {e}")
                 continue
 
         return results
@@ -175,7 +177,7 @@ def add_known_servers():
             "name": "baidu-ernie-mcp",
             "full_name": "badhbhb/baidu-ernie-mcp",
             "source": "https://github.com/badhbhb/baidu-ernie-mcp",
-            "description": "MCP server for Baidu Ernie AI - Integrate Baidu AI capabilities with Claude and other AI assistants",
+            "description": "MCP server for Baidu Ernie AI — integrate Baidu AI with Claude",
             "stars": 45,
             "language": "Python",
             "owner": "badhbhb",
@@ -191,7 +193,7 @@ def add_known_servers():
             "name": "baidu-qianfan-mcp",
             "full_name": "open-bmb/baidu-qianfan-mcp",
             "source": "https://github.com/open-bmb/baidu-qianfan-mcp",
-            "description": "MCP server for Baidu Qianfan AI platform - Access Baidu LLMs via Model Context Protocol",
+            "description": "MCP server for Baidu Qianfan — access Baidu LLMs via MCP",
             "stars": 89,
             "language": "Python",
             "owner": "open-bmb",
@@ -207,7 +209,7 @@ def add_known_servers():
             "name": "baidu-mcp-server",
             "full_name": "tensorchow/baidu-mcp-server",
             "source": "https://github.com/tensorchow/baidu-mcp-server",
-            "description": "MCP server integrating Baidu AI services including OCR, NLU, and text analysis",
+            "description": "MCP server integrating Baidu AI services: OCR, NLU, text analysis",
             "stars": 67,
             "language": "TypeScript",
             "owner": "tensorchow",
@@ -224,7 +226,7 @@ def add_known_servers():
             "name": "huawei-obs-mcp",
             "full_name": "huaweicloud/obs-mcp",
             "source": "https://github.com/huaweicloud/obs-mcp",
-            "description": "MCP server for Huawei Cloud OBS (Object Storage Service) - Manage cloud storage",
+            "description": "MCP server for Huawei Cloud OBS object storage management",
             "stars": 156,
             "language": "Python",
             "owner": "huaweicloud",
@@ -240,7 +242,7 @@ def add_known_servers():
             "name": "huawei-modelarts-mcp",
             "full_name": "huaweicloud/modelarts-mcp",
             "source": "https://github.com/huaweicloud/modelarts-mcp",
-            "description": "MCP server for Huawei Cloud ModelArts - AI development platform integration",
+            "description": "MCP server for Huawei Cloud ModelArts AI dev platform",
             "stars": 203,
             "language": "Python",
             "owner": "huaweicloud",
@@ -256,7 +258,7 @@ def add_known_servers():
             "name": "harmonyos-mcp",
             "full_name": "openharmony/harmonyos-mcp",
             "source": "https://github.com/openharmony/harmonyos-mcp",
-            "description": "MCP server for HarmonyOS development - Tools for HarmonyOS app development",
+            "description": "MCP server for HarmonyOS development — tools for app builders",
             "stars": 412,
             "language": "TypeScript",
             "owner": "openharmony",
@@ -273,7 +275,7 @@ def add_known_servers():
             "name": "meituan-api-mcp",
             "full_name": "api4ai/meituan-api-mcp",
             "source": "https://github.com/api4ai/meituan-api-mcp",
-            "description": "MCP server for Meituan API integration - Access Meituan delivery and store APIs",
+            "description": "MCP server for Meituan API delivery and store integrations",
             "stars": 78,
             "language": "Python",
             "owner": "api4ai",
@@ -289,7 +291,7 @@ def add_known_servers():
             "name": "dianping-mcp",
             "full_name": "dianping-open/dianping-mcp",
             "source": "https://github.com/dianping-open/dianping-mcp",
-            "description": "MCP server for Dianping (大众点评) API - Restaurant review and location data",
+            "description": "MCP server for Dianping (大众点评) — restaurant and location data",
             "stars": 34,
             "language": "TypeScript",
             "owner": "dianping-open",
@@ -306,7 +308,7 @@ def add_known_servers():
             "name": "xiaomi-iot-mcp",
             "full_name": "miot-project/xiaomi-iot-mcp",
             "source": "https://github.com/miot-project/xiaomi-iot-mcp",
-            "description": "MCP server for Xiaomi IoT (Smart Home) - Control Mi Home devices via AI assistants",
+            "description": "MCP server for Xiaomi IoT, control Mi Home devices via AI",
             "stars": 287,
             "language": "Python",
             "owner": "miot-project",
@@ -322,7 +324,7 @@ def add_known_servers():
             "name": "mijia-mcp",
             "full_name": "smarthome-fans/mijia-mcp",
             "source": "https://github.com/smarthome-fans/mijia-mcp",
-            "description": "MCP server for Mijia (小米米家) smart devices - Xiaomi smart home integration",
+            "description": "MCP server for Mijia (小米米家) — Xiaomi smart home integration",
             "stars": 156,
             "language": "Python",
             "owner": "smarthome-fans",
@@ -355,7 +357,7 @@ def add_known_servers():
             "name": "music163-mcp",
             "full_name": "music163/music163-mcp",
             "source": "https://github.com/music163/music163-mcp",
-            "description": "MCP server for NetEase Cloud Music (网易云音乐) - Music search and playlist management",
+            "description": "MCP server for NetEase Cloud Music (网易云音乐) — search & playlists",
             "stars": 234,
             "language": "TypeScript",
             "owner": "music163",
@@ -388,7 +390,7 @@ def add_known_servers():
             "name": "dingtalk-sdk-mcp",
             "full_name": "open-dingtalk/dingtalk-sdk-mcp",
             "source": "https://github.com/open-dingtalk/dingtalk-sdk-mcp",
-            "description": "Official DingTalk MCP SDK - Build MCP servers for DingTalk enterprise communication",
+            "description": "Official DingTalk MCP SDK - build servers for DingTalk enterprise",
             "stars": 445,
             "language": "TypeScript",
             "owner": "open-dingtalk",
@@ -404,7 +406,7 @@ def add_known_servers():
             "name": "aliyun-dingtalk-mcp",
             "full_name": "aliyun-sls/aliyun-dingtalk-mcp",
             "source": "https://github.com/aliyun-sls/aliyun-dingtalk-mcp",
-            "description": "Alibaba Cloud DingTalk integration MCP - Connect DingTalk with Alibaba Cloud services",
+            "description": "Alibaba Cloud DingTalk integration MCP - connect with Aliyun services",
             "stars": 123,
             "language": "Python",
             "owner": "aliyun-sls",
@@ -444,7 +446,7 @@ def update_index_with_domestic_servers():
         if server["name"] not in existing_names:
             index_data["servers"].append(server)
             added_count += 1
-            print(f"  + Added: {server['name']} ({server['owner']})")
+            _LOG.info(f"  + Added: {server['name']} ({server['owner']})")
 
     # 更新统计
     index_data["total_servers"] = len(index_data["servers"])
@@ -463,23 +465,23 @@ def update_index_with_domestic_servers():
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
         json.dump(index_data, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✓ Added {added_count} new domestic company servers")
-    print(f"✓ Total servers: {index_data['total_servers']}")
-    print(f"✓ Categories: {len(categories)}")
+    _LOG.info(f"\n✓ Added {added_count} new domestic company servers")
+    _LOG.info(f"✓ Total servers: {index_data['total_servers']}")
+    _LOG.info(f"✓ Categories: {len(categories)}")
 
 
 def main():
     """主函数"""
-    print("=" * 60)
-    print("MCP Hub - 国内大厂项目补充工具")
-    print("=" * 60)
+    _LOG.info("=" * 60)
+    _LOG.info("MCP Hub - 国内大厂项目补充工具")
+    _LOG.info("=" * 60)
 
-    print("\n正在添加国内大厂 MCP 服务器...")
+    _LOG.info("\n正在添加国内大厂 MCP 服务器...")
     update_index_with_domestic_servers()
 
-    print("\n" + "=" * 60)
-    print("补充完成!")
-    print("=" * 60)
+    _LOG.info("\n" + "=" * 60)
+    _LOG.info("补充完成!")
+    _LOG.info("=" * 60)
 
 
 if __name__ == "__main__":

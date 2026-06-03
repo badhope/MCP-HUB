@@ -5,10 +5,13 @@
 """
 
 import json
+import logging
 import os
 import subprocess
 from pathlib import Path
 from typing import List, Optional
+
+_LOG = logging.getLogger(__name__)
 
 BASE_PATH = Path(__file__).parent.parent
 INDEX_FILE = BASE_PATH / "servers-index.json"
@@ -55,7 +58,7 @@ def git_clone(repo_url: str, target_dir: Path, token: str = "") -> bool:
 
         return result.returncode == 0
     except Exception as e:
-        print(f"  ❌ 克隆失败: {e}")
+        _LOG.info(f"  ❌ 克隆失败: {e}")
         return False
     finally:
         if askpass_script is not None:
@@ -82,7 +85,7 @@ def download_server(server: dict, token: str = "") -> tuple:
     if target_dir.exists():
         return name, "exists", "已存在"
 
-    print(f"  📥 下载 {name} ({source_type})...")
+    _LOG.info(f"  📥 下载 {name} ({source_type})...")
 
     if git_clone(repo_url, target_dir, token):
         return name, "success", repo_url
@@ -97,7 +100,7 @@ def download_from_index(
 ):
     """从索引下载服务器"""
     if not INDEX_FILE.exists():
-        print(f"❌ 索引文件不存在: {INDEX_FILE}")
+        _LOG.info(f"❌ 索引文件不存在: {INDEX_FILE}")
         return
 
     SERVERS_DIR.mkdir(exist_ok=True)
@@ -114,9 +117,9 @@ def download_from_index(
     if limit:
         servers = servers[:limit]
 
-    print(f"🚀 准备下载 {len(servers)} 个服务器...")
-    print(f"   目标目录: {SERVERS_DIR}")
-    print()
+    _LOG.info(f"🚀 准备下载 {len(servers)} 个服务器...")
+    _LOG.info(f"   目标目录: {SERVERS_DIR}")
+    _LOG.info("")
 
     stats = {"success": 0, "failed": 0, "skipped": 0, "exists": 0}
 
@@ -126,16 +129,16 @@ def download_from_index(
         stats[status] = stats.get(status, 0) + 1
 
         if status == "success":
-            print(f"    ✅ {name}")
+            _LOG.info(f"    ✅ {name}")
         elif status == "failed":
-            print(f"    ❌ {name}: {msg}")
+            _LOG.info(f"    ❌ {name}: {msg}")
 
-    print()
-    print("📊 下载统计:")
-    print(f"   成功: {stats['success']}")
-    print(f"   失败: {stats['failed']}")
-    print(f"   跳过: {stats['skipped']}")
-    print(f"   已存在: {stats['exists']}")
+    _LOG.info("")
+    _LOG.info("📊 下载统计:")
+    _LOG.info(f"   成功: {stats['success']}")
+    _LOG.info(f"   失败: {stats['failed']}")
+    _LOG.info(f"   跳过: {stats['skipped']}")
+    _LOG.info(f"   已存在: {stats['exists']}")
 
 
 def main():

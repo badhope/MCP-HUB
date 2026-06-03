@@ -13,10 +13,13 @@ MCP Hub 全量项目收集系统 v2.0
 """
 
 import json
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+_LOG = logging.getLogger(__name__)
 
 
 @dataclass
@@ -1540,8 +1543,8 @@ class ComprehensiveCollector:
         """保存收集结果"""
         with open(self.output_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"✅ 已保存到: {self.output_file}")
-        print(f"📊 共收集 {data['total_projects']} 个项目")
+        _LOG.info(f"✅ 已保存到: {self.output_file}")
+        _LOG.info(f"📊 共收集 {data['total_projects']} 个项目")
 
 
 def main():
@@ -1549,25 +1552,25 @@ def main():
     base_path = Path(__file__).parent.parent
     collector = ComprehensiveCollector(base_path)
 
-    print("🚀 开始收集全量 MCP 项目...")
-    print()
+    _LOG.info("🚀 开始收集全量 MCP 项目...")
+    _LOG.info("")
 
     data = collector.collect_all()
 
-    print()
-    print("📈 收集统计:")
-    print(f"  - 总项目数: {data['total_projects']}")
-    print(f"  - 分类统计:")
+    _LOG.info("")
+    _LOG.info("📈 收集统计:")
+    _LOG.info(f"  - 总项目数: {data['total_projects']}")
+    _LOG.info("  - 分类统计:")
 
     for category, stats in data["categories"].items():
-        print(f"    {category}:")
+        _LOG.info(f"    {category}:")
         for key, count in sorted(stats.items(), key=lambda x: -x[1])[:5]:
-            print(f"      - {key}: {count}")
+            _LOG.info(f"      - {key}: {count}")
 
     collector.save(data)
 
-    print()
-    print("✅ 收集完成！")
+    _LOG.info("")
+    _LOG.info("✅ 收集完成！")
 
 
 if __name__ == "__main__":

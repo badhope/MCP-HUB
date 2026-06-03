@@ -26,9 +26,19 @@
 ### 变更
 - README、README_CN、QUICKSTART、QUICKSTART_CN、USER_GUIDE、USER_GUIDE_CN：`4,400+` / `4407` → `4,403+` / `4403`，匹配实时注册数据
 - `index.html` 的 `og:image` / `og:url` / `twitter:image` 改为指向 GitHub Pages CDN（`https://badhope.github.io/MCP-HUB/...`）而非 `raw.githubusercontent.com`
+- 18 个 `tools/*.py` 文件中 234 个 `print(...)` 调用替换为模块级 `_LOG = logging.getLogger(__name__)` + `_LOG.info(...))`。CLI 用 `print(..., file=sys.stderr)` 输出错误的代码段保持原样（logger 没有 `file=` 关键字参数）。`tools/secret_scanner.py` 的 "OK: no secrets detected." 仍然走 stdout，保证 `test_scanner_clean_directory_verbose` 继续通过
+- 新增 `.flake8`（max-line-length=100，排除 `servers/`、`frontend/`、构建目录）— 与 black 26.5.1 + isort 8 已用的 100 字符预算对齐，让 linter 和 formatter 不再相互打架
 
 ### 修复
 - Demo 上的星数现在明确标注为 snapshot，消除了之前"看起来是实时但实际数据陈旧"的风险
+- `tools/sync_index.py` F601 — 删除 3 个重复 dict key（`html`、`notion`、`arxiv`）；以 `document-notes` 块里那一份为权威
+- `main.py` F541 — 去掉两个相同 install/run 命令块的多余 `f` 前缀（字面量里没有 `{}` 占位符）
+- `tools/build_social_preview.py` F841 — 删除 4 个未使用的包围盒变量和 1 个未使用字体句柄
+- `tools/gen_static_data.py` F841 — 删除 2 个未使用局部变量（`notable`、`tpl`）
+- `tests/test_query.py` / `tools/gen_api_docs.py` E741 — 推导式目标 `l` 重命名为 `line`（与数字 `1` 容易混淆）
+- 22 个 E501 超长行（分布于 `services.py`、`tools/secret_scanner.py`、`tools/completeness_scoring.py`、`tools/gen_static_data.py`、`tools/auto_updater.py`、`tools/notable_projects_navigator.py`、`tools/update_index.py`、`tools/collect_domestic_companies.py`）— 描述文本缩短，URL/正则/docker 命令酌情加 `# noqa: E501`
+- `tests/test_api.py` / `tests/test_fastapi.py` E402 — 中段的 `import socket` 上移到顶部 import 区
+- `tools/notable_projects_navigator.py` / `tools/download_manager.py` F541 — 去掉没有占位符的字符串前的多余 `f` 前缀
 
 ## [2.0.1] - 2026-06-01
 

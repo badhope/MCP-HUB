@@ -46,6 +46,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - README, README_CN: rewritten from scratch — removed the emoji-heavy decorative headers, the "100% free / production-ready" marketing tone, and the bullet-list-of-buzzwords structure. Each section now leads with a concrete fact (an endpoint, a number, a file path) and the prose reads like an engineer's first-day-on-the-job note rather than a launch announcement.
 - `docs/internal/*.md`: stripped the 200+ decorative emoji that were making the maintainer docs read like AI-generated filler. Tables, headings, and bullets now use plain markdown.
 - `docs/internal/IMPROVEMENT_PLAN.md`: `🔴高` / `🟡中` / `🟢低` priority labels replaced with `Priority: high` / `medium` / `low`.
+- 234 `print(...)` calls across 18 `tools/*.py` files replaced with module-level `_LOG = logging.getLogger(__name__)` + `_LOG.info(...)`. CLI error output that uses `print(..., file=sys.stderr)` is preserved (logger has no `file=` kwarg). `tools/secret_scanner.py`'s "OK: no secrets detected." stays on stdout so `test_scanner_clean_directory_verbose` keeps passing.
+- Added `.flake8` (max-line-length=100, exclude `servers/`, `frontend/`, build dirs) — gives the same 100-char budget that black 26.5.1 + isort 8 already enforce, so the linter / formatter can no longer disagree.
+
+### Fixed
+- `tools/sync_index.py` F601 — removed three duplicate dict keys (`html`, `notion`, `arxiv`); the canonical definitions in the `document-notes` block are the ones that survive
+- `main.py` F541 — removed stray `f` prefix from two identical install/run command blocks (no `{}` placeholders in those literals)
+- `tools/build_social_preview.py` F841 — deleted 4 unused bounding-box vars and 1 unused font handle
+- `tools/gen_static_data.py` F841 — deleted 2 unused locals (`notable`, `tpl`)
+- `tests/test_query.py` / `tools/gen_api_docs.py` E741 — renamed comprehension target `l` to `line` (ambiguous with the digit `1`)
+- 22 E501 long lines across `services.py`, `tools/secret_scanner.py`, `tools/completeness_scoring.py`, `tools/gen_static_data.py`, `tools/auto_updater.py`, `tools/notable_projects_navigator.py`, `tools/update_index.py`, `tools/collect_domestic_companies.py` — descriptions shortened, regex/URL/docker commands annotated with `# noqa: E501` where wrapping hurts readability
+- `tests/test_api.py` / `tests/test_fastapi.py` E402 — moved mid-file `import socket` to the top import block
+- `tools/notable_projects_navigator.py` / `tools/download_manager.py` F541 — stripped redundant `f` prefix from strings without placeholders
 
 ## [2.0.1] - 2026-06-01
 

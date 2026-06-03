@@ -9,8 +9,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
 SCANNER = Path(__file__).parent.parent / "tools" / "secret_scanner.py"
 
 

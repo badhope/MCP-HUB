@@ -4,6 +4,7 @@ Tests the FastAPI backend endpoints including new comparison and recommendation 
 """
 
 import json
+import socket
 import threading
 import time
 import urllib.error
@@ -13,8 +14,6 @@ from pathlib import Path
 import pytest
 
 PROJECT_ROOT = Path(__file__).parent.parent
-
-import socket
 
 
 def _free_port():
