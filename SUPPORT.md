@@ -5,11 +5,11 @@
 Most questions are answered in the project's documentation:
 
 - [README.md](README.md) — overview, features, quick start
-- [AGENT_GUIDE.md](AGENT_GUIDE.md) — for AI agents and tool builders
-- [FULL_SYSTEM_GUIDE.md](FULL_SYSTEM_GUIDE.md) — full system documentation
-- [QUICKSTART.md](QUICKSTART.md) — 5-minute start guide
-- [API docs](https://github.com/badhope/MCP-HUB#-usage-guide) —
-  generated automatically at `/docs` when you run the backend
+- [docs/internal/AGENT_GUIDE.md](docs/internal/AGENT_GUIDE.md) — for AI agents and tool builders
+- [docs/internal/FULL_SYSTEM_GUIDE.md](docs/internal/FULL_SYSTEM_GUIDE.md) — full system documentation
+- [QUICKSTART.md](docs/QUICKSTART.md) — 5-minute start guide
+- [API docs](docs/API.md) — REST + AI-query reference, plus
+  auto-generated Swagger UI at `/docs` when you run the backend
 
 ## Community
 

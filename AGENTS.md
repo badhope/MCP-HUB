@@ -2,9 +2,9 @@
 #
 # This file follows the emerging AGENTS.md convention used by top OSS
 # projects (Cursor, Anthropic, etc.) to give AI coding agents explicit,
-# project-specific instructions. It complements AGENT_GUIDE.md (which is
-# for AI agents helping *users* find MCP servers) and is the file that
-# AI coding assistants should read first.
+# project-specific instructions. It complements `docs/internal/AGENT_GUIDE.md`
+# (which is for AI agents helping *users* find MCP servers) and is the file
+# that AI coding assistants should read first.
 
 ## Project overview
 
@@ -118,7 +118,11 @@ python tools/sync_index.py
     ├── CODE_OF_CONDUCT.md
     ├── SECURITY.md
     ├── SUPPORT.md
-    └── AGENT_GUIDE.md        # Guide for AI agents (different purpose)
+    └── docs/                  # User-facing documentation (EN + CN pairs)
+        ├── QUICKSTART.md
+        ├── USER_GUIDE.md
+        ├── API.md
+        └── internal/           # Maintainer-only docs (AGENT_GUIDE.md, etc.)
 ```
 
 ## Do / do not
@@ -168,6 +172,6 @@ but should trend upward.
 ## When in doubt
 
 - Read the existing code in the same area before writing new code
-- Check `AGENT_GUIDE.md` for guidance targeted at AI agents helping users
-  find MCP servers (different purpose)
+- Check `docs/internal/AGENT_GUIDE.md` for guidance targeted at AI agents
+  helping users find MCP servers (different purpose)
 - Open a discussion at <https://github.com/badhope/MCP-HUB/discussions>

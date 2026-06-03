@@ -8,6 +8,50 @@
 
 ---
 
+## 横切中间件
+
+以下行为作用于上面所有端点，不会出现在 OpenAPI schema 中。
+
+### GZip 压缩
+
+大于 **1 KB** 的响应会被 FastAPI 内置的 `GZipMiddleware` 自动用
+`Content-Encoding: gzip` 压缩。目录类载荷压缩比大约 6–8×（比如
+`servers.json` 从约 100 KB 缩小到 15 KB 以下）。客户端必须发送
+`Accept-Encoding: gzip`（所有浏览器默认即带）才能生效。
+
+### 速率限制
+
+应用前置了一个无外部依赖的进程内令牌桶限流器：
+
+| 配置 | 默认值 | 环境变量 |
+|---|---|---|
+| 每个客户端 IP 的容量 | 120 请求 | `RATE_LIMIT_REQUESTS` |
+| 补充窗口 | 60 秒 | `RATE_LIMIT_WINDOW` |
+| 信任 `X-Forwarded-For` | 关 | `RATE_LIMIT_TRUST_PROXY=1` |
+| 旁路（用于测试） | 关 | `RATE_LIMIT_DISABLED=1` |
+
+豁免路径：`/`、`/health`、`/docs`、`/redoc`、`/openapi.json`，以及 CORS
+预检请求（`OPTIONS`）。
+
+触发限流时，响应为：
+
+```http
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 60
+
+{
+  "detail": "Rate limit exceeded",
+  "limit": 120,
+  "window_seconds": 60
+}
+```
+
+横向扩容部署时，请把限流放到反向代理 / API 网关（nginx `limit_req`、
+Cloudflare 等）—— 进程内桶是按 Pod 计算的。
+
+---
+
 ## 端点
 
 ### `GET /`

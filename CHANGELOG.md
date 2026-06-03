@@ -22,13 +22,28 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `.github/workflows/release.yml` — auto-draft a GitHub Release on `v*.*.*` tag push, pulling notes from `CHANGELOG.md`
 - `GET /health` liveness probe in `main.py` (lightweight, no DB/catalog touch)
 - `HEALTHCHECK` in `Dockerfile` now hits `/health` instead of `/`
+- `GZipMiddleware` in `main.py` (compresses responses ≥ 1KB; `servers.json` shrinks from ~100 KB to <15 KB on the wire)
+- `RateLimitMiddleware` in `main.py` — dependency-free in-process token-bucket limiter, defaults to 120 req / 60 s per client IP, exempts `/`, `/health`, `/docs`, `/redoc`, `/openapi.json` and CORS preflight. Tunable via `RATE_LIMIT_REQUESTS`, `RATE_LIMIT_WINDOW`, `RATE_LIMIT_TRUST_PROXY`, `RATE_LIMIT_DISABLED`
+- `cli()` console entry-point in `main.py` plus `[project.scripts]` in `pyproject.toml` — `pip install mcp-hub` now exposes `mcp-hub`, `mcp-hub-server`, `mcp-market` commands on `$PATH`
+- `[project] classifiers` and `[project.urls]` in `pyproject.toml` for richer PyPI presentation
+- `frontend/tsconfig.app.json` + `frontend/tsconfig.node.json` — Vite-recommended split config, now referenced from `tsconfig.json`
+- `frontend/.dockerignore` — excludes `node_modules`, tests, `static-data`, editor cruft from the frontend build context
+- `.gitattributes` — normalises line endings, marks binary extensions, pins lockfiles to `-diff`
+- `.github/FUNDING.yml` — 7 funding platforms enabled (GitHub Sponsors, Open Collective, Ko-fi, Community Bridge, Liberapay, IssueHunt, Buy Me a Coffee)
+- `.vscode/` shared team config (settings + 16 recommended extensions), kept under version control via `.gitignore` whitelist
+- `.nvmrc` (Node 20) and `.devcontainer/devcontainer.json` for one-click Codespaces
+- `.dockerignore` at repo root, Makefile with 25+ targets, examples/README now lists 50 templates
 
 ### Changed
 - README, README_CN, QUICKSTART, QUICKSTART_CN, USER_GUIDE, USER_GUIDE_CN: `4,400+` / `4407` → `4,403+` / `4403` to match the live registry count
 - `og:image` / `og:url` / `twitter:image` in `index.html` now point to the GitHub Pages CDN (`https://badhope.github.io/MCP-HUB/...`) instead of `raw.githubusercontent.com`
+- Rewrote `docs/internal/PROJECT_STRUCTURE_GUIDE.md` — was an outdated scaffold of the previous layout; now matches the actual monorepo (FastAPI backend, Vite/React frontend, `tools/`, `docs/internal/`, `.vscode/`, `.devcontainer/`, all 5 CI workflows, etc.)
+- `SUPPORT.md` now points to `docs/API.md`, `docs/internal/AGENT_GUIDE.md`, `docs/internal/FULL_SYSTEM_GUIDE.md` and `docs/QUICKSTART.md` instead of broken root-level links / a dead GitHub anchor
 
 ### Fixed
 - Star counts on the demo are now visibly labelled as a snapshot, eliminating the previous "live-looking demo with stale data" risk
+- `frontend/Dockerfile` no longer references a non-existent `tsconfig.node.json` — file is now actually shipped, and `tsconfig.json` is wired up with proper `references` so the multi-stage build can copy all three configs
+- `CHANGELOG.md`, `CHANGELOG_CN.md`, `AGENTS.md` no longer link to `AGENT_GUIDE.md` at the repo root — that file lives in `docs/internal/`, links are updated accordingly
 
 ## [2.0.1] - 2026-06-01
 
@@ -162,7 +177,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - AI query interface (`query.py`)
-- AI agent guide (`AGENT_GUIDE.md`)
+- AI agent guide (`docs/internal/AGENT_GUIDE.md`, superseded by `AGENTS.md`)
 - Test framework (`tests/`)
 - CI/CD (GitHub Actions)
 - CONTRIBUTING.md and CHANGELOG.md

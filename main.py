@@ -5,11 +5,15 @@ Modern, high-performance async API server with type safety and security features
 import os
 import json
 import threading
+import time
 import uvicorn
 from contextlib import asynccontextmanager
 from typing import Any, List, Dict, Optional
 from fastapi import FastAPI, Query, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse
 from pathlib import Path
 from pydantic import BaseModel, Field
 
@@ -171,6 +175,120 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
 )
+
+
+# ------------------------------
+# GZip Middleware - compress responses >= 1KB
+# ------------------------------
+# The catalog endpoints (servers.json ~100KB+, stats, categories) compress
+# to <15KB on the wire. Static /health and /docs responses are skipped
+# automatically by FastAPI's GZipMiddleware (responses smaller than
+# ``minimum_size`` are left untouched).
+app.add_middleware(GZipMiddleware, minimum_size=1024)
+
+
+# ------------------------------
+# Rate Limiting Middleware (in-memory token bucket per client IP)
+# ------------------------------
+# Lightweight, dependency-free protection against accidental abuse and
+# noisy scrapers. Tunable via environment variables:
+#   RATE_LIMIT_REQUESTS  - max requests per window per IP (default 120)
+#   RATE_LIMIT_WINDOW    - window length in seconds (default 60)
+#   RATE_LIMIT_DISABLED  - set to "1" to bypass the limiter (for tests)
+#
+# This is an in-process limiter intended for single-instance deployments.
+# For horizontally scaled deployments put a reverse proxy / API gateway
+# in front (nginx limit_req, Cloudflare, etc.) instead.
+class _InMemoryTokenBucket:
+    """Thread-safe per-key token bucket."""
+
+    def __init__(self, capacity: int, refill_window: float) -> None:
+        self.capacity = capacity
+        self.refill_window = refill_window
+        self._buckets: Dict[str, Dict[str, float]] = {}
+        self._lock = threading.Lock()
+
+    def take(self, key: str, cost: int = 1) -> bool:
+        now = time.monotonic()
+        with self._lock:
+            bucket = self._buckets.get(key)
+            if bucket is None:
+                bucket = {"tokens": float(self.capacity), "updated": now}
+                self._buckets[key] = bucket
+            elapsed = now - bucket["updated"]
+            # Refill at a linear rate: capacity tokens per refill_window.
+            refill = (elapsed / self.refill_window) * self.capacity
+            if refill > 0:
+                bucket["tokens"] = min(self.capacity, bucket["tokens"] + refill)
+                bucket["updated"] = now
+            if bucket["tokens"] >= cost:
+                bucket["tokens"] -= cost
+                return True
+            return False
+
+    def cleanup_expired(self) -> None:
+        """Drop buckets that have not been touched for 2x the window."""
+        now = time.monotonic()
+        threshold = self.refill_window * 2
+        with self._lock:
+            stale = [k for k, v in self._buckets.items() if now - v["updated"] > threshold]
+            for k in stale:
+                del self._buckets[k]
+
+
+_RATE_LIMIT_DISABLED = os.environ.get("RATE_LIMIT_DISABLED", "").lower() in {"1", "true", "yes"}
+_RATE_LIMIT_REQUESTS = int(os.environ.get("RATE_LIMIT_REQUESTS", "120"))
+_RATE_LIMIT_WINDOW = float(os.environ.get("RATE_LIMIT_WINDOW", "60"))
+_bucket = _InMemoryTokenBucket(
+    capacity=_RATE_LIMIT_REQUESTS,
+    refill_window=_RATE_LIMIT_WINDOW,
+)
+
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    """Per-IP token-bucket rate limiter.
+
+    Exempts:
+    - CORS preflight (OPTIONS) — they carry no payload
+    - ``/health`` and ``/`` — used by orchestrators
+    - ``/docs``, ``/redoc``, ``/openapi.json`` — interactive docs UI
+    """
+
+    EXEMPT_PATHS = {"/", "/health", "/docs", "/redoc", "/openapi.json"}
+
+    async def dispatch(self, request: Request, call_next):
+        if _RATE_LIMIT_DISABLED:
+            return await call_next(request)
+
+        if request.method == "OPTIONS" or request.url.path in self.EXEMPT_PATHS:
+            return await call_next(request)
+
+        # Pick the most specific client identifier available.
+        client_host = request.client.host if request.client else "unknown"
+        # Honour X-Forwarded-For only if we are configured to trust the
+        # upstream proxy (RATE_LIMIT_TRUST_PROXY=1). Otherwise the immediate
+        # peer is the authoritative source.
+        if os.environ.get("RATE_LIMIT_TRUST_PROXY", "").lower() in {"1", "true", "yes"}:
+            fwd = request.headers.get("x-forwarded-for")
+            if fwd:
+                client_host = fwd.split(",")[0].strip()
+
+        if not _bucket.take(client_host):
+            retry_after = int(_RATE_LIMIT_WINDOW) or 1
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "detail": "Rate limit exceeded",
+                    "limit": _RATE_LIMIT_REQUESTS,
+                    "window_seconds": int(_RATE_LIMIT_WINDOW),
+                },
+                headers={"Retry-After": str(retry_after)},
+            )
+
+        return await call_next(request)
+
+
+app.add_middleware(RateLimitMiddleware)
 
 
 # ------------------------------
@@ -1297,20 +1415,52 @@ async def export_batch_markdown(request: BatchExportRequest, data: Dict[str, Any
 
 
 # ------------------------------
-# Run Server
+# CLI entry-point (referenced by pyproject.toml [project.scripts])
 # ------------------------------
-if __name__ == "__main__":
+def cli() -> None:
+    """Console entry-point for ``mcp-hub`` / ``mcp-hub-server`` / ``mcp-market``.
+
+    Equivalent to running ``python main.py`` and forwards the same
+    ``--host`` / ``--port`` / ``--reload`` flags. Lets users install the
+    package with ``pip install mcp-hub`` and then start the server via
+    a real CLI command on their ``$PATH``.
+    """
     import argparse
-    parser = argparse.ArgumentParser(description="MCP Hub FastAPI Server")
-    parser.add_argument("--host", default=os.environ.get("HOST", "0.0.0.0"), help="Host address to bind")
-    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8080)), help="Port number")
-    parser.add_argument("--reload", action="store_true", help="Enable auto-reload (development only)")
+    import sys
+
+    parser = argparse.ArgumentParser(
+        prog="mcp-hub",
+        description="MCP Hub FastAPI Server — start the catalog API.",
+    )
+    parser.add_argument(
+        "--host",
+        default=os.environ.get("HOST", "0.0.0.0"),
+        help="Host address to bind (env: HOST)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.environ.get("PORT", "8080")),
+        help="Port number (env: PORT)",
+    )
+    parser.add_argument(
+        "--reload",
+        action="store_true",
+        help="Enable auto-reload (development only)",
+    )
     args = parser.parse_args()
-    
+
     uvicorn.run(
         "main:app",
         host=args.host,
         port=args.port,
         reload=args.reload,
-        log_level="info"
+        log_level="info",
     )
+
+
+# ------------------------------
+# Run Server
+# ------------------------------
+if __name__ == "__main__":
+    cli()

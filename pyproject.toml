@@ -9,6 +9,24 @@ authors = [
   {name = "badhope"},
 ]
 keywords = ["mcp", "model-context-protocol", "ai", "marketplace", "claude", "cursor"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Framework :: FastAPI",
+  "Typing :: Typed",
+]
 dependencies = [
   "fastapi>=0.109.0",
   "uvicorn[standard]>=0.27.0",
@@ -29,6 +47,19 @@ dev = [
   "isort",
   "pytest",
 ]
+
+[project.scripts]
+mcp-hub = "main:cli"
+mcp-hub-server = "main:cli"
+mcp-market = "main:cli"
+
+[project.urls]
+Homepage = "https://github.com/badhope/MCP-HUB"
+Repository = "https://github.com/badhope/MCP-HUB"
+Documentation = "https://github.com/badhope/MCP-HUB#-documentation"
+Issues = "https://github.com/badhope/MCP-HUB/issues"
+Changelog = "https://github.com/badhope/MCP-HUB/blob/main/CHANGELOG.md"
+"Buy Me a Coffee" = "https://buymeacoffee.com/badhope"
 
 [tool.setuptools]
 packages = ["core"]

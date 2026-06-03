@@ -8,6 +8,54 @@ Interactive docs: `/docs` (Swagger UI) and `/redoc` (ReDoc) on a running server.
 
 ---
 
+## Cross-cutting middleware
+
+These behaviours apply to every endpoint above and are not visible in the
+OpenAPI schema.
+
+### GZip compression
+
+Responses larger than **1 KB** are automatically `Content-Encoding: gzip`'d
+by FastAPI's built-in `GZipMiddleware`. The catalog payloads compress
+roughly 6–8× (e.g. `servers.json` shrinks from ~100 KB to <15 KB on the
+wire). Clients must send `Accept-Encoding: gzip` (all browsers do by
+default) to benefit.
+
+### Rate limiting
+
+A dependency-free in-process token-bucket limiter sits in front of the
+app:
+
+| Setting | Default | Env var |
+|---|---|---|
+| Capacity per client IP | 120 requests | `RATE_LIMIT_REQUESTS` |
+| Refill window | 60 seconds | `RATE_LIMIT_WINDOW` |
+| Trust `X-Forwarded-For` | off | `RATE_LIMIT_TRUST_PROXY=1` |
+| Bypass (for tests) | off | `RATE_LIMIT_DISABLED=1` |
+
+Exempt paths: `/`, `/health`, `/docs`, `/redoc`, `/openapi.json`, and
+CORS preflight (`OPTIONS`).
+
+When the limit is hit, the response is:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 60
+
+{
+  "detail": "Rate limit exceeded",
+  "limit": 120,
+  "window_seconds": 60
+}
+```
+
+For horizontally scaled deployments, terminate the limit at a reverse
+proxy / API gateway (nginx `limit_req`, Cloudflare, etc.) instead — the
+in-process bucket is per-pod.
+
+---
+
 ## Endpoints
 
 ### `GET /`

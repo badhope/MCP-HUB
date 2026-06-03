@@ -162,7 +162,7 @@
 
 ### 新增
 - AI 查询接口（`query.py`）
-- AI agent 指南（`AGENT_GUIDE.md`）
+- AI agent 指南（`docs/internal/AGENT_GUIDE.md`，由 `AGENTS.md` 取代）
 - 测试框架（`tests/`）
 - CI/CD（GitHub Actions）
 - CONTRIBUTING.md 和 CHANGELOG.md
