@@ -5,11 +5,13 @@ MCP Hub 自动化更新系统
 """
 
 import json
+import logging
 import subprocess
-import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
+
+_LOG = logging.getLogger(__name__)
 
 
 class AutoUpdater:
@@ -68,7 +70,7 @@ class AutoUpdater:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_entry = f"[{timestamp}] [{level}] {message}\n"
 
-        print(log_entry.strip())
+        _LOG.info(log_entry.strip())
 
         with open(self.log_file, "a", encoding="utf-8") as f:
             f.write(log_entry)
@@ -397,8 +399,8 @@ class AutoUpdater:
 ## 更新任务
 
 1. **同步上游索引**: {'启用' if self.load_config()['auto_update']['tasks']['sync_index'] else '禁用'}
-2. **更新质量评分**: {'启用' if self.load_config()['auto_update']['tasks']['update_quality_scores'] else '禁用'}
-3. **更新知名项目**: {'启用' if self.load_config()['auto_update']['tasks']['update_notable_projects'] else '禁用'}
+2. **更新质量评分**: {'启用' if self.load_config()['auto_update']['tasks']['update_quality_scores'] else '禁用'}  # noqa: E501
+3. **更新知名项目**: {'启用' if self.load_config()['auto_update']['tasks']['update_notable_projects'] else '禁用'}  # noqa: E501
 4. **检查下载状态**: {'启用' if self.load_config()['auto_update']['tasks']['check_downloads'] else '禁用'}
 
 ## 使用说明
@@ -437,11 +439,11 @@ def main():
     updater = AutoUpdater(base_path)
 
     if len(sys.argv) < 2:
-        print("用法:")
-        print("  python auto_updater.py run        运行更新")
-        print("  python auto_updater.py run --force  强制更新")
-        print("  python auto_updater.py status     查看状态")
-        print("  python auto_updater.py report     生成报告")
+        _LOG.info("用法:")
+        _LOG.info("  python auto_updater.py run        运行更新")
+        _LOG.info("  python auto_updater.py run --force  强制更新")
+        _LOG.info("  python auto_updater.py status     查看状态")
+        _LOG.info("  python auto_updater.py report     生成报告")
         return
 
     cmd = sys.argv[1]
@@ -454,7 +456,7 @@ def main():
         config = updater.load_config()
         last_update = updater.get_last_update_time()
 
-        print(f"""
+        _LOG.info(f"""
 MCP Hub 自动更新状态
 ========================
 
@@ -476,7 +478,7 @@ MCP Hub 自动更新状态
         report_file = base_path / "UPDATE_REPORT.md"
         with open(report_file, "w", encoding="utf-8") as f:
             f.write(report)
-        print(f"✅ 更新报告已生成: {report_file}")
+        _LOG.info(f"✅ 更新报告已生成: {report_file}")
 
 
 if __name__ == "__main__":

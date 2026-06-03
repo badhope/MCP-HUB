@@ -122,7 +122,7 @@ class TestQueryCategories:
 
     def test_categories_count(self):
         out = _run_query("categories")
-        lines = [l for l in out.strip().split("\n") if l.strip()]
+        lines = [line for line in out.strip().split("\n") if line.strip()]
         assert len(lines) > 10
 
 

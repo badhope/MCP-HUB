@@ -4,14 +4,15 @@ MCP Hub 服务器下载和模板化管理系统
 负责下载可用的 MCP 服务器并生成标准化配置模板
 """
 
-import hashlib
 import json
-import os
+import logging
 import subprocess
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+_LOG = logging.getLogger(__name__)
 
 
 @dataclass
@@ -115,7 +116,7 @@ class MCPServerDownloader:
 
                 # Python 项目
                 if language.lower() in ["python", "py"] or "requirements.txt" in source:
-                    return "uvx", [f"--from", f"git+https://github.com/{owner}/{repo}"], {}
+                    return "uvx", ["--from", f"git+https://github.com/{owner}/{repo}"], {}
 
                 # Node.js 项目
                 if language.lower() in ["javascript", "typescript", "node", "nodejs"]:
@@ -413,27 +414,27 @@ def main():
     downloader = MCPServerDownloader(base_path)
 
     if len(sys.argv) < 2:
-        print("用法:")
-        print("  python download_manager.py sync [limit]  同步服务器并生成模板")
-        print("  python download_manager.py list         列出所有已注册服务器")
-        print("  python download_manager.py download <names...>  下载指定服务器")
-        print("  python download_manager.py export <names...>  导出配置")
+        _LOG.info("用法:")
+        _LOG.info("  python download_manager.py sync [limit]  同步服务器并生成模板")
+        _LOG.info("  python download_manager.py list         列出所有已注册服务器")
+        _LOG.info("  python download_manager.py download <names...>  下载指定服务器")
+        _LOG.info("  python download_manager.py export <names...>  导出配置")
         return
 
     cmd = sys.argv[1]
 
     if cmd == "sync":
         limit = int(sys.argv[2]) if len(sys.argv) > 2 else None
-        print("🔄 正在同步服务器...")
+        _LOG.info("🔄 正在同步服务器...")
         registry = downloader.sync_from_index(base_path / "servers-index.json", limit)
-        print(f"✅ 已同步 {registry['total']} 个服务器")
-        print(f"📊 其中 {registry['downloaded']} 个已下载")
+        _LOG.info(f"✅ 已同步 {registry['total']} 个服务器")
+        _LOG.info(f"📊 其中 {registry['downloaded']} 个已下载")
 
     elif cmd == "list":
         registry = downloader.load_registry()
-        print(f"\n📦 已注册服务器: {registry['total']} 个")
-        print(f"✅ 已下载: {registry['downloaded']} 个")
-        print(f"🕐 最后同步: {registry['last_sync']}\n")
+        _LOG.info(f"\n📦 已注册服务器: {registry['total']} 个")
+        _LOG.info(f"✅ 已下载: {registry['downloaded']} 个")
+        _LOG.info(f"🕐 最后同步: {registry['last_sync']}\n")
 
         for name, data in list(registry["servers"].items())[:20]:
             status_icon = {
@@ -443,28 +444,28 @@ def main():
                 "failed": "❌",
             }.get(data["download_status"], "❓")
 
-            print(f"{status_icon} {name} ({data['quality_level']}级 {data['quality_score']}分)")
+            _LOG.info(f"{status_icon} {name} ({data['quality_level']}级 {data['quality_score']}分)")
 
     elif cmd == "download":
         if len(sys.argv) < 3:
-            print("❌ 请指定要下载的服务器名称")
+            _LOG.info("❌ 请指定要下载的服务器名称")
             return
 
         names = sys.argv[2:]
-        print(f"📥 正在下载 {len(names)} 个服务器...")
+        _LOG.info(f"📥 正在下载 {len(names)} 个服务器...")
         results = downloader.download_batch(names)
 
         for name, success in results.items():
-            print(f"{'✅' if success else '❌'} {name}")
+            _LOG.info(f"{'✅' if success else '❌'} {name}")
 
     elif cmd == "export":
         if len(sys.argv) < 3:
-            print("❌ 请指定要导出的服务器名称")
+            _LOG.info("❌ 请指定要导出的服务器名称")
             return
 
         names = sys.argv[2:]
         output = downloader.export_config(names, base_path / "exported_config.json")
-        print(f"✅ 配置已导出到: {output}")
+        _LOG.info(f"✅ 配置已导出到: {output}")
 
 
 if __name__ == "__main__":

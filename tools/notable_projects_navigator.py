@@ -5,9 +5,12 @@ MCP Hub 知名项目导航引导系统
 """
 
 import json
+import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
+
+_LOG = logging.getLogger(__name__)
 
 # 知名 MCP 相关项目分类收集
 NOTABLE_PROJECTS = {
@@ -134,7 +137,7 @@ NOTABLE_PROJECTS = {
                 "url": "https://github.com/open-webui/open-webui",
                 "categories": ["AI界面", "LLM"],
                 "features": ["ChatGPT界面", "多模型支持", "工具调用"],
-                "install": "docker run -d -p 3000:8080 -v open-webui:/app/backend/data ghcr.io/open-webui/open-webui:main",
+                "install": "docker run -d -p 3000:8080 -v open-webui:/app/backend/data ghcr.io/open-webui/open-webui:main",  # noqa: E501
                 "is_downloadable": True,
                 "is_mcp_server": False,
                 "mcp_support": True,
@@ -432,10 +435,10 @@ def generate_notable_projects_report() -> str:
                 report += f"- 📦 安装: `{project['install']}`\n"
 
             if project.get("is_mcp_server"):
-                report += f"- 🎯 **MCP Server**: 是\n"
+                report += "- 🎯 **MCP Server**: 是\n"
 
             if project.get("mcp_support"):
-                report += f"- 🔌 **MCP 支持**: 是\n"
+                report += "- 🔌 **MCP 支持**: 是\n"
 
             if project.get("categories"):
                 report += f"- 🏷️ 分类: {', '.join(project['categories'])}\n"
@@ -570,7 +573,7 @@ if __name__ == "__main__":
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
 
-    print(f"✅ 知名项目导航已生成: {report_file}")
+    _LOG.info(f"✅ 知名项目导航已生成: {report_file}")
 
     # 生成 JSON 数据
     json_data = export_notable_projects_json()
@@ -578,7 +581,7 @@ if __name__ == "__main__":
     with open(json_file, "w", encoding="utf-8") as f:
         json.dump(json_data, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ JSON 数据已生成: {json_file}")
+    _LOG.info(f"✅ JSON 数据已生成: {json_file}")
 
     # 生成导航指南
     guide = generate_navigation_guide()
@@ -586,4 +589,4 @@ if __name__ == "__main__":
     with open(guide_file, "w", encoding="utf-8") as f:
         f.write(guide)
 
-    print(f"✅ 导航指南已生成: {guide_file}")
+    _LOG.info(f"✅ 导航指南已生成: {guide_file}")

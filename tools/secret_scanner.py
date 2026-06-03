@@ -18,11 +18,14 @@ Exit codes:
 from __future__ import annotations
 
 import argparse
+import logging
 import os
 import re
 import sys
 from pathlib import Path
 from typing import Dict, List, NamedTuple
+
+_LOG = logging.getLogger(__name__)
 
 
 class Finding(NamedTuple):
@@ -51,7 +54,7 @@ PATTERNS: Dict[str, str] = {
     "Private Key (PEM)": r"-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----",
     "JWT Token (long)": r"\beyJ[A-Za-z0-9_-]{50,}\.eyJ[A-Za-z0-9_-]{50,}\.[A-Za-z0-9_-]{50,}\b",
     "Password in URL": r"://[A-Za-z0-9._%+\-]+:[A-Za-z0-9._%+\-]+@[A-Za-z0-9.-]+",
-    "Heroku API Key": r"(?i)heroku[a-z0-9_ .\-,]{0,25}(?:api[_-]?key|token)['\"\s:=]+[A-Za-z0-9-]{20,}",
+    "Heroku API Key": r"(?i)heroku[a-z0-9_ .\-,]{0,25}(?:api[_-]?key|token)['\"\s:=]+[A-Za-z0-9-]{20,}",  # noqa: E501
     "npm Auth Token": r"\b//registry\.npmjs\.org/:_authToken=[A-Za-z0-9-]{36,}\b",
     "PyPI Token": r"\bpypi-AgEIcHlwaS5vcmc[A-Za-z0-9_-]{50,}\b",
 }
@@ -198,7 +201,7 @@ def main() -> int:
         return 2
 
     if not args.quiet:
-        print(f"Scanning {root} ...")
+        _LOG.info(f"Scanning {root} ...")
 
     findings = scan(root)
     if not findings:

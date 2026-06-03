@@ -14,10 +14,13 @@ frontend `apiClient` expects.
 """
 
 import json
+import logging
 import re
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+
+_LOG = logging.getLogger(__name__)
 
 # Resolve the repo root relative to this script so the same code works
 # in the dev sandbox (where the project lives at /workspace/mcp-market)
@@ -61,7 +64,7 @@ def main() -> None:
             if isinstance(d, dict) and d.get("name"):
                 templates[d["name"]] = d
         except Exception as e:
-            print(f"  skip {p.name}: {e}")
+            _LOG.info(f"  skip {p.name}: {e}")
 
     registry = load_json(ROOT / "server_registry.json")
     registry_servers = registry.get("servers", {})
@@ -71,9 +74,7 @@ def main() -> None:
 
     market_config = load_json(ROOT / "market-config.json")
 
-    notable = load_json(ROOT / "notable_projects.json")
-
-    print(
+    _LOG.info(
         f"Loaded {len(templates)} templates, {len(registry_servers)} registry servers, "
         f"{len(projects)} comprehensive projects"
     )
@@ -91,7 +92,6 @@ def main() -> None:
 
     def to_server(name, src):
         """Map a template/registry entry to the frontend `Server` shape."""
-        tpl = templates.get(name, src)
         reg = registry_servers.get(name, {})
         proj = projects_by_name.get(name.lower())
 
@@ -421,7 +421,7 @@ def main() -> None:
         OUT_DIR / "featured-configs.json",
         {
             "names": featured_names,
-            "note": "Pre-bundled config files for the top servers. See /static-data/config/{name}.json",
+            "note": "Pre-bundled config files for the top servers. See /static-data/config/{name}.json",  # noqa: E501
         },
     )
 
@@ -453,13 +453,13 @@ def main() -> None:
         },
     )
 
-    print("---")
-    print(f"Wrote {len(servers_list)} servers, {len(templates)} configs")
-    print(f"Output: {OUT_DIR}")
-    print("Files:")
+    _LOG.info("---")
+    _LOG.info(f"Wrote {len(servers_list)} servers, {len(templates)} configs")
+    _LOG.info(f"Output: {OUT_DIR}")
+    _LOG.info("Files:")
     for p in sorted(OUT_DIR.rglob("*.json")):
         size = p.stat().st_size
-        print(f"  {p.relative_to(OUT_DIR)}  ({size} bytes)")
+        _LOG.info(f"  {p.relative_to(OUT_DIR)}  ({size} bytes)")
 
 
 if __name__ == "__main__":

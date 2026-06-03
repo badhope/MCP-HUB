@@ -4,10 +4,11 @@ MCP 服务器功能完整性评分系统
 基于完整性和功能性进行评分，而非传统的"质量"概念
 """
 
-import json
+import logging
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
+
+_LOG = logging.getLogger(__name__)
 
 
 def calculate_completeness_score(server: Dict) -> Dict[str, Any]:
@@ -436,7 +437,7 @@ if __name__ == "__main__":
     # 测试评分系统
     test_server = {
         "name": "puppeteer-mcp-server",
-        "description": "A Model Context Protocol server for Puppeteer. Provides browser automation capabilities including page navigation, screenshot capture, PDF generation, and DOM querying. Includes example usage and quick start guide.",
+        "description": "MCP server for Puppeteer. Browser automation, screenshots, PDF, DOM.",
         "npm_package": "@modelcontextprotocol/server-puppeteer",
         "source": "https://github.com/modelcontextprotocol/server-puppeteer",
         "stars": 15000,
@@ -450,33 +451,33 @@ if __name__ == "__main__":
         "license": "MIT",
     }
 
-    print("=" * 60)
-    print("MCP 服务器功能完整性评分测试")
-    print("=" * 60)
-    print()
+    _LOG.info("=" * 60)
+    _LOG.info("MCP 服务器功能完整性评分测试")
+    _LOG.info("=" * 60)
+    _LOG.info("")
 
     result = calculate_completeness_score(test_server)
 
-    print(f"服务器: {test_server['name']}")
-    print(f"总分: {result['total_score']}/100 ({result['level']}级)")
-    print()
+    _LOG.info(f"服务器: {test_server['name']}")
+    _LOG.info(f"总分: {result['total_score']}/100 ({result['level']}级)")
+    _LOG.info("")
 
-    print("评分维度:")
+    _LOG.info("评分维度:")
     for dim_name, dim_data in result["dimensions"].items():
-        print(f"  {dim_data['description']}: {dim_data['score']}/{dim_data['max']}")
+        _LOG.info(f"  {dim_data['description']}: {dim_data['score']}/{dim_data['max']}")
 
-    print()
-    print("加分项:")
+    _LOG.info("")
+    _LOG.info("加分项:")
     for factor in result["factors"]:
-        print(f"  ✅ {factor['reason']} (+{factor['value']})")
+        _LOG.info(f"  ✅ {factor['reason']} (+{factor['value']})")
 
     if result["recommendations"]:
-        print()
-        print("改进建议:")
+        _LOG.info("")
+        _LOG.info("改进建议:")
         for rec in result["recommendations"]:
-            print(f"  💡 {rec}")
+            _LOG.info(f"  💡 {rec}")
 
-    print()
-    print("=" * 60)
-    print(f"等级说明: {get_level_description(result['level'])}")
-    print("=" * 60)
+    _LOG.info("")
+    _LOG.info("=" * 60)
+    _LOG.info(f"等级说明: {get_level_description(result['level'])}")
+    _LOG.info("=" * 60)

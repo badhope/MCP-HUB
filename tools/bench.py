@@ -14,10 +14,13 @@ reproducible — same script, same machine, same Python.
 from __future__ import annotations
 
 import argparse
+import logging
 import statistics
 import sys
 import time
 import urllib.request
+
+_LOG = logging.getLogger(__name__)
 
 ENDPOINTS: list[tuple[str, str]] = [
     ("GET /", "/"),
@@ -87,30 +90,30 @@ def main() -> int:
     )
     args = p.parse_args()
 
-    print(f"# Bench at {args.host}  (n={args.n}, warmup={args.warmup})", file=sys.stderr)
-    print(f"{'Endpoint':<62} {'p50 ms':>8} {'p95 ms':>8} {'p99 ms':>8} {'body KB':>8}")
-    print("-" * 98)
+    _LOG.info(f"# Bench at {args.host}  (n={args.n}, warmup={args.warmup})", file=sys.stderr)
+    _LOG.info(f"{'Endpoint':<62} {'p50 ms':>8} {'p95 ms':>8} {'p99 ms':>8} {'body KB':>8}")
+    _LOG.info("-" * 98)
     for name, path in ENDPOINTS:
         p50, p95, p99, body_kb = bench(args.host + path, gzip=True, n=args.n, warmup=args.warmup)
-        print(f"{name:<62} {p50:>8.2f} {p95:>8.2f} {p99:>8.2f} {body_kb:>8.1f}")
-    print()
+        _LOG.info(f"{name:<62} {p50:>8.2f} {p95:>8.2f} {p99:>8.2f} {body_kb:>8.1f}")
+    _LOG.info("")
 
-    print("GZip impact on /servers?limit=200 (full catalog):")
+    _LOG.info("GZip impact on /servers?limit=200 (full catalog):")
     p50_g, _, _, kb_g = bench(
         args.host + "/servers?limit=200", gzip=True, n=max(50, args.n // 4), warmup=args.warmup
     )
     p50_p, _, _, kb_p = bench(
         args.host + "/servers?limit=200", gzip=False, n=max(50, args.n // 4), warmup=args.warmup
     )
-    print(f"  with GZip:    p50 {p50_g:5.2f} ms  wire = {kb_g:6.1f} KB")
-    print(f"  without GZip: p50 {p50_p:5.2f} ms  wire = {kb_p:6.1f} KB")
+    _LOG.info(f"  with GZip:    p50 {p50_g:5.2f} ms  wire = {kb_g:6.1f} KB")
+    _LOG.info(f"  without GZip: p50 {p50_p:5.2f} ms  wire = {kb_p:6.1f} KB")
     if kb_g > 0:
-        print(f"  ratio: {kb_p / kb_g:.1f}× smaller on the wire with GZip")
-    print()
+        _LOG.info(f"  ratio: {kb_p / kb_g:.1f}× smaller on the wire with GZip")
+    _LOG.info("")
 
-    print(f"Sustained RPS on /health ({args.sustained_seconds:.0f}s, single conn):")
+    _LOG.info(f"Sustained RPS on /health ({args.sustained_seconds:.0f}s, single conn):")
     count, elapsed = sustained_rps(args.host + "/health", args.sustained_seconds)
-    print(f"  {count} req in {elapsed:.2f}s = {count / elapsed:.0f} req/s")
+    _LOG.info(f"  {count} req in {elapsed:.2f}s = {count / elapsed:.0f} req/s")
     return 0
 
 

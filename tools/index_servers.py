@@ -10,6 +10,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List
 
+_LOG = logging.getLogger(__name__)
+
 # 分类关键词（中英文都支持）
 CATEGORY_KEYWORDS = {
     "🔤 语言模型 & AI 桥接": [
@@ -232,13 +234,13 @@ def main():
     servers_path = base_path / "servers"
 
     if not servers_path.exists():
-        print("❌ 找不到 servers 目录")
+        _LOG.info("❌ 找不到 servers 目录")
         return
 
     index = {"total_servers": 0, "categories": {}, "servers": []}
 
     # 扫描所有服务器
-    print("🔍 扫描服务器目录...")
+    _LOG.info("🔍 扫描服务器目录...")
 
     for server_dir in servers_path.iterdir():
         if not server_dir.is_dir():
@@ -278,18 +280,18 @@ def main():
         json.dump(index, f, ensure_ascii=False, indent=2)
 
     # 打印统计
-    print("\n✅ 索引完成！")
-    print(f"📦 总服务器数: {index['total_servers']}")
-    print("\n📂 分类统计:")
+    _LOG.info("\n✅ 索引完成！")
+    _LOG.info(f"📦 总服务器数: {index['total_servers']}")
+    _LOG.info("\n📂 分类统计:")
     for category, count in sorted(index["categories"].items(), key=lambda x: x[1], reverse=True):
-        print(f"   {category}: {count}")
+        _LOG.info(f"   {category}: {count}")
 
     # 保存分类目录
     catalog_path = base_path / "SERVER_CATALOG.md"
     generate_catalog(index, catalog_path)
 
-    print(f"\n📄 目录已保存: {catalog_path}")
-    print(f"📊 索引已保存: {index_path}")
+    _LOG.info(f"\n📄 目录已保存: {catalog_path}")
+    _LOG.info(f"📊 索引已保存: {index_path}")
 
 
 def generate_catalog(index, output_path):

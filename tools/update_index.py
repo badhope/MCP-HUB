@@ -7,9 +7,12 @@ Update servers-index.json:
 """
 
 import json
+import logging
 import re
 from pathlib import Path
 from typing import Dict, Tuple
+
+_LOG = logging.getLogger(__name__)
 
 BASE_PATH = Path(__file__).parent.parent
 INDEX_FILE = BASE_PATH / "servers-index.json"
@@ -48,7 +51,7 @@ OFFICIAL_SERVERS = [
         "source": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
         "source_type": "official",
         "categories": ["terminal-system", "development"],
-        "description": "Official MCP server for filesystem operations - read, write, list directories",
+        "description": "Official MCP server for filesystem operations - read, write, list directories",  # noqa: E501
         "language": "nodejs",
         "npm_package": "@modelcontextprotocol/server-filesystem",
     },
@@ -99,7 +102,7 @@ OFFICIAL_SERVERS = [
     },
     {
         "name": "sequential-thinking",
-        "source": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+        "source": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",  # noqa: E501
         "source_type": "official",
         "categories": ["ai-llm"],
         "description": "Official MCP server for sequential thinking / chain of thought",
@@ -490,14 +493,14 @@ def update_index():
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(f"Updated {len(updated_servers)} servers")
-    print(f"Categories: {len(cat_count)}")
-    print("\nSource distribution:")
+    _LOG.info(f"Updated {len(updated_servers)} servers")
+    _LOG.info(f"Categories: {len(cat_count)}")
+    _LOG.info("\nSource distribution:")
     for stype, count in sorted(source_stats.items(), key=lambda x: -x[1]):
         pct = count / len(updated_servers) * 100
-        print(f"  {stype}: {count} ({pct:.1f}%)")
+        _LOG.info(f"  {stype}: {count} ({pct:.1f}%)")
     for c, n in sorted(cat_count.items(), key=lambda x: -x[1])[:10]:
-        print(f"  {c}: {n}")
+        _LOG.info(f"  {c}: {n}")
 
 
 if __name__ == "__main__":

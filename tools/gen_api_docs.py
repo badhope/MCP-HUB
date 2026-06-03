@@ -1,8 +1,11 @@
 """Generate docs/API.md from a running FastAPI server's openapi.json."""
 
 import json
+import logging
 import sys
 import urllib.request
+
+_LOG = logging.getLogger(__name__)
 
 OUT = "docs/API.md"
 
@@ -79,7 +82,7 @@ def main() -> int:
 
     with open(OUT, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
-    print(f"wrote {OUT} ({sum(len(l) for l in lines)} chars)")
+    _LOG.info(f"wrote {OUT} ({sum(len(line) for line in lines)} chars)")
     return 0
 
 
