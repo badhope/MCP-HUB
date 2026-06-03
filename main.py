@@ -120,10 +120,20 @@ def _data_refresh_thread(app_state: Any, stop_event: threading.Event):
             if DATA_FILE.exists():
                 current_mtime = DATA_FILE.stat().st_mtime
                 if current_mtime > last_mtime:
-                    app_state.data = _load_data_from_disk()
+                    new_data = _load_data_from_disk()
+                    # Mutate in place: replacing the dict under a hot read path
+                    # can race with concurrent request handlers iterating it.
+                    existing = app_state.data
+                    existing.clear()
+                    existing.update(new_data)
                     last_mtime = current_mtime
-        except Exception:
-            pass
+        except Exception as e:
+            # Swallow + log so a transient load error doesn't kill the daemon.
+            # The next interval will retry. Don't crash the watcher.
+            import logging
+            logging.getLogger("mcp_hub.refresh").warning(
+                "data refresh skipped: %s", e
+            )
         stop_event.wait(DATA_REFRESH_INTERVAL)
 
 

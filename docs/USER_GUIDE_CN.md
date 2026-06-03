@@ -319,7 +319,6 @@ docker compose up -d --build
 | `python tools/update_index.py` | 一键：拉 → 打分 → 发布 |
 | `python tools/downloader.py awesome 10` | 从 `awesome-mcp` 拉前 10 名到 `servers/` |
 | `python tools/batch_manager.py` | 批量操作 `servers/*` |
-| `python tools/rebrand_to_mcp_hub.py` | 一次性脚本：把所有 `mcp-market` 引用改成 `MCP-HUB`（2026-06 rebrand 时用过） |
 
 ---
 

@@ -319,7 +319,6 @@ All under [`tools/`](../tools/). Run from the repo root.
 | `python tools/update_index.py` | One-shot: pull → score → publish |
 | `python tools/downloader.py awesome 10` | Download top-10 from `awesome-mcp` into `servers/` |
 | `python tools/batch_manager.py` | Bulk-apply operations across `servers/*` |
-| `python tools/rebrand_to_mcp_hub.py` | One-off: rewrite all `mcp-market` references to `MCP-HUB` (used during the 2026-06 rebrand) |
 
 ---
 
