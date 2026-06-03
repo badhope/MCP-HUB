@@ -122,8 +122,10 @@ export const Navbar = React.memo(() => {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden transition-all duration-300 overflow-hidden ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+          isOpen
+            ? 'max-h-[calc(100vh-4rem)] opacity-100'
+            : 'max-h-0 opacity-0'
         }`}
       >
         <div className="px-4 pb-4 border-t border-gray-100 bg-white">

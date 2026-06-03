@@ -4,32 +4,17 @@ import { Star, Github, Clock, Code, ArrowUpRight, CheckCircle2 } from 'lucide-re
 import { Card, CardContent, CardFooter } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { QualityBadge } from '../shared/QualityBadge';
+import { getQualityScore } from '../../lib/quality';
 import { Server } from '../../types';
-
-const getQualityScore = (server: Server): number => {
-  let score = 35;
-  if (server.stars > 5000) score += 30;
-  else if (server.stars > 1000) score += 25;
-  else if (server.stars > 100) score += 15;
-  else if (server.stars > 10) score += 8;
-  if (server.source_type === 'official') score += 15;
-  if (!server.archived) score += 10;
-  if (server.description && server.description.length > 80) score += 5;
-  if (server.categories.length > 1) score += 5;
-  if (server.topics && server.topics.length > 2) score += 5;
-  if (server.license) score += 5;
-  return Math.min(score, 100);
-};
 
 interface ServerCardProps {
   server: Server;
-  index?: number;
   selectable?: boolean;
   selected?: boolean;
   onSelect?: (name: string) => void;
 }
 
-export const ServerCard = React.memo<ServerCardProps>(({ server, index = 0, selectable = false, selected = false, onSelect }) => {
+export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = false, selected = false, onSelect }) => {
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
@@ -63,10 +48,9 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, index = 0, sele
   };
 
   return (
-    <Card 
+    <Card
       onClick={handleClick}
-      className={`cursor-pointer group card-lift card-border relative ${selected ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
-      style={{ animationDelay: `${index * 50}ms` }}
+      className={`cursor-pointer group card-lift card-border relative h-full ${selected ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
     >
       {selectable && (
         <div className="absolute top-3 right-3 z-10">
@@ -80,27 +64,27 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, index = 0, sele
         </div>
       )}
       <CardContent className="p-5 sm:p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3 sm:space-x-4">
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-start min-w-0 gap-3 sm:gap-4">
             {/* Avatar */}
-            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br ${getColorScheme(server.name)} rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br ${getColorScheme(server.name)} rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
               {getInitials(server.name)}
               {/* Glow effect on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
-            
+
             {/* Name and Owner */}
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-slate-900 text-base sm:text-lg truncate group-hover:text-primary-600 transition-colors flex items-center">
                 {server.name}
-                <ArrowUpRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300" />
+                <ArrowUpRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0" />
               </h3>
               <p className="text-sm text-slate-500 truncate">@{server.owner}</p>
             </div>
           </div>
-          
+
           {/* Stars Badge — marked as snapshot to keep the demo honest about freshness */}
-          <div className="flex flex-col items-end space-y-0.5">
+          <div className="flex flex-col items-end space-y-0.5 flex-shrink-0">
             <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-100 text-amber-600 px-2.5 py-1.5 rounded-xl group-hover:bg-amber-100 transition-colors">
               <Star className="w-4 h-4 fill-current" />
               <span className="text-sm font-semibold">{server.stars.toLocaleString()}</span>
@@ -141,21 +125,21 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, index = 0, sele
       </CardContent>
 
       {/* Footer */}
-      <CardFooter className="flex items-center justify-between py-3 sm:py-4 px-5 sm:px-6 bg-slate-50 border-t border-slate-100">
-        <div className="flex items-center space-x-3 sm:space-x-4 text-sm text-slate-500">
+      <CardFooter className="flex items-center justify-between gap-2 py-3 sm:py-4 px-4 sm:px-6 bg-slate-50 border-t border-slate-100">
+        <div className="flex items-center min-w-0 gap-3 sm:gap-4 text-sm text-slate-500">
           {server.language && (
-            <div className="flex items-center space-x-1.5">
-              <Code className="w-4 h-4" />
-              <span className="hidden xs:inline">{server.language}</span>
+            <div className="flex items-center min-w-0 gap-1.5">
+              <Code className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{server.language}</span>
             </div>
           )}
-          <div className="flex items-center space-x-1.5">
-            <Clock className="w-4 h-4" />
-            <span>{formatDate(server.updated_at)}</span>
+          <div className="flex items-center min-w-0 gap-1.5">
+            <Clock className="w-4 h-4 flex-shrink-0" />
+            <span className="truncate">{formatDate(server.updated_at)}</span>
           </div>
         </div>
-        
-        <div className="flex items-center space-x-2">
+
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           {/* Quality Badge */}
           <QualityBadge score={getQualityScore(server)} size="sm" />
           

@@ -119,7 +119,7 @@ const Companies = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">Companies &amp; Organizations</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Companies &amp; Organizations</h1>
             <p className="text-gray-600">MCP servers maintained by well-known companies and organizations</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
@@ -141,7 +141,7 @@ const Companies = React.memo(() => {
         <div className="mb-12">
           <div className="flex items-center space-x-3 mb-3">
             <Building2 size={32} className="text-primary-600" />
-            <h1 className="text-4xl font-bold text-gray-900">Companies &amp; Organizations</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Companies &amp; Organizations</h1>
           </div>
           <p className="text-gray-600 mb-6">
             MCP servers maintained by {knownCompanies.length} well-known companies and organizations worldwide

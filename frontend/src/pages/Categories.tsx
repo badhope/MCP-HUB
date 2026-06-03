@@ -76,7 +76,7 @@ const Categories = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">Browse Categories</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Browse Categories</h1>
             <p className="text-gray-600">Explore MCP servers by category</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
@@ -97,7 +97,7 @@ const Categories = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">Browse Categories</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Browse Categories</h1>
             <p className="text-gray-600">Explore MCP servers by category</p>
           </div>
           <div className="text-center py-16">
@@ -125,7 +125,7 @@ const Categories = React.memo(() => {
         <div className="mb-12">
           <div className="flex items-center space-x-3 mb-3">
             <Database size={32} className="text-primary-600" />
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Browse Categories</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Browse Categories</h1>
           </div>
           <p className="text-gray-600">
             Explore {categoryStats.length} categories of MCP servers

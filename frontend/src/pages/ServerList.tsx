@@ -11,21 +11,7 @@ import { Pagination } from '../components/shared/Pagination';
 import { BatchExportBar } from '../components/shared/BatchExportBar';
 import { Button } from '../components/ui/Button';
 import { Server } from '../types';
-
-const getQualityScore = (server: Server): number => {
-  let score = 35;
-  if (server.stars > 5000) score += 30;
-  else if (server.stars > 1000) score += 25;
-  else if (server.stars > 100) score += 15;
-  else if (server.stars > 10) score += 8;
-  if (server.source_type === 'official') score += 15;
-  if (!server.archived) score += 10;
-  if (server.description && server.description.length > 80) score += 5;
-  if (server.categories && server.categories.length > 1) score += 5;
-  if (server.topics && server.topics.length > 2) score += 5;
-  if (server.license) score += 5;
-  return Math.min(score, 100);
-};
+import { getQualityScore, QUALITY_THRESHOLDS } from '../lib/quality';
 
 const ServerList = React.memo(() => {
   const {
@@ -109,13 +95,7 @@ const ServerList = React.memo(() => {
     }
 
     if (minQuality) {
-      const thresholds: Record<string, number> = {
-        S: 80,
-        A: 65,
-        B: 50,
-        C: 35,
-      };
-      const threshold = thresholds[minQuality] || 0;
+      const threshold = QUALITY_THRESHOLDS[minQuality] || 0;
       result = result.filter((s) => getQualityScore(s) >= threshold);
     }
 
@@ -180,19 +160,23 @@ const ServerList = React.memo(() => {
       </Helmet>
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">MCP Servers</h1>
-              <p className="text-gray-600">Discover and explore {allServers.length.toLocaleString()} MCP servers</p>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">MCP Servers</h1>
+              <p className="text-gray-600">
+                Discover and explore {allServers.length.toLocaleString()} MCP servers
+              </p>
             </div>
-            <Button
-              variant={selectMode ? 'primary' : 'outline'}
-              size="sm"
-              onClick={toggleSelectMode}
-            >
-              <Download size={16} className="mr-1.5" />
-              {selectMode ? 'Cancel Export' : 'Batch Export'}
-            </Button>
+            <div className="flex-shrink-0">
+              <Button
+                variant={selectMode ? 'primary' : 'outline'}
+                size="sm"
+                onClick={toggleSelectMode}
+              >
+                <Download size={16} className="mr-1.5" />
+                {selectMode ? 'Cancel Export' : 'Batch Export'}
+              </Button>
+            </div>
           </div>
         </div>
 

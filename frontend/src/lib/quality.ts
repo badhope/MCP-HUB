@@ -1,3 +1,5 @@
+import { Server } from '../types';
+
 export interface QualityLevel {
   label: string;
   color: string;
@@ -13,3 +15,32 @@ export const getQualityLevel = (score: number): QualityLevel => {
 };
 
 export const getQualityDisplay = (score: number): QualityLevel => getQualityLevel(score);
+
+/**
+ * Single source of truth for the quality score used by cards, the list filter,
+ * and the detail page. The threshold table mirrors the brief on the About page:
+ *   4,403+ servers graded S/A/B/C/D across stars, source, maintenance, docs,
+ *   category breadth, topic breadth, and license.
+ */
+export const getQualityScore = (server: Server): number => {
+  let score = 35;
+  if (server.stars > 5000) score += 30;
+  else if (server.stars > 1000) score += 25;
+  else if (server.stars > 100) score += 15;
+  else if (server.stars > 10) score += 8;
+  if (server.source_type === 'official') score += 15;
+  if (!server.archived) score += 10;
+  if (server.description && server.description.length > 80) score += 5;
+  if (server.categories && server.categories.length > 1) score += 5;
+  if (server.topics && server.topics.length > 2) score += 5;
+  if (server.license) score += 5;
+  return Math.min(score, 100);
+};
+
+/** Letter grade → minimum score threshold, used by the ServerList filter. */
+export const QUALITY_THRESHOLDS: Record<string, number> = {
+  S: 80,
+  A: 65,
+  B: 50,
+  C: 35,
+};

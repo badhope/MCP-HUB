@@ -7,7 +7,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { QualityBadge } from '../components/shared/QualityBadge';
-import { getQualityDisplay } from '../lib/quality';
+import { getQualityScore, getQualityDisplay } from '../lib/quality';
 import { FavoritesButton } from '../components/user/FavoritesButton';
 import { RatingSection } from '../components/user/RatingSection';
 import { CommentSection } from '../components/user/CommentSection';
@@ -16,21 +16,6 @@ import { useServerConfig } from '../hooks/useServerDetail';
 import { useDownloadConfig } from '../hooks/useExport';
 import { useStats } from '../hooks/useStats';
 import { apiClient } from '../lib/api';
-
-const getQualityScore = (s: Server): number => {
-  let score = 35;
-  if (s.stars > 5000) score += 30;
-  else if (s.stars > 1000) score += 25;
-  else if (s.stars > 100) score += 15;
-  else if (s.stars > 10) score += 8;
-  if (s.source_type === 'official') score += 15;
-  if (!s.archived) score += 10;
-  if (s.description && s.description.length > 80) score += 5;
-  if (s.categories && s.categories.length > 1) score += 5;
-  if (s.topics && s.topics.length > 2) score += 5;
-  if (s.license) score += 5;
-  return Math.min(score, 100);
-};
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);

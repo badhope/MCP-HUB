@@ -34,43 +34,49 @@ export const Pagination = React.memo<PaginationProps>(({
   };
 
   return (
-    <div className="flex items-center justify-center space-x-2 mt-8">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-1"
-      >
-        <ChevronLeft size={16} />
-        <span className="hidden sm:inline">Previous</span>
-      </button>
-      
-      {getPages().map((page, index) => (
+    <nav
+      aria-label="Pagination"
+      className="flex items-center justify-center mt-8 -mx-2 px-2 overflow-x-auto scrollbar-hide"
+    >
+      <div className="inline-flex items-center gap-1.5 sm:gap-2">
         <button
-          key={index}
-          onClick={() => typeof page === 'number' && onPageChange(page)}
-          disabled={page === '...'}
-          className={`
-            px-4 py-2 rounded-lg font-medium transition-all
-            ${page === '...'
-              ? 'text-gray-400 cursor-default'
-              : page === currentPage
-                ? 'bg-gradient-to-r from-primary-600 to-accent-500 text-white shadow-md'
-                : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
-            }
-          `}
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-1 flex-shrink-0"
         >
-          {page}
+          <ChevronLeft size={16} aria-hidden="true" />
+          <span className="hidden sm:inline">Previous</span>
         </button>
-      ))}
-      
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-1"
-      >
-        <span className="hidden sm:inline">Next</span>
-        <ChevronRight size={16} />
-      </button>
-    </div>
+
+        {getPages().map((page, index) => (
+          <button
+            key={index}
+            onClick={() => typeof page === 'number' && onPageChange(page)}
+            disabled={page === '...'}
+            aria-current={page === currentPage ? 'page' : undefined}
+            className={`
+              min-w-[2.5rem] px-3 py-2 rounded-lg font-medium transition-all flex-shrink-0
+              ${page === '...'
+                ? 'text-gray-400 cursor-default border border-transparent'
+                : page === currentPage
+                  ? 'bg-gradient-to-r from-primary-600 to-accent-500 text-white shadow-md'
+                  : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
+              }
+            `}
+          >
+            {page}
+          </button>
+        ))}
+
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-1 flex-shrink-0"
+        >
+          <span className="hidden sm:inline">Next</span>
+          <ChevronRight size={16} aria-hidden="true" />
+        </button>
+      </div>
+    </nav>
   );
 });

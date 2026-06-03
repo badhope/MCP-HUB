@@ -118,7 +118,7 @@ const Favorites = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">My Favorites</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">My Favorites</h1>
             <p className="text-gray-600">Your collection of saved MCP servers</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
@@ -139,7 +139,7 @@ const Favorites = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">My Favorites</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">My Favorites</h1>
             <p className="text-gray-600">Your collection of saved MCP servers</p>
           </div>
           <div className="text-center py-16">
@@ -171,23 +171,29 @@ const Favorites = React.memo(() => {
       </Helmet>
       <div className="container mx-auto px-4">
         <div className="mb-12">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 mb-3">
-              <Heart size={32} className="text-red-500" fill="currentColor" />
-              <h1 className="text-4xl font-bold text-gray-900">My Favorites</h1>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center space-x-3 mb-3">
+                <Heart size={32} className="text-red-500" fill="currentColor" />
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">My Favorites</h1>
+              </div>
+              <p className="text-gray-600">
+                {favoriteServers.length} saved server{favoriteServers.length !== 1 ? 's' : ''}
+              </p>
             </div>
             {favoriteServers.length > 0 && (
-              <Button
-                variant={selectMode ? 'primary' : 'outline'}
-                size="sm"
-                onClick={toggleSelectMode}
-              >
-                <Download size={16} className="mr-1.5" />
-                {selectMode ? 'Cancel Export' : 'Batch Export'}
-              </Button>
+              <div className="flex-shrink-0">
+                <Button
+                  variant={selectMode ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={toggleSelectMode}
+                >
+                  <Download size={16} className="mr-1.5" />
+                  {selectMode ? 'Cancel Export' : 'Batch Export'}
+                </Button>
+              </div>
             )}
           </div>
-          <p className="text-gray-600">{favoriteServers.length} saved server{favoriteServers.length !== 1 ? 's' : ''}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

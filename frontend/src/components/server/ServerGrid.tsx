@@ -68,12 +68,11 @@ export const ServerGrid = React.memo<ServerGridProps>(({
       {servers.map((server, idx) => (
         <div
           key={server.name}
-          style={{ animationDelay: `${idx * 50}ms` }}
+          style={{ animationDelay: `${Math.min(idx, 12) * 40}ms` }}
           className="animate-slide-up"
         >
           <ServerCard
             server={server}
-            index={idx}
             selectable={selectable}
             selected={selectable && selectedServers ? selectedServers.has(server.name) : false}
             onSelect={onSelect}
