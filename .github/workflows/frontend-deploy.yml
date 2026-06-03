@@ -64,6 +64,19 @@ jobs:
       - name: Build frontend
         run: cd frontend && npm run build
 
+      - name: Add SPA fallback + nojekyll
+        # GitHub Pages serves 404.html for unknown paths, so we copy the
+        # built index.html there for client-side routing. .nojekyll tells
+        # Pages not to run files through the Jekyll preprocessor.
+        # This MUST run after `npm run build` so the copy references the
+        # same hashed asset names that index.html does. If we relied on
+        # `frontend/public/404.html` instead, that file would be a stale
+        # static copy from a previous build and would 404 on every asset
+        # it referenced.
+        run: |
+          cp frontend/dist/index.html frontend/dist/404.html
+          touch frontend/dist/.nojekyll
+
       - name: Configure git
         run: |
           git config user.name  "github-actions[bot]"
