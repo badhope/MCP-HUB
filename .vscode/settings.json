@@ -1,0 +1,90 @@
+{
+  "_about": "Per-repo editor settings for MCP Hub. Stops generated files, secrets, and secrets-adjacent JSON from ever getting auto-formatted in a way that would break the build. JSON does not allow // comments, so explanations live in _comment_* keys instead.",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+
+  "_comment_langs": "Per-language defaults.",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "isort.args": ["--profile", "black"]
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.tabSize": 2
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": false
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[makefile]": {
+    "editor.useTabStops": true
+  },
+
+  "_comment_files_search": "Files & search exclusions.",
+  "files.exclude": {
+    "**/.git": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.vite": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/servers-index.json": true,
+    "**/market-data.json": true
+  },
+
+  "_comment_lint": "Linting / testing bindings.",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+
+  "_comment_security": "Security: never allow sensitive files to be edited accidentally.",
+  "files.associations": {
+    "**/.env": "dotenv",
+    "**/.env.*": "dotenv"
+  },
+
+  "_comment_recommended": "Allow these extensions in untrusted workspaces too.",
+  "extensions.supportUntrustedWorkspaces": {
+    "ms-python.python": true,
+    "ms-python.black-formatter": true,
+    "esbenp.prettier-vscode": true,
+    "redhat.vscode-yaml": true
+  }
+}

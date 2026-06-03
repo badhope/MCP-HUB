@@ -1,0 +1,36 @@
+{
+  "_about": "GitHub Codespaces / VS Code Remote Containers config for MCP Hub. One-click: Code → Codespaces → Create codespace.",
+  "name": "MCP Hub",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  "postCreateCommand": "pip install -e '.[dev,test]' && cd frontend && npm ci",
+  "portsAttributes": {
+    "8080": {
+      "label": "FastAPI (backend)",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Vite (frontend)",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}

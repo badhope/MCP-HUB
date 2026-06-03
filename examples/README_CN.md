@@ -18,7 +18,7 @@
 
 ## 更多配置
 
-MCP Hub 提供 30 个内置配置模板，可通过 API 或 CLI 自动生成：
+MCP Hub 提供 50 个内置配置模板，可通过 API 或 CLI 自动生成：
 
 ```bash
 # API 方式
@@ -32,7 +32,7 @@ python query.py config notion
 python query.py config playwright
 ```
 
-### 内置模板列表 (30个)
+### 内置模板列表 (50个)
 
 | 分类 | 模板 | 说明 |
 |------|------|------|

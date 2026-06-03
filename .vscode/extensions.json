@@ -1,0 +1,23 @@
+{
+  "_about": "Recommended extensions for the MCP Hub codebase. VS Code will prompt to install these the first time the workspace opens.",
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.black-formatter",
+    "ms-python.isort",
+    "ms-python.flake8",
+    "ms-python.mypy-type-checker",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "ms-azuretools.vscode-docker",
+    "DavidAnson.vscode-markdownlint",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+    "GitHub.vscode-pull-request-github",
+    "EditorConfig.EditorConfig"
+  ],
+  "unwantedRecommendations": [
+    "formulahendry.auto-rename-tag"
+  ]
+}

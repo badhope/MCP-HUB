@@ -1,0 +1,70 @@
+# .dockerignore — keep the build context small and the image clean.
+# Anything that shouldn't end up inside the production image goes here.
+
+# Version control
+.git
+.gitignore
+.gitattributes
+.github
+
+# Local artefacts
+.cache
+.DS_Store
+*.log
+*.tmp
+*.swp
+.idea
+.vscode
+*.code-workspace
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+.tox
+.venv
+venv
+env/
+
+# Node / frontend
+frontend/node_modules
+frontend/dist
+frontend/.vite
+frontend/coverage
+frontend/.cache
+frontend/.npm
+frontend/.next
+frontend/.nuxt
+frontend/.parcel-cache
+
+# Data that must not be baked into the image
+# (servers-index.json is large and the runtime downloads/refreshes it)
+servers-index.json
+market-data.json
+comprehensive_mcp_projects.json
+data/
+logs/
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.crt
+
+# Documentation that is not needed at runtime
+docs/
+*.md
+!README.md
+!LICENSE
+
+# CI
+.pre-commit-config.yaml

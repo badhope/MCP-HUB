@@ -18,7 +18,7 @@ This directory contains MCP configuration examples for various AI clients.
 
 ## More Configurations
 
-MCP Hub provides 30 built-in configuration templates that can be auto-generated via API or CLI:
+MCP Hub provides 50 built-in configuration templates that can be auto-generated via API or CLI:
 
 ```bash
 # API way
@@ -32,7 +32,7 @@ python query.py config notion
 python query.py config playwright
 ```
 
-### Built-in Templates (30)
+### Built-in Templates (50)
 
 | Category | Templates | Description |
 |----------|----------|-------------|

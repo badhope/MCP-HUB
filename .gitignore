@@ -72,7 +72,14 @@ frontend/dist/
 frontend/.vite/
 
 # ─── IDE ──────────────────────────────────────────────────────────────────
+# Track shared team configs (settings.json + extensions.json) but ignore
+# machine-local files. Anything user-specific should land in
+# `.vscode/settings.local.json` (gitignored) instead.
 .vscode/
+!.vscode/settings.json
+!.vscode/settings.local.json
+!.vscode/extensions.json
+!.vscode/launch.json
 .idea/
 *.swp
 *.swo
