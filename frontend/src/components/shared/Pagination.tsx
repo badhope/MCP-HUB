@@ -48,9 +48,14 @@ export const Pagination = React.memo<PaginationProps>(({
           <span className="hidden sm:inline">Previous</span>
         </button>
 
-        {getPages().map((page, index) => (
+        {getPages().map((page) => (
+          // `key` must be the page identity, not the array index — when the
+          // user navigates the list is rebuilt and index-based keys make
+          // React reuse button instances for different page numbers, which
+          // triggers the "Each child in a list should have a unique key"
+          // warning and can mis-fire click handlers after re-renders.
           <button
-            key={index}
+            key={page === '...' ? 'ellipsis' : `page-${page}`}
             onClick={() => typeof page === 'number' && onPageChange(page)}
             disabled={page === '...'}
             aria-current={page === currentPage ? 'page' : undefined}

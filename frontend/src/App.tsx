@@ -39,15 +39,18 @@ export default function App() {
         onReset={handleReset}
       >
         <div className="min-h-screen flex flex-col">
-          {isStaticDemo && <StaticDemoBanner />}
-          <Navbar />
-          {/* Skip link for keyboard users; visually hidden until focused */}
+          {/* Skip link for keyboard users; visually hidden until focused.
+              MUST be the first focusable element in the DOM (before the
+              static-demo banner, Navbar, and any other content) so the
+              very first Tab press lands on it. */}
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none"
           >
             Skip to main content
           </a>
+          {isStaticDemo && <StaticDemoBanner />}
+          <Navbar />
           <main id="main-content" className="flex-1">
             <Suspense fallback={<PageSkeleton variant="default" />}>
               <Routes>
