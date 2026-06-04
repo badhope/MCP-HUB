@@ -15,7 +15,7 @@ const Curated = React.memo(() => {
       </Helmet>
       <div className="container mx-auto px-4">
         <div className="mb-12">
-          <div className="flex items-center space-x-3 mb-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
             <Star size={32} className="text-yellow-500" fill="currentColor" />
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Curated Picks</h1>
           </div>

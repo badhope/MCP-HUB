@@ -174,22 +174,22 @@ const ServerDetail = React.memo(() => {
                         <QualityBadge score={qualityScore} size="md" showScore />
                       </div>
                       <p className="text-gray-500">by <span className="font-medium text-gray-700">@{server.owner}</span></p>
-                      <div className="flex items-center space-x-4 mt-3">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
                         <div className="flex items-center text-amber-600">
-                          <Star size={18} className="fill-current mr-1.5" />
+                          <Star size={18} className="fill-current mr-1.5 flex-shrink-0" />
                           <span className="font-bold text-lg">{server.stars.toLocaleString()}</span>
                           <span className="ml-1.5 text-[10px] uppercase tracking-wide font-medium text-amber-700/70 self-start mt-1.5">
                             snapshot
                           </span>
                         </div>
-                        <div className="flex items-center text-gray-400">
-                          <Clock size={16} className="mr-1.5" />
-                          <span className="text-sm">{formatDate(server.updated_at)}</span>
+                        <div className="flex items-center text-gray-400 min-w-0">
+                          <Clock size={16} className="mr-1.5 flex-shrink-0" />
+                          <span className="text-sm truncate">{formatDate(server.updated_at)}</span>
                         </div>
                         {server.language && (
-                          <div className="flex items-center text-gray-400">
-                            <Code2 size={16} className="mr-1.5" />
-                            <span className="text-sm">{server.language}</span>
+                          <div className="flex items-center text-gray-400 min-w-0">
+                            <Code2 size={16} className="mr-1.5 flex-shrink-0" />
+                            <span className="text-sm truncate">{server.language}</span>
                           </div>
                         )}
                       </div>
@@ -343,9 +343,9 @@ const ServerDetail = React.memo(() => {
 
                 {activeTab === 'config' && (
                   <div>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                       <h3 className="text-sm font-semibold text-gray-500">MCP Configuration</h3>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           onClick={() => server && downloadConfigJson(server, config)}
                           disabled={downloading || !server}
@@ -423,9 +423,9 @@ const ServerDetail = React.memo(() => {
             {similarServers.length > 0 && (
               <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <TrendingUp size={18} className="text-primary-600" />
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center space-x-2 min-w-0">
+                      <TrendingUp size={18} className="text-primary-600 flex-shrink-0" />
                       <h2 className="text-lg font-bold text-gray-900">Similar Servers</h2>
                     </div>
                     <Link to={`/servers?search=${encodeURIComponent(server.name.split('-')[0] ?? '')}`} className="text-sm text-primary-600 hover:text-primary-700 font-medium">

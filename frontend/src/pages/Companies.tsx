@@ -119,11 +119,11 @@ const Companies = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Companies &amp; Organizations</h1>
+            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-3">Companies &amp; Organizations</h1>
             <p className="text-gray-600">MCP servers maintained by well-known companies and organizations</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
-            <AlertCircle size={20} />
+            <AlertCircle size={20} className="flex-shrink-0" />
             <span className="text-sm">{error.message || 'Failed to load'}</span>
           </div>
         </div>
@@ -139,9 +139,9 @@ const Companies = React.memo(() => {
       </Helmet>
       <div className="container mx-auto px-4">
         <div className="mb-12">
-          <div className="flex items-center space-x-3 mb-3">
-            <Building2 size={32} className="text-primary-600" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Companies &amp; Organizations</h1>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
+            <Building2 size={32} className="text-primary-600 flex-shrink-0" />
+            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">Companies &amp; Organizations</h1>
           </div>
           <p className="text-gray-600 mb-6">
             MCP servers maintained by {knownCompanies.length} well-known companies and organizations worldwide
@@ -160,10 +160,10 @@ const Companies = React.memo(() => {
         </div>
 
         {error && (
-          <div className="bg-amber-50 border border-amber-200 text-amber-700 px-6 py-4 rounded-xl mb-8 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <AlertCircle size={20} />
-              <span className="text-sm">{error.message || 'Error'} - Showing partial data</span>
+          <div className="bg-amber-50 border border-amber-200 text-amber-700 px-6 py-4 rounded-xl mb-8 flex items-center">
+            <div className="flex items-center space-x-3 min-w-0">
+              <AlertCircle size={20} className="flex-shrink-0" />
+              <span className="text-sm truncate">{error.message || 'Error'} - Showing partial data</span>
             </div>
           </div>
         )}
@@ -201,25 +201,25 @@ const Companies = React.memo(() => {
               return (
                 <Card key={companyId}>
                   <CardHeader>
-                    <div className="flex items-center justify-between flex-wrap gap-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg flex-shrink-0">
                           {company.name.charAt(0)}
                         </div>
-                        <div>
-                          <h2 className="text-2xl font-bold text-gray-900">{company.name}</h2>
-                          <p className="text-gray-500 text-sm">{company.description}</p>
+                        <div className="min-w-0">
+                          <h2 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{company.name}</h2>
+                          <p className="text-gray-500 text-sm truncate">{company.description}</p>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center gap-4 sm:gap-6 pl-14 sm:pl-0 flex-shrink-0">
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-gray-900">{companyServers.length}</div>
+                          <div className="text-xl sm:text-2xl font-bold text-gray-900">{companyServers.length}</div>
                           <div className="text-xs text-gray-500">servers</div>
                         </div>
                         <div className="text-right">
                           <div className="flex items-center text-amber-600">
                             <Star size={16} className="fill-current mr-1" />
-                            <span className="text-2xl font-bold">{totalStars.toLocaleString()}</span>
+                            <span className="text-xl sm:text-2xl font-bold">{totalStars.toLocaleString()}</span>
                           </div>
                           <div className="text-xs text-gray-500">total stars</div>
                         </div>

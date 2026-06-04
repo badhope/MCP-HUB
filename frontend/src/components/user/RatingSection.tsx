@@ -64,12 +64,12 @@ export const RatingSection = React.memo<RatingSectionProps>(({
   return (
     <div>
       {/* Average Rating Display */}
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="text-center">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
+        <div className="text-center sm:text-left flex-shrink-0">
           <div className="text-4xl font-bold text-gray-900">
             {averageRating > 0 ? averageRating.toFixed(1) : '--'}
           </div>
-          <div className="flex items-center justify-center mt-1">
+          <div className="flex items-center justify-center sm:justify-start mt-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
@@ -86,7 +86,7 @@ export const RatingSection = React.memo<RatingSectionProps>(({
         </div>
 
         {/* Rating Breakdown */}
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-1 w-full min-w-0">
           {[5, 4, 3, 2, 1].map((star) => {
             const count = ratingCounts[star] || 0;
             const pct = totalRatings > 0 ? (count / totalRatings) * 100 : 0;

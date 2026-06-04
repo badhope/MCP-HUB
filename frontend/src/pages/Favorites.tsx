@@ -122,7 +122,7 @@ const Favorites = React.memo(() => {
             <p className="text-gray-600">Your collection of saved MCP servers</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
-            <AlertCircle size={20} />
+            <AlertCircle size={20} className="flex-shrink-0" />
             <span className="text-sm">{error}</span>
           </div>
         </div>
@@ -173,7 +173,7 @@ const Favorites = React.memo(() => {
         <div className="mb-12">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div className="min-w-0">
-              <div className="flex items-center space-x-3 mb-3">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
                 <Heart size={32} className="text-red-500" fill="currentColor" />
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">My Favorites</h1>
               </div>

@@ -283,12 +283,12 @@ const SubmitServer = React.memo(() => {
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t">
-                <div className="flex items-center space-x-2 text-xs text-gray-400">
-                  <Info size={14} />
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t">
+                <div className="flex items-center space-x-2 text-xs text-gray-400 min-w-0">
+                  <Info size={14} className="flex-shrink-0" />
                   <span>By submitting, you confirm this server follows the MCP protocol standards.</span>
                 </div>
-                <Button type="submit" disabled={submitting} className="flex items-center space-x-2">
+                <Button type="submit" disabled={submitting} className="flex items-center space-x-2 flex-shrink-0">
                   {submitting ? (
                     <>
                       <Loader2 size={18} className="animate-spin" />

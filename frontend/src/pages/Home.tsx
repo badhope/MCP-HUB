@@ -151,7 +151,7 @@ const Home = React.memo(() => {
       </section>
 
       <section className="container mx-auto px-4 mt-12">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
           <h2 className="text-xl font-bold text-gray-900">Featured Companies</h2>
           <Link to="/companies" className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center">
             View All <ArrowRight size={14} className="ml-1" />
@@ -163,10 +163,10 @@ const Home = React.memo(() => {
       </section>
 
       <section className="container mx-auto px-4 mt-16">
-        <div className="flex items-center justify-between mb-8">
-          <div>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-8">
+          <div className="min-w-0">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-              <Star size={24} className="text-amber-500" />
+              <Star size={24} className="text-amber-500 flex-shrink-0" />
               <span>Top Rated Servers</span>
             </h2>
             <p className="text-gray-500 mt-1">Most starred MCP servers in the marketplace</p>
@@ -201,10 +201,10 @@ const Home = React.memo(() => {
       </section>
 
       <section className="container mx-auto px-4 mt-16 mb-16">
-        <div className="flex items-center justify-between mb-8">
-          <div>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-8">
+          <div className="min-w-0">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-              <Zap size={24} className="text-amber-500" />
+              <Zap size={24} className="text-amber-500 flex-shrink-0" />
               <span>Recently Updated</span>
             </h2>
             <p className="text-gray-500 mt-1">Servers with the latest updates</p>

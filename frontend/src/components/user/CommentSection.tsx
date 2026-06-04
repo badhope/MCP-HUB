@@ -104,12 +104,12 @@ export const CommentSection = React.memo<CommentSectionProps>(({
               <div className="w-10 h-10 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                 {comment.user_id.substring(0, 2).toUpperCase()}
               </div>
-              <div className="flex-1 bg-gray-50 rounded-xl px-4 py-3">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-900">{comment.user_id}</span>
-                  <span className="text-xs text-gray-400">{formatDate(comment.created_at)}</span>
+              <div className="flex-1 bg-gray-50 rounded-xl px-4 py-3 min-w-0">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                  <span className="text-sm font-medium text-gray-900 truncate min-w-0">{comment.user_id}</span>
+                  <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(comment.created_at)}</span>
                 </div>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{comment.text}</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">{comment.text}</p>
               </div>
             </div>
           ))

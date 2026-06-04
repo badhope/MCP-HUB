@@ -80,7 +80,7 @@ const Categories = React.memo(() => {
             <p className="text-gray-600">Explore MCP servers by category</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
-            <AlertCircle size={20} />
+            <AlertCircle size={20} className="flex-shrink-0" />
             <span className="text-sm">{error.message || 'Failed to load'}</span>
           </div>
         </div>
@@ -123,8 +123,8 @@ const Categories = React.memo(() => {
       </Helmet>
       <div className="container mx-auto px-4">
         <div className="mb-12">
-          <div className="flex items-center space-x-3 mb-3">
-            <Database size={32} className="text-primary-600" />
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
+            <Database size={32} className="text-primary-600 flex-shrink-0" />
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Browse Categories</h1>
           </div>
           <p className="text-gray-600">
@@ -144,7 +144,7 @@ const Categories = React.memo(() => {
               key={cat.name}
               to={`/servers?category=${encodeURIComponent(cat.name)}`}
               className="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-primary-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 card-border"
-              style={{ animationDelay: `${index * 50}ms` }}
+              style={{ animationDelay: `${Math.min(index, 12) * 40}ms` }}
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
