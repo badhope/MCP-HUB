@@ -21,8 +21,8 @@ export const Button = React.memo<ButtonProps>(({
   const variantStyles = {
     primary: 'bg-gradient-to-r from-primary-600 to-accent-500 text-white shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 hover:-translate-y-0.5 active:translate-y-0',
     secondary: 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 hover:bg-slate-800 hover:-translate-y-0.5 active:translate-y-0',
-    outline: 'bg-transparent border-2 border-slate-200 text-slate-700 hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50',
-    ghost: 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100',
+    outline: 'bg-transparent border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-primary-500 dark:hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-950/40',
+    ghost: 'bg-transparent text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800',
     glass: 'glass text-slate-700 hover:text-slate-900 hover:bg-white dark:bg-slate-900/80',
   };
 

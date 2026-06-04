@@ -19,7 +19,7 @@ export const Card = React.memo<CardProps>(({
     <div 
       onClick={onClick}
       className={`
-        bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 shadow-sm overflow-hidden
+        bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden
         ${hoverable ? 'transition-all duration-400 ease-smooth cursor-pointer' : ''}
         ${className}
       `}
@@ -35,12 +35,12 @@ interface CardHeaderProps {
   className?: string;
 }
 
-export const CardHeader = React.memo<CardHeaderProps>(({ 
-  children, 
-  className = '' 
+export const CardHeader = React.memo<CardHeaderProps>(({
+  children,
+  className = '',
 }) => {
   return (
-    <div className={`p-5 sm:p-6 border-b border-slate-100 ${className}`}>
+    <div className={`p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 ${className}`}>
       {children}
     </div>
   );
@@ -51,9 +51,9 @@ interface CardContentProps {
   className?: string;
 }
 
-export const CardContent = React.memo<CardContentProps>(({ 
-  children, 
-  className = '' 
+export const CardContent = React.memo<CardContentProps>(({
+  children,
+  className = '',
 }) => {
   return (
     <div className={`p-5 sm:p-6 ${className}`}>
@@ -67,12 +67,12 @@ interface CardFooterProps {
   className?: string;
 }
 
-export const CardFooter = React.memo<CardFooterProps>(({ 
-  children, 
-  className = '' 
+export const CardFooter = React.memo<CardFooterProps>(({
+  children,
+  className = '',
 }) => {
   return (
-    <div className={`p-5 sm:p-6 border-t border-slate-100 bg-slate-50/50 ${className}`}>
+    <div className={`p-5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 ${className}`}>
       {children}
     </div>
   );

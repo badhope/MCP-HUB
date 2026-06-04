@@ -148,10 +148,10 @@ const Categories = React.memo(() => {
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="font-semibold text-slate-900 group-hover:text-primary-600 transition-colors text-base">
+                  <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors text-base">
                     {cat.name}
                   </h3>
-                  <p className="text-sm text-slate-500 mt-1">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     {cat.total.toLocaleString()} server{cat.total !== 1 ? 's' : ''}
                     {sampleSize > 0 && cat.curated > 0 && cat.curated < cat.total && (
                       <span className="text-slate-400">

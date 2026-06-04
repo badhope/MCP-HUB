@@ -74,7 +74,7 @@ export const CommentSection = React.memo<CommentSectionProps>(({
               onKeyDown={handleKeyDown}
               placeholder="Share your experience or ask a question..."
               rows={3}
-              className="w-full px-4 py-3 border border-gray-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
             />
             <div className="flex justify-between items-center mt-2">
               <p className="text-xs text-gray-400 dark:text-slate-500">Press Enter to send, Shift+Enter for new line</p>

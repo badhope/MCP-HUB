@@ -96,7 +96,7 @@ const Home = React.memo(() => {
             <div className="flex flex-wrap gap-4">
               <Link
                 to="/servers"
-                className="inline-flex items-center space-x-2 px-8 py-4 bg-white dark:bg-slate-900 text-primary-700 font-semibold rounded-2xl hover:bg-gray-100 dark:bg-slate-800 transition-all hover:shadow-2xl hover:-translate-y-0.5"
+                className="inline-flex items-center space-x-2 px-8 py-4 bg-white dark:bg-slate-800 text-primary-700 dark:text-primary-300 font-semibold rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-all hover:shadow-2xl hover:-translate-y-0.5"
               >
                 <Database size={20} />
                 <span>Browse Servers</span>

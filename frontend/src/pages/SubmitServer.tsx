@@ -193,8 +193,8 @@ const SubmitServer = React.memo(() => {
                   onChange={(e) => handleChange('name', e.target.value)}
                   onBlur={() => handleBlur('name')}
                   placeholder="e.g., my-awesome-mcp-server"
-                  className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
-                    getFieldError('name') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
+                  className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
+                    getFieldError('name') ? 'border-red-300 bg-red-50 dark:bg-red-950/30' : 'border-gray-200 dark:border-slate-700'
                   }`}
                 />
                 <div className="flex items-center justify-between mt-1">
@@ -217,8 +217,8 @@ const SubmitServer = React.memo(() => {
                     onChange={(e) => handleChange('source', e.target.value)}
                     onBlur={() => handleBlur('source')}
                     placeholder="https://github.com/username/repo"
-                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
-                      getFieldError('source') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
+                      getFieldError('source') ? 'border-red-300 bg-red-50 dark:bg-red-950/30' : 'border-gray-200 dark:border-slate-700'
                     }`}
                   />
                 </div>
@@ -237,8 +237,8 @@ const SubmitServer = React.memo(() => {
                   onBlur={() => handleBlur('description')}
                   placeholder="Describe what this MCP server does, its main features, and how it integrates with AI assistants..."
                   rows={4}
-                  className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none transition-colors ${
-                    getFieldError('description') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
+                  className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none transition-colors ${
+                    getFieldError('description') ? 'border-red-300 bg-red-50 dark:bg-red-950/30' : 'border-gray-200 dark:border-slate-700'
                   }`}
                 />
                 <div className="flex items-center justify-between mt-1">
@@ -261,8 +261,8 @@ const SubmitServer = React.memo(() => {
                   onChange={(e) => handleChange('categories', e.target.value)}
                   onBlur={() => handleBlur('categories')}
                   placeholder="e.g., ai, database, productivity"
-                  className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
-                    getFieldError('categories') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
+                  className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
+                    getFieldError('categories') ? 'border-red-300 bg-red-50 dark:bg-red-950/30' : 'border-gray-200 dark:border-slate-700'
                   }`}
                 />
                 <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
@@ -279,7 +279,7 @@ const SubmitServer = React.memo(() => {
                   value={formData.npmPackage}
                   onChange={(e) => handleChange('npmPackage', e.target.value)}
                   placeholder="e.g., @modelcontextprotocol/server-github"
-                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 

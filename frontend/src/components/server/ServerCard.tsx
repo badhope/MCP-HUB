@@ -75,11 +75,11 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
 
             {/* Name and Owner */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-slate-900 text-base sm:text-lg truncate group-hover:text-primary-600 transition-colors flex items-center">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-base sm:text-lg truncate group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors flex items-center">
                 {server.name}
                 <ArrowUpRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0" />
               </h3>
-              <p className="text-sm text-slate-500 truncate">@{server.owner}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 truncate">@{server.owner}</p>
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
         </div>
 
         {/* Description */}
-        <p className="text-slate-600 text-sm line-clamp-2 mb-4 leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-2 mb-4 leading-relaxed">
           {server.description}
         </p>
 
@@ -125,8 +125,8 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
       </CardContent>
 
       {/* Footer */}
-      <CardFooter className="flex items-center justify-between gap-2 py-3 sm:py-4 px-4 sm:px-6 bg-slate-50 border-t border-slate-100">
-        <div className="flex items-center min-w-0 gap-3 sm:gap-4 text-sm text-slate-500">
+      <CardFooter className="flex items-center justify-between gap-2 py-3 sm:py-4 px-4 sm:px-6">
+        <div className="flex items-center min-w-0 gap-3 sm:gap-4 text-sm text-slate-500 dark:text-slate-400">
           {server.language && (
             <div className="flex items-center min-w-0 gap-1.5">
               <Code className="w-4 h-4 flex-shrink-0" />
@@ -142,25 +142,25 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           {/* Quality Badge */}
           <QualityBadge score={getQualityScore(server)} size="sm" />
-          
+
           {/* Source Type Badge */}
           {server.source_type === 'official' && (
-            <Badge 
-              variant="success" 
+            <Badge
+              variant="success"
               size="sm"
-              className="bg-accent-50 text-accent-700 border-accent-100"
+              className="bg-accent-50 text-accent-700 border-accent-100 dark:bg-accent-950/40 dark:text-accent-300 dark:border-accent-900/50"
             >
               Official
             </Badge>
           )}
-          
+
           {/* GitHub Link */}
           <a
             href={server.source}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-all duration-200"
+            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 dark:text-slate-500 dark:hover:text-white dark:hover:bg-slate-700 rounded-lg transition-all duration-200"
           >
             <Github className="w-4 h-4" />
           </a>
