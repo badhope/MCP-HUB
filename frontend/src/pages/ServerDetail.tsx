@@ -130,9 +130,9 @@ const ServerDetail = React.memo(() => {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-md mx-auto">
             <div className="w-20 h-20 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Code2 size={40} className="text-gray-300" />
+              <Code2 size={40} className="text-gray-300 dark:text-slate-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Server Not Found</h2>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Server Not Found</h1>
             <p className="text-gray-500 dark:text-slate-400 mb-6">The server &quot;{decodedName}&quot; doesn't exist or has been removed from the catalog.</p>
             <Link to="/servers" className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium">
               <ArrowLeft size={16} className="mr-1" />

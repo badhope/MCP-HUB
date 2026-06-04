@@ -17,7 +17,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "audit": "tsx scripts/visual-audit.ts"
+    "audit": "tsx scripts/visual-audit.ts",
+    "audit:contrast": "tsx scripts/dark-contrast-audit.ts",
+    "audit:prod": "tsx scripts/prod-audit.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.83.0",
