@@ -29,7 +29,7 @@ const formatDate = (dateString: string) => {
 const ServerDetail = React.memo(() => {
   const { name } = useParams<{ name: string }>();
   const decodedName = decodeURIComponent(name || '');
-  const { data: serverData } = useServers();
+  const { data: serverData, isLoading: loadingServer } = useServers();
   const { data: configData, isLoading: loadingConfig } = useServerConfig(decodedName);
   const { data: stats } = useStats();
 
@@ -104,6 +104,22 @@ const ServerDetail = React.memo(() => {
     return '';
   };
 
+  if (loadingServer) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-16">
+        <Helmet>
+          <title>Loading Server | MCP Hub</title>
+        </Helmet>
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="w-8 h-8 text-primary-500 animate-spin mb-3" aria-hidden="true" />
+            <p className="text-gray-500 text-sm">Loading server…</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!server) {
     return (
       <div className="min-h-screen bg-gray-50 py-16">
@@ -117,7 +133,7 @@ const ServerDetail = React.memo(() => {
               <Code2 size={40} className="text-gray-300" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Server Not Found</h2>
-            <p className="text-gray-500 mb-6">The server you're looking for doesn't exist or has been removed.</p>
+            <p className="text-gray-500 mb-6">The server &quot;{decodedName}&quot; doesn't exist or has been removed from the catalog.</p>
             <Link to="/servers" className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium">
               <ArrowLeft size={16} className="mr-1" />
               Back to Servers

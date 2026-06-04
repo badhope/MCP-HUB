@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { StaticDemoBanner } from "./components/layout/StaticDemoBanner";
+import { ScrollToTop } from "./components/layout/ScrollToTop";
 import { ErrorFallback } from "./components/shared/ErrorFallback";
 import { PageSkeleton } from "./components/shared/PageSkeleton";
 import { isStaticDemo } from "./lib/api";
@@ -31,6 +32,7 @@ export default function App() {
   };
   return (
     <Router basename={basename || undefined}>
+      <ScrollToTop />
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
         onError={handleError}
@@ -39,7 +41,14 @@ export default function App() {
         <div className="min-h-screen flex flex-col">
           {isStaticDemo && <StaticDemoBanner />}
           <Navbar />
-          <main className="flex-1">
+          {/* Skip link for keyboard users; visually hidden until focused */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none"
+          >
+            Skip to main content
+          </a>
+          <main id="main-content" className="flex-1">
             <Suspense fallback={<PageSkeleton variant="default" />}>
               <Routes>
                 <Route

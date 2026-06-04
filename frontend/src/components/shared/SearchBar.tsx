@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 
 interface SearchBarProps {
@@ -11,6 +11,8 @@ interface SearchBarProps {
    * `hero`: translucent dark glass, white text. Used over colored hero gradients.
    */
   variant?: 'page' | 'hero';
+  /** Debounce onChange calls. Default 200ms. Set 0 to disable. */
+  debounceMs?: number;
 }
 
 export const SearchBar = React.memo<SearchBarProps>(({
@@ -19,8 +21,27 @@ export const SearchBar = React.memo<SearchBarProps>(({
   placeholder = 'Search servers...',
   className = '',
   variant = 'page',
+  debounceMs = 200,
 }) => {
   const isHero = variant === 'hero';
+  // Local mirror so the input is responsive while the upstream value is
+  // throttled. We sync the local state whenever the upstream changes
+  // (covers the "URL has ?search=" case where the parent is the source
+  // of truth).
+  const [local, setLocal] = useState(value);
+  useEffect(() => {
+    setLocal(value);
+  }, [value]);
+  useEffect(() => {
+    if (debounceMs <= 0) return;
+    const t = setTimeout(() => {
+      if (local !== value) onChange(local);
+    }, debounceMs);
+    return () => clearTimeout(t);
+    // We intentionally only re-arm when `local` changes; `onChange` and
+    // `value` are stable references for typical consumers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [local, debounceMs]);
 
   return (
     <div className={`relative group ${className}`}>
@@ -37,8 +58,14 @@ export const SearchBar = React.memo<SearchBarProps>(({
       </div>
       <input
         type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        role="searchbox"
+        aria-label={placeholder}
+        value={local}
+        onChange={(e) => {
+          const next = e.target.value;
+          if (debounceMs <= 0) onChange(next);
+          else setLocal(next);
+        }}
         placeholder={placeholder}
         className={
           isHero
@@ -48,8 +75,7 @@ export const SearchBar = React.memo<SearchBarProps>(({
               'focus:border-white/40 focus:ring-4 focus:ring-white/10 focus:bg-white/15 ' +
               'transition-all duration-300 outline-none ' +
               'placeholder-primary-100 text-white'
-            : // Page variant: light surface, dark text. The previous version
-              // (white text on glass) was invisible on the gray list page.
+            : // Page variant: light surface, dark text.
               'w-full pl-12 sm:pl-14 pr-4 sm:pr-5 py-3 sm:py-3.5 text-base ' +
               'border border-slate-200 bg-white rounded-2xl shadow-sm ' +
               'focus:border-primary-400 focus:ring-4 focus:ring-primary-100 ' +

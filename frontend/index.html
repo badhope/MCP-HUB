@@ -93,6 +93,19 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="max-width: 32rem; margin: 4rem auto; padding: 1.5rem; font-family: system-ui, sans-serif; color: #1f2937; text-align: center;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">MCP Hub needs JavaScript</h1>
+        <p style="color: #6b7280; margin-bottom: 1rem;">
+          This site is a single-page React app. Please enable JavaScript, or
+          browse the static catalog directly:
+        </p>
+        <ul style="list-style: none; padding: 0; line-height: 2;">
+          <li><a href="https://github.com/badhope/MCP-HUB" style="color: #6366f1;">GitHub repository</a></li>
+          <li><a href="https://raw.githubusercontent.com/badhope/MCP-HUB/main/frontend/public/static-data/servers.json" style="color: #6366f1;">servers.json (raw catalog)</a></li>
+        </ul>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

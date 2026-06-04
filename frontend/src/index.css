@@ -227,35 +227,6 @@
     animation: pingSoft 2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
-  /* Reveal on scroll */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease-smooth, transform 0.6s ease-smooth;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Stagger children animation */
-  .stagger-children > * {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  .stagger-children.visible > * {
-    animation: slideUp 0.5s ease-smooth forwards;
-  }
-
-  .stagger-children.visible > *:nth-child(1) { animation-delay: 0.05s; }
-  .stagger-children.visible > *:nth-child(2) { animation-delay: 0.1s; }
-  .stagger-children.visible > *:nth-child(3) { animation-delay: 0.15s; }
-  .stagger-children.visible > *:nth-child(4) { animation-delay: 0.2s; }
-  .stagger-children.visible > *:nth-child(5) { animation-delay: 0.25s; }
-  .stagger-children.visible > *:nth-child(6) { animation-delay: 0.3s; }
-
   /* Icon hover effect */
   .icon-bounce:hover {
     animation: bounceIn 0.5s ease-smooth;

@@ -1,4 +1,5 @@
 import { Server, ServerConfig, StatsResponse, ServerListResponse } from '../types';
+import { getQualityScore, getQualityDisplay } from './quality';
 
 const API_BASE_URL = import.meta.env.PROD
   ? (import.meta.env.VITE_API_URL || '')
@@ -278,20 +279,7 @@ class ApiClient {
         const { list } = await loadServerIndex();
         let filtered = list.servers;
         if (minScore !== undefined) {
-          filtered = filtered.filter((s) => {
-            let score = 35;
-            if (s.stars > 5000) score += 30;
-            else if (s.stars > 1000) score += 25;
-            else if (s.stars > 100) score += 15;
-            else if (s.stars > 10) score += 8;
-            if (s.source_type === 'official') score += 15;
-            if (!s.archived) score += 10;
-            if (s.description && s.description.length > 80) score += 5;
-            if (s.categories && s.categories.length > 1) score += 5;
-            if (s.topics && s.topics.length > 2) score += 5;
-            if (s.license) score += 5;
-            return Math.min(score, 100) >= minScore!;
-          });
+          filtered = filtered.filter((s) => getQualityScore(s) >= minScore!);
         }
         return { total: filtered.length, servers: filtered.slice(0, limit) };
       }
@@ -319,29 +307,42 @@ class ApiClient {
         const { byName } = await loadServerIndex();
         const matched = servers
           .map((n) => byName.get(n))
-          .filter((s): s is Server => Boolean(s));
+          .filter((s): s is Server => Boolean(s))
+          .map((s) => {
+            const q = getQualityScore(s);
+            return {
+              ...s,
+              quality_score: q,
+              quality_level: getQualityDisplay(q).label,
+              // Static catalog doesn't ship a documentation score; use the
+              // description length as a rough proxy so the comparison bar
+              // isn't identical for every server.
+              documentation_score: Math.min(100, Math.floor((s.description?.length || 0) / 4)),
+            };
+          });
+
+        // Pick "best for" by the actual dimension, not just by stars.
         const byStars = [...matched].sort((a, b) => b.stars - a.stars);
+        const byQuality = [...matched].sort((a, b) => b.quality_score - a.quality_score);
         const byCategories = [...matched].sort(
           (a, b) => (b.categories?.length || 0) - (a.categories?.length || 0)
         );
+        const byDocs = [...matched].sort((a, b) => b.documentation_score - a.documentation_score);
+
         return {
           total: matched.length,
-          servers: matched.map((s) => ({
-            ...s,
-            quality_score: 0,
-            quality_level: '',
-          })),
+          servers: matched,
           best_for: {
-            stars: {
-              name: byStars[0]?.name || '',
-              value: byStars[0]?.stars || 0,
-            },
-            quality: { name: byStars[0]?.name || '', value: 0 },
+            stars: { name: byStars[0]?.name || '', value: byStars[0]?.stars || 0 },
+            quality: { name: byQuality[0]?.name || '', value: byQuality[0]?.quality_score || 0 },
             categories: {
               name: byCategories[0]?.name || '',
               value: byCategories[0]?.categories?.length || 0,
             },
-            documentation: { name: byStars[0]?.name || '', value: 0 },
+            documentation: {
+              name: byDocs[0]?.name || '',
+              value: byDocs[0]?.documentation_score || 0,
+            },
           },
         };
       }
@@ -358,31 +359,58 @@ class ApiClient {
           return { target: name, total: 0, similar_servers: [] };
         }
         const targetCats = new Set((target.categories || []).map((c) => c.toLowerCase()));
+        const targetTopics = new Set((target.topics || []).map((t) => t.toLowerCase()));
+        // Static similarity = Jaccard over (categories ∪ topics), normalized
+        // to a 0–100 score. The live API uses semantic embeddings, but
+        // shipping 0 here made the Similar Servers panel look like a bug.
+        const jaccard = (s: Server) => {
+          const cats = (s.categories || []).map((c) => c.toLowerCase());
+          const topics = (s.topics || []).map((t) => t.toLowerCase());
+          if (cats.length + topics.length === 0 && targetCats.size + targetTopics.size === 0) {
+            return 0;
+          }
+          let inter = 0;
+          for (const c of cats) if (targetCats.has(c)) inter++;
+          for (const t of topics) if (targetTopics.has(t)) inter++;
+          const union = new Set([...cats, ...topics, ...targetCats, ...targetTopics]).size;
+          return union === 0 ? 0 : Math.round((inter / union) * 100);
+        };
+
         const scored = list.servers
           .filter((s) => s.name !== name)
           .map((s) => {
-            const overlap = (s.categories || []).filter((c) =>
+            const matchingCategories = (s.categories || []).filter((c) =>
               targetCats.has(c.toLowerCase())
-            ).length;
-            return { server: s, score: overlap };
+            );
+            const matchingTopics = (s.topics || []).filter((t) =>
+              targetTopics.has(t.toLowerCase())
+            );
+            const overlap = matchingCategories.length + matchingTopics.length;
+            return { server: s, score: overlap, similarity: jaccard(s) };
           })
           .filter((x) => x.score > 0)
           .sort((a, b) => b.score - a.score || b.server.stars - a.server.stars)
           .slice(0, limit)
-          .map((x) => x.server);
+          .map((x) => {
+            const q = getQualityScore(x.server);
+            return {
+              ...x.server,
+              quality_score: q,
+              quality_level: getQualityDisplay(q).label,
+              matching_categories: (x.server.categories || []).filter((c) =>
+                targetCats.has(c.toLowerCase())
+              ),
+              matching_topics: (x.server.topics || []).filter((t) =>
+                targetTopics.has(t.toLowerCase())
+              ),
+              similarity_score: x.similarity,
+            };
+          });
+
         return {
           target: name,
           total: scored.length,
-          similar_servers: scored.map((s) => ({
-            ...s,
-            quality_score: 0,
-            quality_level: '',
-            matching_categories: (s.categories || []).filter((c) =>
-              targetCats.has(c.toLowerCase())
-            ),
-            matching_topics: [],
-            similarity_score: 0,
-          })),
+          similar_servers: scored,
         };
       }
     );
