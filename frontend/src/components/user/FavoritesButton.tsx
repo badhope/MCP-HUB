@@ -50,7 +50,7 @@ export const FavoritesButton = React.memo<FavoritesButtonProps>(({
 
   if (isStaticDemo) {
     return (
-      <div className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed" title="Favorites are disabled in the static demo. Connect a backend to enable them.">
+      <div className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-gray-500 dark:text-slate-400 cursor-not-allowed" title="Favorites are disabled in the static demo. Connect a backend to enable them.">
         <Lock size={18} />
         <span className="font-medium">Favorite (offline)</span>
       </div>
@@ -64,7 +64,7 @@ export const FavoritesButton = React.memo<FavoritesButtonProps>(({
       className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
         isFavorite
           ? 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100'
-          : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-500'
+          : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-950 hover:text-red-500'
       }`}
     >
       <Heart
@@ -74,7 +74,7 @@ export const FavoritesButton = React.memo<FavoritesButtonProps>(({
       <span className="font-medium">{isFavorite ? 'Favorited' : 'Favorite'}</span>
       {favoriteCount > 0 && (
         <span className={`text-sm px-1.5 py-0.5 rounded-full ${
-          isFavorite ? 'bg-red-100' : 'bg-gray-100'
+          isFavorite ? 'bg-red-100' : 'bg-gray-100 dark:bg-slate-800'
         }`}>
           {favoriteCount}
         </span>

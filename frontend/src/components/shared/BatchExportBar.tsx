@@ -25,7 +25,7 @@ export const BatchExportBar = React.memo<BatchExportBarProps>(({
   const allSelected = selectedServers.length === totalCount;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50 animate-slide-up">
+    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 shadow-2xl z-50 animate-slide-up">
       <div className="px-3 sm:px-4 py-2 sm:py-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
           <div className="flex items-center justify-between sm:justify-start sm:space-x-4">
@@ -33,11 +33,11 @@ export const BatchExportBar = React.memo<BatchExportBarProps>(({
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary-100 rounded-lg flex items-center justify-center">
                 <CheckSquare size={14} className="sm:size-4 text-primary-600" />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-gray-900">
+              <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
                 {selectedServers.length} selected
               </span>
             </div>
-            <div className="hidden sm:block h-5 w-px bg-gray-200" />
+            <div className="hidden sm:block h-5 w-px bg-gray-200 dark:bg-slate-800" />
             <button
               onClick={allSelected ? onDeselectAll : onSelectAll}
               className="text-xs sm:text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -46,7 +46,7 @@ export const BatchExportBar = React.memo<BatchExportBarProps>(({
             </button>
             <button
               onClick={onClearSelection}
-              className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 ml-2 sm:ml-0"
+              className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-200 ml-2 sm:ml-0"
             >
               Clear
             </button>
@@ -79,7 +79,7 @@ export const BatchExportBar = React.memo<BatchExportBarProps>(({
             </Button>
             <button
               onClick={onClearSelection}
-              className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all flex-shrink-0"
+              className="p-1.5 sm:p-2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:bg-slate-800 rounded-lg transition-all flex-shrink-0"
             >
               <X size={18} />
             </button>

@@ -23,7 +23,7 @@ export const Button = React.memo<ButtonProps>(({
     secondary: 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 hover:bg-slate-800 hover:-translate-y-0.5 active:translate-y-0',
     outline: 'bg-transparent border-2 border-slate-200 text-slate-700 hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50',
     ghost: 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100',
-    glass: 'glass text-slate-700 hover:text-slate-900 hover:bg-white/80',
+    glass: 'glass text-slate-700 hover:text-slate-900 hover:bg-white dark:bg-slate-900/80',
   };
 
   const sizeStyles = {

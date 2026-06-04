@@ -20,7 +20,7 @@ export const StaticDemoBanner: React.FC = () => {
 
   return (
     <div
-      className="bg-amber-50 border-b border-amber-200 text-amber-900"
+      className="bg-amber-50 border-b border-amber-200 text-amber-900 dark:bg-amber-950/40 dark:border-amber-900/50 dark:text-amber-100"
       role="status"
       aria-live="polite"
     >

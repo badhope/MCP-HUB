@@ -6,7 +6,7 @@ import { Card, CardContent } from '../components/ui/Card';
 
 const About = React.memo(() => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       <Helmet>
         <title>About MCP Hub</title>
         <meta name="description" content="MCP Hub is the central hub for discovering and sharing MCP servers for AI applications." />
@@ -15,8 +15,8 @@ const About = React.memo(() => {
       <section className="relative overflow-hidden bg-gradient-to-br from-primary-600 via-violet-600 to-accent-600 py-20">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-          <div className="hero-orb w-96 h-96 bg-white top-0 -left-20 opacity-10 float-slow"></div>
-          <div className="hero-orb w-96 h-96 bg-white bottom-0 -right-20 opacity-10 float" style={{ animationDelay: '-2s' }}></div>
+          <div className="hero-orb w-96 h-96 bg-white dark:bg-slate-900 top-0 -left-20 opacity-10 float-slow"></div>
+          <div className="hero-orb w-96 h-96 bg-white dark:bg-slate-900 bottom-0 -right-20 opacity-10 float" style={{ animationDelay: '-2s' }}></div>
         </div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">About MCP Hub</h1>
@@ -30,8 +30,8 @@ const About = React.memo(() => {
       <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h2>
+            <p className="text-lg text-gray-600 dark:text-slate-300 leading-relaxed">
               MCP Hub aims to be the central hub for the MCP ecosystem, making it easy for developers and AI enthusiasts to discover, evaluate, and integrate high-quality MCP servers into their projects.
             </p>
           </div>
@@ -49,8 +49,8 @@ const About = React.memo(() => {
                     <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-accent-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <Icon size={32} className="text-primary-600" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-gray-600">{item.desc}</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                    <p className="text-gray-600 dark:text-slate-300">{item.desc}</p>
                   </CardContent>
                 </Card>
               );
@@ -60,9 +60,9 @@ const About = React.memo(() => {
       </section>
 
       {/* Features */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Key Features</h2>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">Key Features</h2>
           <div className="space-y-8">
             {[
               { icon: Shield, title: 'Smart Quality Scoring', desc: 'Every server is evaluated across four dimensions: functionality, documentation, maintenance activity, and community support. Scores range from D to S level.' },
@@ -72,13 +72,13 @@ const About = React.memo(() => {
             ].map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="flex items-start space-x-4 p-6 rounded-xl bg-gray-50 hover:bg-primary-50 transition-colors">
+                <div key={i} className="flex items-start space-x-4 p-6 rounded-xl bg-gray-50 dark:bg-slate-950 hover:bg-primary-50 transition-colors">
                   <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Icon size={24} className="text-primary-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.title}</h3>
-                    <p className="text-gray-600">{item.desc}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                    <p className="text-gray-600 dark:text-slate-300">{item.desc}</p>
                   </div>
                 </div>
               );
@@ -90,7 +90,7 @@ const About = React.memo(() => {
       {/* Tech Stack */}
       <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Technology Stack</h2>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">Technology Stack</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { name: 'React 18', role: 'Frontend Framework' },
@@ -104,8 +104,8 @@ const About = React.memo(() => {
             ].map((tech, i) => (
               <Card key={i} hoverable>
                 <CardContent className="p-6 text-center">
-                  <h3 className="font-bold text-gray-900 mb-1">{tech.name}</h3>
-                  <p className="text-sm text-gray-500">{tech.role}</p>
+                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">{tech.name}</h3>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{tech.role}</p>
                 </CardContent>
               </Card>
             ))}
@@ -126,7 +126,7 @@ const About = React.memo(() => {
               Browse Servers
             </Button>
             <a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="text-white border-white/30 hover:bg-white/20">
+              <Button variant="outline" className="text-white border-white/30 hover:bg-white dark:bg-slate-900/20">
                 <Github className="w-5 h-5 mr-2" />
                 MCP on GitHub
                 <ExternalLink className="w-4 h-4 ml-2" />

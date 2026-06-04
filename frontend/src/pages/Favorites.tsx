@@ -79,28 +79,28 @@ const Favorites = React.memo(() => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>My Favorites | MCP Hub</title>
           <meta name="description" content="Your collection of saved MCP servers for quick access." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <div className="h-8 w-64 bg-gray-200 rounded-lg animate-pulse mb-3" />
-            <div className="h-5 w-96 bg-gray-200 rounded-lg animate-pulse" />
+            <div className="h-8 w-64 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse mb-3" />
+            <div className="h-5 w-96 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 animate-pulse">
+              <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl p-5 animate-pulse">
                 <div className="flex items-start mb-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-xl" />
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-slate-800 rounded-xl" />
                   <div className="ml-3 flex-1">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                    <div className="h-4 bg-gray-200 dark:bg-slate-800 rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded w-1/2" />
                   </div>
                 </div>
-                <div className="h-3 bg-gray-200 rounded mb-2" />
-                <div className="h-3 bg-gray-200 rounded w-2/3" />
+                <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded mb-2" />
+                <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded w-2/3" />
               </div>
             ))}
           </div>
@@ -111,15 +111,15 @@ const Favorites = React.memo(() => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>My Favorites | MCP Hub</title>
           <meta name="description" content="Your collection of saved MCP servers for quick access." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">My Favorites</h1>
-            <p className="text-gray-600">Your collection of saved MCP servers</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">My Favorites</h1>
+            <p className="text-gray-600 dark:text-slate-300">Your collection of saved MCP servers</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
             <AlertCircle size={20} className="flex-shrink-0" />
@@ -132,22 +132,22 @@ const Favorites = React.memo(() => {
 
   if (favoriteServers.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>My Favorites | MCP Hub</title>
           <meta name="description" content="Your collection of saved MCP servers for quick access." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">My Favorites</h1>
-            <p className="text-gray-600">Your collection of saved MCP servers</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">My Favorites</h1>
+            <p className="text-gray-600 dark:text-slate-300">Your collection of saved MCP servers</p>
           </div>
           <div className="text-center py-16">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
               <Heart size={40} className="text-gray-300" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">No Favorites Yet</h2>
-            <p className="text-gray-500 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Favorites Yet</h2>
+            <p className="text-gray-500 dark:text-slate-400 mb-6">
               Start exploring servers and save your favorites for quick access.
             </p>
             <Link
@@ -164,7 +164,7 @@ const Favorites = React.memo(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
       <Helmet>
         <title>My Favorites | MCP Hub</title>
         <meta name="description" content="Your collection of saved MCP servers for quick access." />
@@ -175,9 +175,9 @@ const Favorites = React.memo(() => {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
                 <Heart size={32} className="text-red-500" fill="currentColor" />
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">My Favorites</h1>
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">My Favorites</h1>
               </div>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-slate-300">
                 {favoriteServers.length} saved server{favoriteServers.length !== 1 ? 's' : ''}
               </p>
             </div>
@@ -208,7 +208,7 @@ const Favorites = React.memo(() => {
               {!selectMode && (
                 <button
                   onClick={() => removeFavorite(server.name)}
-                  className="absolute top-3 right-3 p-2 bg-white rounded-xl shadow-md hover:bg-red-50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
+                  className="absolute top-3 right-3 p-2 bg-white dark:bg-slate-900 rounded-xl shadow-md hover:bg-red-50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
                   title="Remove from favorites"
                 >
                   <Heart size={16} fill="currentColor" className="text-red-500" />

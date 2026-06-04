@@ -39,25 +39,25 @@ const Categories = React.memo(() => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>Browse Categories | MCP Hub</title>
           <meta name="description" content="Explore MCP servers by category. Find the right MCP server for your AI application needs." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <div className="h-8 w-64 bg-gray-200 rounded-lg animate-pulse mb-3"></div>
-            <div className="h-5 w-96 bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 w-64 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse mb-3"></div>
+            <div className="h-5 w-96 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+              <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl p-6 animate-pulse">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="h-6 bg-gray-200 rounded w-2/3 mb-3"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-6 bg-gray-200 dark:bg-slate-800 rounded w-2/3 mb-3"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-slate-800 rounded w-1/2"></div>
                   </div>
-                  <div className="w-12 h-12 bg-gray-200 rounded-xl"></div>
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-slate-800 rounded-xl"></div>
                 </div>
               </div>
             ))}
@@ -69,15 +69,15 @@ const Categories = React.memo(() => {
 
   if (error && categoryStats.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>Browse Categories | MCP Hub</title>
           <meta name="description" content="Explore MCP servers by category. Find the right MCP server for your AI application needs." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Browse Categories</h1>
-            <p className="text-gray-600">Explore MCP servers by category</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">Browse Categories</h1>
+            <p className="text-gray-600 dark:text-slate-300">Explore MCP servers by category</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
             <AlertCircle size={20} className="flex-shrink-0" />
@@ -90,22 +90,22 @@ const Categories = React.memo(() => {
 
   if (categoryStats.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>Browse Categories | MCP Hub</title>
           <meta name="description" content="Explore MCP servers by category. Find the right MCP server for your AI application needs." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Browse Categories</h1>
-            <p className="text-gray-600">Explore MCP servers by category</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">Browse Categories</h1>
+            <p className="text-gray-600 dark:text-slate-300">Explore MCP servers by category</p>
           </div>
           <div className="text-center py-16">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
               <Database size={40} className="text-gray-300" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">No Categories Found</h2>
-            <p className="text-gray-500 mb-6">No categories were found in the database</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Categories Found</h2>
+            <p className="text-gray-500 dark:text-slate-400 mb-6">No categories were found in the database</p>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@ const Categories = React.memo(() => {
   const sampleSize = stats?.sample_size || 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
       <Helmet>
         <title>Browse Categories | MCP Hub</title>
         <meta name="description" content="Explore MCP servers by category. Find the right MCP server for your AI application needs." />
@@ -125,12 +125,12 @@ const Categories = React.memo(() => {
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
             <Database size={32} className="text-primary-600 flex-shrink-0" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Browse Categories</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Browse Categories</h1>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Explore {categoryStats.length} categories of MCP servers
             {sampleSize > 0 && (
-              <span className="text-gray-400">
+              <span className="text-gray-400 dark:text-slate-500">
                 {' '}
                 · {servers.length} curated in this demo
               </span>
@@ -143,7 +143,7 @@ const Categories = React.memo(() => {
             <Link
               key={cat.name}
               to={`/servers?category=${encodeURIComponent(cat.name)}`}
-              className="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-primary-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 card-border"
+              className="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 hover:border-primary-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 card-border"
               style={{ animationDelay: `${Math.min(index, 12) * 40}ms` }}
             >
               <div className="flex items-start justify-between mb-4">
@@ -175,8 +175,8 @@ const Categories = React.memo(() => {
           ))}
         </div>
         {sampleSize > 0 && (
-          <p className="mt-6 text-xs text-gray-500 flex items-center gap-1.5">
-            <Info size={12} className="text-gray-400" />
+          <p className="mt-6 text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1.5">
+            <Info size={12} className="text-gray-400 dark:text-slate-500" />
             Bar widths are proportional to the full {stats?.total_servers.toLocaleString()}-server registry
             count, not the curated sample.
           </p>

@@ -6,14 +6,15 @@
   html {
     @apply scroll-smooth;
   }
-  
+
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-200;
+    @apply dark:bg-slate-950 dark:text-slate-100;
     font-family: 'Inter', system-ui, sans-serif;
   }
-  
+
   * {
-    @apply border-slate-200;
+    @apply border-slate-200 dark:border-slate-800;
   }
 }
 

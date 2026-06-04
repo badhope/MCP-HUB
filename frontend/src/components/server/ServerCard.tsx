@@ -57,7 +57,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
           <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
             selected
               ? 'bg-primary-500 border-primary-500 text-white'
-              : 'border-gray-300 bg-white group-hover:border-primary-400'
+              : 'border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 group-hover:border-primary-400'
           }`}>
             {selected && <CheckCircle2 size={14} />}
           </div>

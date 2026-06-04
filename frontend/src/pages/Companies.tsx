@@ -79,28 +79,28 @@ const Companies = React.memo(() => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>Companies &amp; Organizations | MCP Hub</title>
           <meta name="description" content="MCP servers maintained by well-known companies and organizations worldwide." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <div className="h-8 w-64 bg-gray-200 rounded-lg animate-pulse mb-3"></div>
-            <div className="h-5 w-96 bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 w-64 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse mb-3"></div>
+            <div className="h-5 w-96 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+              <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl p-6 animate-pulse">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-14 h-14 bg-gray-200 rounded-2xl"></div>
-                  <div className="w-16 h-8 bg-gray-200 rounded-lg"></div>
+                  <div className="w-14 h-14 bg-gray-200 dark:bg-slate-800 rounded-2xl"></div>
+                  <div className="w-16 h-8 bg-gray-200 dark:bg-slate-800 rounded-lg"></div>
                 </div>
-                <div className="h-5 bg-gray-200 rounded w-2/3 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                <div className="h-5 bg-gray-200 dark:bg-slate-800 rounded w-2/3 mb-2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-slate-800 rounded w-full mb-4"></div>
                 <div className="flex gap-2 mb-3">
-                  <div className="h-6 bg-gray-200 rounded-full w-20"></div>
-                  <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                  <div className="h-6 bg-gray-200 dark:bg-slate-800 rounded-full w-20"></div>
+                  <div className="h-6 bg-gray-200 dark:bg-slate-800 rounded-full w-16"></div>
                 </div>
               </div>
             ))}
@@ -112,15 +112,15 @@ const Companies = React.memo(() => {
 
   if (error && companyMap.size === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
         <Helmet>
           <title>Companies &amp; Organizations | MCP Hub</title>
           <meta name="description" content="MCP servers maintained by well-known companies and organizations worldwide." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-3">Companies &amp; Organizations</h1>
-            <p className="text-gray-600">MCP servers maintained by well-known companies and organizations</p>
+            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">Companies &amp; Organizations</h1>
+            <p className="text-gray-600 dark:text-slate-300">MCP servers maintained by well-known companies and organizations</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
             <AlertCircle size={20} className="flex-shrink-0" />
@@ -132,7 +132,7 @@ const Companies = React.memo(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
       <Helmet>
         <title>Companies &amp; Organizations | MCP Hub</title>
         <meta name="description" content="MCP servers maintained by well-known companies and organizations worldwide." />
@@ -141,20 +141,20 @@ const Companies = React.memo(() => {
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
             <Building2 size={32} className="text-primary-600 flex-shrink-0" />
-            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">Companies &amp; Organizations</h1>
+            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white">Companies &amp; Organizations</h1>
           </div>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-slate-300 mb-6">
             MCP servers maintained by {knownCompanies.length} well-known companies and organizations worldwide
           </p>
 
           <div className="relative max-w-md">
-            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search companies..."
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -170,13 +170,13 @@ const Companies = React.memo(() => {
 
         {filteredCompanies.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
               <Building2 size={40} className="text-gray-300" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {searchQuery ? 'No Companies Found' : 'No Company Servers Found'}
             </h2>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-500 dark:text-slate-400 mb-6">
               {searchQuery
                 ? `No companies matching "${searchQuery}" were found`
                 : 'No servers associated with known companies were found in the database'}
@@ -207,21 +207,21 @@ const Companies = React.memo(() => {
                           {company.name.charAt(0)}
                         </div>
                         <div className="min-w-0">
-                          <h2 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{company.name}</h2>
-                          <p className="text-gray-500 text-sm truncate">{company.description}</p>
+                          <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">{company.name}</h2>
+                          <p className="text-gray-500 dark:text-slate-400 text-sm truncate">{company.description}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 sm:gap-6 pl-14 sm:pl-0 flex-shrink-0">
                         <div className="text-right">
-                          <div className="text-xl sm:text-2xl font-bold text-gray-900">{companyServers.length}</div>
-                          <div className="text-xs text-gray-500">servers</div>
+                          <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{companyServers.length}</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-400">servers</div>
                         </div>
                         <div className="text-right">
                           <div className="flex items-center text-amber-600">
                             <Star size={16} className="fill-current mr-1" />
                             <span className="text-xl sm:text-2xl font-bold">{totalStars.toLocaleString()}</span>
                           </div>
-                          <div className="text-xs text-gray-500">total stars</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-400">total stars</div>
                         </div>
                       </div>
                     </div>
@@ -232,15 +232,15 @@ const Companies = React.memo(() => {
                         <Link
                           key={server.name}
                           to={`/servers/${encodeURIComponent(server.name)}`}
-                          className="block p-4 border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-primary-100 transition-all duration-200"
+                          className="block p-4 border border-gray-100 dark:border-slate-800 rounded-xl hover:bg-gray-50 dark:bg-slate-950 hover:border-primary-100 transition-all duration-200"
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-gray-900 truncate group-hover:text-primary-600 transition-colors flex items-center">
+                              <h3 className="font-semibold text-gray-900 dark:text-white truncate group-hover:text-primary-600 transition-colors flex items-center">
                                 {server.name}
                                 <ExternalLink size={12} className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                               </h3>
-                              <p className="text-sm text-gray-500 line-clamp-2 mt-1">{server.description}</p>
+                              <p className="text-sm text-gray-500 dark:text-slate-400 line-clamp-2 mt-1">{server.description}</p>
                               <div className="flex items-center space-x-2 mt-2">
                                 <div className="flex items-center text-amber-600 text-xs">
                                   <Star size={12} className="fill-current mr-0.5" />
@@ -264,13 +264,13 @@ const Companies = React.memo(() => {
                       {companyServers.length > 6 && (
                         <Link
                           to={`/servers?search=${encodeURIComponent(company.keyword)}`}
-                          className="block p-4 border border-dashed border-gray-200 rounded-xl hover:border-primary-200 hover:bg-primary-50 transition-all duration-200 text-center flex items-center justify-center"
+                          className="block p-4 border border-dashed border-gray-200 dark:border-slate-800 rounded-xl hover:border-primary-200 hover:bg-primary-50 transition-all duration-200 text-center flex items-center justify-center"
                         >
                           <div>
                             <div className="text-primary-600 font-semibold">
                               +{companyServers.length - 6} more
                             </div>
-                            <div className="text-xs text-gray-500">View all</div>
+                            <div className="text-xs text-gray-500 dark:text-slate-400">View all</div>
                           </div>
                         </Link>
                       )}

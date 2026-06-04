@@ -20,7 +20,7 @@ export const Footer = React.memo(() => {
               </div>
               <span className="text-xl font-bold text-white">MCP Hub</span>
             </Link>
-            <p className="text-sm text-gray-400 mb-4 leading-relaxed">
+            <p className="text-sm text-gray-400 dark:text-slate-500 mb-4 leading-relaxed">
               The comprehensive marketplace for discovering and sharing MCP servers. 
               Empowering developers to build better AI integrations.
             </p>
@@ -85,10 +85,10 @@ export const Footer = React.memo(() => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-slate-400">
               &copy; {currentYear} MCP Hub. Built with <Heart size={10} className="inline text-red-500 fill-current" /> for the MCP community.
             </p>
-            <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-slate-400">
               <Link to="/about" className="hover:text-white transition-colors">About</Link>
               <span>&middot;</span>
               <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer" 

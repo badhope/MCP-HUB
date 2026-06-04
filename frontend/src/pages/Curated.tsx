@@ -8,7 +8,7 @@ const Curated = React.memo(() => {
   const { data: servers = [], isLoading, error, refetch } = useCuratedServers(50);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
       <Helmet>
         <title>Curated Picks | MCP Hub</title>
         <meta name="description" content="High-quality, carefully selected MCP servers hand-picked by our team." />
@@ -17,9 +17,9 @@ const Curated = React.memo(() => {
         <div className="mb-12">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
             <Star size={32} className="text-yellow-500" fill="currentColor" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Curated Picks</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Curated Picks</h1>
           </div>
-          <p className="text-gray-600">High-quality, carefully selected MCP servers</p>
+          <p className="text-gray-600 dark:text-slate-300">High-quality, carefully selected MCP servers</p>
         </div>
 
         {error && (

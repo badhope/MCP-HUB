@@ -30,6 +30,14 @@ const VIEWPORTS: { name: string; size: ViewportSize }[] = [
   { name: '1280', size: { width: 1280, height: 800 } }, // desktop
 ];
 
+// `light` = no system pref + light theme; `dark` = prefers-color-scheme:dark
+// + localStorage('mcp-hub-theme')=dark. Each combination produces its own
+// screenshot, so we can spot contrast/overflow bugs unique to dark mode.
+const COLOR_SCHEMES = [
+  { name: 'light', colorScheme: 'light' as const, localStorage: null as string | null },
+  { name: 'dark', colorScheme: 'dark' as const, localStorage: 'dark' },
+];
+
 const PAGES = [
   { name: 'home', path: '/' },
   { name: 'servers', path: '/servers' },
@@ -45,9 +53,34 @@ const ISSUES: { kind: string; page: string; viewport: string; detail: string }[]
 
 const log = (...args: unknown[]) => console.log('[audit]', ...args);
 
-async function capturePage(browser: Browser, pageName: string, pagePath: string, vp: { name: string; size: ViewportSize }) {
-  const ctx = await browser.newContext({ viewport: vp.size, deviceScaleFactor: 1 });
+async function capturePage(
+  browser: Browser,
+  pageName: string,
+  pagePath: string,
+  vp: { name: string; size: ViewportSize },
+  scheme: { name: string; colorScheme: 'light' | 'dark'; localStorage: string | null }
+) {
+  const ctx = await browser.newContext({
+    viewport: vp.size,
+    deviceScaleFactor: 1,
+    colorScheme: scheme.colorScheme,
+  });
   const page = await ctx.newPage();
+  // If the user has explicitly chosen a theme, set it before the FOUC
+  // script runs by priming localStorage on the first navigation.
+  if (scheme.localStorage) {
+    await ctx.addInitScript(
+      ([k, v]) => {
+        try {
+          window.localStorage.setItem(k, v);
+        } catch {
+          // localStorage may be unavailable in some browser contexts;
+          // the FOUC script tolerates this, so it's safe to no-op.
+        }
+      },
+      ['mcp-hub-theme', scheme.localStorage]
+    );
+  }
   const consoleErrors: string[] = [];
   const pageErrors: string[] = [];
   const failedRequests: { url: string; status: number }[] = [];
@@ -190,9 +223,33 @@ async function capturePage(browser: Browser, pageName: string, pagePath: string,
   }
 
   // Take a full-page screenshot
-  const file = path.join(OUT_DIR, `${pageName}_${vp.name}.png`);
+  const file = path.join(OUT_DIR, `${pageName}_${vp.name}_${scheme.name}.png`);
   await page.screenshot({ path: file, fullPage: true });
-  log(`  ${vp.name.padEnd(4)} ${pageName.padEnd(12)} ${file}`);
+  log(`  ${vp.name.padEnd(4)} ${pageName.padEnd(12)} (${scheme.name}) ${file}`);
+
+  // Sanity-check the dark-mode toggle actually applied: the <html> element
+  // should have the `dark` class when the scheme is dark, and shouldn't
+  // when it's light. This catches the FOUC-prevention script silently
+  // failing (e.g. localStorage blocked, body bg never flips).
+  const hasDarkClass = await page.evaluate(() =>
+    document.documentElement.classList.contains('dark')
+  );
+  if (scheme.name === 'dark' && !hasDarkClass) {
+    ISSUES.push({
+      kind: 'dark-mode-not-applied',
+      page: pageName,
+      viewport: vp.name,
+      detail: '<html> is missing the `dark` class in dark-mode audit',
+    });
+  }
+  if (scheme.name === 'light' && hasDarkClass) {
+    ISSUES.push({
+      kind: 'dark-mode-leaked',
+      page: pageName,
+      viewport: vp.name,
+      detail: '<html> has `dark` class in light-mode audit',
+    });
+  }
 
   await ctx.close();
 }
@@ -287,8 +344,10 @@ async function main() {
   try {
     log('=== viewport sweep ===');
     for (const vp of VIEWPORTS) {
-      for (const p of PAGES) {
-        await capturePage(browser, p.name, p.path, vp);
+      for (const scheme of COLOR_SCHEMES) {
+        for (const p of PAGES) {
+          await capturePage(browser, p.name, p.path, vp, scheme);
+        }
       }
     }
     log('=== not-found state ===');

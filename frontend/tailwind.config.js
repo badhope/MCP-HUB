@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
+  // Class-based dark mode: <html class="dark"> enables the dark: variants.
+  // The class is set by the FOUC-prevention script in index.html and toggled
+  // at runtime by the useTheme hook.
+  darkMode: 'class',
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     container: {

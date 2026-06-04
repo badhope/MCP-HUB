@@ -153,7 +153,7 @@ const ServerList = React.memo(() => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">
       <Helmet>
         <title>All MCP Servers | MCP Hub</title>
         <meta name="description" content="Browse and search our complete collection of MCP servers. Filter by category, language, stars, and quality score." />
@@ -162,8 +162,8 @@ const ServerList = React.memo(() => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div className="min-w-0">
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">MCP Servers</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">MCP Servers</h1>
+              <p className="text-gray-600 dark:text-slate-300">
                 Discover and explore {allServers.length.toLocaleString()} MCP servers
               </p>
             </div>

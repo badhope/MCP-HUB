@@ -5,7 +5,7 @@ import { Button } from '../components/ui/Button';
 
 const NotFound = React.memo(() => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center py-20">
       <Helmet>
         <title>404 - Page Not Found | MCP Hub</title>
         <meta name="description" content="The page you're looking for doesn't exist." />
@@ -14,8 +14,8 @@ const NotFound = React.memo(() => {
         <div className="text-8xl sm:text-9xl font-bold bg-gradient-to-r from-primary-500 via-violet-500 to-accent-500 bg-clip-text text-transparent mb-4">
           404
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Page Not Found</h1>
-        <p className="text-gray-600 text-lg mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Page Not Found</h1>
+        <p className="text-gray-600 dark:text-slate-300 text-lg mb-8">
           Oops! The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -29,7 +29,7 @@ const NotFound = React.memo(() => {
           </Button>
           <button
             onClick={() => window.history.back()}
-            className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:text-white transition-colors"
           >
             <ArrowLeft size={18} />
             <span>Go Back</span>

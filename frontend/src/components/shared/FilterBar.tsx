@@ -18,7 +18,7 @@ interface FilterBarProps {
 }
 
 const qualityLevels = [
-  { value: '', label: 'Any quality', color: 'bg-gray-100 text-gray-600' },
+  { value: '', label: 'Any quality', color: 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300' },
   { value: 'S', label: 'S - Excellent', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
   { value: 'A', label: 'A - Good', color: 'bg-blue-50 text-blue-700 border-blue-200' },
   { value: 'B', label: 'B - Fair', color: 'bg-violet-50 text-violet-700 border-violet-200' },
@@ -81,7 +81,7 @@ export const FilterBar = React.memo<FilterBarProps>(({
     const padding = size === 'md' ? 'px-4 py-2' : 'px-3 py-1.5';
     const activeCls =
       'bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-md';
-    const idleCls = 'bg-gray-100 text-gray-600 hover:bg-gray-200';
+    const idleCls = 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:bg-slate-800';
     return (
       <button
         type="button"
@@ -95,12 +95,12 @@ export const FilterBar = React.memo<FilterBarProps>(({
   };
 
   return (
-    <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-gray-100 mb-8">
+    <div className="bg-white dark:bg-slate-900 rounded-xl p-5 sm:p-6 shadow-sm border border-gray-100 dark:border-slate-800 mb-8">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="flex items-center space-x-2">
-          <Filter size={20} className="text-gray-400" aria-hidden="true" />
-          <span className="text-gray-600">
-            <span className="font-semibold text-gray-900">{totalResults.toLocaleString()}</span>{' '}
+          <Filter size={20} className="text-gray-400 dark:text-slate-500" aria-hidden="true" />
+          <span className="text-gray-600 dark:text-slate-300">
+            <span className="font-semibold text-gray-900 dark:text-white">{totalResults.toLocaleString()}</span>{' '}
             result{totalResults === 1 ? '' : 's'}
           </span>
         </div>
@@ -108,12 +108,12 @@ export const FilterBar = React.memo<FilterBarProps>(({
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           {onMinQualityChange && (
             <label className="flex items-center gap-2">
-              <Shield size={18} className="text-gray-400" aria-hidden="true" />
+              <Shield size={18} className="text-gray-400 dark:text-slate-500" aria-hidden="true" />
               <span className="sr-only">Minimum quality</span>
               <select
                 value={minQuality || ''}
                 onChange={(e) => onMinQualityChange(e.target.value || null)}
-                className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-colors bg-white"
+                className="px-3 py-2 border border-gray-200 dark:border-slate-800 rounded-lg text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-colors bg-white dark:bg-slate-900"
               >
                 {qualityLevels.map((level) => (
                   <option key={level.value} value={level.value}>
@@ -125,12 +125,12 @@ export const FilterBar = React.memo<FilterBarProps>(({
           )}
 
           <label className="flex items-center gap-2">
-            <SortAsc size={18} className="text-gray-400" aria-hidden="true" />
+            <SortAsc size={18} className="text-gray-400 dark:text-slate-500" aria-hidden="true" />
             <span className="sr-only">Sort by</span>
             <select
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value as 'stars' | 'updated')}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-colors bg-white"
+              className="px-3 py-2 border border-gray-200 dark:border-slate-800 rounded-lg text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-colors bg-white dark:bg-slate-900"
             >
               <option value="stars">Most stars</option>
               <option value="updated">Recently updated</option>
@@ -138,12 +138,12 @@ export const FilterBar = React.memo<FilterBarProps>(({
           </label>
 
           <label className="flex items-center gap-2">
-            <Star size={18} className="text-gray-400" aria-hidden="true" />
+            <Star size={18} className="text-gray-400 dark:text-slate-500" aria-hidden="true" />
             <span className="sr-only">Minimum stars</span>
             <select
               value={minStars}
               onChange={(e) => onMinStarsChange(Number(e.target.value))}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-colors bg-white"
+              className="px-3 py-2 border border-gray-200 dark:border-slate-800 rounded-lg text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-colors bg-white dark:bg-slate-900"
             >
               {starOptions.map((stars) => (
                 <option key={stars} value={stars}>
@@ -155,11 +155,11 @@ export const FilterBar = React.memo<FilterBarProps>(({
         </div>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-gray-100">
+      <div className="mt-6 pt-6 border-t border-gray-100 dark:border-slate-800">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-gray-500">
+          <h3 className="text-sm font-semibold text-gray-500 dark:text-slate-400">
             Categories
-            <span className="ml-2 text-xs text-gray-400 font-normal">
+            <span className="ml-2 text-xs text-gray-400 dark:text-slate-500 font-normal">
               {categories.length}
             </span>
           </h3>
@@ -185,12 +185,12 @@ export const FilterBar = React.memo<FilterBarProps>(({
         </div>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-gray-100">
+      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-800">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-gray-500 flex items-center">
+          <h3 className="text-sm font-semibold text-gray-500 dark:text-slate-400 flex items-center">
             <Globe size={14} className="mr-1" aria-hidden="true" />
             Languages
-            <span className="ml-2 text-xs text-gray-400 font-normal">{languages.length}</span>
+            <span className="ml-2 text-xs text-gray-400 dark:text-slate-500 font-normal">{languages.length}</span>
           </h3>
           {languages.length > COLLAPSE_CHIP_COUNT && (
             <button

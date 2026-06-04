@@ -127,7 +127,7 @@ const SubmitServer = React.memo(() => {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 py-16">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-16">
         <Helmet>
           <title>Submit a Server | MCP Hub</title>
           <meta name="description" content="Share an MCP server with the community. Submit your MCP server for review." />
@@ -138,8 +138,8 @@ const SubmitServer = React.memo(() => {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle size={32} className="text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Submission Received!</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Submission Received!</h2>
+              <p className="text-gray-600 dark:text-slate-300 mb-6">
                 Thank you for contributing to MCP Hub! Our team will review your submission and get back to you soon.
               </p>
               <Button onClick={() => navigate('/servers')}>
@@ -153,7 +153,7 @@ const SubmitServer = React.memo(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
       <Helmet>
         <title>Submit a Server | MCP Hub</title>
         <meta name="description" content="Share an MCP server with the community. Submit your MCP server for review." />
@@ -162,13 +162,13 @@ const SubmitServer = React.memo(() => {
         <div className="mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+            className="flex items-center text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:text-white mb-4 transition-colors"
           >
             <ChevronRight size={20} className="rotate-180 mr-1" />
             Back
           </button>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Submit a Server</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Submit a Server</h1>
+          <p className="text-gray-600 dark:text-slate-300">
             Share an MCP server with the community. Our team will review your submission.
           </p>
         </div>
@@ -184,7 +184,7 @@ const SubmitServer = React.memo(() => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">
                   Server Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -194,11 +194,11 @@ const SubmitServer = React.memo(() => {
                   onBlur={() => handleBlur('name')}
                   placeholder="e.g., my-awesome-mcp-server"
                   className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
-                    getFieldError('name') ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                    getFieldError('name') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
                   }`}
                 />
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-xs text-gray-400">Use kebab-case (lowercase with hyphens)</p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500">Use kebab-case (lowercase with hyphens)</p>
                   {getFieldError('name') && (
                     <p className="text-xs text-red-500">{getFieldError('name')}</p>
                   )}
@@ -206,11 +206,11 @@ const SubmitServer = React.memo(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">
                   Source URL <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Github size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Github size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
                   <input
                     type="url"
                     value={formData.source}
@@ -218,7 +218,7 @@ const SubmitServer = React.memo(() => {
                     onBlur={() => handleBlur('source')}
                     placeholder="https://github.com/username/repo"
                     className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
-                      getFieldError('source') ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                      getFieldError('source') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
                     }`}
                   />
                 </div>
@@ -228,7 +228,7 @@ const SubmitServer = React.memo(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">
                   Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -238,11 +238,11 @@ const SubmitServer = React.memo(() => {
                   placeholder="Describe what this MCP server does, its main features, and how it integrates with AI assistants..."
                   rows={4}
                   className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none transition-colors ${
-                    getFieldError('description') ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                    getFieldError('description') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
                   }`}
                 />
                 <div className="flex items-center justify-between mt-1">
-                  <p className={`text-xs ${formData.description.length < 20 ? 'text-gray-400' : 'text-green-500'}`}>
+                  <p className={`text-xs ${formData.description.length < 20 ? 'text-gray-400 dark:text-slate-500' : 'text-green-500'}`}>
                     {formData.description.length} / 500 characters (minimum 20)
                   </p>
                   {getFieldError('description') && (
@@ -252,7 +252,7 @@ const SubmitServer = React.memo(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">
                   Categories
                 </label>
                 <input
@@ -262,29 +262,29 @@ const SubmitServer = React.memo(() => {
                   onBlur={() => handleBlur('categories')}
                   placeholder="e.g., ai, database, productivity"
                   className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
-                    getFieldError('categories') ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                    getFieldError('categories') ? 'border-red-300 bg-red-50' : 'border-gray-200 dark:border-slate-800'
                   }`}
                 />
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
                   Comma-separated list of categories
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  NPM Package <span className="text-gray-400">(optional)</span>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">
+                  NPM Package <span className="text-gray-400 dark:text-slate-500">(optional)</span>
                 </label>
                 <input
                   type="text"
                   value={formData.npmPackage}
                   onChange={(e) => handleChange('npmPackage', e.target.value)}
                   placeholder="e.g., @modelcontextprotocol/server-github"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t">
-                <div className="flex items-center space-x-2 text-xs text-gray-400 min-w-0">
+                <div className="flex items-center space-x-2 text-xs text-gray-400 dark:text-slate-500 min-w-0">
                   <Info size={14} className="flex-shrink-0" />
                   <span>By submitting, you confirm this server follows the MCP protocol standards.</span>
                 </div>

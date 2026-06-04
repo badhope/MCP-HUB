@@ -8,8 +8,8 @@ export const ErrorFallback = React.memo<FallbackProps>(({
   resetErrorBoundary,
 }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 p-4">
+      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 overflow-hidden">
         <div className="h-2 bg-gradient-to-r from-red-500 via-rose-500 to-pink-500" />
 
         <div className="p-8">
@@ -18,16 +18,16 @@ export const ErrorFallback = React.memo<FallbackProps>(({
               <AlertTriangle size={28} className="text-red-600" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Something went wrong</h2>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Something went wrong</h2>
+              <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
                 An unexpected error occurred. Please try again.
               </p>
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-4 mb-6">
-            <p className="text-xs text-gray-500 font-medium mb-1">Error Details</p>
-            <p className="text-sm text-gray-700 font-mono break-all leading-relaxed">
+          <div className="bg-gray-50 dark:bg-slate-950 rounded-xl p-4 mb-6">
+            <p className="text-xs text-gray-500 dark:text-slate-400 font-medium mb-1">Error Details</p>
+            <p className="text-sm text-gray-700 dark:text-slate-200 font-mono break-all leading-relaxed">
               {error instanceof Error ? error.message : String(error)}
             </p>
           </div>
@@ -42,7 +42,7 @@ export const ErrorFallback = React.memo<FallbackProps>(({
             </button>
             <Link
               to="/"
-              className="flex items-center justify-center space-x-2 px-4 py-3 border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium rounded-xl transition-colors"
+              className="flex items-center justify-center space-x-2 px-4 py-3 border border-gray-200 dark:border-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:bg-slate-950 font-medium rounded-xl transition-colors"
             >
               <Home size={18} />
               <span>Home</span>

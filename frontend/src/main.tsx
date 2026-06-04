@@ -15,3 +15,16 @@ createRoot(document.getElementById('root')!).render(
     </HelmetProvider>
   </StrictMode>,
 )
+
+// Register the PWA service worker (no-op in dev with the dev server, but
+// always active in production). Failures are silent — the app still works
+// online without cache.
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    const swUrl = `${import.meta.env.BASE_URL}sw.js`.replace(/\/+/g, '/').replace(/^([^/])/, '/$1')
+    navigator.serviceWorker.register(swUrl).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn('[pwa] service worker registration failed:', err)
+    })
+  })
+}

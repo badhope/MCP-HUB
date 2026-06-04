@@ -2,32 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/MCP-HUB/favicon.svg" />
+    <link rel="apple-touch-icon" href="/MCP-HUB/icon-192.png" />
+    <link rel="manifest" href="/MCP-HUB/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MCP Hub" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="The Universal MCP Tool Market — 4,403+ curated Model Context Protocol servers, REST API, web UI, and AI-agent friendly discovery for Claude, Cursor, ChatGPT, and more." />
+    <meta name="description" content="MCP Hub — discover, compare and rate MCP servers. Open marketplace for the Model Context Protocol ecosystem." />
     <meta name="keywords" content="MCP, Model Context Protocol, MCP servers, MCP marketplace, AI agents, Claude, Cursor, ChatGPT, DeepSeek, LLM tools" />
     <meta name="author" content="MCP Hub" />
-    <meta name="theme-color" content="#6366f1" />
+    <!-- Theme color adapts to user color-scheme (PWA address bar / iOS status bar). -->
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MCP Hub" />
-    <meta property="og:title" content="MCP Hub — The Universal MCP Tool Market" />
-    <meta property="og:description" content="Browse, search, and download 4,403+ curated MCP server configurations for Claude, Cursor, ChatGPT, and more." />
-    <meta property="og:image" content="https://badhope.github.io/MCP-HUB/social-preview.png" />
-    <meta property="og:image:width" content="1280" />
-    <meta property="og:image:height" content="640" />
-    <meta property="og:image:alt" content="MCP Hub — The Universal Model Context Protocol Tool Market" />
-    <meta property="og:url" content="https://badhope.github.io/MCP-HUB/" />
+    <meta property="og:title" content="MCP Hub" />
+    <meta property="og:description" content="Discover, compare and rate MCP servers." />
+    <meta property="og:image" content="/MCP-HUB/social-preview.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MCP Hub — The Universal MCP Tool Market" />
-    <meta name="twitter:description" content="Browse, search, and download 4,403+ curated MCP server configurations for Claude, Cursor, ChatGPT, and more." />
-    <meta name="twitter:image" content="https://badhope.github.io/MCP-HUB/social-preview.png" />
-    <meta name="twitter:image:alt" content="MCP Hub — The Universal Model Context Protocol Tool Market" />
 
     <link rel="canonical" href="https://badhope.github.io/MCP-HUB/" />
     <link rel="image_src" href="https://badhope.github.io/MCP-HUB/social-preview.png" />
-    <link rel="apple-touch-icon" href="/social-preview.png" />
 
     <!-- JSON-LD structured data: tells search engines this is a SoftwareApplication -->
     <script type="application/ld+json">
@@ -79,6 +78,20 @@
     </script>
 
     <title>MCP Hub — The Universal MCP Tool Market</title>
+    <!-- Dark-mode FOUC prevention: set <html class="dark"> BEFORE first paint.
+         Reads from localStorage('mcp-hub-theme') first, then falls back to
+         the OS preference. Must be a blocking inline script (no defer/async). -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('mcp-hub-theme');
+          var prefersDark = window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored === 'dark' || (!stored && prefersDark);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (_) { /* localStorage may be unavailable */ }
+      })();
+    </script>
     <script type="module">
       if (import.meta.hot?.on) {
         import.meta.hot.on('vite:error', (error) => {

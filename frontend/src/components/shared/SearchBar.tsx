@@ -71,13 +71,13 @@ export const SearchBar = React.memo<SearchBarProps>(({
           isHero
             ? // Hero variant: translucent white over a colored background.
               'w-full pl-12 sm:pl-14 pr-4 sm:pr-5 py-3.5 sm:py-4 text-base sm:text-lg ' +
-              'border-2 border-white/20 bg-white/10 backdrop-blur-xl rounded-2xl ' +
-              'focus:border-white/40 focus:ring-4 focus:ring-white/10 focus:bg-white/15 ' +
+              'border-2 border-white/20 bg-white dark:bg-slate-900/10 backdrop-blur-xl rounded-2xl ' +
+              'focus:border-white/40 focus:ring-4 focus:ring-white/10 focus:bg-white dark:bg-slate-900/15 ' +
               'transition-all duration-300 outline-none ' +
               'placeholder-primary-100 text-white'
             : // Page variant: light surface, dark text.
               'w-full pl-12 sm:pl-14 pr-4 sm:pr-5 py-3 sm:py-3.5 text-base ' +
-              'border border-slate-200 bg-white rounded-2xl shadow-sm ' +
+              'border border-slate-200 bg-white dark:bg-slate-900 rounded-2xl shadow-sm ' +
               'focus:border-primary-400 focus:ring-4 focus:ring-primary-100 ' +
               'transition-all duration-200 outline-none ' +
               'placeholder-slate-400 text-slate-900 ' +

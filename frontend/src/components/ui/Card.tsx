@@ -19,7 +19,7 @@ export const Card = React.memo<CardProps>(({
     <div 
       onClick={onClick}
       className={`
-        bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden
+        bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 shadow-sm overflow-hidden
         ${hoverable ? 'transition-all duration-400 ease-smooth cursor-pointer' : ''}
         ${className}
       `}

@@ -66,7 +66,7 @@ export const RatingSection = React.memo<RatingSectionProps>(({
       {/* Average Rating Display */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
         <div className="text-center sm:text-left flex-shrink-0">
-          <div className="text-4xl font-bold text-gray-900">
+          <div className="text-4xl font-bold text-gray-900 dark:text-white">
             {averageRating > 0 ? averageRating.toFixed(1) : '--'}
           </div>
           <div className="flex items-center justify-center sm:justify-start mt-1">
@@ -82,7 +82,7 @@ export const RatingSection = React.memo<RatingSectionProps>(({
               />
             ))}
           </div>
-          <p className="text-xs text-gray-500 mt-1">{totalRatings} rating{totalRatings !== 1 ? 's' : ''}</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{totalRatings} rating{totalRatings !== 1 ? 's' : ''}</p>
         </div>
 
         {/* Rating Breakdown */}
@@ -92,15 +92,15 @@ export const RatingSection = React.memo<RatingSectionProps>(({
             const pct = totalRatings > 0 ? (count / totalRatings) * 100 : 0;
             return (
               <div key={star} className="flex items-center space-x-2 text-sm">
-                <span className="text-gray-600 w-2">{star}</span>
+                <span className="text-gray-600 dark:text-slate-300 w-2">{star}</span>
                 <Star size={12} className="text-yellow-400 fill-yellow-400" />
-                <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div className="flex-1 bg-gray-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-yellow-400 h-full rounded-full transition-all"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
-                <span className="text-gray-400 w-6 text-xs">{count}</span>
+                <span className="text-gray-400 dark:text-slate-500 w-6 text-xs">{count}</span>
               </div>
             );
           })}
@@ -109,7 +109,7 @@ export const RatingSection = React.memo<RatingSectionProps>(({
 
       {/* User Rating Input */}
       <div className="border-t pt-4">
-        <p className="text-sm font-medium text-gray-700 mb-2">
+        <p className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2">
           {userRating > 0 ? 'Your Rating' : 'Rate this server'}
         </p>
         <div className="flex items-center space-x-1">
@@ -133,7 +133,7 @@ export const RatingSection = React.memo<RatingSectionProps>(({
             </button>
           ))}
           {userRating > 0 && (
-            <span className="text-sm text-gray-500 ml-2">
+            <span className="text-sm text-gray-500 dark:text-slate-400 ml-2">
               {userRating === 5 ? 'Excellent!' : userRating === 4 ? 'Good' : userRating === 3 ? 'Average' : userRating === 2 ? 'Poor' : 'Terrible'}
             </span>
           )}

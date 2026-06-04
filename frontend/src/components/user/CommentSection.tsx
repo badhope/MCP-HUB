@@ -74,10 +74,10 @@ export const CommentSection = React.memo<CommentSectionProps>(({
               onKeyDown={handleKeyDown}
               placeholder="Share your experience or ask a question..."
               rows={3}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
             />
             <div className="flex justify-between items-center mt-2">
-              <p className="text-xs text-gray-400">Press Enter to send, Shift+Enter for new line</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500">Press Enter to send, Shift+Enter for new line</p>
               <button
                 onClick={submitComment}
                 disabled={!newComment.trim() || submitting}
@@ -96,7 +96,7 @@ export const CommentSection = React.memo<CommentSectionProps>(({
         {comments.length === 0 ? (
           <div className="text-center py-8">
             <MessageSquare size={32} className="mx-auto text-gray-300 mb-2" />
-            <p className="text-gray-500 text-sm">No comments yet. Be the first to share!</p>
+            <p className="text-gray-500 dark:text-slate-400 text-sm">No comments yet. Be the first to share!</p>
           </div>
         ) : (
           comments.map((comment) => (
@@ -104,12 +104,12 @@ export const CommentSection = React.memo<CommentSectionProps>(({
               <div className="w-10 h-10 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                 {comment.user_id.substring(0, 2).toUpperCase()}
               </div>
-              <div className="flex-1 bg-gray-50 rounded-xl px-4 py-3 min-w-0">
+              <div className="flex-1 bg-gray-50 dark:bg-slate-950 rounded-xl px-4 py-3 min-w-0">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                  <span className="text-sm font-medium text-gray-900 truncate min-w-0">{comment.user_id}</span>
-                  <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(comment.created_at)}</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">{comment.user_id}</span>
+                  <span className="text-xs text-gray-400 dark:text-slate-500 flex-shrink-0">{formatDate(comment.created_at)}</span>
                 </div>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">{comment.text}</p>
+                <p className="text-sm text-gray-700 dark:text-slate-200 whitespace-pre-wrap break-words">{comment.text}</p>
               </div>
             </div>
           ))
