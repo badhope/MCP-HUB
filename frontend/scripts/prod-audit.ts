@@ -92,7 +92,11 @@ async function ping(b: Browser, path: string) {
   console.log(`[prod] ${path.padEnd(20)} h1="${(h1 || '').slice(0, 40)}" skip=${skipTarget} theme=${themeBtn}`)
 
   if (!h1) ISSUES.push({ kind: 'no-h1', page: path, detail: 'no h1 rendered' })
-  if (h1 && /Not Found/i.test(h1) && !/this-does-not-exist/.test(path)) {
+  // Flag an unexpected "Not Found" h1 — EXCEPT on paths that are
+  // intentionally probing a "not found" branch (e.g. ServerDetail's
+  // missing-server UI or the global 404 route). The expected h1 in
+  // those branches is "Server Not Found" / "Page Not Found".
+  if (h1 && /Not Found/i.test(h1) && !/this-does-not-exist/.test(path) && !/NoSuchServer/.test(path)) {
     ISSUES.push({ kind: 'wrong-page', page: path, detail: `h1="${h1}"` })
   }
   if (!skipTarget) {
@@ -114,7 +118,8 @@ async function ping(b: Browser, path: string) {
     // Tolerate GitHub Pages' SPA-fallback 404: it returns HTTP 404 with
     // the index.html body so React Router can take over. The body has
     // loaded, the page renders — the 404 is purely a status code.
-    if (/ 404 https:\/\/badhope\.github\.io\/MCP-HUB\/[^?]+$/.test(r)) {
+    // The format in failedRequests is "<status> <url>" (no leading space).
+    if (/^404 https:\/\/badhope\.github\.io\/MCP-HUB\/[^?]+$/.test(r)) {
       // skip — this is the SPA fallback
       continue
     }
