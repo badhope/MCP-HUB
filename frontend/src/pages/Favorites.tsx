@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Heart, Star, AlertCircle, Download } from 'lucide-react';
+import { Heart, Star, AlertCircle, Download, Info } from 'lucide-react';
 import { apiClient } from '../lib/api';
 import { useServers } from '../hooks/useServers';
+import { useUserStore } from '../store/useUserStore';
 import { ServerCard } from '../components/server/ServerCard';
 import { BatchExportBar } from '../components/shared/BatchExportBar';
 import { Button } from '../components/ui/Button';
 import { Server } from '../types';
 
 const Favorites = React.memo(() => {
-  const userId = 'default-user';
+  const userId = useUserStore((s) => s.userId);
+  const favoriteNames = useUserStore((s) => s.favorites);
   const [favoriteServers, setFavoriteServers] = useState<Server[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,31 +21,23 @@ const Favorites = React.memo(() => {
   const { data: serverData } = useServers();
   const allServers = useMemo(() => serverData?.servers || [], [serverData?.servers]);
 
-  const loadFavorites = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await apiClient.getFavorites(userId);
-      const matchedServers = allServers.filter((s: Server) => result.favorites.includes(s.name));
-      setFavoriteServers(matchedServers);
-    } catch {
-      setError('Failed to load favorites. Please make sure the backend is running.');
-    }
-    setLoading(false);
-  }, [allServers, userId]);
-
   useEffect(() => {
-    if (allServers.length > 0) {
-      loadFavorites();
+    if (allServers.length === 0) {
+      setLoading(true);
+      return;
     }
-  }, [allServers.length, loadFavorites]);
+    const matched = allServers.filter((s: Server) => favoriteNames.includes(s.name));
+    setFavoriteServers(matched);
+    setLoading(false);
+  }, [allServers, favoriteNames]);
 
   const removeFavorite = async (serverName: string) => {
     try {
       await apiClient.removeFavorite(userId, serverName);
-      setFavoriteServers((prev) => prev.filter((s) => s.name !== serverName));
+      // useUserStore will refresh automatically via its in-tab listener.
     } catch (e) {
       console.error('Error removing favorite:', e);
+      setError('Failed to remove favorite. Please try again.');
     }
   };
 
@@ -139,7 +133,14 @@ const Favorites = React.memo(() => {
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">My Favorites</h1>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
+              <Heart size={32} className="text-red-500" fill="currentColor" />
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">My Favorites</h1>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
+                <Info size={12} className="mr-1" />
+                Saved locally on this device
+              </span>
+            </div>
             <p className="text-gray-600 dark:text-slate-300">Your collection of saved MCP servers</p>
           </div>
           <div className="text-center py-16">
@@ -147,8 +148,8 @@ const Favorites = React.memo(() => {
               <Heart size={40} className="text-gray-300" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Favorites Yet</h2>
-            <p className="text-gray-500 dark:text-slate-400 mb-6">
-              Start exploring servers and save your favorites for quick access.
+            <p className="text-gray-500 dark:text-slate-400 mb-6 max-w-md mx-auto">
+              Start exploring servers and tap the heart icon to save them here. Your favorites are stored on this device.
             </p>
             <Link
               to="/servers"
@@ -176,6 +177,13 @@ const Favorites = React.memo(() => {
               <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
                 <Heart size={32} className="text-red-500" fill="currentColor" />
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">My Favorites</h1>
+                <span
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+                  title="Favorites are stored in this browser's local storage and sync across tabs of this device."
+                >
+                  <Info size={12} className="mr-1" />
+                  Saved locally on this device
+                </span>
               </div>
               <p className="text-gray-600 dark:text-slate-300">
                 {favoriteServers.length} saved server{favoriteServers.length !== 1 ? 's' : ''}
@@ -208,7 +216,8 @@ const Favorites = React.memo(() => {
               {!selectMode && (
                 <button
                   onClick={() => removeFavorite(server.name)}
-                  className="absolute top-3 right-3 p-2 bg-white dark:bg-slate-900 rounded-xl shadow-md hover:bg-red-50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
+                  aria-label={`Remove ${server.name} from favorites`}
+                  className="absolute top-3 right-3 p-2 bg-white dark:bg-slate-900 rounded-xl shadow-md hover:bg-red-50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
                   title="Remove from favorites"
                 >
                   <Heart size={16} fill="currentColor" className="text-red-500" />

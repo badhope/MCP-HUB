@@ -4,7 +4,6 @@
  * its own static JSON fallback) — we don't want to serve stale API
  * responses.
  */
-/* eslint-disable no-restricted-globals */
 const VERSION = 'mcp-hub-v1';
 const APP_SHELL = [
   '/MCP-HUB/',

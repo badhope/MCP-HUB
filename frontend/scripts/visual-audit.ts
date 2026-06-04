@@ -259,9 +259,12 @@ async function testServerDetailNotFound(browser: Browser) {
   const page = await ctx.newPage();
   await page.goto(join('servers/this-server-does-not-exist-zzzzz'), { waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);
-  const text = await page.locator('h2').first().textContent().catch(() => '');
+  // The "Server Not Found" branch is the page's h1 (one-h1-per-page a11y
+  // requirement). The visual audit just needs to confirm the heading is
+  // present and contains the expected text.
+  const text = await page.locator('h1').first().textContent().catch(() => '');
   if (!text || !/Not Found/i.test(text)) {
-    ISSUES.push({ kind: 'not-found-state-missing', page: 'servers/<bogus>', viewport: '1280', detail: `h2="${text}"` });
+    ISSUES.push({ kind: 'not-found-state-missing', page: 'servers/<bogus>', viewport: '1280', detail: `h1="${text}"` });
   }
   await page.screenshot({ path: path.join(OUT_DIR, 'detail_not_found_1280.png'), fullPage: true });
   await ctx.close();

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Send, Github, ChevronRight, CheckCircle, AlertCircle, Loader2, Info } from 'lucide-react';
+import { Send, Github, ChevronRight, CheckCircle, AlertCircle, Loader2, Info, ExternalLink } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { apiClient } from '../lib/api';
+import { apiClient, isStaticDemo } from '../lib/api';
 
 const SubmitServer = React.memo(() => {
   const navigate = useNavigate();
@@ -126,6 +126,25 @@ const SubmitServer = React.memo(() => {
   };
 
   if (success) {
+    // Pre-fill a GitHub issue template body with the same data so the
+    // visitor can one-click open a real submission ticket for review.
+    const issueBody = [
+      `**Server name:** \`${formData.name.trim()}\``,
+      `**Source:** ${formData.source.trim()}`,
+      formData.categories.trim() ? `**Categories:** ${formData.categories.trim()}` : null,
+      formData.npmPackage.trim() ? `**NPM package:** \`${formData.npmPackage.trim()}\`` : null,
+      '',
+      '**Description:**',
+      formData.description.trim(),
+    ]
+      .filter(Boolean)
+      .join('\n');
+    const issueUrl =
+      `https://github.com/badhope/MCP-HUB/issues/new` +
+      `?template=server_submission.md` +
+      `&title=${encodeURIComponent(`Server submission: ${formData.name.trim()}`)}` +
+      `&body=${encodeURIComponent(issueBody)}`;
+
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-16">
         <Helmet>
@@ -140,11 +159,38 @@ const SubmitServer = React.memo(() => {
               </div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Submission Received!</h2>
               <p className="text-gray-600 dark:text-slate-300 mb-6">
-                Thank you for contributing to MCP Hub! Our team will review your submission and get back to you soon.
+                Thank you for contributing to MCP Hub!
               </p>
-              <Button onClick={() => navigate('/servers')}>
-                Browse Servers
-              </Button>
+              {isStaticDemo && (
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 text-left text-sm text-amber-800 dark:text-amber-200 mb-6">
+                  <div className="flex items-start gap-2">
+                    <Info size={16} className="mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium mb-1">Saved locally on this device</p>
+                      <p className="text-amber-700 dark:text-amber-300">
+                        This demo runs without a live backend, so your submission is stored only in this browser.
+                        To make it visible to the community, open a GitHub issue with the same details and
+                        a maintainer will review and merge it.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href={issueUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-sm font-medium"
+                >
+                  <Github size={16} />
+                  Open GitHub issue
+                  <ExternalLink size={12} />
+                </a>
+                <Button onClick={() => navigate('/servers')}>
+                  Browse Servers
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -175,6 +221,17 @@ const SubmitServer = React.memo(() => {
 
         <Card>
           <CardContent className="p-8">
+            {isStaticDemo && (
+              <div className="flex items-start space-x-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 px-4 py-3 rounded-lg mb-6 text-sm">
+                <Info size={16} className="mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium">Demo mode — submissions are stored locally on this device</p>
+                  <p className="text-amber-700 dark:text-amber-300 text-xs mt-0.5">
+                    A maintainer will only see your server if you also open a GitHub issue using the link on the next screen.
+                  </p>
+                </div>
+              </div>
+            )}
             {error && (
               <div className="flex items-start space-x-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
                 <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />

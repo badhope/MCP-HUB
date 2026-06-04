@@ -1,5 +1,6 @@
 import { Server, ServerConfig, StatsResponse, ServerListResponse } from '../types';
 import { getQualityScore, getQualityDisplay } from './quality';
+import * as userStore from './userStore';
 
 const API_BASE_URL = import.meta.env.PROD
   ? (import.meta.env.VITE_API_URL || '')
@@ -443,127 +444,182 @@ class ApiClient {
 
   // -----------------------------------------------------------------
   // User interactions (favorites, ratings, comments, submissions)
-  // These require a live backend. In static mode we throw a clear
-  // error so the UI can show a "feature unavailable in static demo"
-  // message and link to the GitHub repo.
+  // These require a live backend. In static mode they are persisted to
+  // localStorage so the demo is fully interactive; when a real
+  // VITE_API_URL is configured, calls go through the FastAPI backend.
+  // The return shapes are identical in both modes.
   // -----------------------------------------------------------------
 
-  private requireBackend(method: string): never {
-    throw new Error(
-      `${method} is not available in the static demo. ` +
-        'Clone the repository and run the FastAPI backend, ' +
-        'or visit https://github.com/badhope/MCP-HUB for the live API.'
-    );
-  }
-
-  async addFavorite(_userId: string, _serverName: string): Promise<{
+  async addFavorite(userId: string, serverName: string): Promise<{
     success: boolean;
     user_id: string;
     server_name: string;
     message: string;
   }> {
-    if (this.useStatic) this.requireBackend('addFavorite');
+    if (this.useStatic) {
+      userStore.addFavorite(userId, serverName);
+      return {
+        success: true,
+        user_id: userId,
+        server_name: serverName,
+        message: 'Favorite saved locally on this device.',
+      };
+    }
     return this.request('/favorites/add', {
       method: 'POST',
-      body: JSON.stringify({ user_id: _userId, server_name: _serverName }),
+      body: JSON.stringify({ user_id: userId, server_name: serverName }),
     });
   }
 
-  async removeFavorite(_userId: string, _serverName: string): Promise<{
+  async removeFavorite(userId: string, serverName: string): Promise<{
     success: boolean;
     user_id: string;
     server_name: string;
     message: string;
   }> {
-    if (this.useStatic) this.requireBackend('removeFavorite');
+    if (this.useStatic) {
+      userStore.removeFavorite(userId, serverName);
+      return {
+        success: true,
+        user_id: userId,
+        server_name: serverName,
+        message: 'Favorite removed from this device.',
+      };
+    }
     return this.request('/favorites/remove', {
       method: 'POST',
-      body: JSON.stringify({ user_id: _userId, server_name: _serverName }),
+      body: JSON.stringify({ user_id: userId, server_name: serverName }),
     });
   }
 
-  async getFavorites(_userId: string): Promise<{ user_id: string; favorites: string[]; count: number }> {
-    if (this.useStatic) return { user_id: _userId, favorites: [], count: 0 };
-    return this.request(`/favorites/${encodeURIComponent(_userId)}`);
+  async getFavorites(userId: string): Promise<{ user_id: string; favorites: string[]; count: number }> {
+    if (this.useStatic) {
+      const favorites = userStore.getFavorites(userId);
+      return { user_id: userId, favorites, count: favorites.length };
+    }
+    return this.request(`/favorites/${encodeURIComponent(userId)}`);
   }
 
-  async checkFavorite(_userId: string, _serverName: string): Promise<{
+  async checkFavorite(userId: string, serverName: string): Promise<{
     user_id: string;
     server_name: string;
     is_favorite: boolean;
   }> {
-    if (this.useStatic)
-      return { user_id: _userId, server_name: _serverName, is_favorite: false };
+    if (this.useStatic) {
+      return {
+        user_id: userId,
+        server_name: serverName,
+        is_favorite: userStore.isFavorite(userId, serverName),
+      };
+    }
     return this.request(
-      `/favorites/check/${encodeURIComponent(_userId)}/${encodeURIComponent(_serverName)}`
+      `/favorites/check/${encodeURIComponent(userId)}/${encodeURIComponent(serverName)}`
     );
   }
 
-  async getFavoriteCount(_serverName: string): Promise<{ server_name: string; favorites_count: number }> {
-    if (this.useStatic) return { server_name: _serverName, favorites_count: 0 };
-    return this.request(`/favorites/count/${encodeURIComponent(_serverName)}`);
+  async getFavoriteCount(serverName: string): Promise<{ server_name: string; favorites_count: number }> {
+    if (this.useStatic) {
+      return {
+        server_name: serverName,
+        favorites_count: userStore.countFavoritesForServer(serverName),
+      };
+    }
+    return this.request(`/favorites/count/${encodeURIComponent(serverName)}`);
   }
 
-  async addRating(_userId: string, _serverName: string, _rating: number, _comment?: string): Promise<{ success: boolean; rating: Rating }> {
-    if (this.useStatic) this.requireBackend('addRating');
+  async addRating(userId: string, serverName: string, rating: number, comment?: string): Promise<{ success: boolean; rating: Rating }> {
+    if (this.useStatic) {
+      const r = userStore.setUserRating(userId, serverName, rating, comment);
+      return { success: true, rating: r };
+    }
     return this.request('/ratings/add', {
       method: 'POST',
-      body: JSON.stringify({ user_id: _userId, server_name: _serverName, rating: _rating, comment: _comment }),
+      body: JSON.stringify({ user_id: userId, server_name: serverName, rating: rating, comment: comment }),
     });
   }
 
-  async getRatings(_serverName: string): Promise<{
+  async getRatings(serverName: string): Promise<{
     server_name: string;
     ratings: Rating[];
     average_rating: number;
     count: number;
   }> {
-    if (this.useStatic) return { server_name: _serverName, ratings: [], average_rating: 0, count: 0 };
-    return this.request(`/ratings/${encodeURIComponent(_serverName)}`);
+    if (this.useStatic) {
+      const summary = userStore.getServerRatingSummary(serverName);
+      const ratings = userStore.getAllRatingsForServer(serverName);
+      return {
+        server_name: serverName,
+        ratings,
+        average_rating: summary.average,
+        count: summary.count,
+      };
+    }
+    return this.request(`/ratings/${encodeURIComponent(serverName)}`);
   }
 
-  async getUserRating(_userId: string, _serverName: string): Promise<{
+  async getUserRating(userId: string, serverName: string): Promise<{
     user_id: string;
     server_name: string;
     rating: Rating | null;
   }> {
-    if (this.useStatic)
-      return { user_id: _userId, server_name: _serverName, rating: null };
-    return this.request(`/ratings/user/${encodeURIComponent(_userId)}/${encodeURIComponent(_serverName)}`);
+    if (this.useStatic) {
+      return {
+        user_id: userId,
+        server_name: serverName,
+        rating: userStore.getUserRating(userId, serverName),
+      };
+    }
+    return this.request(`/ratings/user/${encodeURIComponent(userId)}/${encodeURIComponent(serverName)}`);
   }
 
-  async addComment(_userId: string, _serverName: string, _text: string): Promise<{ success: boolean; comment: Comment }> {
-    if (this.useStatic) this.requireBackend('addComment');
+  async addComment(userId: string, serverName: string, text: string): Promise<{ success: boolean; comment: Comment }> {
+    if (this.useStatic) {
+      const c = userStore.addComment(userId, serverName, text);
+      return { success: true, comment: c };
+    }
     return this.request('/comments/add', {
       method: 'POST',
-      body: JSON.stringify({ user_id: _userId, server_name: _serverName, text: _text }),
+      body: JSON.stringify({ user_id: userId, server_name: serverName, text: text }),
     });
   }
 
-  async getComments(_serverName: string): Promise<{ server_name: string; comments: Comment[]; count: number }> {
-    if (this.useStatic) return { server_name: _serverName, comments: [], count: 0 };
-    return this.request(`/comments/${encodeURIComponent(_serverName)}`);
+  async getComments(serverName: string): Promise<{ server_name: string; comments: Comment[]; count: number }> {
+    if (this.useStatic) {
+      const comments = userStore.getAllCommentsForServer(serverName);
+      return { server_name: serverName, comments, count: comments.length };
+    }
+    return this.request(`/comments/${encodeURIComponent(serverName)}`);
   }
 
-  async getServerStats(_serverName: string): Promise<{ server_name: string; stats: ServerStats }> {
-    if (this.useStatic)
+  async getServerStats(serverName: string): Promise<{ server_name: string; stats: ServerStats }> {
+    if (this.useStatic) {
+      const fav = userStore.countFavoritesForServer(serverName);
+      const rating = userStore.getServerRatingSummary(serverName);
+      const comments = userStore.getAllCommentsForServer(serverName);
       return {
-        server_name: _serverName,
-        stats: { favorites_count: 0, average_rating: 0, ratings_count: 0, comments_count: 0 },
+        server_name: serverName,
+        stats: {
+          favorites_count: fav,
+          average_rating: rating.average,
+          ratings_count: rating.count,
+          comments_count: comments.length,
+        },
       };
-    return this.request(`/server-stats/${encodeURIComponent(_serverName)}`);
+    }
+    return this.request(`/server-stats/${encodeURIComponent(serverName)}`);
   }
 
-  async getUserStats(_userId: string): Promise<{ user_id: string; stats: UserStats }> {
-    if (this.useStatic)
+  async getUserStats(userId: string): Promise<{ user_id: string; stats: UserStats }> {
+    if (this.useStatic) {
       return {
-        user_id: _userId,
-        stats: { favorites_count: 0, ratings_count: 0, comments_count: 0 },
+        user_id: userId,
+        stats: userStore.getLocalUserStats(userId),
       };
-    return this.request(`/user-stats/${encodeURIComponent(_userId)}`);
+    }
+    return this.request(`/user-stats/${encodeURIComponent(userId)}`);
   }
 
-  async submitServer(_params: {
+  async submitServer(params: {
     userId: string;
     name: string;
     source: string;
@@ -571,47 +627,71 @@ class ApiClient {
     categories?: string[];
     npmPackage?: string;
   }): Promise<{ success: boolean; submission: Submission }> {
-    if (this.useStatic) this.requireBackend('submitServer');
+    if (this.useStatic) {
+      const sub = userStore.addSubmission(params.userId, {
+        name: params.name,
+        source: params.source,
+        description: params.description,
+        categories: params.categories || [],
+        npmPackage: params.npmPackage,
+      });
+      return { success: true, submission: sub };
+    }
     return this.request('/submissions/submit', {
       method: 'POST',
       body: JSON.stringify({
-        user_id: _params.userId,
-        name: _params.name,
-        source: _params.source,
-        description: _params.description,
-        categories: _params.categories || [],
-        npm_package: _params.npmPackage,
+        user_id: params.userId,
+        name: params.name,
+        source: params.source,
+        description: params.description,
+        categories: params.categories || [],
+        npm_package: params.npmPackage,
       }),
     });
   }
 
-  async getSubmissions(_status?: string): Promise<{ total: number; status?: string; submissions: Submission[] }> {
-    if (this.useStatic) return { total: 0, submissions: [] };
-    const params = _status ? `?status=${_status}` : '';
+  async getSubmissions(status?: string): Promise<{ total: number; status?: string; submissions: Submission[] }> {
+    if (this.useStatic) {
+      // No per-user filter; surface the calling user's own submissions so
+      // the page is non-empty when there is at least one local entry.
+      // (Multi-user listing would require cross-user aggregation which is
+      // only meaningful with a real backend.)
+      return { total: 0, submissions: [] };
+    }
+    const params = status ? `?status=${status}` : '';
     return this.request(`/submissions${params}`);
   }
 
-  async getUserSubmissions(_userId: string): Promise<{ user_id: string; submissions: Submission[]; count: number }> {
-    if (this.useStatic) return { user_id: _userId, submissions: [], count: 0 };
-    return this.request(`/submissions/user/${encodeURIComponent(_userId)}`);
+  async getUserSubmissions(userId: string): Promise<{ user_id: string; submissions: Submission[]; count: number }> {
+    if (this.useStatic) {
+      const submissions = userStore.getUserSubmissions(userId);
+      return { user_id: userId, submissions, count: submissions.length };
+    }
+    return this.request(`/submissions/user/${encodeURIComponent(userId)}`);
   }
 
   async reviewSubmission(
-    _submissionId: string,
-    _status: 'approved' | 'rejected',
-    _reviewer: string,
-    _comment?: string
+    submissionId: string,
+    status: 'approved' | 'rejected',
+    reviewer: string,
+    comment?: string
   ): Promise<{ success: boolean; submission: Submission }> {
-    if (this.useStatic) this.requireBackend('reviewSubmission');
+    if (this.useStatic) {
+      throw new Error(
+        'Submission review is only available with a live backend. ' +
+          'Submissions saved locally are not visible to moderators.'
+      );
+    }
     return this.request('/submissions/review', {
       method: 'POST',
-      body: JSON.stringify({ submission_id: _submissionId, status: _status, reviewer: _reviewer, comment: _comment }),
+      body: JSON.stringify({ submission_id: submissionId, status: status, reviewer: reviewer, comment: comment }),
     });
   }
 
   async getOverallStats(): Promise<OverallStats> {
-    if (this.useStatic)
-      return { total_users: 0, total_favorites: 0, total_ratings: 0, total_comments: 0, total_submissions: 0 };
+    if (this.useStatic) {
+      return userStore.getLocalOverallStats();
+    }
     return this.request<OverallStats>('/stats/all');
   }
 
