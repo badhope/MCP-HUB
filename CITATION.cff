@@ -1,32 +1,29 @@
 cff-version: 1.2.0
-message: |
-  If you use MCP Hub in academic work, please cite it as below.
-title: "MCP Hub: A Universal Marketplace for Model Context Protocol Servers"
-type: software
-date-released: 2026-05-21
-license: MIT
-repository-code: "https://github.com/badhope/MCP-HUB"
-url: "https://github.com/badhope/MCP-HUB"
+message: >-
+  If you use this software in academic work, please cite it using the
+  metadata below.
+title: MCP-HUB
 authors:
-  - family-names: "badhope"
-    given-names: "Maintainer"
-    affiliation: "MCP Hub"
-    orcid: ""
+  - family-names: badhope
+    given-names: badhope
+    alias: badhope
+identifiers:
+  - type: url
+    value: https://github.com/badhope/MCP-HUB
+license: MIT
+type: software
+url: https://github.com/badhope/MCP-HUB
+repository-code: https://github.com/badhope/MCP-HUB
 keywords:
-  - mcp
-  - model-context-protocol
+  - developer-tools
+  - typescript
   - ai-agents
-  - mcp-servers
+  - ai-tools
   - claude
+  - claude-desktop
+  - cursor
+  - fastapi
   - llm
-  - tools
   - marketplace
-  - registry
-  - open-source
-references:
-  - type: standard
-    title: "Model Context Protocol Specification"
-    url: "https://modelcontextprotocol.io/"
-  - type: software
-    title: "awesome-mcp-servers (upstream data source)"
-    url: "https://github.com/punkpeye/awesome-mcp-servers"
+abstract: >-
+  Curated registry of 4,400+ MCP servers, prompts, and resources. FastAPI backend, React/Vite SPA, copy-paste configs for Claude Desktop / Cursor / ChatGPT. Daily upstream sync, open JSON dump for offline use.
