@@ -1,34 +1,25 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: '[FEATURE] '
-labels: 'enhancement, triage'
-assignees: ''
+about: Suggest an idea
+title: "[feat] "
+labels: enhancement
+assignees: badhope
 ---
 
-## Is your feature request related to a problem?
+## Problem
 
-A clear and concise description of what the problem is. Ex. I'm always
-frustrated when [...]
+<!-- What's the underlying problem or gap? -->
 
-## Describe the solution you'd like
+## Proposed solution
 
-A clear and concise description of what you want to happen.
+<!-- Describe the feature you'd like. -->
 
-## Describe alternatives you've considered
+## Alternatives considered
 
-Any alternative solutions or features you've considered.
+<!-- Other ways you thought about solving this. -->
 
-## Use case
+## Willingness to contribute
 
-Describe the use case for this feature. Who benefits? How?
-
-## Mockups / examples
-
-If applicable, add mockups, screenshots, or examples of how the feature
-would work.
-
-## Additional context
-
-Add any other context, screenshots, or links to related issues about the
-feature request here.
+- [ ] I would submit a PR for this
+- [ ] I would test a PR for this
+- [ ] I would only discuss / design
