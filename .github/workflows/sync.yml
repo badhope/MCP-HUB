@@ -17,12 +17,12 @@ jobs:
       pull-requests: write  # to open the PR
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -50,7 +50,7 @@ jobs:
       # path that survives both the protection and the required reviews.
       - name: Open sync PR
         if: steps.changes.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: chore/auto-sync-${{ github.run_id }}
           commit-message: "chore: auto-sync upstream index ${{ github.event.head_commit.author.name }}"
