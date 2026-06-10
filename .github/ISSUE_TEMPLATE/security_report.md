@@ -1,44 +1,39 @@
 ---
-name: Security vulnerability report
-about: Privately report a security issue (do not file public issues for vulns)
-title: '[SECURITY] '
-labels: 'security, private'
-assignees: ''
+name: Security report
+about: Report a vulnerability (PRIVATE)
+title: "[security] "
+labels: security
+assignees: badhope
 ---
 
-## ⚠️ Please do not file public issues for security vulnerabilities.
-
-For sensitive security disclosures, follow the private reporting process
-described in [`SECURITY.md`](../../SECURITY.md#-reporting-a-vulnerability):
-open a private GitHub security advisory at
-<https://github.com/badhope/MCP-HUB/security/advisories/new> instead of
-using this template.
-
-This template is for low-severity, non-sensitive findings that are safe to
-discuss in public issues.
+> **Please do not disclose the vulnerability in a public issue.**
+> Use this private channel and the repository owner will respond within
+> 7 days. If you cannot wait, email the security contact listed in
+> [SECURITY.md](./SECURITY.md).
 
 ## Summary
 
-A clear and concise description of the issue.
+<!-- One-paragraph summary of the vulnerability. -->
 
-## Affected versions
+## Affected component(s)
 
-Which versions are affected? (e.g. v2.0.0 and below)
+- File(s):
+- Function(s) / endpoint(s):
+- Version / commit SHA:
 
-## Reproduction steps
+## Severity (your estimate)
 
-1.
-2.
-3.
+- [ ] Critical
+- [ ] High
+- [ ] Medium
+- [ ] Low
+
+## Reproduction
+
+```bash
+# Minimal steps / payload
+```
 
 ## Impact
 
-What can an attacker achieve by exploiting this?
-
-## Suggested fix
-
-If you have a suggested fix, describe it here.
-
-## Disclosure timeline
-
-Have you disclosed this elsewhere? (Coordinated disclosure preferred.)
+<!-- What an attacker can do. -->
