@@ -1,53 +1,40 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: '[BUG] '
-labels: 'bug, triage'
-assignees: ''
+about: Something is broken
+title: "[bug] "
+labels: bug
+assignees: badhope
 ---
 
-## Bug description
+## Describe the bug
 
-A clear and concise description of what the bug is.
+<!-- A clear and concise description of what the bug is. -->
 
 ## To reproduce
 
-Steps to reproduce the behavior:
+```bash
+# Minimal reproduction steps
+```
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Expected behaviour
 
-## Expected behavior
+<!-- What you expected to happen. -->
 
-A clear and concise description of what you expected to happen.
+## Actual behaviour
 
-## Screenshots
-
-If applicable, add screenshots to help explain your problem.
+<!-- What actually happened. Include stack traces, error messages,
+screenshots. -->
 
 ## Environment
 
-- **OS**: [e.g. macOS 14, Ubuntu 22.04, Windows 11]
-- **Browser**: [e.g. Chrome 124, Firefox 125, Safari 17]
-- **Node.js version**: [e.g. 20.10.0]
-- **Python version**: [e.g. 3.11.5]
-- **Project version**: [e.g. 2.0.1]
+- OS: <!-- e.g. macOS 14.4 -->
+- Runtime version: <!-- e.g. Node 20.11, Python 3.11 -->
+- Package version: <!-- git rev-parse HEAD, or npm/pip version -->
+- Date observed: <!-- 2026-06-10 -->
 
-## Server (backend) logs
+## Severity
 
-```
-Paste relevant server logs here (strip secrets!)
-```
-
-## Browser console output
-
-```
-Paste relevant browser console messages here
-```
-
-## Additional context
-
-Add any other context about the problem here (e.g. minimal reproduction
-repository, MCP server being queried, search query, etc.).
+- [ ] Blocker — production is down
+- [ ] High — feature unusable
+- [ ] Medium — workaround exists
+- [ ] Low — cosmetic
