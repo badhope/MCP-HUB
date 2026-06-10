@@ -1,110 +1,46 @@
-# 贡献指南
+# Contributing
 
-感谢您对 MCP-HUB 项目的关注！我们欢迎各种形式的贡献。
+Want to send a PR? Cool. Here's the flow.
 
-## 如何贡献
+## Before you start
 
-### 1. 报告问题
+- **Open an issue first** if the change is non-trivial. I don't want you
+  to spend a weekend on something I'd have asked you to do differently.
+- Read the code that's already there. I try to keep it boring and
+  consistent. If you're adding a new pattern, it should fit.
+- Look at the README for how to install / run / test. Use the lockfile
+  that's checked in; don't regenerate it.
 
-如果您发现了 bug 或有功能建议，请通过 GitHub Issues 报告：
+## Local checks
 
-1. 检查是否已有类似 issue
-2. 提供详细的复现步骤
-3. 附上相关日志和错误信息
-4. 说明您的环境（OS、Python 版本等）
+Run whatever the project has: `pnpm test`, `pytest`, `cargo test`, etc.
+If linter / formatter configs are checked in, run them too. CI will
+catch what you missed, but a green push is faster than a red one.
 
-### 2. 提交代码
+## Commit messages
 
-#### 开发环境设置
+I don't enforce Conventional Commits. Subject, blank line, body, done.
+If a commit fixes an issue, mention the issue number. Don't bother with
+emoji or "WIP" prefixes.
 
-```bash
-# 克隆仓库
-git clone https://github.com/badhope/MCP-HUB.git
-cd MCP-HUB
+## Pull requests
 
-# 创建虚拟环境
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate    # Windows
+- Fill the PR template. One paragraph in the body is fine; screenshots
+  help for UI.
+- Keep the diff small. Squash before merging unless the history matters.
+- I'll review roughly in order of arrival. If CI is green and the change
+  does what the description says, I'll merge. I might push back on
+  architecture; that's not personal.
+- Don't commit secrets, generated build output, large binaries, or
+  someone else's code without a license.
 
-# 安装开发依赖
-pip install pytest pytest-cov black isort flake8 mypy
-```
+## What I won't merge
 
-#### 代码规范
+- Drive-by refactors that don't fix a real problem.
+- New dependencies for trivial reasons.
+- Anything that breaks the existing API without a heads-up first.
 
-- **格式化**: 使用 black (`black .`)
-- **导入排序**: 使用 isort (`isort .`)
-- **类型注解**: 所有函数添加类型注解
-- **文档字符串**: 公共 API 添加 docstring
+## License
 
-#### 提交流程
-
-1. **Fork 仓库** 并创建分支
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **编写代码** 并添加测试
-
-3. **运行测试**
-   ```bash
-   pytest tests/ -v
-   ```
-
-4. **提交更改**
-   ```bash
-   git add .
-   git commit -m "feat: 添加新功能描述"
-   ```
-
-   提交信息格式：
-   - `feat:` 新功能
-   - `fix:` 修复 bug
-   - `docs:` 文档更新
-   - `refactor:` 代码重构
-   - `test:` 测试相关
-   - `chore:` 构建/工具
-
-5. **推送并创建 PR**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-### 3. 代码审查
-
-所有 PR 都需要通过：
-- 代码审查
-- CI 测试通过
-- 无安全漏洞
-
-## 项目结构
-
-```
-MCP-HUB/
-├── core/              # 核心框架
-├── tools/             # 工具脚本
-├── tests/             # 测试代码
-├── examples/          # 配置示例
-├── universal-adapter/ # 通用适配器
-└── .github/           # CI/CD 配置
-```
-
-## 添加新的 MCP 服务器
-
-使用统一下载器：
-```bash
-python tools/downloader.py awesome 10
-```
-
-或手动添加到 `servers/` 目录。
-
-## 行为准则
-
-- 尊重他人，友善交流
-- 接受建设性批评
-- 关注社区利益
-
-## 许可证
-
-通过提交代码，您同意您的贡献将在 MIT 许可证下发布。
+By contributing, you agree your contribution is licensed under the same
+license as the rest of the project. See [`LICENSE`](./LICENSE).
