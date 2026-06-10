@@ -1,0 +1,21 @@
+{
+  "name": "lobehub",
+  "mcpServers": {
+    "lobehub": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-lobehub"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-lobehub"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-lobehub"
+  }
+}

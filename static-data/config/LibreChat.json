@@ -1,0 +1,21 @@
+{
+  "name": "LibreChat",
+  "mcpServers": {
+    "LibreChat": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-LibreChat"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-LibreChat"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-LibreChat"
+  }
+}

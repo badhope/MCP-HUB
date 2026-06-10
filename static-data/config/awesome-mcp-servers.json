@@ -1,0 +1,21 @@
+{
+  "name": "awesome-mcp-servers",
+  "mcpServers": {
+    "awesome-mcp-servers": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-awesome-mcp-servers"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-awesome-mcp-servers"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-awesome-mcp-servers"
+  }
+}

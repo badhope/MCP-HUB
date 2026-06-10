@@ -1,0 +1,21 @@
+{
+  "name": "PDFMathTranslate",
+  "mcpServers": {
+    "PDFMathTranslate": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/PDFMathTranslate/PDFMathTranslate"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/PDFMathTranslate/PDFMathTranslate"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/PDFMathTranslate/PDFMathTranslate"
+  }
+}

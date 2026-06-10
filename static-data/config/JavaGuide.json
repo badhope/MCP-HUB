@@ -1,0 +1,21 @@
+{
+  "name": "JavaGuide",
+  "mcpServers": {
+    "JavaGuide": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-JavaGuide"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-JavaGuide"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-JavaGuide"
+  }
+}

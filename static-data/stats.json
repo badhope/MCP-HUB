@@ -1,0 +1,45 @@
+{
+  "total_servers": 4403,
+  "total_categories": 21,
+  "last_sync": "2026-05-31",
+  "data_snapshot_date": "2026-05-31",
+  "sample_source_types": {
+    "community": 45,
+    "official": 5
+  },
+  "sample_size": 50,
+  "categories": {
+    "ai-llm": 4392,
+    "development": 3194,
+    "terminal-system": 1845,
+    "integration": 1336,
+    "art-design": 1167,
+    "calendar-time": 575,
+    "cloud-devops": 551,
+    "document-notes": 536,
+    "memory-rag": 485,
+    "browser-web": 466,
+    "social-communication": 466,
+    "security": 432,
+    "game": 415,
+    "database": 319,
+    "learning-research": 289,
+    "finance-crypto": 277,
+    "video-media": 250,
+    "weather-nature": 197,
+    "map-geo": 139,
+    "bio-medical": 116,
+    "music-audio": 107
+  },
+  "features": [
+    "REST API (api.py)",
+    "Query interface (query.py)",
+    "CLI tool (market.py)",
+    "Bilingual README",
+    "Auto sync from awesome-mcp",
+    "Star ratings",
+    "Source tracing (100%)",
+    "English categories",
+    "Enhanced category inference"
+  ]
+}

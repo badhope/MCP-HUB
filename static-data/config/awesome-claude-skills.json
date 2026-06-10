@@ -1,0 +1,21 @@
+{
+  "name": "awesome-claude-skills",
+  "mcpServers": {
+    "awesome-claude-skills": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/ComposioHQ/awesome-claude-skills"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/ComposioHQ/awesome-claude-skills"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/ComposioHQ/awesome-claude-skills"
+  }
+}

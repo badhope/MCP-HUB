@@ -1,0 +1,1 @@
+import{o as s,g as t}from"./index-Bea1aR_H.js";function n(e){return s({queryKey:["servers",e],queryFn:()=>t.getServers(e),select:r=>({servers:r.servers,total:r.total}),staleTime:120*1e3})}function v(e=20){return s({queryKey:["servers","curated",e],queryFn:()=>t.getCuratedServers(e),select:r=>r.servers})}export{n as a,v as u};

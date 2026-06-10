@@ -1,0 +1,50 @@
+{
+  "name": "MCP Hub",
+  "short_name": "MCP Hub",
+  "description": "Discover, compare and rate MCP servers. Open marketplace for the Model Context Protocol ecosystem.",
+  "start_url": "/MCP-HUB/",
+  "scope": "/MCP-HUB/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "en",
+  "categories": ["developer", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/MCP-HUB/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/MCP-HUB/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/MCP-HUB/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse servers",
+      "url": "/MCP-HUB/servers",
+      "description": "See all MCP servers"
+    },
+    {
+      "name": "Categories",
+      "url": "/MCP-HUB/categories",
+      "description": "Browse by category"
+    },
+    {
+      "name": "Submit server",
+      "url": "/MCP-HUB/submit",
+      "description": "Add a new MCP server"
+    }
+  ]
+}

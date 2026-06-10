@@ -1,0 +1,394 @@
+{
+  "total": 42,
+  "companies": [
+    {
+      "name": "Model Context Protocol",
+      "servers": [
+        "postgres-mcp",
+        "sqlite-mcp",
+        "redis-mcp",
+        "puppeteer-mcp",
+        "filesystem-mcp",
+        "memory-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 6,
+      "total": 6
+    },
+    {
+      "name": "Anthropic",
+      "servers": [
+        "fetch-mcp",
+        "fastmcp",
+        "mcp-typescript-sdk",
+        "mcp-go-sdk",
+        "mcp-java-sdk",
+        "mcp-rust-sdk"
+      ],
+      "official_count": 0,
+      "community_count": 6,
+      "total": 6
+    },
+    {
+      "name": "Microsoft",
+      "servers": [
+        "playwright-mcp",
+        "azure-mcp-server"
+      ],
+      "official_count": 2,
+      "community_count": 0,
+      "total": 2
+    },
+    {
+      "name": "GitHub (Microsoft)",
+      "servers": [
+        "github-mcp-server"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Stripe",
+      "servers": [
+        "stripe-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Notion",
+      "servers": [
+        "notion-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Docker",
+      "servers": [
+        "docker-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Slack (Salesforce)",
+      "servers": [
+        "slack-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Amazon",
+      "servers": [
+        "aws-mcp-server"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Google",
+      "servers": [
+        "gcp-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Cloudflare",
+      "servers": [
+        "cloudflare-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Sentry",
+      "servers": [
+        "sentry-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Linear",
+      "servers": [
+        "linear-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "Upstash",
+      "servers": [
+        "context7"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Tavily",
+      "servers": [
+        "tavily-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Brave",
+      "servers": [
+        "brave-search-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Perplexity AI",
+      "servers": [
+        "perplexity-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "iFlow",
+      "servers": [
+        "chrome-devtools-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Discord MCP Community",
+      "servers": [
+        "discord-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Base64",
+      "servers": [
+        "telegram-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "punkpeye",
+      "servers": [
+        "awesome-mcp-servers"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "n8n",
+      "servers": [
+        "n8n"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "langgenius",
+      "servers": [
+        "dify"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "open-webui",
+      "servers": [
+        "open-webui"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "MindsDB",
+      "servers": [
+        "mindsdb"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "1Panel-dev",
+      "servers": [
+        "1panel"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "uranus-public",
+      "servers": [
+        "pymcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "PulseMCP",
+      "servers": [
+        "pulsemcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Glama",
+      "servers": [
+        "glama-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "Taskade",
+      "servers": [
+        "taskade-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "justinyoo",
+      "servers": [
+        "feishu-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "钉钉",
+      "servers": [
+        "dingtalk-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "百度",
+      "servers": [
+        "baidu-ernie-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "netease-im",
+      "servers": [
+        "yunxin-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "zhayujie",
+      "servers": [
+        "wechat-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "idootop",
+      "servers": [
+        "xiaoi-mcp"
+      ],
+      "official_count": 0,
+      "community_count": 1,
+      "total": 1
+    },
+    {
+      "name": "小米",
+      "servers": [
+        "miloco"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "阿里云",
+      "servers": [
+        "aliyun-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "腾讯云",
+      "servers": [
+        "tencentcloud-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "开源中国",
+      "servers": [
+        "gitee-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "华为云",
+      "servers": [
+        "huawei-cloud-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    },
+    {
+      "name": "美团",
+      "servers": [
+        "meituan-mcp"
+      ],
+      "official_count": 1,
+      "community_count": 0,
+      "total": 1
+    }
+  ]
+}

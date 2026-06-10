@@ -1,0 +1,21 @@
+{
+  "name": "cc-switch",
+  "mcpServers": {
+    "cc-switch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-cc-switch"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-cc-switch"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-cc-switch"
+  }
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/MCP-HUB/favicon.svg" />
+    <link rel="apple-touch-icon" href="/MCP-HUB/icon-192.png" />
+    <link rel="manifest" href="/MCP-HUB/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MCP Hub" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MCP Hub — discover, compare and rate MCP servers. Open marketplace for the Model Context Protocol ecosystem." />
+    <meta name="keywords" content="MCP, Model Context Protocol, MCP servers, MCP marketplace, AI agents, Claude, Cursor, ChatGPT, DeepSeek, LLM tools" />
+    <meta name="author" content="MCP Hub" />
+    <!-- Theme color adapts to user color-scheme (PWA address bar / iOS status bar). -->
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MCP Hub" />
+    <meta property="og:title" content="MCP Hub" />
+    <meta property="og:description" content="Discover, compare and rate MCP servers." />
+    <meta property="og:image" content="/MCP-HUB/social-preview.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="canonical" href="https://badhope.github.io/MCP-HUB/" />
+    <link rel="image_src" href="https://badhope.github.io/MCP-HUB/social-preview.png" />
+
+    <!-- JSON-LD structured data: tells search engines this is a SoftwareApplication -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "MCP Hub",
+        "alternateName": "MCP-HUB",
+        "url": "https://badhope.github.io/MCP-HUB/",
+        "description": "The Universal MCP Tool Market — 4,403+ curated Model Context Protocol servers, REST API, web UI, and AI-agent friendly discovery for Claude, Cursor, ChatGPT, and more.",
+        "inLanguage": ["en", "zh-CN"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://badhope.github.io/MCP-HUB/servers?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "MCP Hub",
+          "url": "https://github.com/badhope/MCP-HUB",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://badhope.github.io/MCP-HUB/favicon.svg"
+          }
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MCP Hub",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "softwareVersion": "2.0.1",
+        "url": "https://badhope.github.io/MCP-HUB/",
+        "downloadUrl": "https://github.com/badhope/MCP-HUB/archive/refs/heads/main.zip",
+        "codeRepository": "https://github.com/badhope/MCP-HUB",
+        "license": "https://github.com/badhope/MCP-HUB/blob/main/LICENSE"
+      }
+    </script>
+
+    <title>MCP Hub — The Universal MCP Tool Market</title>
+    <!-- Dark-mode FOUC prevention: set <html class="dark"> BEFORE first paint.
+         Reads from localStorage('mcp-hub-theme') first, then falls back to
+         the OS preference. Must be a blocking inline script (no defer/async). -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('mcp-hub-theme');
+          var prefersDark = window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored === 'dark' || (!stored && prefersDark);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (_) { /* localStorage may be unavailable */ }
+      })();
+    </script>
+    <script type="module" crossorigin src="/MCP-HUB/assets/index-Bea1aR_H.js"></script>
+    <link rel="stylesheet" crossorigin href="/MCP-HUB/assets/index-r6GO6I2H.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="max-width: 32rem; margin: 4rem auto; padding: 1.5rem; font-family: system-ui, sans-serif; color: #1f2937; text-align: center;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">MCP Hub needs JavaScript</h1>
+        <p style="color: #6b7280; margin-bottom: 1rem;">
+          This site is a single-page React app. Please enable JavaScript, or
+          browse the static catalog directly:
+        </p>
+        <ul style="list-style: none; padding: 0; line-height: 2;">
+          <li><a href="https://github.com/badhope/MCP-HUB" style="color: #6366f1;">GitHub repository</a></li>
+          <li><a href="https://raw.githubusercontent.com/badhope/MCP-HUB/main/frontend/public/static-data/servers.json" style="color: #6366f1;">servers.json (raw catalog)</a></li>
+        </ul>
+      </div>
+    </noscript>
+  </body>
+</html>

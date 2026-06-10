@@ -1,0 +1,21 @@
+{
+  "name": "chatgpt-on-wechat",
+  "mcpServers": {
+    "chatgpt-on-wechat": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/zhayujie/chatgpt-on-wechat"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/zhayujie/chatgpt-on-wechat"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/zhayujie/chatgpt-on-wechat"
+  }
+}

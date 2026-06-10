@@ -1,0 +1,21 @@
+{
+  "name": "FastGPT",
+  "mcpServers": {
+    "FastGPT": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-FastGPT"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-FastGPT"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-FastGPT"
+  }
+}

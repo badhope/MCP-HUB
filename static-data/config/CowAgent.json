@@ -1,0 +1,21 @@
+{
+  "name": "CowAgent",
+  "mcpServers": {
+    "CowAgent": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/zhayujie/CowAgent"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/zhayujie/CowAgent"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/zhayujie/CowAgent"
+  }
+}

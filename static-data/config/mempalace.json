@@ -1,0 +1,21 @@
+{
+  "name": "mempalace",
+  "mcpServers": {
+    "mempalace": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/MemPalace/mempalace"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/MemPalace/mempalace"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/MemPalace/mempalace"
+  }
+}

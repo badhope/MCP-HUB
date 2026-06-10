@@ -1,0 +1,21 @@
+{
+  "name": "agents",
+  "mcpServers": {
+    "agents": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/wshobson/agents"
+      ]
+    }
+  },
+  "commands": {
+    "uvx": [
+      "--from",
+      "git+https://github.com/wshobson/agents"
+    ]
+  },
+  "install": {
+    "npm": "uvx --from git+https://github.com/wshobson/agents"
+  }
+}

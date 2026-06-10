@@ -1,0 +1,21 @@
+{
+  "name": "repomix",
+  "mcpServers": {
+    "repomix": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-repomix"
+      ]
+    }
+  },
+  "commands": {
+    "npx": [
+      "-y",
+      "@modelcontextprotocol/server-repomix"
+    ]
+  },
+  "install": {
+    "npm": "npx -y @modelcontextprotocol/server-repomix"
+  }
+}
