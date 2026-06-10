@@ -23,13 +23,13 @@
     "audit:cross-browser": "tsx scripts/cross-browser-audit.ts"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.83.0",
-    "lucide-react": "^0.511.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-error-boundary": "^5.0.0",
-    "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^7.16.0",
+    "@tanstack/react-query": "^5.101.0",
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-error-boundary": "^6.1.2",
+    "react-helmet-async": "^3.0.0",
+    "react-router-dom": "^7.17.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
@@ -38,8 +38,8 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.9.2",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/coverage-v8": "^4.1.8",
     "autoprefixer": "^10.5.0",
