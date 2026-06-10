@@ -1,6 +1,6 @@
 # MCP Hub Backend - Production Dockerfile
 # Multi-stage build for security and performance
-FROM python:3.11-slim as base
+FROM python:3.14-slim as base
 
 # Create non-root user for security
 RUN useradd -m -u 1000 mcp-hub
