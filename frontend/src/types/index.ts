@@ -86,5 +86,11 @@ export interface StatsResponse {
   sample_source_types?: Record<string, number>;
   sample_size?: number;
   categories: Record<string, number>;
+  /** Count of servers we have an adapter for (our_signal >= 0.7). Sourced
+   *  from the build-time `our_tools_count` field in servers-index.json. */
+  our_tools_count?: number;
+  /** Map of language -> server count. Sourced from the build-time
+   *  `languages` map in servers-index.json. */
+  languages?: Record<string, number>;
   features?: string[];
 }

@@ -168,6 +168,8 @@ class ApiClient {
       last_sync: data.snapshot_date,
       data_snapshot_date: data.snapshot_date,
       categories: data.categories,
+      our_tools_count: data.our_tools_count,
+      languages: data.languages,
     };
   }
 

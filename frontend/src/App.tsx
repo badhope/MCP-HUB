@@ -3,21 +3,21 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
-import { StaticDemoBanner } from "./components/layout/StaticDemoBanner";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
 import { ErrorFallback } from "./components/shared/ErrorFallback";
 import { PageSkeleton } from "./components/shared/PageSkeleton";
-import { isStaticDemo } from "./lib/api";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const ServerList = React.lazy(() => import("./pages/ServerList"));
 const ServerDetail = React.lazy(() => import("./pages/ServerDetail"));
+const Browse = React.lazy(() => import("./pages/Browse"));
+const OurTools = React.lazy(() => import("./pages/OurTools"));
+const More = React.lazy(() => import("./pages/More"));
 const Categories = React.lazy(() => import("./pages/Categories"));
 const Curated = React.lazy(() => import("./pages/Curated"));
 const Companies = React.lazy(() => import("./pages/Companies"));
 const Favorites = React.lazy(() => import("./pages/Favorites"));
 const About = React.lazy(() => import("./pages/About"));
-const SubmitServer = React.lazy(() => import("./pages/SubmitServer"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 const handleError = (error: unknown) => {
@@ -49,7 +49,6 @@ export default function App() {
           >
             Skip to main content
           </a>
-          {isStaticDemo && <StaticDemoBanner />}
           <Navbar />
           <main id="main-content" className="flex-1">
             <Suspense fallback={<PageSkeleton variant="default" />}>
@@ -75,6 +74,41 @@ export default function App() {
                   element={
                     <Suspense fallback={<PageSkeleton variant="detail" />}>
                       <ServerDetail />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/browse"
+                  element={
+                    <Suspense fallback={<PageSkeleton variant="list" />}>
+                      <Browse />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/our-tools"
+                  element={
+                    <Suspense fallback={<PageSkeleton variant="list" />}>
+                      <OurTools />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/more"
+                  element={
+                    <Suspense fallback={<PageSkeleton variant="default" />}>
+                      <More />
+                    </Suspense>
+                  }
+                />
+                {/* /submit was absorbed into /more in Phase 7; the
+                    old route is kept as a redirect for one release
+                    so old links don't 404. */}
+                <Route
+                  path="/submit"
+                  element={
+                    <Suspense fallback={<PageSkeleton variant="default" />}>
+                      <More />
                     </Suspense>
                   }
                 />
@@ -115,14 +149,6 @@ export default function App() {
                   element={
                     <Suspense fallback={<PageSkeleton variant="default" />}>
                       <About />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/submit"
-                  element={
-                    <Suspense fallback={<PageSkeleton variant="default" />}>
-                      <SubmitServer />
                     </Suspense>
                   }
                 />

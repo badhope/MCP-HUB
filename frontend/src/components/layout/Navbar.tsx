@@ -1,24 +1,37 @@
+/**
+ * Navbar — top nav, simplified to the 3-layer product model.
+ *
+ * 4 primary links (replacing the previous 6 + 2 user menu):
+ *   - /              Home          🏠
+ *   - /browse        Browse        📂
+ *   - /our-tools     Our tools     🛠   (Layer 2)
+ *   - /more          More          ➕   (Layer 3 — data status, contribute)
+ *
+ * Plus 2 secondary "user" entries (favorites is kept; submit was
+ * absorbed into /more in Phase 7) and the GitHub external link.
+ *
+ * The "Submit" link and the StaticDemoBanner are gone: the
+ * submission flow now lives at /more, and "demo" is no longer a
+ * concept once the data is the production data.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  Menu, X, Home, Server, Tag, Star, Building2,
-  Plus, Zap, Heart, Info
+  Menu, X, Home, Tag, Wrench, Plus, Heart, Zap,
 } from 'lucide-react';
 import { Github } from '../icons/Github';
 import { ThemeToggle } from '../shared/ThemeToggle';
 
 const navLinks = [
   { path: '/', label: 'Home', icon: Home },
-  { path: '/servers', label: 'Servers', icon: Server },
-  { path: '/categories', label: 'Categories', icon: Tag },
-  { path: '/curated', label: 'Curated', icon: Star },
-  { path: '/companies', label: 'Companies', icon: Building2 },
-  { path: '/about', label: 'About', icon: Info },
+  { path: '/browse', label: 'Browse', icon: Tag },
+  { path: '/our-tools', label: 'Our tools', icon: Wrench },
+  { path: '/more', label: 'More', icon: Plus },
 ];
 
 const userLinks = [
   { path: '/favorites', label: 'Favorites', icon: Heart },
-  { path: '/submit', label: 'Submit', icon: Plus },
 ];
 
 export const Navbar = React.memo(() => {

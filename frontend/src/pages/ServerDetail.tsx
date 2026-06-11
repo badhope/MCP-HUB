@@ -12,6 +12,10 @@ import { getQualityScore, getQualityDisplay } from '../lib/quality';
 import { FavoritesButton } from '../components/user/FavoritesButton';
 import { RatingSection } from '../components/user/RatingSection';
 import { CommentSection } from '../components/user/CommentSection';
+import { InstallPanel } from '../components/server/InstallPanel';
+import { UniversalConfig } from '../components/server/UniversalConfig';
+import { ScoreRadar } from '../components/server/ScoreRadar';
+import { OurSignalBadge } from '../components/server/OurSignalBadge';
 import { useServers } from '../hooks/useServers';
 import { useServerConfig } from '../hooks/useServerDetail';
 import { useDownloadConfig } from '../hooks/useExport';
@@ -189,6 +193,10 @@ const ServerDetail = React.memo(() => {
                       <div className="flex items-center flex-wrap gap-3 mb-2">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{server.name}</h1>
                         <QualityBadge score={qualityScore} size="md" showScore />
+                        <OurSignalBadge
+                          label={server.our_signal_label || 'unknown'}
+                          size="sm"
+                        />
                       </div>
                       <p className="text-gray-500 dark:text-slate-400">by <span className="font-medium text-gray-700 dark:text-slate-200">@{server.owner}</span></p>
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
@@ -294,6 +302,61 @@ const ServerDetail = React.memo(() => {
                 </p>
               </CardContent>
             </Card>
+
+            {/* Phase 7: 5-factor score breakdown (radar) — only if build-time
+                gen_static_data.py populated score_breakdown for this server. */}
+            {server.score_breakdown && (
+              <Card>
+                <CardContent className="p-6 sm:p-8">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <TrendingUp size={20} className="text-primary-600" />
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                      Score breakdown
+                    </h2>
+                    <span className="ml-auto text-xs text-slate-500 dark:text-slate-400">
+                      weighted: stars 30% · recency 15% · lang 15% · docs 20% · ours 20%
+                    </span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <ScoreRadar breakdown={server.score_breakdown} size={240} />
+                    <div className="flex-1 grid grid-cols-2 sm:grid-cols-1 gap-2 w-full">
+                      {(
+                        [
+                          ['Stars', server.score_breakdown.stars],
+                          ['Recency', server.score_breakdown.recency],
+                          ['Lang coverage', server.score_breakdown.lang_coverage],
+                          ['Docs quality', server.score_breakdown.desc_quality],
+                          ['Our signal', server.score_breakdown.our_signal],
+                        ] as Array<[string, number]>
+                      ).map(([label, value]) => (
+                        <div
+                          key={label}
+                          className="flex items-center justify-between text-sm"
+                        >
+                          <span className="text-slate-500 dark:text-slate-400">
+                            {label}
+                          </span>
+                          <span className="font-medium text-slate-900 dark:text-white">
+                            {Math.round(value)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Phase 7: Install panel — 1-line install + npx/uvx + GitHub + ZIP. */}
+            <InstallPanel server={server} />
+
+            {/* Phase 7: Universal config — only when we have an adapter
+                (our_signal_label === 'adapted' / 'in_progress'). For now
+                this branch never fires because Layer 2 is empty; the
+                component will start rendering in Phase 9. */}
+            {(server.our_signal ?? 0) >= 0.7 && (
+              <UniversalConfig server={server} />
+            )}
 
             <Card>
               <CardHeader>
