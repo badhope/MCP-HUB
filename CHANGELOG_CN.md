@@ -4,7 +4,65 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
-## [Unreleased]
+## [3.0.0] - 2026-06-11
+
+> **架构转向：纯静态 SPA，去后端。**
+>
+> FastAPI 后端（38 个 REST 接口、`core/`、`services.py`、`user_data.py`、`query.py`、GZip 与限流中间件、PyPI 控制台脚本）已全部下线。MCP Hub 现在是一个 Vite + React 19 的静态 SPA，直接部署到 GitHub Pages，用户数据存放在 `localStorage`。一条小 Python 数据管道（`tools/sync_index.py` → `tools/gen_static_data.py`）每天从上游拉取，生成单一的 `frontend/public/servers-index.json`（~4.4 MB，4,400+ 套服务器），SPA 启动时加载一次。
+>
+> 详见 [`REFACTOR_PLAN.md`](REFACTOR_PLAN.md)：5 阶段重构计划、5 因子打分公式、3 层产品模型（上游索引 → 我们的通用适配器 → "更多"标签页）。
+
+### 新增
+- **`tools/sync_index.py`** — 拉取上游 `awesome-mcp` 镜像，用 GitHub API 元信息（stars、语言、topics、`updated_at`、license）补全每个仓库，写入根目录的 `servers-index.json`。仅依赖标准库。
+- **`tools/gen_static_data.py`** — 读取根索引，5 因子打分，每种语言生成 `install_hint`，扫描 `frontend/public/adapters/` 得出 `our_signal` 映射，写入 SPA 用的 `frontend/public/servers-index.json`。仅依赖标准库。
+- **`tools/completeness_scoring.py`** — 5 因子打分：stars 30% + recency 15% + lang_coverage 15% + desc_quality 20% + our_signal 20% → 0-100。纯函数，测试完备。
+- **`tools/_install_hint.py`** — 根据每台服务器的语言和源仓库推导主安装命令 + 4 种备选（`npx -y X` / `uvx X` / `pip install X` / `git clone …`）。Python → `uvx`；JS/TS → `npx -y`；Go/Rust → 克隆仓库。同时推导 `codeload.github.com` 的 zip 下载链接。
+- **`tools/_our_signal.py`** — 遍历 `frontend/public/adapters/<name>/adapter.json`，返回 `our_signal` 映射（`✅ adapted=1.0` / `⚙️ in_progress=0.7` / `👀 researched=0.4`）。
+- **`frontend/public/adapters/.gitkeep`** — 第二层（我们的通用适配器）骨架；首批适配器在 3.1.0。
+- **`.github/workflows/sync-data.yml`** — 每天 04:00 UTC 跑 `sync_index.py` + `gen_static_data.py`，自动 commit 重新生成的 `servers-index.json` 到 `main`。
+- **`tests/test_install_hint.py`** — 12 个测试，覆盖 5 种语言分支。
+- **`tests/test_scoring.py`** — 21 个测试，锁定打分公式。
+- **每日上游数据文件** — `frontend/public/servers-index.json`，作为静态资源下发。顶层结构为 `{ version, snapshot_date, generator, total_servers, total_categories, our_tools_count, categories, languages, source_types, servers[] }`。
+- **通用适配器 schema** — `frontend/public/adapters/<name>/adapter.json`：`{ name, platforms: { "claude-desktop", "cursor", "cline", "windsurf" }, notes }`。每条 platform 是 `{ command, args }`，SPA 用一份适配器渲染出多客户端可粘贴的配置块。
+- **`Server` 类型上 5 个构建期字段** — `install_hint`、`score`、`score_breakdown`、`our_signal`、`our_signal_label`。
+- **`.github/workflows/ci.yml`** — 两个 job：`frontend`（type-check + Vite build）、`data-pipeline`（pytest）。
+- **`frontend/.env.example`** — 精简为 `VITE_APP_NAME` / `VITE_APP_VERSION` / `VITE_BASE_PATH`；旧的 `VITE_API_URL` / `VITE_USE_STATIC_DATA` 全部移除。
+- **`frontend/vite.config.ts`** — 移除 `/api → :8080` 开发代理。
+- **`REFACTOR_PLAN.md`** — 5 阶段重构计划、3 层产品模型、打分公式、每个阶段的 commit 形态。
+
+### 变更
+- **`frontend/src/lib/api.ts`** — 重写。800 行的 `requestWithFallback` shim 和 `STATIC_BASE` 演示分支全部删除。`loadIndex()` 拉取唯一的 `servers-index.json`，模块级缓存，对外暴露相同的接口（`getServers`、`getServer`、`getPopularServers`、`getRecentServers`、`getCuratedServers`、`getServerConfig`、`exportServerMarkdown`、`exportBatchJson`、`exportBatchMarkdown` …）。所有过滤/排序都在内存里完成。
+- **`frontend/src/types/index.ts`** — `Server` 增加 5 个构建期字段；`full_name`、`owner`、`topics`、`created_at`、`archived`、`license` 改为可选。
+- **`Makefile`** — 重写 25+ 目标：`frontend`（开发）、`data` / `sync`（管道）、`test`（pytest）、`build` / `build-frontend` / `build-data`、`deploy`，外加 `clean` / `clean-py` / `clean-frontend`。删除 `make docker-up` / `make dev`（后端+前端一起）。
+- **`pyproject.toml`** — 缩成 `[tool.black]` + `[tool.isort]`。`[project]` / `[project.optional-dependencies]` / `[project.scripts]` / `[tool.setuptools.packages.find]` / `[tool.pytest.ini_options]` 全部删除。
+- **`.gitignore`** — 删除 `servers/` / `awesome-mcp-list/` 例外（上游镜像现在写到一个 4.4 MB 的 `servers-index.json`，不再 318 MB 克隆树）。
+- **`.devcontainer/devcontainer.json`** — 镜像改为 `python:3.11-bullseye` + `devcontainers/features/node:1`；删除旧的 `features: ['docker-in-docker']`。
+- **`.flake8`** — `servers/` 移出 `exclude`（目录已删除）。
+- **`CODEOWNERS`** — 删除 `main.py / api.py / services.py / user_data.py / query.py / core/ / templates/` 行；保留 `/tools/`、`/frontend/`、`/.github/workflows/`、构建配置组。
+- **`README.md`** / **`README_CN.md`** — 按 3 层产品模型重写。
+- **`tools/secret_scanner.py`** + **`tools/pre-commit`** — 保留不变；现在是唯一的 Python 质量门禁。
+- **`.github/workflows/ci.yml`** — secret-scan job 移到 `.github/workflows/gitleaks.yml`；后端 job 删除。
+- **`frontend/src/test/setup.ts`** — 精简；`VITE_API_URL` / `VITE_USE_STATIC_DATA` 的 `import.meta.env` 占位不再需要。
+
+### 删除
+- **后端 100%** — `main.py`、`services.py`、`query.py`、`user_data.py`、`core/`、`api.py`。约 120 KB FastAPI 代码，加上对应的测试文件（`tests/test_config_builder.py`、`test_export.py`、`test_fastapi.py`、`test_core.py`、`test_downloader.py`、`test_query.py`、`test_secret_scanner.py`、`test_user_functions.py`、`conftest.py`）。
+- **Docker 100%** — `Dockerfile`、`docker-compose.yml`、`docker-entrypoint.sh`、`.dockerignore`、`frontend/Dockerfile`、`frontend/.dockerignore`、`frontend/nginx.conf`。
+- **上游参考子项目（318 MB 死重）** — `servers/dify` (181 MB)、`servers/gemini-cli` (132 MB)、`servers/memory` (2.5 MB)、`servers/filesystem` (2.5 MB)。**仓库体积：318 MB → 17 MB**。
+- **逐服务器配置模板（50 个）** — `templates/*.json`。同样的 JSON 之前在 `frontend/public/static-data/config/*.json`，两份都删除；安装提示现在从语言/源仓库自动推导。
+- **过时的 JSON 索引（3 个）** — `comprehensive_mcp_projects.json` (64 KB)、`notable_projects.json` (20 KB)、`server_registry.json` (56 KB)。
+- **前端 `static-data/` 快照** — `frontend/public/static-data/{servers,stats,categories,companies,curated,featured-configs,index,popular,recent}.json` + `static-data/config/*.json` (320 KB)。
+- **13 个死代码 CLI 工具** — `tools/auto_updater.py`、`batch_manager.py`、`bench.py`、`collect_domestic_companies.py`、`comprehensive_collector.py`、`download_manager.py`、`downloader.py`、`gen_api_docs.py`、`index_downloader.py`、`index_servers.py`、`notable_projects_navigator.py`、`server_health_checker.py`、`update_index.py`。
+- **4 个过时 CI workflow** — `.github/workflows/docker.yml`、`codeql.yml`、`scorecard.yml`、`lychee.yml`。
+- **5 个过时文档** — `docs/API.md`、`docs/API_CN.md`、`docs/BENCHMARKS.md`、`docs/internal/AGENT_GUIDE_CN.md`、`docs/internal/NOTABLE_PROJECTS_GUIDE.md`。
+- **Python 打包元数据** — `pytest.ini`、`requirements.txt`、`mcp_hub.egg-info/`。
+- **MSW mocks** — `frontend/src/test/mocks/handlers.ts`、`frontend/src/test/mocks/server.ts`。
+
+### 迁移说明
+- **终端用户** — 演示站 https://badhope.github.io/MCP-HUB/ 的浏览、搜索、收藏、评分、评论功能不变。**收藏数据保存在 `localStorage`**，升级后依然存在；清空站点数据会一并清空。
+- **服务器作者** — 提交入口改为 "更多" 标签页（静态表单，打开预填好的 `server_submission` issue）。旧的 `POST /submissions/submit` 接口返回 404。
+- **AI agents** — REST API 没了。直接读 `servers-index.json`（作为静态资源在 `/servers-index.json` 提供，~4.4 MB）。数据结构见 `tools/gen_static_data.py` 顶部注释。
+
+## [2.0.1] - 2026-06-01
 
 ### 新增
 - `static-data/stats.json` 增加 `data_snapshot_date` 字段 — 在每个服务器指标旁展示快照新鲜度，让 GitHub Pages 演示版清楚标注为"快照"而非"实时数据"。FastAPI 后端会在每次抓取时用 `datetime.utcnow()` 覆盖该字段

@@ -4,67 +4,150 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [3.0.0] - 2026-06-11
 
-### Removed
-- **`api.py`** (15 KB legacy `BaseHTTPHandler` shim) and its `tests/test_api.py`. The file was never imported by `main.py` — all FastAPI routes have always lived in `main.py` — and the `test_api.py` fixture imported the dead class. Coverage of the same surface continues under `tests/test_fastapi.py` (which spins up the real `app` via `uvicorn`). Any project depending on `python api.py` as an entry point should switch to `python main.py` (or `uvicorn main:app`); behavior is identical because `main.py` is the only thing that ever defined the routes.
+> **Architecture pivot: static SPA, no backend.**
+>
+> The FastAPI backend (38 REST endpoints, `core/`, `services.py`, `user_data.py`, `query.py`,
+> GZip + rate-limit middlewares, PyPI console scripts) is gone. MCP Hub is now a Vite + React 19
+> SPA deployed straight to GitHub Pages, with user data persisted to `localStorage`. A small Python
+> data-pipeline (`tools/sync_index.py` → `tools/gen_static_data.py`) fetches upstream nightly and
+> emits a single `frontend/public/servers-index.json` (~4.4 MB, 4,400+ servers) the SPA loads
+> once at boot.
+>
+> See [`REFACTOR_PLAN.md`](REFACTOR_PLAN.md) for the full plan, the 5-factor scoring formula, and
+> the 3-layer product model (upstream index → our universal adapters → "More" tab).
 
 ### Added
-- `data_snapshot_date` field in `static-data/stats.json` — surfaces the snapshot's freshness next to every per-server metric so the GitHub Pages demo is clearly labelled as a snapshot, not a live feed. FastAPI backend will overwrite this with `datetime.utcnow()` on every scrape.
-- `data_snapshot_date` field on the `StatsResponse` TypeScript type
-- `Clock` icon and "Data last synced …" line in `StaticDemoBanner`
-- `snapshot` badge under every star count in `ServerCard` and `ServerDetail`
-- "Snapshot data — last synced …" footnote in `Quality Assessment` section of `ServerDetail`
-- `frontend/public/robots.txt` with sitemap pointer
-- `frontend/public/sitemap.xml` covering all top-level routes
-- `<link rel="canonical">` and JSON-LD `WebSite` + `SoftwareApplication` structured data in `frontend/index.html`
-- `CHANGELOG_CN.md` — Chinese translation of the changelog
-- `docs/API_CN.md` — Chinese translation of the API reference
-- `.github/workflows/lint.yml` — fast `black`/`isort`/`flake8`/secret-scan/TS-typecheck on every push
-- `.github/workflows/frontend-deploy.yml` — auto-build the SPA and publish `frontend/dist/` to the `gh-pages` branch (replaces the manual deploy step)
-- `.github/workflows/release.yml` — auto-draft a GitHub Release on `v*.*.*` tag push, pulling notes from `CHANGELOG.md`
-- `GET /health` liveness probe in `main.py` (lightweight, no DB/catalog touch)
-- `HEALTHCHECK` in `Dockerfile` now hits `/health` instead of `/`
-- `GZipMiddleware` in `main.py` (compresses responses ≥ 1KB; `servers.json` shrinks from ~100 KB to <15 KB on the wire)
-- `RateLimitMiddleware` in `main.py` — dependency-free in-process token-bucket limiter, defaults to 120 req / 60 s per client IP, exempts `/`, `/health`, `/docs`, `/redoc`, `/openapi.json` and CORS preflight. Tunable via `RATE_LIMIT_REQUESTS`, `RATE_LIMIT_WINDOW`, `RATE_LIMIT_TRUST_PROXY`, `RATE_LIMIT_DISABLED`
-- `cli()` console entry-point in `main.py` plus `[project.scripts]` in `pyproject.toml` — `pip install mcp-hub` now exposes `mcp-hub`, `mcp-hub-server`, `mcp-market` commands on `$PATH`
-- `[project] classifiers` and `[project.urls]` in `pyproject.toml` for richer PyPI presentation
-- `frontend/tsconfig.app.json` + `frontend/tsconfig.node.json` — Vite-recommended split config, now referenced from `tsconfig.json`
-- `frontend/.dockerignore` — excludes `node_modules`, tests, `static-data`, editor cruft from the frontend build context
-- `.gitattributes` — normalises line endings, marks binary extensions, pins lockfiles to `-diff`
-- `.github/FUNDING.yml` — 7 funding platforms enabled (GitHub Sponsors, Open Collective, Ko-fi, Community Bridge, Liberapay, IssueHunt, Buy Me a Coffee)
-- `.vscode/` shared team config (settings + 16 recommended extensions), kept under version control via `.gitignore` whitelist
-- `.nvmrc` (Node 20) and `.devcontainer/devcontainer.json` for one-click Codespaces
-- `.dockerignore` at repo root, Makefile with 25+ targets, examples/README now lists 50 templates
-- `docs/ARCHITECTURE.md` — design notes, subsystem boundaries, decision log
-- `docs/SECURITY-MODEL.md` — six concrete threat models with mitigations
-- `docs/DEVELOPMENT.md` — dev workflow, branch rules, test bar, release process
-- `docs/BENCHMARKS.md` — real numbers for the public API (p50/p95/p99 by endpoint, GZip impact, sustained RPS, RSS)
-- `tools/bench.py` — the script that produces `docs/BENCHMARKS.md`, runnable locally
-- `.github/labeler.yml` + `.github/workflows/labeler.yml` — auto-apply `area/*` labels to PRs based on paths touched
-- `.github/release-drafter.yml` — auto-draft release notes on `v*.*.*` tag push, grouped by area
-- `.github/ISSUE_TEMPLATE/config.yml` — hide the blank-issue option, point low-effort / security / spec questions to Discussions or SECURITY.md
+- **`tools/sync_index.py`** — pulls the upstream `awesome-mcp` mirror, enriches each repo with
+  GitHub API metadata (stars, language, topics, `updated_at`, license), and writes
+  `servers-index.json` (root). Stdlib-only.
+- **`tools/gen_static_data.py`** — reads the root index, runs the 5-factor scoring, computes
+  `install_hint` per language, scans `frontend/public/adapters/` for the `our_signal` map, and
+  writes the SPA-bound `frontend/public/servers-index.json`. Stdlib-only.
+- **`tools/completeness_scoring.py`** — 5-factor score: stars 30% + recency 15% +
+  lang_coverage 15% + desc_quality 20% + our_signal 20% → 0-100. Pure function, fully tested.
+- **`tools/_install_hint.py`** — derives a primary install command and 4 alternatives
+  (`npx -y X` / `uvx X` / `pip install X` / `git clone …`) from each server's language and
+  source. Python → `uvx`; JS/TS → `npx -y`; Go/Rust → repo clone. Also derives a
+  `codeload.github.com` zip URL.
+- **`tools/_our_signal.py`** — walks `frontend/public/adapters/<name>/adapter.json` and
+  returns the `our_signal` map (`✅ adapted=1.0` / `⚙️ in_progress=0.7` / `👀 researched=0.4`).
+- **`frontend/public/adapters/.gitkeep`** — Layer 2 (our universal adapters) skeleton. First
+  adapters land in 3.1.0.
+- **`.github/workflows/sync-data.yml`** — daily 04:00 UTC cron: runs `sync_index.py` and
+  `gen_static_data.py`, auto-commits the regenerated `servers-index.json` back to `main`.
+- **`tests/test_install_hint.py`** — 12 tests covering all 5 language branches.
+- **`tests/test_scoring.py`** — 21 tests pinning the scoring formula.
+- **Daily-upstream data file** — `frontend/public/servers-index.json`, served as a static
+  asset, with a top-level `{ version, snapshot_date, generator, total_servers,
+  total_categories, our_tools_count, categories, languages, source_types, servers[] }` shape.
+- **Universal-adapter schema** — `frontend/public/adapters/<name>/adapter.json`:
+  `{ name, platforms: { "claude-desktop", "cursor", "cline", "windsurf" }, notes }`. Each
+  platform entry is `{ command, args }` — the SPA renders a per-client copy-pasteable config
+  block from a single adapter.
+- **5 build-time fields on `Server`** — `install_hint`, `score`, `score_breakdown`,
+  `our_signal`, `our_signal_label`.
+- **`.github/workflows/ci.yml`** — two jobs: `frontend` (type-check + Vite build) and
+  `data-pipeline` (pytest). The Python-job / secret-scan-job that used to live here are gone;
+  the secret scanner is invoked from `pre-commit` and from a dedicated `gitleaks.yml` workflow.
+- **`frontend/.env.example`** — trimmed to `VITE_APP_NAME` / `VITE_APP_VERSION` /
+  `VITE_BASE_PATH`; the old `VITE_API_URL` / `VITE_USE_STATIC_DATA` knobs are gone.
+- **`frontend/vite.config.ts`** — dropped the `/api → :8080` dev proxy.
+- **`REFACTOR_PLAN.md`** — the 5-phase refactor plan, the 3-layer product model, the
+  scoring formula, and the per-phase commit shape.
 
 ### Changed
-- README, README_CN: rewritten from scratch — removed the emoji-heavy decorative headers, the "100% free / production-ready" marketing tone, and the bullet-list-of-buzzwords structure. Each section now leads with a concrete fact (an endpoint, a number, a file path) and the prose reads like an engineer's first-day-on-the-job note rather than a launch announcement.
-- `docs/internal/*.md`: stripped the 200+ decorative emoji that were making the maintainer docs read like AI-generated filler. Tables, headings, and bullets now use plain markdown.
-- `docs/internal/IMPROVEMENT_PLAN.md`: `🔴高` / `🟡中` / `🟢低` priority labels replaced with `Priority: high` / `medium` / `low`.
-- 234 `print(...)` calls across 18 `tools/*.py` files replaced with module-level `_LOG = logging.getLogger(__name__)` + `_LOG.info(...)`. CLI error output that uses `print(..., file=sys.stderr)` is preserved (logger has no `file=` kwarg). `tools/secret_scanner.py`'s "OK: no secrets detected." stays on stdout so `test_scanner_clean_directory_verbose` keeps passing.
-- Added `.flake8` (max-line-length=100, exclude `servers/`, `frontend/`, build dirs) — gives the same 100-char budget that black 26.5.1 + isort 8 already enforce, so the linter / formatter can no longer disagree.
-- `Makefile` `deploy-ghpages` target — replaced the manual `git worktree + git push` dance with a pointer to the new GitHub Actions deploy. The gh-pages branch no longer exists; deploys are handled by `actions/deploy-pages@v4` and the Pages artifact uploader.
-- `.github/workflows/frontend-deploy.yml` — switched from `peaceiris/actions-gh-pages@v4` (push to gh-pages branch) to `actions/configure-pages@v5` + `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4` (Pages workflow). The SPA fallback (`cp index.html 404.html`) and `.nojekyll` are still produced inline. Repo Pages source switched to `build_type: workflow`.
-- Repository branches — `gh-pages` deleted. The repo now has only `main`. Public site at https://badhope.github.io/MCP-HUB/ is still live and continues to update on every push to `main`, just served directly by the Pages CDN instead of from a branch.
-- **Rollback** — the previous two entries (actions/deploy-pages switch, gh-pages deletion) are reverted. `gh-pages` branch is back as the Pages source (`build_type: legacy`, `source: gh-pages /`). The workflow restores the `peaceiris/actions-gh-pages@v4` push to `gh-pages`. Net effect: same end-state as the original `b210884` setup, but with the additional flake8 cleanup (#14), so the deployed site serves the lint-clean frontend.
+- **`frontend/src/lib/api.ts`** — rewritten. The 800-line `requestWithFallback` shim and the
+  `STATIC_BASE` demo-mode branch are gone. `loadIndex()` fetches the single
+  `servers-index.json` once, caches in module-scope, and exposes the same surface
+  (`getServers`, `getServer`, `getPopularServers`, `getRecentServers`, `getCuratedServers`,
+  `getServerConfig`, `exportServerMarkdown`, `exportBatchJson`, `exportBatchMarkdown`, …).
+  All filtering/sorting happens in memory.
+- **`frontend/src/types/index.ts`** — `Server` now has the 5 build-time fields; `full_name`,
+  `owner`, `topics`, `created_at`, `archived`, `license` are now optional (the new index
+  doesn't always carry them).
+- **`Makefile`** — 25+ targets refreshed: `frontend` (dev), `data` / `sync` (pipeline), `test`
+  (pytest), `build` / `build-frontend` / `build-data`, `deploy`, plus `clean` /
+  `clean-py` / `clean-frontend`. The old `make docker-up` / `make dev` (backend + frontend
+  together) are gone.
+- **`pyproject.toml`** — reduced to `[tool.black]` + `[tool.isort]`. The `[project]` /
+  `[project.optional-dependencies]` / `[project.scripts]` / `[tool.setuptools.packages.find]`
+  / `[tool.pytest.ini_options]` blocks are gone — the only Python dep is `pytest`, installed
+  by `make install-pytest` / `pip install pytest` in CI.
+- **`.gitignore`** — dropped the `servers/` / `awesome-mcp-list/` exceptions (the upstream
+  mirror is now written to a single `servers-index.json`, not a 318 MB tree of clones).
+- **`.devcontainer/devcontainer.json`** — image is now `python:3.11-bullseye` +
+  `devcontainers/features/node:1`; the legacy backend `features: ['docker-in-docker']` is
+  gone.
+- **`.flake8`** — `servers/` removed from `exclude` (the dir is gone).
+- **`CODEOWNERS`** — dropped the `main.py / api.py / services.py / user_data.py / query.py /
+  core/ / templates/` rules; kept the `/tools/`, `/frontend/`, `/.github/workflows/`,
+  build-config groups.
+- **`README.md`** / **`README_CN.md`** — rewritten for the 3-layer product model (upstream
+  index → our adapters → "More" tab). Section headings now lead with concrete artefacts
+  (a file path, a number, an endpoint).
+- **`tools/secret_scanner.py`** + **`tools/pre-commit`** — preserved unchanged; now the
+  only Python-based quality gate.
+- **`.github/workflows/ci.yml`** — secret-scan job moved out (now lives in
+  `.github/workflows/gitleaks.yml`); backend job deleted; new two-job shape: `frontend` +
+  `data-pipeline`.
+- **`frontend/src/test/setup.ts`** — trimmed; the `VITE_API_URL` /
+  `VITE_USE_STATIC_DATA` `import.meta.env` stubs are no longer needed.
 
-### Fixed
-- `tools/sync_index.py` F601 — removed three duplicate dict keys (`html`, `notion`, `arxiv`); the canonical definitions in the `document-notes` block are the ones that survive
-- `main.py` F541 — removed stray `f` prefix from two identical install/run command blocks (no `{}` placeholders in those literals)
-- `tools/build_social_preview.py` F841 — deleted 4 unused bounding-box vars and 1 unused font handle
-- `tools/gen_static_data.py` F841 — deleted 2 unused locals (`notable`, `tpl`)
-- `tests/test_query.py` / `tools/gen_api_docs.py` E741 — renamed comprehension target `l` to `line` (ambiguous with the digit `1`)
-- 22 E501 long lines across `services.py`, `tools/secret_scanner.py`, `tools/completeness_scoring.py`, `tools/gen_static_data.py`, `tools/auto_updater.py`, `tools/notable_projects_navigator.py`, `tools/update_index.py`, `tools/collect_domestic_companies.py` — descriptions shortened, regex/URL/docker commands annotated with `# noqa: E501` where wrapping hurts readability
-- `tests/test_api.py` / `tests/test_fastapi.py` E402 — moved mid-file `import socket` to the top import block
-- `tools/notable_projects_navigator.py` / `tools/download_manager.py` F541 — stripped redundant `f` prefix from strings without placeholders
+### Removed
+- **Backend (100%)** — `main.py`, `services.py`, `query.py`, `user_data.py`, `core/`,
+  `api.py`. ~120 KB of FastAPI code, plus the matching test files
+  (`tests/test_config_builder.py`, `tests/test_export.py`, `tests/test_fastapi.py`,
+  `tests/test_core.py`, `tests/test_downloader.py`, `tests/test_query.py`,
+  `tests/test_secret_scanner.py`, `tests/test_user_functions.py`, `tests/conftest.py`).
+- **Docker (100%)** — `Dockerfile`, `docker-compose.yml`, `docker-entrypoint.sh`,
+  `.dockerignore`, `frontend/Dockerfile`, `frontend/.dockerignore`, `frontend/nginx.conf`.
+  GH Pages does what the Docker stack used to.
+- **Upstream reference subprojects (318 MB dead weight)** — `servers/dify` (181 MB),
+  `servers/gemini-cli` (132 MB), `servers/memory` (2.5 MB), `servers/filesystem` (2.5 MB).
+  These were only ever used as test fixtures for the now-removed `tests/test_core.py` and
+  the now-removed `tools/download_manager.py`. Repo size: **318 MB → 17 MB**.
+- **Per-server config templates (50 files)** — `templates/*.json`. The same JSON lived in
+  `frontend/public/static-data/config/*.json`. Both are gone; install hints are now
+  derived automatically from the server's language/source.
+- **Stale JSON indexes (3 files)** — `comprehensive_mcp_projects.json` (64 KB),
+  `notable_projects.json` (20 KB), `server_registry.json` (56 KB). Superseded by
+  `frontend/public/servers-index.json`.
+- **Frontend `static-data/` snapshot** — `frontend/public/static-data/{servers,stats,
+  categories,companies,curated,featured-configs,index,popular,recent}.json` +
+  `static-data/config/*.json` (320 KB). The new `servers-index.json` carries everything
+  the SPA needs in one file.
+- **13 dead CLI tools** — `tools/auto_updater.py`, `tools/batch_manager.py`,
+  `tools/bench.py`, `tools/collect_domestic_companies.py`,
+  `tools/comprehensive_collector.py`, `tools/download_manager.py`,
+  `tools/downloader.py`, `tools/gen_api_docs.py`, `tools/index_downloader.py`,
+  `tools/index_servers.py`, `tools/notable_projects_navigator.py`,
+  `tools/server_health_checker.py`, `tools/update_index.py`. All hit the now-removed
+  FastAPI endpoints or duplicated what `gen_static_data.py` does.
+- **4 stale CI workflows** — `.github/workflows/docker.yml`,
+  `.github/workflows/codeql.yml`, `.github/workflows/scorecard.yml`,
+  `.github/workflows/lychee.yml`. The first targets the now-removed Docker stack; the
+  latter three are high-noise / low-value for a single-package SPA.
+- **5 obsolete docs** — `docs/API.md`, `docs/API_CN.md`, `docs/BENCHMARKS.md`,
+  `docs/internal/AGENT_GUIDE_CN.md`, `docs/internal/NOTABLE_PROJECTS_GUIDE.md`. Backend
+  API reference + bench numbers + cross-team agent notes are no longer applicable.
+- **Python packaging metadata** — `pytest.ini`, `requirements.txt`,
+  `mcp_hub.egg-info/`. The pipeline + tests use only the stdlib + `pytest`.
+- **MSW mocks** — `frontend/src/test/mocks/handlers.ts`,
+  `frontend/src/test/mocks/server.ts`. The frontend no longer mocks the backend; the
+  tests now exercise `localStorage` + the static index directly.
+
+### Migration notes
+- **End users** — the demo at https://badhope.github.io/MCP-HUB/ is unchanged for browsing,
+  searching, favoriting, rating, and commenting. Your favorites survive the upgrade
+  because they live in `localStorage`. **Clearing site data still clears them — there
+  is no server-side account.**
+- **Server authors** — server submissions now go through the "More" tab (a static form
+  that opens a prefilled `server_submission` issue). The old `POST /submissions/submit`
+  endpoint returns 404.
+- **AI agents** — the REST API is gone. Read `servers-index.json` directly (it is served
+  as a static asset at `/servers-index.json`, ~4.4 MB). The shape is documented at the top of `tools/gen_static_data.py`.
 
 ## [2.0.1] - 2026-06-01
 
