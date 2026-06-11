@@ -1,6 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { Moon, Sun, Monitor } from 'lucide-react'
 import { useTheme, type Theme } from '../../hooks/useTheme'
+
+// Subscribe to "is the browser rendering this?" without an effect.
+// `useSyncExternalStore` returns the server snapshot during SSR/initial
+// hydration and the client snapshot after — exactly the boundary this
+// component needs to avoid a hydration mismatch with the FOUC script
+// that paints the theme before React mounts.
+function subscribe() {
+  return () => {}
+}
+function getClientSnapshot() {
+  return true
+}
+function getServerSnapshot() {
+  return false
+}
 
 /**
  * Three-way theme toggle: light / dark / system.
@@ -17,11 +32,7 @@ import { useTheme, type Theme } from '../../hooks/useTheme'
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  // Avoid hydration mismatches: the SSR/initial DOM (set by the FOUC
-  // script) may disagree with React's first render of the icon.
-  useEffect(() => setMounted(true), [])
+  const mounted = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot)
 
   const Icon = !mounted
     ? Sun

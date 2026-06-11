@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Info, X, Github, BookOpen, Clock } from 'lucide-react';
+import { Info, X, BookOpen, Clock } from 'lucide-react';
+import { Github } from '../icons/Github';
 import { useStats } from '../../hooks/useStats';
 
 const formatSnapshotDate = (iso: string): string => {

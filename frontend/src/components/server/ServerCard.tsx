@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, Github, Clock, Code, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { Star, Clock, Code, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { Github } from '../icons/Github';
 import { Card, CardContent, CardFooter } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { QualityBadge } from '../shared/QualityBadge';

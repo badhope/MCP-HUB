@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Send, Github, ChevronRight, CheckCircle, AlertCircle, Loader2, Info, ExternalLink } from 'lucide-react';
+import { Send, ChevronRight, CheckCircle, AlertCircle, Loader2, Info, ExternalLink } from 'lucide-react';
+import { Github } from '../components/icons/Github';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { apiClient, isStaticDemo } from '../lib/api';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Server, Github, Heart, Sparkles } from 'lucide-react';
+import { Server, Heart, Sparkles } from 'lucide-react';
+import { Github } from '../icons/Github';
 
 export const Footer = React.memo(() => {
   const currentYear = new Date().getFullYear();

@@ -526,63 +526,128 @@ async def get_server_config(name: str, data: Dict[str, Any] = Depends(get_app_da
     if not server:
         raise HTTPException(status_code=404, detail="Server not found")
 
-    owner = server.get("owner", "")
-    repo_name = server.get("name", "")
+    return build_server_config(server)
 
-    # Generate install commands based on repository content
-    install = {}
-    source = server.get("source", "")
-    language = (server.get("language") or "").lower()
-    description = (server.get("description") or "").lower()
 
-    # NPM
-    if (
-        "npm" in source.lower()
-        or "npmjs" in source.lower()
-        or language in {"javascript", "typescript", "nodejs", "node", "ts", "js"}
-    ):
+def _is_python_project(language: str, source: str, description: str) -> bool:
+    """
+    Decide whether a server should get a `pip install` install hint.
+
+    The data index has `language` populated for ~100% of entries (see
+    `tools/sync_index.py`), so it's the primary signal. We fall back to
+    description/source string matching only when the explicit signal
+    disagrees — never the other way around. The old heuristic
+    (`"pyproject.toml" in description`) over-matched because descriptions
+    frequently mention dependencies in passing.
+    """
+    lang = (language or "").lower()
+    if lang in {"python", "py"}:
+        return True
+    if "pypi.org" in (source or "").lower():
+        return True
+    # Heuristic fallback: only trust it if the language field is empty.
+    if not lang:
+        desc = (description or "").lower()
+        if "pyproject.toml" in desc or "setup.py" in desc:
+            return True
+    return False
+
+
+def _build_run_command(language: str, repo_name: str) -> str:
+    """
+    Best-guess `command` for the `mcpServers` block. Picks the conventional
+    runner for the project's primary language. The repo name is used as the
+    entry-point name; users should verify it matches the actual binary in
+    the repo (which is why we keep `install` as separate suggestions).
+    """
+    lang = (language or "").lower()
+    if lang in {"javascript", "typescript", "nodejs", "node", "ts", "js"}:
+        return f"npx -y {repo_name}"
+    if lang in {"python", "py"}:
+        return f"uvx {repo_name}"
+    if lang in {"go", "golang"}:
+        return repo_name
+    if lang in {"rust"}:
+        return repo_name
+    # Unknown language — use the repo name and let the user wire it up.
+    return repo_name
+
+
+def build_server_config(server: Dict[str, Any]) -> ServerConfig:
+    """
+    Pure function: turn a server record into a `ServerConfig`.
+
+    Extracted from the route handler so it can be unit-tested without
+    spinning up FastAPI. Inputs and outputs are both plain dicts / pydantic
+    models — no I/O, no globals.
+    """
+    repo_name = server.get("name", "") or ""
+    source = server.get("source", "") or ""
+    owner = server.get("owner", "") or ""
+    language = server.get("language") or ""
+    description = server.get("description") or ""
+
+    install: Dict[str, str] = {}
+
+    # NPM — JS/TS projects and projects that link to npmjs.com.
+    src_lower = source.lower()
+    lang_lower = language.lower()
+    is_js = lang_lower in {"javascript", "typescript", "nodejs", "node", "ts", "js"}
+    if is_js or "npmjs" in src_lower or "npm" in src_lower:
         install["npm"] = f"npm install -g {repo_name}"
 
-    # Pip — only suggest when the repo is a Python project. Earlier this
-    # branch was guarded by `"pyproject.toml" in str(data)` which is
-    # nonsense: it serialised the whole index and matched any project
-    # whose description mentioned the string, so every server ended up
-    # with a `pip install` hint regardless of language.
-    is_python = (
-        language in {"python", "py"}
-        or "pypi.org" in source.lower()
-        or "pyproject.toml" in description
-        or "setup.py" in description
-    )
-    if is_python:
+    # Pip — Python projects only (see `_is_python_project` for rationale).
+    if _is_python_project(language, source, description):
         install["pip"] = f"pip install {repo_name}"
 
-    # Git - general fallback
-    install["git"] = f"git clone {source}.git"
+    # Git — always available as a fallback, since every server has a source.
+    if source:
+        install["git"] = f"git clone {source}.git"
 
-    config = ServerConfig(
+    run_command = _build_run_command(language, repo_name)
+    mcp_entry = {repo_name: {"command": run_command, "args": []}}
+
+    return ServerConfig(
         name=repo_name,
         install=install,
-        mcpServers={repo_name: {"command": "mcp-server", "args": []}},
+        mcpServers=mcp_entry,
         commands={
             "install": [
                 "# Clone repository",
-                f"git clone {source}.git",
-                f"cd {repo_name}",
+                f"git clone {source}.git" if source else f"# (no source URL for {repo_name})",
+                f"cd {repo_name}" if repo_name else "# cd into the repo",
                 "",
                 "# Install dependencies (choose appropriate method)",
                 "npm install",
                 "# or",
                 "pip install -e .",
             ],
-            "run": [f"cd {repo_name}", "npm run start", "# or", f"python -m {repo_name}"],
+            "run": (
+                [
+                    f"cd {repo_name}",
+                    "npm run start",
+                    "# or",
+                    f"python -m {repo_name.replace('-', '_')}",
+                ]
+                if repo_name
+                else ["# (no repo name available)"]
+            ),
         },
-        docker={"image": f"{owner}/{repo_name}:latest", "args": [], "env": {}},
+        docker={
+            "image": f"{owner}/{repo_name}:latest" if owner and repo_name else "",
+            "args": [],
+            "env": {},
+        },
         snippets={
-            "basic": json.dumps({"mcpServers": {repo_name: {"command": repo_name}}}, indent=2)
+            "basic": json.dumps({"mcpServers": mcp_entry}, indent=2),
+            "note": (
+                "Verify the command above matches the actual entry point "
+                "shipped in this repo. The `command` is chosen from the "
+                "server's primary language; some repos publish under a "
+                "different package name on npm/PyPI than the GitHub repo slug."
+            ),
         },
     )
-    return config
 
 
 # ------------------------------

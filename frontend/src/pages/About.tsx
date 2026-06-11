@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Server, Github, Heart, Star, Users, Shield, Code2, ExternalLink } from 'lucide-react';
+import { Server, Heart, Star, Users, Shield, Code2, ExternalLink } from 'lucide-react';
+import { Github } from '../components/icons/Github';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
 

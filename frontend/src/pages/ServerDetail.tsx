@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Star, Github, Clock, Code2, ExternalLink, Copy, CheckCircle, MessageSquare, ThumbsUp, TrendingUp, Shield, Tag, BookOpen, ChevronRight, Loader2, Download, FileJson, FileText } from 'lucide-react';
+import { ArrowLeft, Star, Clock, Code2, ExternalLink, Copy, CheckCircle, MessageSquare, ThumbsUp, TrendingUp, Shield, Tag, BookOpen, ChevronRight, Loader2, Download, FileJson, FileText } from 'lucide-react';
+import { Github } from '../components/icons/Github';
 import { ServerConfig, Server } from '../types';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';

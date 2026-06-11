@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Github, Code2, Zap, BookOpen, Info } from 'lucide-react';
+import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Code2, Zap, BookOpen, Info } from 'lucide-react';
+import { Github } from '../components/icons/Github';
 import { useServers } from '../hooks/useServers';
 import { useStats } from '../hooks/useStats';
 import { ServerCard } from '../components/server/ServerCard';

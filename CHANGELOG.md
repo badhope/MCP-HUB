@@ -6,6 +6,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Removed
+- **`api.py`** (15 KB legacy `BaseHTTPHandler` shim) and its `tests/test_api.py`. The file was never imported by `main.py` — all FastAPI routes have always lived in `main.py` — and the `test_api.py` fixture imported the dead class. Coverage of the same surface continues under `tests/test_fastapi.py` (which spins up the real `app` via `uvicorn`). Any project depending on `python api.py` as an entry point should switch to `python main.py` (or `uvicorn main:app`); behavior is identical because `main.py` is the only thing that ever defined the routes.
+
 ### Added
 - `data_snapshot_date` field in `static-data/stats.json` — surfaces the snapshot's freshness next to every per-server metric so the GitHub Pages demo is clearly labelled as a snapshot, not a live feed. FastAPI backend will overwrite this with `datetime.utcnow()` on every scrape.
 - `data_snapshot_date` field on the `StatsResponse` TypeScript type

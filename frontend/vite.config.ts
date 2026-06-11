@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => {
   const base = explicitBase
     ? `/${explicitBase}/`
     : `/${REPO_NAME}/`
-  const isProd = mode === 'production'
 
   return {
     base,
@@ -31,13 +30,13 @@ export default defineConfig(({ mode }) => {
       }
     },
     plugins: [
-      react({
-        babel: {
-          plugins: isProd
-            ? []
-            : ['react-dev-locator'],
-        },
-      }),
+      // @vitejs/plugin-react v6 dropped Babel entirely (it now uses
+      // oxc for the JSX transform and exposes no `plugins` option).
+      // `babel-plugin-react-dev-locator` was a dev-only "click a
+      // component in the browser to jump to its source" nicety — not
+      // worth rebuilding a Babel pipeline for. Drop it; the rest of the
+      // toolchain (vite-tsconfig-paths) is unaffected.
+      react(),
       tsconfigPaths()
     ],
   }

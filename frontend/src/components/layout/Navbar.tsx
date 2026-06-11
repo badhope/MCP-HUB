@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Menu, X, Home, Server, Tag, Star, Building2,
-  Plus, Zap, Github, Heart, Info
+  Plus, Zap, Heart, Info
 } from 'lucide-react';
+import { Github } from '../icons/Github';
 import { ThemeToggle } from '../shared/ThemeToggle';
 
 const navLinks = [
