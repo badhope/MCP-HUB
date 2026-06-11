@@ -1,0 +1,45 @@
+{
+  "upstream": "microsoft/playwright-mcp",
+  "name": "playwright-mcp",
+  "status": "adapted",
+  "version": "1.0.0",
+  "last_verified": "2026-06-11",
+  "description": "Official Microsoft Playwright MCP server. Wraps the Playwright browser-automation library as a Model Context Protocol server, so an AI agent can drive a real Chromium / Firefox / WebKit instance for testing, scraping, or visual inspection. We test the install on Claude Desktop, Cursor, Cline, and Windsurf.",
+  "homepage": "https://github.com/microsoft/playwright-mcp",
+  "language": "TypeScript",
+  "min_node": "20",
+  "install_universal": "npx -y @playwright/mcp@latest",
+  "install_universal_args": [],
+  "env": {},
+  "tested_clients": [
+    "claude-desktop",
+    "cursor",
+    "cline",
+    "windsurf"
+  ],
+  "platforms": {
+    "claude-desktop": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "cursor": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "cline": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "windsurf": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    }
+  },
+  "gotchas": [
+    "On first run, playwright-mcp downloads its browser bundles (Chromium / Firefox / WebKit). The download is ~300MB and only happens once, but the first tool call will hang for 30-90s while it completes. Plan for this in your client (Claude Desktop will show a 'tool running' spinner).",
+    "Headless mode is the default. If you want a visible browser, pass `--headed` via the args: `npx -y @playwright/mcp@latest --headed`. Note: not all clients surface the headed-mode console, so headless is recommended for automation use cases.",
+    "The default viewport is 1280x720. Override with `--viewport-size 1920,1080` for retina screenshots or wider layouts.",
+    "On Linux servers without a display, you don't need to do anything special — Playwright bundles a virtual display. The `--no-sandbox` flag is needed only if you run the browser inside Docker."
+  ],
+  "notes": "Universal install via npx is the canonical path because the package is published to npm as @playwright/mcp. Same mcpServers config string across all four clients we tested."
+}
