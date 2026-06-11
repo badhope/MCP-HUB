@@ -1,0 +1,84 @@
+name: Deploy to GitHub Pages
+
+# Phase 7: deploy the static SPA to GH Pages on every push to main.
+# The frontend is a Vite + React 19 SPA; the build output goes to
+# `dist/`, which we publish verbatim with actions/deploy-pages.
+#
+# The data file (frontend/public/servers-index.json) is rebuilt
+# separately by .github/workflows/sync-data.yml on a daily cron; if
+# a snapshot hasn't been committed yet, the static fallback in
+# `public/servers-index.json` (which is git-tracked) is what serves.
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Allow only one concurrent deployment, queueing newer runs and
+# cancelling in-progress ones. Useful when pushes to main happen in
+# quick succession.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+# Default to read-all so the GH Pages bot can grab the artifact.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build SPA
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Type-check
+        working-directory: frontend
+        run: npx tsc -b --noEmit
+
+      - name: Build
+        working-directory: frontend
+        # VITE_BASE_PATH must match the GH Pages repo slug. We use
+        # the standard /<repo>/ prefix for project pages and '/' for
+        # user/org pages. Override with the GH_PAGES_BASE env var.
+        env:
+          VITE_BASE_PATH: ${{ vars.GH_PAGES_BASE || format('/{0}/', github.event.repository.name) }}
+        run: npm run build
+
+      - name: Strip SPA-fallback index for project pages
+        # actions/deploy-pages only knows how to serve one index.html
+        # per path; for project pages the 404.html must be a copy of
+        # index.html so client-side routes resolve after a refresh.
+        run: |
+          cp dist/index.html dist/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
