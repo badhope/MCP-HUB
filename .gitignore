@@ -62,10 +62,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-store/
 
-# ─── MCP servers (skip for size) ──────────────────────────────────────────
-servers/
-awesome-mcp-list/
-
 # ─── Frontend build outputs ───────────────────────────────────────────────
 frontend/node_modules/
 frontend/dist/

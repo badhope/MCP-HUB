@@ -7,12 +7,8 @@
       "version": "20"
     }
   },
-  "postCreateCommand": "pip install -e '.[dev,test]' && cd frontend && npm ci",
+  "postCreateCommand": "pip install pytest && cd frontend && npm ci",
   "portsAttributes": {
-    "8080": {
-      "label": "FastAPI (backend)",
-      "onAutoForward": "notify"
-    },
     "5173": {
       "label": "Vite (frontend)",
       "onAutoForward": "openBrowser"

@@ -10,22 +10,13 @@
 # Default owners for everything
 *       @badhope
 
-# Backend
-/main.py             @badhope
-/api.py              @badhope
-/services.py         @badhope
-/user_data.py        @badhope
-/query.py            @badhope
-/core/               @badhope
-/templates/          @badhope
+# Tools (data pipeline)
 /tools/              @badhope
 
 # Frontend
 /frontend/           @badhope
 
 # Build & deployment
-/Dockerfile          @badhope
-/docker-compose.yml  @badhope
 /.github/workflows/  @badhope
 /requirements.txt    @badhope
 /pyproject.toml      @badhope
