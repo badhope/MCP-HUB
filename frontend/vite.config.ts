@@ -21,13 +21,8 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1024,
     },
     server: {
-      proxy: {
-        '/api': {
-          target: env.VITE_API_PROXY_TARGET || 'http://localhost:8080',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      }
+      // Phase 6+: no backend. The dev server only serves the SPA + the
+      // JSON files from public/. (Vite already does this by default.)
     },
     plugins: [
       // @vitejs/plugin-react v6 dropped Babel entirely (it now uses

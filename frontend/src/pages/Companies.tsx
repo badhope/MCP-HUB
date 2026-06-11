@@ -50,7 +50,7 @@ const Companies = React.memo(() => {
     knownCompanies.forEach((company) => {
       const keyword = company.keyword.toLowerCase();
       const companyServers = servers.filter((server) => {
-        const owner = server.owner.toLowerCase();
+        const owner = (server.owner || '').toLowerCase();
         return owner.includes(keyword) || server.name.toLowerCase().includes(keyword);
       });
       if (companyServers.length > 0) {

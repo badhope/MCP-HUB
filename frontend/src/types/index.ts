@@ -1,18 +1,43 @@
+export interface InstallHint {
+  primary: string;
+  alternatives: {
+    npm: string | null;
+    pip: string | null;
+    git: string | null;
+    docker: string | null;
+  };
+  zip_url: string | null;
+}
+
+export interface ScoreBreakdown {
+  stars: number;
+  recency: number;
+  lang_coverage: number;
+  desc_quality: number;
+  our_signal: number;
+}
+
 export interface Server {
   name: string;
-  full_name: string;
+  full_name?: string;
   source: string;
   description: string;
   source_type: string;
   categories: string[];
   language: string;
   stars: number;
-  owner: string;
-  topics: string[];
+  owner?: string;
+  topics?: string[];
   updated_at: string;
-  created_at: string;
-  archived: boolean;
+  created_at?: string;
+  archived?: boolean;
   license?: string;
+  /** Build-time fields (Phase 5 gen_static_data.py) */
+  install_hint?: InstallHint;
+  score?: number;
+  score_breakdown?: ScoreBreakdown;
+  our_signal?: number;
+  our_signal_label?: string;
 }
 
 export interface MCPServerEntry {
