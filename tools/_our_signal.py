@@ -34,8 +34,13 @@ _STATUS_TO_LABEL: Dict[str, str] = {
 }
 
 
-def _adapter_dir(adapters_root: Path) -> Path:
-    return adapters_root / "public" / "adapters"
+def _adapter_dir(repo_root: Path) -> Path:
+    # Phase 5 originally placed the adapter JSONs at
+    # `<root>/public/adapters/`. Phase 9 moved them under the SPA
+    # bundle at `<root>/frontend/public/adapters/` so they ship
+    # with the GH Pages deploy and can be `fetch()`'d at runtime
+    # by the UniversalConfig card.
+    return repo_root / "frontend" / "public" / "adapters"
 
 
 def scan_adapters(repo_root: Path) -> Dict[str, float]:
