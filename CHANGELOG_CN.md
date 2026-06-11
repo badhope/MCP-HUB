@@ -62,6 +62,35 @@
 - **服务器作者** — 提交入口改为 "更多" 标签页（静态表单，打开预填好的 `server_submission` issue）。旧的 `POST /submissions/submit` 接口返回 404。
 - **AI agents** — REST API 没了。直接读 `servers-index.json`（作为静态资源在 `/servers-index.json` 提供，~4.4 MB）。数据结构见 `tools/gen_static_data.py` 顶部注释。
 
+### Phase 7 — 三层 UI 外壳 (2026-06-11)
+
+> 前端终于用上 3 层产品模型了——第 1 层上游索引、第 2 层我们的通用适配器、第 3 层开放贡献通道。Home 重写，新增 2 个顶级路由，外加一套共享的 install / radar / copy / config 组件。
+
+#### 新增（Phase 7）
+- **`pages/OurTools.tsx`** — 第 2 层主页；列出所有 `our_signal >= 0.7` 的服务器。空状态自带引导（指向 /more）。
+- **`pages/More.tsx`** — 第 3 层主页；数据状态、3 步 PR 贡献指南、快速链接。
+- **`pages/Browse.tsx`** — 全分类 + 全语言一键筛选进完整服务器列表。
+- **`components/server/OurSignalBadge.tsx`** — 4 档状态徽章（adapted / in_progress / researched / unknown）。
+- **`components/server/ScoreRadar.tsx`** — 纯 SVG 5 轴雷达图，零依赖。
+- **`components/server/InstallPanel.tsx`** — 安装面板：主安装命令 + 3 个备选（npx/uvx/git/docker）+ GitHub + ZIP 下载。
+- **`components/server/UniversalConfig.tsx`** — 渲染合成的 `mcpServers` JSON，含 Copy 按钮、Trust 标签、curl 一行安装脚本。
+- **`components/shared/CopyButton.tsx`** — 集中式复制按钮，含安全上下文 + execCommand 回退。
+- **`lib/universalConfig.ts`** — `buildUniversalConfig`、`buildBatchUniversalConfig`、`stringifyUniversalConfig`。
+- **`.github/workflows/deploy-pages.yml`** — push 到 main 触发 Vite build，部署到 GH Pages。
+
+#### 变更（Phase 7）
+- **`pages/Home.tsx`** — 重写。6 大分区：hero + 搜索、精选、我们的工具、热门、新上架、分类浏览，底部 "每日刷新" 提示。
+- **`pages/ServerDetail.tsx`** — 原地增强（非整页重写）：新增 5 因子雷达图卡片、InstallPanel、UniversalConfig（仅 `our_signal >= 0.7` 时显示）、标题行新增 OurSignalBadge。
+- **`components/layout/Navbar.tsx`** — 6+2 项菜单精简为 4+1：Home / Browse / Our tools / More / Favorites。StaticDemoBanner 移除。
+- **`lib/api.ts`** — `getStats()` 多暴露 `our_tools_count` 和 `languages`。
+- **`types/index.ts`** — `StatsResponse` 新增 `our_tools_count?` 和 `languages?`。
+- **`App.tsx`** — 路由新增 `/browse`、`/our-tools`、`/more`；`/submit` 暂时 302 到 `<More />` 兼容老链接。
+
+#### 删除（Phase 7）
+- **`pages/SubmitServer.tsx`** — 旧表单，被 /more 吸收。
+- **`components/layout/StaticDemoBanner.tsx`** — 数据已是生产数据，不再是 "demo"。
+
+
 ## [2.0.1] - 2026-06-01
 
 ### 新增

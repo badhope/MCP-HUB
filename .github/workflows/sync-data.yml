@@ -49,7 +49,11 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add frontend/public/servers-index.json
+          # `git add -f` is the belt-and-braces for the case where a
+          # future .gitignore tweak accidentally re-ignores the data
+          # file. The data MUST be tracked for the GH Pages build to
+          # find it.
+          git add -f frontend/public/servers-index.json
           # The snapshot_date lives inside the JSON, but it's
           # convenient to also surface it in the commit message.
           TS=$(python -c "import json; print(json.load(open('frontend/public/servers-index.json'))['snapshot_date'])")

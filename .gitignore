@@ -88,14 +88,22 @@ Desktop.ini
 ehthumbs.db
 
 # ─── Generated files ──────────────────────────────────────────────────────
-# NOTE: servers-index.json and market-index.json are .gitignore'd because
-# they are rebuilt by tools/update_index.py / tools/sync_index.py and bloat
-# the repo. The first `git clone` won't have them — run `python tools/update_index.py`
-# to fetch the latest snapshot from the upstream registry.
-servers-index.json
+# NOTE: frontend/public/servers-index.json IS tracked (the GH Pages
+# build won't have a data file otherwise). It is rebuilt daily by
+# .github/workflows/sync-data.yml and committed back to main; the
+# commit history is the data history. Size is ~4.4MB which is
+# acceptable for a single binary blob.
+#
+# market-index.json, user-data.json, submissions.json remain
+# un-tracked (legacy artefacts, not used by the static SPA anymore).
 market-index.json
 user-data.json
 submissions.json
+# The root servers-index.json (output of sync_index.py) is an
+# intermediate; the SPA reads from frontend/public/servers-index.json
+# which is what gets committed. So we keep the root one out.
+/servers-index.json
+!/frontend/public/servers-index.json
 .pytest_cache/
 .coverage
 htmlcov/

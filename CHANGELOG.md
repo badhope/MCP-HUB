@@ -149,6 +149,71 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **AI agents** — the REST API is gone. Read `servers-index.json` directly (it is served
   as a static asset at `/servers-index.json`, ~4.4 MB). The shape is documented at the top of `tools/gen_static_data.py`.
 
+### Phase 7 — 3-layer UI shell (2026-06-11)
+
+> The frontend now visibly reflects the product model — Layer 1
+> (upstream index), Layer 2 (our universal adapters), Layer 3
+> (open contribution channel) — with a rewritten Home page, two
+> new top-level routes, and a shared install / radar / copy /
+> config component set.
+
+#### Added (Phase 7)
+- `frontend/src/pages/OurTools.tsx` — Layer 2 home; lists every
+  server with `our_signal >= 0.7`. Guided empty state when none
+  exist (today's reality).
+- `frontend/src/pages/More.tsx` — Layer 3 home; data status, 3-step
+  PR contribution guide, quick links.
+- `frontend/src/pages/Browse.tsx` — every category + every language
+  with a one-click filter into the full server list. Replaces the
+  previous /categories page.
+- `frontend/src/components/server/OurSignalBadge.tsx` — 4-tier
+  status badge (adapted / in_progress / researched / unknown).
+- `frontend/src/components/server/ScoreRadar.tsx` — pure-SVG
+  5-axis radar chart for the build-time `score_breakdown`. Zero
+  dependencies, snapshot-testable.
+- `frontend/src/components/server/InstallPanel.tsx` — install
+  surface: primary install command, up to 3 alternatives
+  (npx/uvx/git/docker), "View on GitHub", "Download source ZIP".
+- `frontend/src/components/server/UniversalConfig.tsx` — renders
+  the synthesized `mcpServers` JSON, with primary Copy button,
+  optional "Tested on" trust strip, and optional curl-pipe-sh
+  one-liner installer.
+- `frontend/src/components/shared/CopyButton.tsx` — centralised
+  click-to-copy with secure-context + execCommand fallback.
+- `frontend/src/lib/universalConfig.ts` — `buildUniversalConfig`,
+  `buildBatchUniversalConfig`, `stringifyUniversalConfig`.
+- `frontend/src/test/lib/universalConfig.test.ts` — 11 cases.
+- `.github/workflows/deploy-pages.yml` — build on push to main,
+  Vite build, copy `index.html` to `404.html`, deploy via
+  actions/deploy-pages@v4.
+
+#### Changed (Phase 7)
+- `frontend/src/pages/Home.tsx` — rewritten. 6 sections: hero +
+  search, featured, our-tools, popular, newly updated,
+  browse-by-category, plus a "Snapshot data, refreshed daily"
+  callout at the bottom.
+- `frontend/src/pages/ServerDetail.tsx` — augmented in place
+  (not a full rewrite). Adds the 5-factor ScoreRadar card, the
+  InstallPanel, and the UniversalConfig. OurSignalBadge added to
+  the title row. All pre-existing tabs untouched.
+- `frontend/src/components/layout/Navbar.tsx` — slimmed from
+  6 + 2 menu items to 4 + 1: Home / Browse / Our tools / More /
+  Favorites. The "static-demo" branding is gone.
+- `frontend/src/lib/api.ts` — `getStats()` now surfaces
+  `our_tools_count` and `languages` from the build-time index.
+- `frontend/src/types/index.ts` — `StatsResponse` gains
+  `our_tools_count?` and `languages?`.
+- `frontend/src/App.tsx` — lazy routes for `/browse`,
+  `/our-tools`, `/more`; `/submit` now renders `<More />` for
+  one release. StaticDemoBanner import and rendering removed.
+
+#### Removed (Phase 7)
+- `frontend/src/pages/SubmitServer.tsx` — the old form, absorbed
+  into /more.
+- `frontend/src/components/layout/StaticDemoBanner.tsx` — no
+  longer a "demo" once the data is the production data.
+
+
 ## [2.0.1] - 2026-06-01
 
 ### Added
