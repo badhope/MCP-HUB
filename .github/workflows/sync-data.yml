@@ -1,0 +1,57 @@
+name: Sync Data
+
+on:
+  schedule:
+    # Daily at 03:00 UTC — outside the 02:00 spike of GitHub traffic
+    # and before typical user-browsing hours in the US/EU.
+    - cron: "0 3 * * *"
+  workflow_dispatch: # allow manual re-runs from the Actions tab
+  push:
+    # Re-run when the pipeline logic itself changes — keeps the
+    # generated index in sync with the generator that produced it.
+    paths:
+      - "tools/sync_index.py"
+      - "tools/gen_static_data.py"
+      - "tools/_install_hint.py"
+      - "tools/_our_signal.py"
+      - "tools/completeness_scoring.py"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pull upstream index
+        run: python tools/sync_index.py
+        # sync_index.py writes `servers-index.json` (root, ~3.5MB).
+        # It uses urllib from the stdlib so no `pip install` is needed.
+
+      - name: Enrich into frontend/public
+        run: python tools/gen_static_data.py
+        # Writes `frontend/public/servers-index.json` (~4MB) with
+        # install_hint + score + our_signal pre-computed for every
+        # server.
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet frontend/public/servers-index.json; then
+            echo "No data changes; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/servers-index.json
+          # The snapshot_date lives inside the JSON, but it's
+          # convenient to also surface it in the commit message.
+          TS=$(python -c "import json; print(json.load(open('frontend/public/servers-index.json'))['snapshot_date'])")
+          git commit -m "data(snapshot): refresh at ${TS}"
+          git push
