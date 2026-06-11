@@ -4,6 +4,49 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [3.1.0] - 2026-06-11
+
+> **First Layer 2 entries ship.**
+>
+> The 3-layer product model (upstream index → our universal adapters
+> → open contribution channel) finally has content in the middle layer.
+> Two adapters land today — `fastmcp` and `playwright-mcp` — each
+> following the 4-file contract (`adapter.json` / `install.sh` /
+> `README.md` / `tests/README.md`) that the rest of the catalogue
+> will adopt incrementally. Scoring picks them up automatically: the
+> `our_signal` scanner reads each adapter's `status` field, and the
+> 5-factor score gives the 20% `our_signal` bucket its full weight.
+
+### Added
+- **`frontend/public/adapters/fastmcp/`** — Layer 2 entry for
+  `jlowin/fastmcp` (25k+ stars), the de-facto Python framework for
+  building MCP servers. Universal install: `uv tool install fastmcp`.
+  `install.sh` does python3 → uv → fastmcp → self-check → print
+  `mcpServers` JSON. README documents the two usage paths
+  (decorator-based framework + `fastmcp run server.py` CLI).
+  Score: **69 → 89**.
+- **`frontend/public/adapters/playwright-mcp/`** — Layer 2 entry
+  for `microsoft/playwright-mcp` (33k+ stars), Microsoft's
+  first-party Playwright-as-MCP port. Universal install:
+  `npx -y @playwright/mcp@latest`. `install.sh` does node 20+ check
+  → npx cache warmup → print JSON. README documents the
+  pre-flight system deps and the three real footguns (300MB
+  browser download on first run, headless-by-default, one-context-
+  per-process). Score: **71 → 83**.
+- **`tests/test_our_signal.py`** — 23 cases pinning the adapter
+  scanner. Covers all four statuses, the
+  `owner/name` upstream-prefix match, the no-manest=0.4
+  degradation rule, malformed-JSON resilience, and the
+  score→label threshold function.
+
+### Fixed
+- **`tools/_our_signal.py`** — the scanner was looking at
+  `<root>/public/adapters/` (a path that never existed after the
+  FastAPI backend was dropped in 3.0.0), so it always returned
+  `{}`. The first two adapters scored 0.0 on `our_signal` instead
+  of 1.0. The path is now `<root>/frontend/public/adapters/>`, the
+  same location the SPA serves them from at runtime.
+
 ## [3.0.0] - 2026-06-11
 
 > **Architecture pivot: static SPA, no backend.**

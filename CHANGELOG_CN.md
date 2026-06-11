@@ -4,6 +4,36 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
+## [3.1.0] - 2026-06-11
+
+> **首批 Layer 2 适配器上线。**
+>
+> 3 层产品模型（上游索引 → 我们的通用适配器 → 开放贡献通道）的中游终于有内容了。本版本新增 2 个适配器——`fastmcp` 与 `playwright-mcp`——每个都遵循 4 文件契约（`adapter.json` / `install.sh` / `README.md` / `tests/README.md`），后续的目录条目将逐步沿用此规范。打分自动识别：`our_signal` 扫描器读取每个适配器的 `status` 字段，5 因子打分给 `our_signal` 那一档 20% 的满权重。
+
+### 新增
+- **`frontend/public/adapters/fastmcp/`** — Layer 2 条目，对应
+  `jlowin/fastmcp`（25k+ stars），事实上的 Python MCP 服务器开发框架。
+  通用安装命令：`uv tool install fastmcp`。
+  `install.sh` 流程：python3 → uv → fastmcp → 自检 → 输出 `mcpServers` JSON。
+  README 文档化两条使用路径（基于装饰器的框架 + `fastmcp run server.py` 命令行）。
+  分数：**69 → 89**。
+- **`frontend/public/adapters/playwright-mcp/`** — Layer 2 条目，对应
+  `microsoft/playwright-mcp`（33k+ stars），微软官方的
+  Playwright-as-MCP 端口。通用安装命令：`npx -y @playwright/mcp@latest`。
+  `install.sh` 流程：node 20+ 检查 → npx 缓存预热 → 输出 JSON。
+  README 文档化前置系统依赖和三大坑（首次运行需下载 300MB 浏览器、
+  默认无头模式、每进程一个 context）。分数：**71 → 83**。
+- **`tests/test_our_signal.py`** — 23 个用例，固化适配器扫描行为。
+  覆盖 4 种状态、`owner/name` 上游前缀匹配、无 manifest 时降级为 0.4、
+  畸形 JSON 容忍，以及 score→label 阈值函数。
+
+### 修复
+- **`tools/_our_signal.py`** — 扫描器原本指向
+  `<root>/public/adapters/`（3.0.0 删 FastAPI 后端时该路径已不存在），
+  所以始终返回 `{}`。前两个适配器在 `our_signal` 上得到 0.0 而非 1.0。
+  路径现已修正为 `<root>/frontend/public/adapters/>`，即 SPA 运行时
+  服务的同一位置。
+
 ## [3.0.0] - 2026-06-11
 
 > **架构转向：纯静态 SPA，去后端。**
