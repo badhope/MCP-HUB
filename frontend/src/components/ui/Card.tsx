@@ -11,18 +11,14 @@ interface CardProps {
 export const Card = React.memo<CardProps>(({ 
   children, 
   className = '', 
-  hoverable = true, 
+  hoverable = false, 
   onClick,
   style
 }) => {
   return (
     <div 
       onClick={onClick}
-      className={`
-        bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden
-        ${hoverable ? 'transition-all duration-400 ease-smooth cursor-pointer' : ''}
-        ${className}
-      `}
+      className={`rounded-lg border bg-card text-card-foreground ${hoverable ? 'cursor-pointer hover:bg-accent/50 transition-colors' : ''} ${className}`}
       style={style}
     >
       {children}
@@ -40,7 +36,7 @@ export const CardHeader = React.memo<CardHeaderProps>(({
   className = '',
 }) => {
   return (
-    <div className={`p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 ${className}`}>
+    <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>
       {children}
     </div>
   );
@@ -56,7 +52,7 @@ export const CardContent = React.memo<CardContentProps>(({
   className = '',
 }) => {
   return (
-    <div className={`p-5 sm:p-6 ${className}`}>
+    <div className={`p-6 pt-0 ${className}`}>
       {children}
     </div>
   );
@@ -72,7 +68,7 @@ export const CardFooter = React.memo<CardFooterProps>(({
   className = '',
 }) => {
   return (
-    <div className={`p-5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 ${className}`}>
+    <div className={`flex items-center p-6 pt-0 ${className}`}>
       {children}
     </div>
   );

@@ -1,227 +1,217 @@
 # MCP Hub
 
-精选的 Model Context Protocol (MCP) 服务器注册中心，自带 FastAPI 后端、
-React/Vite 单页应用和给 AI agent 用的稳定 JSON 接口。
+> **通用适配器平台** — 上游索引 · 我们做的通用适配 · 一键添加更多
+>
+> *The universal adapter platform for Model Context Protocol servers.*
 
-> 4,403 个已索引服务器 · 51 个官方 · 23 个分类 · 每日自动同步上游。
-> 38 个 REST 端点 · 提供 `servers-index.json` 离线快照。
+4,400+ 已索引 MCP 服务器 · 21 个分类 · 每日上游同步 · 零后端。
 
-[在线演示](https://badhope.github.io/MCP-HUB/) · [API 文档](docs/API.md) · [English](README.md)
+[在线演示](https://badhope.github.io/MCP-HUB/) · [English](README.md)
 
 ---
 
-## 项目能做什么
+## 这是什么
 
-MCP Hub 索引了所有公开的 MCP 服务器，对每条数据做完整性评分，然后
-通过稳定的 HTTP API 暴露出去，让三类用户都能直接受益：
+MCP Hub 是一个**纯静态单页应用**，把混乱的公共 MCP 服务器生态整理成一个
+有评分、有排名、易安装的目录。产品分三层：
 
-- **终端用户** —— 浏览目录，复制 Claude Desktop、Cursor 或任何
-  stdio-based MCP 客户端开箱即用的配置。
-- **AI agent** —— 调用 `/servers`、`/servers/{name}`、`/config/{name}`、
-  `/stats` 等端点即可推荐合适的工具，无需自行抓取。
-- **服务器作者** —— 提交一次就能触达整个 MCP 生态。
+| 层级 | 内容 | 位置 |
+|---|---|---|
+| **1. 上游索引** | 从 `awesome-mcp` 等源镜像的 4,400+ MCP 服务器 | `frontend/public/servers-index.json`（~4.4 MB，每晚重建）|
+| **2. 我们的适配器** | 我们**亲自**包装的少量服务器，提供通用安装命令，评分加权，标记"✅ 已适配" | `frontend/public/adapters/<name>/adapter.json` |
+| **3. "更多"标签页** | 添加我们尚未覆盖的新服务器的入口（issue / PR / 内联表单）| `/more` 路由 |
 
-数据层刻意做成了单个静态 JSON 文件，让 agent 在需要确定性离线视图时
-能把目录快照和模型一起打包发布。
+我们是一个**中转站/枢纽**，不是后端：没有 FastAPI，没有 Postgres，没有认证。
+整个技术栈是一个部署到 GitHub Pages 的 Vite SPA，加一个每晚运行的
+GitHub Action 拉取上游索引、给每个服务器打分、提交新的 `servers-index.json`。
+
+---
+
+## 为什么做这个
+
+MCP 生态在爆发——但公共目录一团糟：
+
+- **安装命令因语言而异**（`uvx X` vs `npx -y X` vs `pip install X` vs
+  `git clone` …），每个客户端（Claude Desktop、Cursor、Cline、Windsurf …）
+  都用各自的配置格式包装同一个服务器。
+- **质量参差不齐**——周末玩具项目和 Anthropic / Stripe / Microsoft 的
+  生产系统并存。
+- **"50 份模板"问题**——每个客户端集成指南都为每个服务器维护一份手写
+  JSON，全部会过时。
+
+MCP Hub 的解决方式：
+
+1. **打分**——用透明的 5 因子公式（见 [评分](#评分)）给每个服务器评分，
+   让质量可比较。
+2. **自动生成安装命令**——根据服务器的语言/源码自动推导
+   （`tools/_install_hint.py`）。
+3. **标记我们信任的**（✅ 已适配）——让你不用猜。
+4. **开放入口**——通过 `/more` 标签页添加新服务器，因为我们不可能
+   自己适配所有东西。
 
 ---
 
 ## 快速开始
 
-### 方式 A —— Docker Compose
+没有后端。`npm install` + `npm run dev` 就行。
 
 ```bash
 git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
-docker compose up -d --build
-
-# Web UI  : http://localhost:5173
-# REST API: http://localhost:8080
-# API docs: http://localhost:8080/docs
+cd frontend && npm ci && npm run dev
+# → http://localhost:5173
 ```
 
-`docker-compose.yml` 把后端和一个支持热重载的前端拼在一起。首次启动会
-从上游拉取索引（~5 MB）缓存到 `servers-index.json`（被 `.gitignore`
-忽略；需要重建时跑 `python tools/sync_index.py`）。
+就这样。目录已经预构建为 `frontend/public/servers-index.json`
+（~4.4 MB，~4,400 个服务器）。无需后端、无需数据库、无需 API key。
 
-### 方式 B —— 本地 Python
+### 重新生成目录
+
+每日 GitHub Action 会从上游重建 `servers-index.json`。本地操作：
 
 ```bash
-pip install -r requirements.txt
-python tools/sync_index.py          # 一次性，把上游索引写进 servers-index.json
-python main.py                      # API 监听 :8080
+python3 tools/sync_index.py           # 拉上游 + 充实元数据 + 写 servers-index.json（根目录）
+python3 tools/gen_static_data.py      # 复制 + 装饰到 frontend/public/servers-index.json
 ```
 
-再开一个终端：
+两个脚本只用 Python 标准库——数据管道无需 `pip install`。
+唯一的 Python 依赖是跑测试用的 `pytest`：
 
 ```bash
-cd frontend
-npm install
-npm run dev                         # UI 监听 :5173，/servers 代理到 :8080
+pip install pytest
+pytest tests/ -v                     # 56 个测试，~0.3 s
 ```
 
-### 方式 C —— 只用 REST
+### 生产构建
 
 ```bash
-curl http://localhost:8080/health
-curl "http://localhost:8080/servers?search=github&limit=5"
-curl http://localhost:8080/config/github-mcp-server
+make build                           # 数据 + 前端
+# 或
+python3 tools/gen_static_data.py
+cd frontend && npm run build
 ```
 
-`GET /health` 是编排器唯一需要轮询的路径。其余全是 JSON。
+输出在 `frontend/dist/`——约 7 MB 的包（其中 4.4 MB 是目录数据）。
+放到任何静态托管即可。GitHub Pages 开箱即用
+（`.github/workflows/deploy-pages.yml`）。
 
 ---
 
-## 目录结构
+## 评分
+
+目录中每个服务器都有一个 `score`（0–100），在构建时由
+`tools/completeness_scoring.py` 计算：
+
+| 因子 | 权重 | 衡量内容 |
+|---|---|---|
+| `stars` | 30% | `log10(stars + 1) / log10(10_000 + 1)` — 超过 10k 收益递减 |
+| `recency` | 15% | `exp(-Δdays / 30)` — 最后一次提交 30 天半衰期 |
+| `lang_coverage` | 15% | 我们是否对该语言有一流安装支持 |
+| `desc_quality` | 20% | 描述长度分档（60 / 200 / 500 字符）|
+| `our_signal` | 20% | **最重要的一个。** 0.0 = "未处理"，0.4 = "调研过"，0.7 = "适配中"，1.0 = "已适配" |
+
+权重可在 `tools/completeness_scoring.py` 中调整；
+`tests/test_scoring.py` 中的测试锁定了公式。
+
+---
+
+## 通用适配器格式
+
+已适配的服务器放在 `frontend/public/adapters/<server-name>/`，结构如下：
+
+```json
+{
+  "name": "fastmcp",
+  "platforms": {
+    "claude-desktop": { "command": "uvx", "args": ["fastmcp"] },
+    "cursor":        { "command": "uvx", "args": ["fastmcp"] },
+    "cline":         { "command": "uvx", "args": ["fastmcp"] },
+    "windsurf":      { "command": "uvx", "args": ["fastmcp"] }
+  },
+  "notes": "通用 uvx 调用；跨所有 stdio MCP 客户端工作。"
+}
+```
+
+`_our_signal.py` 遍历此目录，给每个目录中的服务器标记 `our_signal` 值，
+SPA 将其渲染为彩色徽章（✅ 已适配 / ⚙️ 适配中 / 👀 调研过 / 🆕 未处理）。
+
+---
+
+## 项目结构
 
 ```
 .
-├── main.py              # FastAPI 应用：lifespan、CORS、GZip、限流
-├── api.py               # 路由定义（薄层）
-├── services.py          # 搜索、评分、配置生成
-├── query.py             # 自然语言查询端点
-├── user_data.py         # 收藏、评分、评论、提交
-├── core/                # 内存索引、哈希、Server 模型
-├── tools/               # 19 个 CLI 工具（同步、评分、扫描、导出）
-├── templates/           # 50 个预制 MCP 配置模板
-├── tests/               # pytest 套件（9 个文件，130+ 用例）
-├── frontend/            # Vite + React 19 + TypeScript SPA
-├── docs/                # 用户文档（EN + CN）
-└── docs/internal/       # 维护者专用设计笔记
+├── tools/                            # Python 数据管道（仅标准库）
+│   ├── sync_index.py                 # 1. 拉上游
+│   ├── gen_static_data.py            # 2. 装饰 + 写入前端包
+│   ├── completeness_scoring.py       # 5 因子评分
+│   ├── _install_hint.py              # 按语言生成 uvx/npx/pip/git/docker
+│   ├── _our_signal.py                # 扫描 adapters/ → our_signal 映射
+│   └── secret_scanner.py             # pre-commit / CI 钩子
+├── tests/                            # 56 个 pytest 测试，无外部依赖
+├── frontend/                         # Vite + React 19 + TypeScript SPA
+│   ├── public/
+│   │   ├── servers-index.json        # 构建时目录
+│   │   └── adapters/                 # 第 2 层：我们的通用适配器
+│   └── src/
+│       ├── lib/api.ts                # 内存查询 + localStorage
+│       ├── pages/                    # Home, OurTools, More, ServerDetail…
+│       └── …
+├── docs/                             # 用户文档
+├── .github/workflows/                # ci + sync-data + deploy-pages + …
+└── （无 main.py，无 services.py，无 core/，无 Dockerfile，无 docker-compose）
 ```
 
-跑 `make help` 看完整任务列表。常用几个：
-
-```bash
-make install-dev   # 后端 + 前端 + pre-commit
-make dev           # 后端 + 前端，热重载
-make test          # pytest
-make lint          # ruff + black + isort + eslint + secret-scan
-make build         # 前端生产构建
-make docker-up     # 全栈启动
-```
-
----
-
-## REST API
-
-`main:app` 是一个 FastAPI 进程。OpenAPI schema 由 `/openapi.json` 提供，
-交互式 UI 在 `/docs`（Swagger）和 `/redoc`。
-
-| 分组 | 端点 |
-|---|---|
-| 健康与统计 | `GET /`, `GET /health`, `GET /stats` |
-| 检索 | `GET /servers`, `GET /servers/{name}`, `GET /servers/popular`, `GET /servers/recent`, `GET /servers/curated`, `GET /servers/by-category/{category}`, `GET /servers/by-quality` |
-| 配置 | `GET /config/{name}`, `GET /export/markdown/{name}`, `POST /export/batch-json`, `POST /export/batch-markdown` |
-| 推荐 | `GET /recommend/for-use-case`, `GET /recommend/similar`, `GET /compare` |
-| 校验 | `GET /validate/server/{name}`, `GET /validate/all`, `GET /validate/health`, `GET /validate/low-quality` |
-| 用户 | `POST/GET /favorites/*`, `POST/GET /ratings/*`, `POST/GET /comments/*` |
-| 提交 | `POST /submissions/submit`, `GET /submissions`, `POST /submissions/review` |
-
-`GET /servers` 支持的查询参数：`search`、`category`、`language`、
-`sort`（`stars` / `updated`）、`min_stars`、`limit`、`offset`。
-
-两条横切行为需要单独说明 —— 完整参考见 [`docs/API.md`](docs/API.md)：
-
-- **GZip**。≥ 1 KB 的响应会被 FastAPI 内置中间件 gzip 压缩。
-  `servers.json` 从 ~100 KB 降到 <15 KB。
-- **限流**。按 IP 令牌桶，默认 120 req / 60 s。豁免 `/`、`/health`、
-  `/docs`、`/redoc`、`/openapi.json` 和 CORS 预检。可用
-  `RATE_LIMIT_REQUESTS` / `RATE_LIMIT_WINDOW` /
-  `RATE_LIMIT_TRUST_PROXY` / `RATE_LIMIT_DISABLED` 调整。横向扩容时
-  把限流放到反向代理。
-
----
-
-## 面向 AI Agent
-
-这个目录对 agent 友好体现在三点：
-
-1. **REST API** 是一等公民。每个响应都是 JSON，每个入参都是查询参数，
-   无需抓页面。
-2. **`servers-index.json`** 随每次 release 发布，agent 可以把目录快照
-   和模型一起打包，提供确定性离线视图。
-3. **`/openapi.json`** 能被任何 OpenAPI 感知的工具生成器消费
-   （LangChain、LlamaIndex 等）。
-
-```python
-import httpx
-
-# 检索
-r = httpx.get("https://mcp-hub.example.com/servers",
-              params={"search": "github", "limit": 5}).json()
-
-# 生成配置
-cfg = httpx.get("https://mcp-hub.example.com/config/github-mcp-server").json()
-```
-
-给 AI 编程助手的约定在 [`AGENTS.md`](AGENTS.md)。给最终用户 agent
-的接入指南在 [`docs/internal/AGENT_GUIDE.md`](docs/internal/AGENT_GUIDE.md)。
+运行 `make help` 查看完整任务列表。
 
 ---
 
 ## 架构
 
 ```
-            HTTP / JSON
-   ┌──────────────────────┐         ┌───────────────────────┐
-   │  React + Vite SPA    │ ──────► │  FastAPI 应用         │
-   │  (开发期 :5173，     │         │  (main.py，Pydantic   │
-   │   生产期 gh-pages)   │ ◄────── │   v2，async，lifespan)│
-   └──────────────────────┘         └───────────────────────┘
-                                                │
-                                                ▼
-                                       ┌───────────────────┐
-                                       │ servers-index.json│
-                                       │ (~5 MB，内存 +    │
-                                       │  文件变更监听)    │
-                                       └───────────────────┘
-                                                ▲
-                                                │ tools/sync_index.py
-                                                │ (每日 GitHub Action)
-                                       ┌───────────────────┐
-                                       │  上游：           │
-                                       │  awesome-mcp +    │
-                                       │  精选源           │
-                                       └───────────────────┘
+                  每晚 GitHub Action
+                          │
+                          ▼
+  ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐
+  │  上游        │ ─► │  sync_index  │ ─► │  gen_static_data │ ─► frontend/public/
+  │  awesome-mcp │    │      .py     │    │       .py        │     servers-index.json
+  └──────────────┘    └──────────────┘    └──────────────────┘
+                                                     │
+                                                     ▼
+                       ┌─────────────────────────────────────┐
+                       │  Vite + React 19 SPA（静态）          │
+                       │  · 读取 servers-index.json（4.4 MB） │
+                       │  · 内存中评分                         │
+                       │  · 用户状态存 localStorage            │
+                       │  · 部署在 GitHub Pages               │
+                       └─────────────────────────────────────┘
 ```
 
-- 目录在 **CI 里重建**，不在请求时计算，延迟只受内存字典查找影响。
-- 前端是 **GitHub Pages 上的静态 SPA**。API 不可用时回落
-  到已提交的 `static-data/*.json` 快照，并显示 `data_snapshot_date`
-  横幅 —— 演示永远能跑。
-- 所有写路径（`favorites`、`ratings`、`comments`、`submissions`）
-  集中在一个 `user_data.py` 模块里，底层是 gitignored 的本地 JSON
-  文件。要换成 Postgres，改 `core/_version.py:USER_DATA_BACKEND`
-  即可，路由不用动。
-
-完整设计说明、决策记录和取舍见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
+- **无请求时计算。** 目录在构建时冻结。
+- **无服务器。** GitHub Pages 就够了。
+- **无追踪。** 收藏 / 评分 / 评论存在你浏览器的 `localStorage` 中。
+  清除站点数据即清除。
 
 ---
 
 ## 贡献
 
-Bug 报告、功能请求、服务器提交、安全披露各有一个专用 issue 模板
-—— 从 **New issue** 下拉里选一个就行。
+- **添加我们还没有的适配器。** 参考 `frontend/public/adapters/` 的格式，
+  然后开 PR。评分加权自动生效。
+- **向目录添加新服务器。** 大多数会从上游 `awesome-mcp` 镜像在每日同步时
+  自动收录。如果没有，开一个 `server_submission` issue。
+- **发现 bug / 有功能建议 / 安全披露？** 使用
+  `.github/ISSUE_TEMPLATE/` 中对应的模板。
+- 代码规范和 PR 清单：[`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
-- Bug 报告 → `.github/ISSUE_TEMPLATE/bug_report.md`
-- 功能请求 → `.github/ISSUE_TEMPLATE/feature_request.md`
-- 服务器提交 → `.github/ISSUE_TEMPLATE/server_submission.md`（或者
-  不想走 PR 的话直接 `POST /submissions/submit`）
-- 提问 → `.github/ISSUE_TEMPLATE/question.md`
-- 安全问题 → 先看 [`SECURITY.md`](SECURITY.md)，**不要** 公开提 issue
-
-开发流程、代码规范、PR 自检清单在 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
-能让 PR 最快被合的两件事：`make test && make lint` 全绿，并写一条
-[`CHANGELOG.md`](CHANGELOG.md)。
+能让 PR 最快被合的两件事：`make test && make lint` 全绿，
+并写一条 [`CHANGELOG.md`](CHANGELOG.md)。
 
 ---
 
 ## 许可
 
-[MIT](LICENSE)。
-
-上游数据从
+[MIT](LICENSE)。上游数据从
 [awesome-mcp](https://github.com/Rodert/awesome-mcp) 和每个精选源的
-公开 GitHub API 同步；逐源署名见
-[`docs/internal/SERVER_CATALOG.md`](docs/internal/SERVER_CATALOG.md)。
+公开 GitHub API 镜像——逐源署名和评分理由见
+[`docs/internal/COMPLETENESS_SCORING_GUIDE.md`](docs/internal/COMPLETENESS_SCORING_GUIDE.md)。

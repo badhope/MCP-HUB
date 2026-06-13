@@ -8,8 +8,6 @@
     "frontend:build": "cd frontend && npm run build",
     "frontend:preview": "cd frontend && npm run preview",
     "frontend:test": "cd frontend && npm run test",
-    "dev": "python main.py --reload",
-    "start": "python main.py",
     "test": "pytest tests/",
     "test:cov": "pytest tests/ --cov=. --cov-report=html",
     "lint": "flake8 . || true",

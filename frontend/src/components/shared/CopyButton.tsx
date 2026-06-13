@@ -10,12 +10,12 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { IconCheck, IconCopy } from '@tabler/icons-react';
 
 export interface CopyButtonProps {
   /** The string to copy. */
   value: string;
-  /** Optional label; shown next to the icon. Defaults to "Copy". */
+  /** Optional label; shown next to the icon. Defaults to "IconCopy". */
   label?: string;
   /** Optional className passthrough for layout. */
   className?: string;
@@ -51,7 +51,7 @@ function legacyCopy(text: string): boolean {
 
 export const CopyButton: React.FC<CopyButtonProps> = ({
   value,
-  label = 'Copy',
+  label = 'IconCopy',
   className = '',
   iconOnly = false,
   variant = 'default',
@@ -69,7 +69,7 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
   }, []);
 
   const handleClick = useCallback(async () => {
-    let ok = false;
+    let ok: boolean;
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(value);
@@ -91,13 +91,13 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
   const palette = {
     default: copied
       ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300 dark:border-emerald-800'
-      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-800',
+      : 'bg-card text-foreground border-border hover:bg-accent hover:text-accent-foreground',
     primary: copied
-      ? 'bg-emerald-600 text-white border-emerald-600'
-      : 'bg-primary-600 text-white border-primary-600 hover:bg-primary-700',
+      ? 'bg-emerald-600 text-primary-foreground border-emerald-600'
+      : 'bg-primary text-primary-foreground border-primary hover:bg-primary/90',
     ghost: copied
       ? 'text-emerald-600 dark:text-emerald-400'
-      : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white',
+      : 'text-muted-foreground hover:text-foreground',
   }[variant];
 
   const a11yLabel = copied ? 'Copied' : label;
@@ -112,7 +112,7 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
         iconOnly ? 'p-1.5' : 'px-3 py-1.5'
       } ${className}`}
     >
-      {copied ? <Check size={iconOnly ? 14 : 16} /> : <Copy size={iconOnly ? 14 : 16} />}
+      {copied ? <IconCheck size={iconOnly ? 14 : 16} /> : <IconCopy size={iconOnly ? 14 : 16} />}
       {!iconOnly && <span>{copied ? 'Copied' : label}</span>}
     </button>
   );

@@ -15,7 +15,7 @@ This guide assumes you have already read the [README](../README.md) and the [Qui
 5. [Workflow C — "I want my AI agent to consume MCP Hub"](#5-workflow-c--i-want-my-ai-agent-to-consume-mcp-hub)
 6. [Workflow D — "I want to submit my own server"](#6-workflow-d--i-want-to-submit-my-own-server)
 7. [Workflow E — "I want to self-host MCP Hub for my team"](#7-workflow-e--i-want-to-self-host-mcp-hub-for-my-team)
-8. [CLI tools reference](#8-cli-tools-reference)
+8. [Data pipeline tools reference](#8-data-pipeline-tools-reference)
 9. [Quality, freshness, and trust signals](#9-quality-freshness-and-trust-signals)
 10. [Troubleshooting](#10-troubleshooting)
 11. [FAQ](#11-faq)
@@ -30,7 +30,7 @@ This guide assumes you have already read the [README](../README.md) and the [Qui
 | A power user searching for a server that does X | [Workflow B](#4-workflow-b--i-want-to-find-a-server-for-a-specific-job) | 5 min |
 | An AI agent builder / tool author | [Workflow C](#5-workflow-c--i-want-my-ai-agent-to-consume-mcp-hub) | 15 min |
 | A server author who wants to be listed | [Workflow D](#6-workflow-d--i-want-to-submit-my-own-server) | 10 min |
-| A platform / DevOps engineer self-hosting | [Workflow E](#7-workflow-e--i-want-to-self-host-mcp-hub-for-my-team) | 20 min |
+| A platform / DevOps engineer self-hosting | [Workflow E](#7-workflow-e--i-want-to-self-host-mcp-hub-for-my-team) | 10 min |
 
 ---
 
@@ -42,8 +42,8 @@ This guide assumes you have already read the [README](../README.md) and the [Qui
 | **MCP server** | A small program (Node.js / Python / Go / …) that exposes a set of tools to MCP clients. Examples: GitHub, filesystem, Postgres. |
 | **Config** | The JSON snippet an MCP client loads at startup that lists which servers to launch and how. For Claude Desktop: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows). |
 | **Index** | MCP Hub's local snapshot of every known MCP server (`servers-index.json`), rebuilt daily from upstream registries. |
-| **Quality score** | A 0-100 number combining README completeness, recency of commits, license presence, and test coverage signals. Higher = more trustworthy. |
-| **Curated** | The hand-picked subset (~50) of servers that pass a stricter bar. Look for the `Curated` page. |
+| **Quality score** | A 0-100 number combining 5 factors: stars (30%), recency (15%), language coverage (15%), description quality (20%), and our signal (20%). Higher = more trustworthy. |
+| **Our signal** | A trust tier (0.0 / 0.4 / 0.7 / 1.0) indicating whether we've personally adapted the server. Look for the "✅ adapted" badge. |
 
 ---
 
@@ -53,45 +53,29 @@ Goal: add a server (e.g. `github`) to your AI client without writing a config fr
 
 ### Step 1 — Find a server
 
-- Open the [Web UI](https://github.com/badhope/MCP-HUB#-quick-start) and search for what you want (e.g. `github`, `postgres`, `playwright`).
-- Or use the API:
-
-  ```bash
-  curl "http://localhost:8080/servers?search=github&limit=5" | jq '.servers[].name'
-  ```
+- Open the [Web UI](https://badhope.github.io/MCP-HUB/) and search for what you want (e.g. `github`, `postgres`, `playwright`).
+- Or browse by category on the [Browse page](https://badhope.github.io/MCP-HUB/browse).
 
 ### Step 2 — Inspect the candidate
 
-- Click the server card in the UI to see its `description`, `stars`, `language`, `last commit`, `license`, and any quality warnings.
-- API:
-
-  ```bash
-  curl http://localhost:8080/servers/github | jq '{name, stars, language, license, quality: .quality_score}'
-  ```
+- Click the server card in the UI to see its `description`, `stars`, `language`, `last commit`, `license`, and quality score breakdown.
+- Look for the "✅ adapted" badge — these are servers we've personally wrapped with a universal install command.
 
 ### Step 3 — Generate a ready-to-paste config
 
-The server detail page has a **"Copy config"** button. From the API:
+The server detail page has a **"Copy config"** button that generates the universal `mcpServers` JSON block.
 
-```bash
-curl http://localhost:8080/config/github-mcp-server
-```
-
-returns:
+Example output:
 
 ```json
 {
-  "name": "github-mcp-server",
   "mcpServers": {
     "github": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-token-here>" }
     }
-  },
-  "commands": { "install": "npm install -g @modelcontextprotocol/server-github" },
-  "docker":   { "image": "mcp/github", "command": "docker run -i --rm mcp/github" },
-  "install":  { "claude_desktop": "Add the mcpServers block to claude_desktop_config.json and restart Claude." }
+  }
 }
 ```
 
@@ -115,87 +99,62 @@ The new tools should now appear in the client's tool picker. If they don't, see 
 
 ## 4. Workflow B — "I want to find a server for a specific job"
 
-The Web UI has filters for category, language, and quality. The API is faster for programmatic discovery.
-
-### Discover by use case (semantic-ish, server-side)
-
-```bash
-curl "http://localhost:8080/recommend/for-use-case?use_case=find+and+fix+security+issues&limit=5"
-```
+The Web UI has filters for category, language, and quality.
 
 ### Browse by category
 
-```bash
-curl "http://localhost:8080/servers/by-category/development?limit=10" | jq '.servers[].name'
-```
-
-### Find similar servers
-
-```bash
-curl "http://localhost:8080/recommend/similar?server=github-mcp-server&limit=5"
-```
-
-### Compare two or more side-by-side
-
-```bash
-curl "http://localhost:8080/compare?servers=github-mcp-server,playwright-mcp" | jq
-```
+Open the [Browse page](https://badhope.github.io/MCP-HUB/browse) and click a category card to filter servers.
 
 ### Filter by quality
 
-```bash
-# Only "high quality" curated servers
-curl "http://localhost:8080/servers/curated" | jq '.servers[].name'
+- Look for servers with score ≥ 60 (often stale or incomplete servers score lower).
+- Prioritize servers with the "✅ adapted" badge — these are in Layer 2 and have been personally tested.
 
-# Anything below threshold 60 (often stale or incomplete)
-curl "http://localhost:8080/validate/low-quality?threshold=60" | jq
-```
+### Find similar servers
+
+Click a server card to see its detail page, which shows related servers in the same category.
 
 ---
 
 ## 5. Workflow C — "I want my AI agent to consume MCP Hub"
 
-MCP Hub is **indexed for agent consumption** out of the box. Three integration paths, pick what fits.
+MCP Hub is **indexed for agent consumption** out of the box. Two integration paths, pick what fits.
 
-### Option 1 — Live REST calls (most up-to-date)
+### Option 1 — Fetch the static index (most up-to-date)
 
 ```python
 import requests
 
-BASE = "https://mcp-hub.example.com"   # or http://localhost:8080
+# Download the static index (rebuilt daily)
+url = "https://badhope.github.io/MCP-HUB/servers-index.json"
+index = requests.get(url).json()
 
-# Discover
-results = requests.get(f"{BASE}/servers", params={"search": "github", "limit": 5}).json()
-for s in results["servers"]:
-    print(s["name"], s["stars"], s["description"])
-
-# Generate a config your agent can hand to the user
-cfg = requests.get(f"{BASE}/config/github-mcp-server").json()
-print(cfg["mcpServers"])
+# Search for servers
+for server in index["servers"]:
+    if "github" in server["name"].lower():
+        print(server["name"], server["stars"], server["description"])
 ```
 
-Every endpoint returns a stable JSON shape (see [API.md](API.md)).
+The file is a flat JSON object with a `servers` array. Each server has:
+- `name`, `owner`, `full_name`
+- `stars`, `updated_at`, `archived`
+- `categories`, `description`, `language`
+- `install_hint` (command + args + env)
+- `score`, `score_breakdown` (5 factors)
+- `our_signal`, `our_signal_label` (trust tier)
 
 ### Option 2 — Offline index (for air-gapped / low-latency agents)
 
 ```bash
 # Download the static index (rebuilt daily)
-curl -O https://github.com/badhope/MCP-HUB/releases/latest/download/servers-index.json
+curl -O https://badhope.github.io/MCP-HUB/servers-index.json
 ```
 
-The file is a flat array of `Server` records, see the `Server` Pydantic model in `main.py`.
-
-### Option 3 — OpenAPI schema (for typed clients)
-
-```bash
-curl http://localhost:8080/openapi.json > mcp-hub-openapi.json
-```
-
-Use it with any OpenAPI generator (`openapi-generator`, `fern`, `speakeasy`, …) to produce a typed client in Python, TypeScript, Go, etc.
+The file is ~4.4 MB and contains all 4,400+ servers. Load it into memory and query locally.
 
 ### Recommended pattern: tool-search step
 
-Point your agent's "which tool should I use?" step at `GET /recommend/for-use-case` and stop maintaining a private server list.
+Point your agent's "which tool should I use?" step at the static index and filter by `score >= 60` and `our_signal >= 0.7` (adapted or in-progress).
 
 ---
 
@@ -203,36 +162,19 @@ Point your agent's "which tool should I use?" step at `GET /recommend/for-use-ca
 
 Two paths, both work.
 
-### Path 1 — Web form (easiest)
+### Path 1 — Issue template (easiest)
 
 Open a new issue from the [server_submission template](../.github/ISSUE_TEMPLATE/server_submission.md). Fill in the quality checklist. A maintainer reviews within a week.
 
-### Path 2 — API (faster, scriptable)
+### Path 2 — Pull request (faster)
 
-```bash
-curl -X POST http://localhost:8080/submissions/submit \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "my-cool-server",
-    "repo_url": "https://github.com/me/my-cool-server",
-    "category": "development",
-    "language": "typescript",
-    "license": "MIT",
-    "description": "Does one thing very well."
-  }'
-```
-
-Status endpoint:
-
-```bash
-curl http://localhost:8080/submissions | jq
-```
+If your server is already in the upstream `awesome-mcp` registry, it will be picked up automatically on the next daily sync. If not, you can open a PR to add it to the upstream registry.
 
 ### What happens next
 
 1. Submission enters the triage queue.
-2. CI fetches the repo, runs the quality scorer, and opens a draft PR against `main`.
-3. A maintainer reviews the PR; on approval the server is merged into the index and goes live on the next daily sync.
+2. The daily sync workflow fetches the upstream index, scores every server, and writes `servers-index.json`.
+3. Your server appears in the catalog with its computed score.
 
 ---
 
@@ -241,22 +183,23 @@ curl http://localhost:8080/submissions | jq
 ### Architecture
 
 ```
-┌──────────────────┐    HTTP/JSON    ┌──────────────────┐
-│   React + Vite   │ ──────────────► │  FastAPI backend │
-│   Web UI (:5173) │                 │     (:8080)      │
-└──────────────────┘                 └──────────────────┘
-                                              │
-                                              ▼
-                                     ┌──────────────────┐
-                                     │ servers-index    │
-                                     │   .json (4,403+) │
-                                     └──────────────────┘
-                                              ▲
-                                              │ daily
-                                     ┌──────────────────┐
-                                     │ GitHub Actions   │
-                                     │  tools/sync_…    │
-                                     └──────────────────┘
+┌──────────────────┐
+│   React + Vite   │
+│   Web UI (:5173) │
+└──────────────────┘
+         │
+         │ fetch /servers-index.json
+         ▼
+┌──────────────────┐
+│ servers-index    │
+│   .json (4,400+) │
+└──────────────────┘
+         ▲
+         │ daily
+┌──────────────────┐
+│ GitHub Actions   │
+│  tools/sync_…    │
+└──────────────────┘
 ```
 
 ### One-command deploy
@@ -264,61 +207,38 @@ curl http://localhost:8080/submissions | jq
 ```bash
 git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
-python tools/sync_index.py             # ~5 MB download
-docker compose up -d --build
+cd frontend && npm install && npm run build
+# Serve frontend/dist/ with any static host (nginx, Caddy, S3, etc.)
 ```
-
-Ports:
-
-| Service | Port | URL |
-|---|---|---|
-| Web UI | 5173 | `http://localhost:5173` |
-| REST API | 8080 | `http://localhost:8080` |
-| Swagger UI | 8080 | `http://localhost:8080/docs` |
-| ReDoc | 8080 | `http://localhost:8080/redoc` |
 
 ### Production checklist
 
-- [ ] Put the API behind a reverse proxy (Caddy / nginx) with TLS
-- [ ] Mount `servers-index.json` and `user-data.json` on a persistent volume
-- [ ] Schedule `python tools/sync_index.py` to run daily (cron / GitHub Action on a schedule)
+- [ ] Serve `frontend/dist/` behind a reverse proxy (Caddy / nginx) with TLS
+- [ ] Schedule `python3 tools/sync_index.py && python3 tools/gen_static_data.py` to run daily (cron / GitHub Action on a schedule)
 - [ ] Enable GitHub secret scanning & push protection (already on by default in this repo's settings)
 - [ ] Set up log shipping to your aggregator
-- [ ] Pin the docker image tag (don't use `:latest` in prod)
 
 ### Updating
 
 ```bash
 git pull
-docker compose pull
-docker compose up -d --build
+cd frontend && npm install && npm run build
+# Redeploy frontend/dist/
 ```
-
-Your data in `user-data.json` and `submissions.json` is preserved by the named volume.
 
 ---
 
-## 8. CLI tools reference
+## 8. Data pipeline tools reference
 
 All under [`tools/`](../tools/). Run from the repo root.
 
 | Command | What it does |
 |---|---|
-| `python tools/sync_index.py` | Download the latest upstream index, rebuild `servers-index.json` |
-| `python tools/index_servers.py <file>` | Add a server from a local `servers/<name>/` directory |
-| `python tools/comprehensive_collector.py` | Crawl multiple upstream registries and merge |
-| `python tools/index_downloader.py` | Bulk download referenced repos (use carefully, see `--help`) |
-| `python tools/completeness_scoring.py` | Re-score every server in the index |
-| `python tools/auto_updater.py` | Cron-friendly: pull upstream, re-score, write back |
-| `python tools/secret_scanner.py` | Scan the repo for accidentally committed secrets |
-| `python tools/gen_api_docs.py` | Regenerate [`docs/API.md`](API.md) from the live OpenAPI schema |
-| `python tools/build_social_preview.py` | Rebuild the social preview banner |
-| `python tools/notable_projects_navigator.py` | Generate `notable_projects.json` |
-| `python tools/collect_domestic_companies.py` | Generate the Chinese-domestic-company catalog |
-| `python tools/server_health_checker.py` | HEAD-check every repo's URL and report dead links |
-| `python tools/update_index.py` | One-shot: pull → score → publish |
-| `python tools/downloader.py awesome 10` | Download top-10 from `awesome-mcp` into `servers/` |
-| `python tools/batch_manager.py` | Bulk-apply operations across `servers/*` |
+| `python3 tools/sync_index.py` | Download the latest upstream index, enrich with GitHub API metadata, write `servers-index.json` (root) |
+| `python3 tools/gen_static_data.py` | Score every server, compute install hints, scan adapters/ for our_signal, write `frontend/public/servers-index.json` |
+| `python3 tools/completeness_scoring.py` | Re-score every server in the index (5-factor formula) |
+| `python3 tools/secret_scanner.py` | Scan the repo for accidentally committed secrets |
+| `python3 tools/build_social_preview.py` | Rebuild the social preview banner |
 
 ---
 
@@ -326,15 +246,15 @@ All under [`tools/`](../tools/). Run from the repo root.
 
 | Signal | Where to see it | What it means |
 |---|---|---|
-| `quality_score` (0-100) | server card + `/servers/{name}` | Composite of README completeness, commit recency, license, tests |
+| `score` (0-100) | server card + detail page | Composite of 5 factors: stars (30%), recency (15%), lang_coverage (15%), desc_quality (20%), our_signal (20%) |
 | `stars` | server card | GitHub stargazers — popularity, not quality |
 | `archived` | server card (red badge) | **Do not install** — the upstream is gone |
 | `updated_at` | server card | If > 1 year old, plan for breakage |
 | `license` | server detail | OSI-approved = safe to use commercially |
-| `curated` flag | `Curated` page | Hand-picked by a maintainer; safest starting point |
+| `our_signal` badge | server card (✅ adapted / ⚙️ in progress / 👀 researched / 🆕 unprocessed) | Trust tier — whether we've personally adapted the server |
 | Last sync timestamp | footer of Web UI | When the index was last refreshed |
 
-**Rule of thumb:** for a production deployment, install only servers that are `!archived`, have `quality_score >= 60`, were updated in the last 6 months, and have an OSI-approved license.
+**Rule of thumb:** for a production deployment, install only servers that are `!archived`, have `score >= 60`, were updated in the last 6 months, and have an OSI-approved license. Prioritize servers with `our_signal >= 0.7` (adapted or in-progress).
 
 ---
 
@@ -342,14 +262,12 @@ All under [`tools/`](../tools/). Run from the repo root.
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Client can't see the new tool | Config JSON malformed | Validate with `python -m json.tool < claude_desktop_config.json` |
+| Client can't see the new tool | Config JSON malformed | Validate with `python3 -m json.tool < claude_desktop_config.json` |
 | Client can't see the new tool | Client not restarted | Quit and reopen Claude Desktop / Cursor |
 | `npx` error on macOS | Node not on PATH | Install Node 20+ via nvm or Homebrew |
-| `pip install` fails on Apple Silicon | Some deps lack arm64 wheels | Use the Docker option, or use `conda` / `pyenv` |
-| API returns 500 | Stale index | Run `python tools/sync_index.py` |
-| Web UI shows "no servers" | API not running, or CORS blocked | Make sure backend is up on :8080 |
-| `python tools/secret_scanner.py` complains in CI | A test fixture triggered a pattern | Run with `--quiet`, or update `tools/secret_scanner.py`'s allowlist |
-| `403` on submitting a server | You hit the submission rate-limit | Wait an hour, or use the issue template |
+| `pip install` fails on Apple Silicon | Some deps lack arm64 wheels | Use `conda` / `pyenv` |
+| Web UI shows "no servers" | `servers-index.json` not found | Run `python3 tools/gen_static_data.py` to regenerate |
+| `python3 tools/secret_scanner.py` complains in CI | A test fixture triggered a pattern | Run with `--quiet`, or update `tools/secret_scanner.py`'s allowlist |
 | "Branch update failed" when pushing to main | Branch protection is on (good!) | Open a PR instead |
 
 ---
@@ -363,27 +281,26 @@ No. It's a community registry that indexes servers speaking the open Model Conte
 Daily, via a GitHub Actions cron job. The `updated_at` on the Web UI footer tells you the exact timestamp.
 
 **Q: Can I trust the configs you generate?**
-The `command` and `args` are taken verbatim from the upstream README. Always review them — the `env` block often contains placeholders for tokens you must supply yourself.
+The `command` and `args` are taken verbatim from the upstream README or from our adapter manifests. Always review them — the `env` block often contains placeholders for tokens you must supply yourself.
 
 **Q: My server was rejected from the curated list. What now?**
 Improve the three things the scorer cares about most: a complete README, recent commits, and a permissive license. Re-submit after the next sync.
 
 **Q: Can I run MCP Hub offline?**
-Yes — `python tools/sync_index.py` downloads a one-time snapshot, and the Web UI works against the local index. The only thing that needs the network is the daily sync.
+Yes — `python3 tools/sync_index.py` downloads a one-time snapshot, and the Web UI works against the local index. The only thing that needs the network is the daily sync.
 
 **Q: Does MCP Hub phone home?**
-No. The server is stateless. The only network egress is the optional daily sync to upstream registries.
+No. The SPA is fully static. User data (favorites, ratings) lives in your browser's `localStorage`. Clearing site data clears them.
 
 **Q: Where's the data stored?**
-- The catalog — `servers-index.json` (regenerable from upstream)
-- User data — `user-data.json` (favorites, ratings, comments). Local-only, gitignored in private deployments.
-- Submissions — `submissions.json` (queue + review history)
+- The catalog — `frontend/public/servers-index.json` (regenerable from upstream)
+- User data — browser `localStorage` (favorites, ratings). Local-only, not synced.
 
 **Q: How do I add a private / internal server that isn't on GitHub?**
-Edit `market-config.json` and add an entry with `source_type: "private"`. The indexer will pick it up on the next run.
+MCP Hub only indexes public GitHub repos. For private servers, you can fork the repo and manually add entries to `servers-index.json`.
 
 ---
 
 <p align="center">
-  <sub>Last updated: 2026-06-02 · MCP-HUB v2.0.1</sub>
+  <sub>Last updated: 2026-06-12 · MCP-HUB v3.1.0</sub>
 </p>

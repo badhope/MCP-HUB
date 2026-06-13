@@ -1,5 +1,11 @@
 # MCP-HUB 质量审计修复计划表
 
+> ⚠️ **Historical document. Superseded by the v3.0.0 architecture pivot.**
+> 
+> This plan was completed before the transition to a static SPA architecture.
+> The FastAPI backend has been removed; all issues related to `main.py`, Docker deployment,
+> and server-side APIs are no longer applicable. See [CHANGELOG.md](CHANGELOG.md) for details.
+
 > 来源：上一轮质量审计（质量员 + 使用者 + 静态分析）发现的全部问题。
 > 目标：把 5 个 P0 + 3 个 P1 + 2 个 P2 全部清掉，让项目达到"可推荐"状态。
 > 流程：架构师 → 程序员 → 设计师 三视角会审 → 共识方案 → 落地修复。

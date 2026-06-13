@@ -1,5 +1,5 @@
 /**
- * Home — the 3-layer product in one page.
+ * IconHome — the 3-layer product in one page.
  *
  * 6 sections, top to bottom:
  *   1. Hero (search + filter + CTA)
@@ -9,7 +9,7 @@
  *   5. 🆕 新上架 (last 7 days, top 12)
  *   6. 📂 分类浏览 (top categories + link to /browse)
  *
- * Plus a "data updates daily" badge at the bottom of the hero so users
+ * IconPlus a "data updates daily" badge at the bottom of the hero so users
  * know they're looking at a snapshot, not a live feed.
  */
 
@@ -17,15 +17,15 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
-  Sparkles, Search, Database, Star, Wrench, Zap, Tag, ArrowRight,
-  Clock, TrendingUp, BookOpen,
-} from 'lucide-react';
+  IconSearch, IconDatabase, IconStar, IconTool, IconBolt, IconTag, IconArrowRight,
+  IconClock, IconTrendingUp, IconBook,
+} from '@tabler/icons-react';
 import { useServers } from '../hooks/useServers';
 import { useStats } from '../hooks/useStats';
 import { ServerCard } from '../components/server/ServerCard';
 import { OurSignalBadge } from '../components/server/OurSignalBadge';
 
-const Home = React.memo(() => {
+const IconHome = React.memo(() => {
   const { data: serverData } = useServers();
   const { data: stats } = useStats();
 
@@ -35,7 +35,7 @@ const Home = React.memo(() => {
   const totalCategories = stats?.total_categories ?? Object.keys(stats?.categories || {}).length;
   const ourToolsCount = stats?.our_tools_count ?? 0;
   const snapshotDate = stats?.data_snapshot_date ?? stats?.last_sync ?? 'unknown';
-  const categoriesMap = stats?.categories || {};
+  const categoriesMap = useMemo(() => stats?.categories || {}, [stats?.categories]);
 
   const topByScore = useMemo(
     () => [...servers]
@@ -49,7 +49,8 @@ const Home = React.memo(() => {
     [servers]
   );
   const recent = useMemo(() => {
-    const cutoff = Date.now() - 7 * 86_400_000;
+    // eslint-disable-next-line react-hooks/purity
+    const cutoff = new Date(Date.now() - 7 * 86_400_000).getTime();
     return [...servers]
       .filter((s) => new Date(s.updated_at).getTime() >= cutoff)
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
@@ -67,7 +68,7 @@ const Home = React.memo(() => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-background">
       <Helmet>
         <title>MCP Hub — {totalServers.toLocaleString()}+ MCP servers, {ourToolsCount} universal adapters</title>
         <meta
@@ -77,63 +78,47 @@ const Home = React.memo(() => {
       </Helmet>
 
       {/* ───── Section 1: Hero + search ───── */}
-      <section className="relative bg-gradient-to-br from-primary-600 via-violet-600 to-accent-600 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
+      <section className="relative bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 py-16 sm:py-24 relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-5 border border-white/20">
-              <Sparkles size={14} className="text-yellow-300" />
-              <span className="text-sm text-white/90">
-                {totalServers.toLocaleString()}+ MCP servers · {ourToolsCount} universal adapters
-              </span>
-            </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight">
               Discover, evaluate, install.
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400">
-                One config, every client.
-              </span>
             </h1>
-            <p className="text-lg sm:text-xl text-white/80 mb-8 max-w-2xl leading-relaxed">
+            <p className="text-lg sm:text-xl text-primary-foreground/80 mb-8 max-w-2xl leading-relaxed">
               The 3-layer directory of MCP servers. Browse {totalServers.toLocaleString()}+
               {' '}upstream repos, install the {ourToolsCount} we've already adapted as
               universal configs, or contribute a new one.
             </p>
 
-            {/* Search bar */}
+            {/* IconSearch bar */}
             <form
               action="/servers"
               method="get"
               className="flex flex-col sm:flex-row gap-3 max-w-2xl"
             >
               <div className="flex-1 relative">
-                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <IconSearch size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="search"
                   name="q"
-                  placeholder="Search servers, e.g. github, postgres, browser…"
-                  className="w-full pl-11 pr-4 py-3.5 rounded-xl text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 border border-white/30 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary-400 placeholder-slate-400"
+                  placeholder="IconSearch servers, e.g. github, postgres, browser…"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl text-foreground bg-card border border-border focus:outline-none focus:ring-2 focus:ring-primary-400 placeholder-muted-foreground"
                 />
               </div>
               <button
                 type="submit"
-                className="px-6 py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold rounded-xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-all"
+                className="px-6 py-3.5 bg-card text-foreground font-semibold rounded-xl hover:bg-accent hover:text-accent-foreground transition-all"
               >
-                Search
+                IconSearch
               </button>
             </form>
-
-            <div className="mt-4 text-xs text-white/60 flex items-center gap-1.5">
-              <Clock size={12} />
-              Data updates daily · snapshot {formatSnapshotDate(snapshotDate)}
-            </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-50 to-transparent dark:from-slate-950" />
       </section>
 
       {/* ───── Section 2: 🏆 精选 (top 10 by score) ───── */}
       <Section
-        icon={<TrendingUp size={22} className="text-amber-500" />}
+        icon={<IconTrendingUp size={22} className="text-amber-500" />}
         title="Featured"
         subtitle="Top 10 by our 5-factor score"
         linkTo="/servers?sort=score"
@@ -154,21 +139,21 @@ const Home = React.memo(() => {
       <section className="container mx-auto px-4 mt-14">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
           <div className="min-w-0">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Wrench size={22} className="text-emerald-600" />
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <IconTool size={22} className="text-emerald-600" />
               <span>Our tools</span>
               <OurSignalBadge label="adapted" size="sm" iconOnly />
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-muted-foreground mt-1">
               Universal configs we've built, downloaded and tested.
             </p>
           </div>
           <Link
             to="/our-tools"
-            className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium flex items-center text-sm"
+            className="text-primary hover:text-foreground font-medium flex items-center text-sm"
           >
             {ourToolsCount > 0 ? `See all ${ourToolsCount}` : 'Why empty?'}
-            <ArrowRight size={16} className="ml-1" />
+            <IconArrowRight size={16} className="ml-1" />
           </Link>
         </div>
         {ourTools.length > 0 ? (
@@ -181,13 +166,13 @@ const Home = React.memo(() => {
           <div className="rounded-2xl border border-dashed border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/10 p-6 sm:p-8">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
-                <Wrench size={20} className="text-emerald-700 dark:text-emerald-300" />
+                <IconTool size={20} className="text-emerald-700 dark:text-emerald-300" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-1">
+                <h3 className="text-base font-semibold text-foreground mb-1">
                   {ourToolsCount} / {totalServers.toLocaleString()} adapted
                 </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   We haven't shipped any universal adapters yet. The first one is
                   queued for the next release. Want to help pick which upstream
                   server we adapt first?{' '}
@@ -204,7 +189,7 @@ const Home = React.memo(() => {
 
       {/* ───── Section 4: 🔥 热门 (top 20 by stars) ───── */}
       <Section
-        icon={<Star size={22} className="text-amber-500" />}
+        icon={<IconStar size={22} className="text-amber-500" />}
         title="Popular"
         subtitle="Most-starred servers in the catalog"
         linkTo="/servers?sort=stars"
@@ -219,7 +204,7 @@ const Home = React.memo(() => {
 
       {/* ───── Section 5: 🆕 新上架 (last 7 days) ───── */}
       <Section
-        icon={<Zap size={22} className="text-amber-500" />}
+        icon={<IconBolt size={22} className="text-amber-500" />}
         title="Newly updated"
         subtitle="Servers touched in the last 7 days"
         linkTo="/servers?sort=updated"
@@ -240,20 +225,20 @@ const Home = React.memo(() => {
       <section className="container mx-auto px-4 mt-14 mb-16">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
           <div className="min-w-0">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Tag size={22} className="text-violet-500" />
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <IconTag size={22} className="text-violet-500" />
               <span>Browse by category</span>
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-muted-foreground mt-1">
               {totalCategories.toLocaleString()} categories in total
             </p>
           </div>
           <Link
             to="/browse"
-            className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium flex items-center text-sm"
+            className="text-primary hover:text-foreground font-medium flex items-center text-sm"
           >
             All categories
-            <ArrowRight size={16} className="ml-1" />
+            <IconArrowRight size={16} className="ml-1" />
           </Link>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -261,10 +246,10 @@ const Home = React.memo(() => {
             <Link
               key={name}
               to={`/servers?category=${encodeURIComponent(name)}`}
-              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-primary-300 hover:text-primary-600 dark:hover:border-primary-500 dark:hover:text-primary-400 transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:border-primary-300 hover:text-foreground transition-colors"
             >
               {name}
-              <span className="text-xs text-slate-400 dark:text-slate-500">
+              <span className="text-xs text-muted-foreground">
                 {count.toLocaleString()}
               </span>
             </Link>
@@ -274,15 +259,15 @@ const Home = React.memo(() => {
 
       {/* ───── Section 7: Data badge ───── */}
       <section className="container mx-auto px-4 pb-16">
-        <div className="rounded-2xl bg-gradient-to-br from-primary-600 via-violet-600 to-accent-600 text-white p-6 sm:p-10 text-center">
-          <BookOpen size={36} className="mx-auto mb-4 text-white/80" />
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+        <div className="rounded-2xl bg-muted border border-border p-6 sm:p-10 text-center">
+          <IconBook size={36} className="mx-auto mb-4 text-muted-foreground" />
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">
             Snapshot data, refreshed daily
           </h2>
-          <p className="text-white/80 max-w-2xl mx-auto mb-5">
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-5">
             The catalog above is the daily-upstream MCP index, frozen at
             {' '}
-            <code className="font-mono text-sm bg-white/10 px-1.5 py-0.5 rounded">
+            <code className="font-mono text-sm bg-card px-1.5 py-0.5 rounded">
               {formatSnapshotDate(snapshotDate)}
             </code>
             . The page itself runs as a static SPA on GitHub Pages; no
@@ -291,16 +276,16 @@ const Home = React.memo(() => {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               to="/servers"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 text-primary-700 dark:text-primary-300 font-semibold rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-card text-foreground font-semibold rounded-xl hover:bg-accent hover:text-accent-foreground transition-all"
             >
-              <Database size={16} />
+              <IconDatabase size={16} />
               Full server list
             </Link>
             <Link
               to="/more"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all border border-white/20"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-muted/50 text-foreground font-semibold rounded-xl hover:bg-accent transition-all border border-border"
             >
-              <Clock size={16} />
+              <IconClock size={16} />
               How the data flows
             </Link>
           </div>
@@ -329,18 +314,18 @@ const Section: React.FC<React.PropsWithChildren<{
   <section className="container mx-auto px-4 mt-14">
     <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
       <div className="min-w-0">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
           {icon}
           <span>{title}</span>
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">{subtitle}</p>
+        <p className="text-muted-foreground mt-1">{subtitle}</p>
       </div>
       <Link
         to={linkTo}
-        className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium flex items-center text-sm"
+        className="text-primary hover:text-foreground font-medium flex items-center text-sm"
       >
         {linkLabel}
-        <ArrowRight size={16} className="ml-1" />
+        <IconArrowRight size={16} className="ml-1" />
       </Link>
     </div>
     {children}
@@ -348,9 +333,9 @@ const Section: React.FC<React.PropsWithChildren<{
 );
 
 const EmptyHint: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <div className="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/30 px-6 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+  <div className="rounded-2xl border border-dashed border-border bg-muted/50 px-6 py-8 text-center text-sm text-muted-foreground">
     {children}
   </div>
 );
 
-export default Home;
+export default IconHome;

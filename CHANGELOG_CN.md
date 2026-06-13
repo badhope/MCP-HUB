@@ -139,6 +139,14 @@
 - `.github/workflows/release.yml` — 推送 `v*.*.*` tag 时自动起草 GitHub Release，从 `CHANGELOG.md` 提取说明
 - `main.py` 新增 `GET /health` liveness 端点（轻量，不接触数据库/目录）
 - `Dockerfile` 的 `HEALTHCHECK` 现在调用 `/health` 而非 `/`
+- `httpx2>=2.3.0` 依赖（CI 中 FastAPI TestClient 必需）
+- `package.json` 脚本：`frontend:dev`、`frontend:build`、`frontend:preview`、`frontend:test`、`test:cov`（替换已删除的 `market.py` 引用）
+- `recommend_servers` 作为 `recommend_by_scene` 的向后兼容别名，已有文档说明
+- `tools/secret_scanner.py` — 自动密钥检测器，覆盖 19 种模式（GitHub PAT、OpenAI、AWS、PEM 密钥等），配套 13 个单元测试
+- `tools/pre-commit` — 对暂存改动运行密钥扫描的 git hook
+- `.github/workflows/ci.yml` 中的 `secret-scan` 任务 — 每次 push/PR 都跑扫描器，发现问题即阻断合并
+- `SECURITY.md` 中的威胁模型、凭据处理矩阵和事件响应 playbook
+- `git credential.helper` 配置为基于缓存的本地凭据存储（`.git/config` 中无明文）
 
 ### 变更
 - README、README_CN、QUICKSTART、QUICKSTART_CN、USER_GUIDE、USER_GUIDE_CN：`4,400+` / `4407` → `4,403+` / `4403`，匹配实时注册数据
@@ -160,20 +168,6 @@
 - 22 个 E501 超长行（分布于 `services.py`、`tools/secret_scanner.py`、`tools/completeness_scoring.py`、`tools/gen_static_data.py`、`tools/auto_updater.py`、`tools/notable_projects_navigator.py`、`tools/update_index.py`、`tools/collect_domestic_companies.py`）— 描述文本缩短，URL/正则/docker 命令酌情加 `# noqa: E501`
 - `tests/test_api.py` / `tests/test_fastapi.py` E402 — 中段的 `import socket` 上移到顶部 import 区
 - `tools/notable_projects_navigator.py` / `tools/download_manager.py` F541 — 去掉没有占位符的字符串前的多余 `f` 前缀
-
-## [2.0.1] - 2026-06-01
-
-### 新增
-- `httpx2>=2.3.0` 依赖（CI 中 FastAPI TestClient 必需）
-- `package.json` 脚本：`frontend:dev`、`frontend:build`、`frontend:preview`、`frontend:test`、`test:cov`（替换已删除的 `market.py` 引用）
-- `recommend_servers` 作为 `recommend_by_scene` 的向后兼容别名，已有文档说明
-- `tools/secret_scanner.py` — 自动密钥检测器，覆盖 19 种模式（GitHub PAT、OpenAI、AWS、PEM 密钥等），配套 13 个单元测试
-- `tools/pre-commit` — 对暂存改动运行密钥扫描的 git hook
-- `.github/workflows/ci.yml` 中的 `secret-scan` 任务 — 每次 push/PR 都跑扫描器，发现问题即阻断合并
-- `SECURITY.md` 中的威胁模型、凭据处理矩阵和事件响应 playbook
-- `git credential.helper` 配置为基于缓存的本地凭据存储（`.git/config` 中无明文）
-
-### 修复
 - `api.py` F821 未定义名称 `get_quality_level_description` — 已从 services 导入
 - `main.py` F401 未使用的 `import time` — 已删除
 - `main.py` F841 局部变量 `full_name`（已赋值未使用）— 已删除

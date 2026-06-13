@@ -7,8 +7,7 @@
 - [README_CN.md](README_CN.md) — 总览、特性、快速上手
 - [docs/USER_GUIDE_CN.md](docs/USER_GUIDE_CN.md) — 完整使用指南（最推荐）
 - [docs/QUICKSTART_CN.md](docs/QUICKSTART_CN.md) — 5 分钟上手
-- [docs/API.md](docs/API.md) — 完整 REST API 参考
-- 运行后端后，API 文档自动生成在 `/docs`（Swagger UI）和 `/redoc`（ReDoc）
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — 系统架构
 
 ## 社区
 

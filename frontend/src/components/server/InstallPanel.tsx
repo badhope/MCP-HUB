@@ -1,12 +1,12 @@
 /**
  * InstallPanel — the 3-action install panel for a single server:
  *
- *   1. 📦 Install (primary install command)        [Copy]
- *   2. 🚀 Run with npx (or uvx / docker, by lang)  [Copy]
+ *   1. 📦 Install (primary install command)        [IconCopy]
+ *   2. 🚀 Run with npx (or uvx / docker, by lang)  [IconCopy]
  *   3. 🐙 View on GitHub                          [Open ↗]
  *
- * Plus a 4th line:
- *   4. 📥 Download source ZIP                     (link)
+ * IconPlus a 4th line:
+ *   4. 📥 IconDownload source ZIP                     (link)
  *
  * Primary copy comes from `server.install_hint.primary`; alternative
  * copy comes from `server.install_hint.alternatives.{npm,pip,git,docker}`
@@ -14,12 +14,12 @@
  *
  * If `install_hint` is missing (very old index, or upstream record
  * with no detectable language), we degrade gracefully — show the
- * "View on GitHub" + "Download ZIP" lines and a note that the
+ * "View on GitHub" + "IconDownload ZIP" lines and a note that the
  * one-liner isn't available.
  */
 
 import React from 'react';
-import { Terminal, ExternalLink, Download, Package } from 'lucide-react';
+import { IconTerminal, IconExternalLink, IconDownload, IconPackage } from '@tabler/icons-react';
 import { CopyButton } from '../shared/CopyButton';
 import type { Server } from '../../types';
 
@@ -82,12 +82,12 @@ export const InstallPanel: React.FC<InstallPanelProps> = ({ server, className = 
 
   return (
     <div
-      className={`rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800 ${className}`}
+      className={`rounded-2xl border border-border bg-card divide-y divide-border ${className}`}
     >
       {/* Header */}
-      <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40">
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-          <Terminal size={16} className="text-primary-600 dark:text-primary-400" />
+      <div className="px-5 py-3 border-b border-border bg-muted/50">
+        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+          <IconTerminal size={16} className="text-primary" />
           Install
         </h3>
       </div>
@@ -96,18 +96,18 @@ export const InstallPanel: React.FC<InstallPanelProps> = ({ server, className = 
       {primary ? (
         <div className="px-5 py-4">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <div className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
-              <Package size={14} className="text-primary-600 dark:text-primary-400" />
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <IconPackage size={14} className="text-primary" />
               Primary install
             </div>
-            <CopyButton value={primary} label="Copy" />
+            <CopyButton value={primary} label="IconCopy" />
           </div>
           <pre className="bg-slate-950 text-slate-100 rounded-lg p-3 text-sm font-mono overflow-x-auto whitespace-pre">
             {primary}
           </pre>
         </div>
       ) : (
-        <div className="px-5 py-4 text-sm text-slate-500 dark:text-slate-400">
+        <div className="px-5 py-4 text-sm text-muted-foreground">
           No one-line install command is available for this server. Use the GitHub link
           below to install it manually.
         </div>
@@ -124,7 +124,7 @@ export const InstallPanel: React.FC<InstallPanelProps> = ({ server, className = 
                 >
                   {alt.label}
                 </div>
-                <CopyButton value={alt.command} label="Copy" />
+                <CopyButton value={alt.command} label="IconCopy" />
               </div>
               <pre className="bg-slate-950 text-slate-100 rounded-lg p-2.5 text-xs font-mono overflow-x-auto whitespace-pre">
                 {alt.command}
@@ -140,13 +140,13 @@ export const InstallPanel: React.FC<InstallPanelProps> = ({ server, className = 
           href={server.source}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between gap-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          className="flex items-center justify-between gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
         >
           <span className="flex items-center gap-2">
-            <ExternalLink size={14} />
+            <IconExternalLink size={14} />
             View on GitHub
           </span>
-          <span className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[60%]">
+          <span className="text-xs text-muted-foreground truncate max-w-[60%]">
             {server.source.replace(/^https?:\/\//, '')}
           </span>
         </a>
@@ -155,13 +155,13 @@ export const InstallPanel: React.FC<InstallPanelProps> = ({ server, className = 
             href={zipUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between gap-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            className="flex items-center justify-between gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
           >
             <span className="flex items-center gap-2">
-              <Download size={14} />
-              Download source ZIP
+              <IconDownload size={14} />
+              IconDownload source ZIP
             </span>
-            <span className="text-xs text-slate-400 dark:text-slate-500">codeload</span>
+            <span className="text-xs text-muted-foreground">codeload</span>
           </a>
         )}
       </div>

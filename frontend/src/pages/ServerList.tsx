@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Download } from 'lucide-react';
+import { IconDownload } from '@tabler/icons-react';
 import { useServerStore } from '../store/useServerStore';
 import { useServers } from '../hooks/useServers';
 import { SearchBar } from '../components/shared/SearchBar';
@@ -10,7 +10,7 @@ import { ServerGrid } from '../components/server/ServerGrid';
 import { Pagination } from '../components/shared/Pagination';
 import { BatchExportBar } from '../components/shared/BatchExportBar';
 import { Button } from '../components/ui/Button';
-import { Server } from '../types';
+import type { Server } from '../types';
 import { getQualityScore, QUALITY_THRESHOLDS } from '../lib/quality';
 
 const ServerList = React.memo(() => {
@@ -153,17 +153,17 @@ const ServerList = React.memo(() => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">
+    <div className="min-h-screen bg-background py-8">
       <Helmet>
         <title>All MCP Servers | MCP Hub</title>
-        <meta name="description" content="Browse and search our complete collection of MCP servers. Filter by category, language, stars, and quality score." />
+        <meta name="description" content="Browse and search our complete collection of MCP servers. IconFilter by category, language, stars, and quality score." />
       </Helmet>
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div className="min-w-0">
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">MCP Servers</h1>
-              <p className="text-gray-600 dark:text-slate-300">
+              <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">MCP Servers</h1>
+              <p className="text-muted-foreground">
                 Discover and explore {allServers.length.toLocaleString()} MCP servers
               </p>
             </div>
@@ -173,7 +173,7 @@ const ServerList = React.memo(() => {
                 size="sm"
                 onClick={toggleSelectMode}
               >
-                <Download size={16} className="mr-1.5" />
+                <IconDownload size={16} className="mr-1.5" />
                 {selectMode ? 'Cancel Export' : 'Batch Export'}
               </Button>
             </div>
@@ -184,7 +184,7 @@ const ServerList = React.memo(() => {
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search server name or description..."
+            placeholder="IconSearch server name or description..."
           />
         </div>
 

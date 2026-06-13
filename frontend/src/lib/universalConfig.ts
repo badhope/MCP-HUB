@@ -1,97 +1,77 @@
 /**
- * Universal adapter config — Layer 2 of the 3-layer product model.
+ * universalConfig.ts — 通用配置生成器
  *
- * Given a server record (and, if we have an adapter, the adapter manifest),
- * synthesize a single JSON snippet that any MCP-compatible client
- * (Claude Desktop, Cursor, Cline, Windsurf, Continue, etc.) can paste
- * into its `mcp_servers` config and have the same working setup.
- *
- * The point of "universal" is that the same JSON works across all of
- * those clients because they share the de-facto `mcpServers` shape;
- * we don't generate one snippet per client.
- *
- * For more details, see REFACTOR_PLAN.md §3 (3-layer model) and §7.3
- * (universal config generator).
+ * 根据服务器信息和适配器配置，生成全平台通用的 MCP 配置。
+ * 一份配置，适用于 Claude Desktop、Cursor、Cline、Windsurf 等所有客户端。
  */
 
-import type { Server } from '../types';
+import type { Server, MCPServerEntry } from '../types';
 
-/** Shape of a single `mcpServers.<name>` entry across all known clients. */
-export interface McpServerEntry {
-  command: string;
-  args?: string[];
-  env?: Record<string, string>;
-  /** Some clients (Claude Desktop) also accept a `type` field. */
-  type?: 'stdio' | 'sse' | 'http';
-}
-
-/** The full `mcp_servers` config object, ready to drop into any client. */
-export interface UniversalConfig {
-  mcpServers: Record<string, McpServerEntry>;
-}
-
-/**
- * Minimal subset of an adapter.json that we need to compose the
- * universal config. The actual adapter.json has more fields (install
- * command, our_signal label, README, etc.) — we only consume the
- * bits that influence the synthesized `mcpServers` payload.
- */
 export interface AdapterManifest {
-  /** Override the upstream install command. Optional. */
   install_universal?: string;
-  /** Override args split (e.g. "npx -y fastmcp" -> ["-y", "fastmcp"]). */
   install_universal_args?: string[];
-  /** Extra env vars the adapter needs. */
   env?: Record<string, string>;
-  /** Our internal status; surfaced in the UI, not the JSON. */
-  our_signal?: 'adapted' | 'in_progress' | 'researched' | 'unknown';
-  /** Tested clients — surfaced as a trust signal. Optional. */
   tested_clients?: string[];
+  extensions?: string;
 }
 
 /**
- * Parse a one-line install command into (command, args).
- * Handles whitespace; ignores quoted whitespace for simplicity.
+ * 解析命令字符串为 command 和 args
  */
-function splitCommand(cmd: string): { command: string; args: string[] } {
-  const parts = cmd.trim().split(/\s+/).filter(Boolean);
-  const command = parts[0] ?? '';
-  return { command, args: parts.slice(1) };
+function splitCommand(command: string): { command: string; args: string[] } {
+  const parts = command.trim().split(/\s+/);
+  return {
+    command: parts[0] || '',
+    args: parts.slice(1),
+  };
 }
 
 /**
- * Build a universal `mcpServers` config from a server + optional adapter.
+ * 生成通用 MCP 配置
  *
- * Resolution order for the primary command:
- *   1. `adapter.install_universal` (if provided; the adapter overrides)
- *   2. `server.install_hint.primary` (the upstream default)
- *   3. empty string (caller decides what to do)
- *
- * Resolution order for env:
- *   1. `adapter.env` (our additions / overrides)
- *   2. (no env hint in the upstream index today)
+ * @param server - 服务器对象
+ * @param adapter - 可选的适配器清单（如果我们有做适配）
+ * @returns 全平台通用的 mcpServers 配置对象
  */
 export function buildUniversalConfig(
   server: Server,
   adapter?: AdapterManifest
-): UniversalConfig {
-  const commandLine =
-    adapter?.install_universal ?? server.install_hint?.primary ?? '';
-  const { command, args: splitArgs } = splitCommand(commandLine);
+): { mcpServers: Record<string, MCPServerEntry> } {
+  let command: string;
+  let args: string[];
+  let env: Record<string, string> | undefined;
 
-  // If the adapter specifies its own args, use them verbatim.
-  const args =
-    adapter?.install_universal_args && adapter.install_universal_args.length > 0
-      ? adapter.install_universal_args
-      : splitArgs.length > 0
-        ? splitArgs
-        : undefined;
+  if (adapter) {
+    // 使用适配器的命令
+    if (adapter.install_universal) {
+      const parsed = splitCommand(adapter.install_universal);
+      command = parsed.command;
+      // 如果适配器提供了 args，使用它；否则使用解析出的 args
+      args = adapter.install_universal_args || parsed.args;
+    } else {
+      // 没有 install_universal，使用服务器的 primary
+      const primary = server.install_hint?.primary || '';
+      const parsed = splitCommand(primary);
+      command = parsed.command;
+      args = parsed.args;
+    }
+    env = adapter.env;
+  } else {
+    // 没有适配器，使用服务器的 primary
+    const primary = server.install_hint?.primary || '';
+    const parsed = splitCommand(primary);
+    command = parsed.command;
+    args = parsed.args;
+  }
 
-  const entry: McpServerEntry = {
+  const entry: MCPServerEntry = {
     command,
+    args: args.length > 0 ? args : undefined,
   };
-  if (args && args.length > 0) entry.args = args;
-  if (adapter?.env && Object.keys(adapter.env).length > 0) entry.env = adapter.env;
+
+  if (env && Object.keys(env).length > 0) {
+    entry.env = env;
+  }
 
   return {
     mcpServers: {
@@ -101,25 +81,40 @@ export function buildUniversalConfig(
 }
 
 /**
- * Pretty-print a universal config to JSON. We always pretty-print
- * because the value is meant to be human-pasted, not wire-encoded.
+ * 批量生成通用配置（多個服务器合并到一个 mcpServers）
+ *
+ * @param servers - 服务器数组
+ * @param adapters - 可选的适配器映射（server.name -> AdapterManifest）
+ * @returns 合并后的 mcpServers 配置对象
  */
-export function stringifyUniversalConfig(config: UniversalConfig): string {
+export function buildBatchUniversalConfig(
+  servers: Server[],
+  adapters?: Record<string, AdapterManifest>
+): { mcpServers: Record<string, MCPServerEntry> } {
+  const mcpServers: Record<string, MCPServerEntry> = {};
+
+  for (const server of servers) {
+    const adapter = adapters?.[server.name];
+    const config = buildUniversalConfig(server, adapter);
+    const entry = config.mcpServers[server.name];
+    if (entry) {
+      mcpServers[server.name] = entry;
+    }
+  }
+
+  return { mcpServers };
+}
+
+/**
+ * 将配置对象格式化为 JSON 字符串（2空格缩进）
+ */
+export function stringifyUniversalConfig(config: { mcpServers: Record<string, MCPServerEntry> }): string {
   return JSON.stringify(config, null, 2);
 }
 
 /**
- * Walk a list of servers and return one big universal config with all
- * of them. Useful for "export every adapted server" buttons.
+ * 检查服务器是否有通用配置
  */
-export function buildBatchUniversalConfig(
-  servers: Server[],
-  adapters: Record<string, AdapterManifest> = {}
-): UniversalConfig {
-  const merged: UniversalConfig = { mcpServers: {} };
-  for (const s of servers) {
-    const cfg = buildUniversalConfig(s, adapters[s.name]);
-    Object.assign(merged.mcpServers, cfg.mcpServers);
-  }
-  return merged;
+export function hasUniversalConfig(server: Server): boolean {
+  return Boolean(server.install_hint?.primary);
 }

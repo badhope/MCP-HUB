@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, Clock, Code, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { IconStar, IconClock, IconCode, IconArrowUpRight, IconCircleCheck } from '@tabler/icons-react';
 import { Github } from '../icons/Github';
 import { Card, CardContent, CardFooter } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { QualityBadge } from '../shared/QualityBadge';
 import { getQualityScore } from '../../lib/quality';
-import { Server } from '../../types';
+import type { Server } from '../../types';
 
 interface ServerCardProps {
   server: Server;
@@ -29,12 +29,12 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
 
   const getColorScheme = (name: string) => {
     const colors = [
-      'from-primary-500 to-primary-600',
-      'from-accent-500 to-accent-600',
-      'from-violet-500 to-violet-600',
-      'from-amber-500 to-amber-600',
-      'from-rose-500 to-rose-600',
-      'from-cyan-500 to-cyan-600',
+      'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300',
+      'bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300',
+      'bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300',
+      'bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-300',
+      'bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-300',
+      'bg-violet-50 text-violet-600 dark:bg-violet-950 dark:text-violet-300',
     ];
     const index = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
     return colors[index];
@@ -51,16 +51,16 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
   return (
     <Card
       onClick={handleClick}
-      className={`cursor-pointer group card-lift card-border relative h-full ${selected ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
+      className={`cursor-pointer group card-lift card-border relative h-full ${selected ? 'ring-2 ring-primary ring-offset-2' : ''}`}
     >
       {selectable && (
         <div className="absolute top-3 right-3 z-10">
           <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
             selected
-              ? 'bg-primary-500 border-primary-500 text-white'
-              : 'border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 group-hover:border-primary-400'
+              ? 'bg-primary border-primary text-primary-foreground'
+              : 'border-border bg-card group-hover:border-primary-400'
           }`}>
-            {selected && <CheckCircle2 size={14} />}
+            {selected && <IconCircleCheck size={14} />}
           </div>
         </div>
       )}
@@ -68,26 +68,24 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-start min-w-0 gap-3 sm:gap-4">
             {/* Avatar */}
-            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br ${getColorScheme(server.name)} rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 ${getColorScheme(server.name)} rounded-xl sm:rounded-2xl flex items-center justify-center font-bold text-lg sm:text-xl flex-shrink-0`}>
               {getInitials(server.name)}
-              {/* Glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
 
             {/* Name and Owner */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-slate-900 dark:text-white text-base sm:text-lg truncate group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors flex items-center">
+              <h3 className="font-semibold text-foreground text-base sm:text-lg truncate group-hover:text-primary transition-colors flex items-center">
                 {server.name}
-                <ArrowUpRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0" />
+                <IconArrowUpRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 truncate">@{server.owner}</p>
+              <p className="text-sm text-muted-foreground truncate">@{server.owner}</p>
             </div>
           </div>
 
           {/* Stars Badge — marked as snapshot to keep the demo honest about freshness */}
           <div className="flex flex-col items-end space-y-0.5 flex-shrink-0">
             <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-100 text-amber-600 px-2.5 py-1.5 rounded-xl group-hover:bg-amber-100 transition-colors">
-              <Star className="w-4 h-4 fill-current" />
+              <IconStar className="w-4 h-4 fill-current" />
               <span className="text-sm font-semibold">{server.stars.toLocaleString()}</span>
             </div>
             <span className="text-[10px] uppercase tracking-wide text-amber-700/70 font-medium pr-1">
@@ -97,7 +95,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
         </div>
 
         {/* Description */}
-        <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-2 mb-4 leading-relaxed">
+        <p className="text-foreground text-sm line-clamp-2 mb-4 leading-relaxed">
           {server.description}
         </p>
 
@@ -108,7 +106,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
               key={idx} 
               variant="primary" 
               size="sm"
-              className="bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100 transition-colors"
+              className="bg-secondary text-foreground border-border hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               {category}
             </Badge>
@@ -117,7 +115,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
             <Badge 
               variant="default" 
               size="sm"
-              className="bg-slate-100 text-slate-600 border-slate-200"
+              className="bg-muted text-muted-foreground border-border"
             >
               +{server.categories.length - 3}
             </Badge>
@@ -127,15 +125,15 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
 
       {/* Footer */}
       <CardFooter className="flex items-center justify-between gap-2 py-3 sm:py-4 px-4 sm:px-6">
-        <div className="flex items-center min-w-0 gap-3 sm:gap-4 text-sm text-slate-500 dark:text-slate-400">
+        <div className="flex items-center min-w-0 gap-3 sm:gap-4 text-sm text-muted-foreground">
           {server.language && (
             <div className="flex items-center min-w-0 gap-1.5">
-              <Code className="w-4 h-4 flex-shrink-0" />
+              <IconCode className="w-4 h-4 flex-shrink-0" />
               <span className="truncate">{server.language}</span>
             </div>
           )}
           <div className="flex items-center min-w-0 gap-1.5">
-            <Clock className="w-4 h-4 flex-shrink-0" />
+            <IconClock className="w-4 h-4 flex-shrink-0" />
             <span className="truncate">{formatDate(server.updated_at)}</span>
           </div>
         </div>
@@ -161,7 +159,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 dark:text-slate-500 dark:hover:text-white dark:hover:bg-slate-700 rounded-lg transition-all duration-200"
+            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
           >
             <Github className="w-4 h-4" />
           </a>

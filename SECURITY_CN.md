@@ -9,7 +9,7 @@
 | 公开仓库数据（服务器目录） | 公开 | GitHub，所有分支 |
 | 开发时使用的 API token | **高** | 仅本地 `.env`，**绝不入 git** |
 | 部署凭据 | **高** | GitHub Actions secrets / 托管平台 env |
-| 用户提交的数据（评分、评论） | 中 | `submissions.json`、`user-data.json` |
+| 用户数据（收藏、评分） | 低 | 浏览器 `localStorage`（仅本地） |
 | 个人信息（真实姓名、邮箱等） | **高** | **绝不提交** |
 
 ## 🚫 绝对不能提交
@@ -44,11 +44,9 @@
 
 | 环境 | 凭据存放 | 设置方式 |
 |-------------|-------------------|------------|
-| **本地开发**（`.env`） | `/.env` 和 `/frontend/.env`（已 gitignore） | 复制 `.env.example` 后填入 |
+| **本地开发** | 无需凭据 | 静态 SPA，无后端 |
 | **CI**（GitHub Actions） | 仓库 Settings → Secrets and variables → Actions | 在网页上添加；以 `${{ secrets.NAME }}` 引用 |
-| **Netlify** | 站点设置 → Environment variables | 在网页上添加；可在 `process.env.NAME` 访问 |
-| **Vercel** | 项目设置 → Environment Variables | 在网页上添加；可在 `process.env.NAME` 访问 |
-| **Docker 部署** | 外部 secrets 管理器（Doppler、Vault 等） | 运行时以 env 变量注入 |
+| **GitHub Pages 部署** | 无需凭据 | 静态站点，无后端 |
 
 ## 🚨 事故响应 · 误提交密钥怎么办
 

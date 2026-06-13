@@ -478,6 +478,7 @@ class ApiClient {
     return { success: true as const, submission: sub };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getSubmissions(_status?: string) {
     // No cross-user aggregation in static mode; per-user list lives on
     // `getUserSubmissions` instead.
@@ -490,9 +491,13 @@ class ApiClient {
   }
 
   async reviewSubmission(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _submissionId?: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _status?: 'approved' | 'rejected',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _reviewer?: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _comment?: string
   ): Promise<never> {
     throw new Error(

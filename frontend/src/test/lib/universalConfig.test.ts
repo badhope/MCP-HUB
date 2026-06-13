@@ -77,7 +77,8 @@ describe('buildUniversalConfig', () => {
   });
 
   it('does not crash when install_hint is missing', () => {
-    const { install_hint, ...serverNoHint } = baseServer;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { install_hint: _, ...serverNoHint } = baseServer;
     const cfg = buildUniversalConfig(serverNoHint as Server);
     // An empty entry is created with an empty command; we tolerate
     // this — the ServerDetail page hides the panel when there's no

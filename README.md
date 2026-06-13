@@ -86,7 +86,7 @@ running tests:
 
 ```bash
 pip install pytest
-pytest tests/ -v                     # 33 tests, ~0.1 s
+pytest tests/ -v                     # 56 tests, ~0.3 s
 ```
 
 ### Build for production
@@ -100,7 +100,7 @@ cd frontend && npm run build
 
 The output is `frontend/dist/` — a 7 MB bundle (4.4 MB of which is the
 catalog). Drop it on any static host. GitHub Pages works out of the
-box (`.github/workflows/frontend-deploy.yml`).
+box (`.github/workflows/deploy-pages.yml`).
 
 ---
 

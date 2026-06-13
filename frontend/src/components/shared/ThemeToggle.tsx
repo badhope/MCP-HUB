@@ -1,5 +1,5 @@
 import { useState, useSyncExternalStore } from 'react'
-import { Moon, Sun, Monitor } from 'lucide-react'
+import { IconMoon, IconSun, IconDeviceDesktop } from '@tabler/icons-react'
 import { useTheme, type Theme } from '../../hooks/useTheme'
 
 // Subscribe to "is the browser rendering this?" without an effect.
@@ -35,12 +35,12 @@ export function ThemeToggle() {
   const mounted = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot)
 
   const Icon = !mounted
-    ? Sun
+    ? IconSun
     : theme === 'dark'
-      ? Moon
+      ? IconMoon
       : theme === 'light'
-        ? Sun
-        : Monitor
+        ? IconSun
+        : IconDeviceDesktop
 
   const label = !mounted
     ? 'Theme'
@@ -59,7 +59,7 @@ export function ThemeToggle() {
         aria-expanded={open}
         aria-label={label}
         title={label}
-        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 rounded-lg transition-colors"
+        className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
       >
         <Icon size={20} />
       </button>
@@ -76,12 +76,12 @@ export function ThemeToggle() {
           />
           <div
             role="menu"
-            className="absolute right-0 mt-2 w-40 z-50 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg ring-1 ring-black/5 overflow-hidden"
+            className="absolute right-0 mt-2 w-40 z-50 rounded-xl border border-border bg-card shadow-sm ring-1 ring-black/5 overflow-hidden"
           >
             <ThemeOption
               value="light"
               current={theme}
-              icon={Sun}
+              icon={IconSun}
               label="Light"
               onSelect={(v) => {
                 setTheme(v)
@@ -91,7 +91,7 @@ export function ThemeToggle() {
             <ThemeOption
               value="dark"
               current={theme}
-              icon={Moon}
+              icon={IconMoon}
               label="Dark"
               onSelect={(v) => {
                 setTheme(v)
@@ -101,7 +101,7 @@ export function ThemeToggle() {
             <ThemeOption
               value="system"
               current={theme}
-              icon={Monitor}
+              icon={IconDeviceDesktop}
               label="System"
               onSelect={(v) => {
                 setTheme(v)
@@ -124,7 +124,7 @@ function ThemeOption({
 }: {
   value: Theme
   current: Theme
-  icon: typeof Sun
+  icon: typeof IconSun
   label: string
   onSelect: (v: Theme) => void
 }) {
@@ -137,8 +137,8 @@ function ThemeOption({
       onClick={() => onSelect(value)}
       className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
         active
-          ? 'bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-300'
-          : 'text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800'
+          ? 'bg-muted text-foreground'
+          : 'text-foreground hover:bg-accent hover:text-accent-foreground'
       }`}
     >
       <Icon size={16} />

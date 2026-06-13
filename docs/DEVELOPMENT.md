@@ -16,42 +16,29 @@ explains the *why*.
 git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
 
-# Backend: Python 3.9+ recommended (3.10+ for `match` statements)
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt -e ".[dev]"
-
 # Frontend
-cd frontend && npm install && cd ..
+cd frontend && npm install
 
-# Pre-commit hooks (runs secret-scan, ruff, black, isort, eslint)
+# Pre-commit hooks (runs secret-scan, eslint)
 pip install pre-commit
 pre-commit install
 ```
 
-`make install-dev` wraps all of the above.
+`make install-frontend` wraps the frontend setup.
 
 ### Day-to-day
 
 ```bash
-make dev            # backend on :8080 (reload) + frontend on :5173
+make frontend       # frontend on :5173 (hot-reload)
 ```
 
-Open `http://localhost:5173`. Edits to `main.py` reload the API
-within a second; edits to `frontend/src/**` hot-reload the SPA.
+Open `http://localhost:5173`. Edits to `frontend/src/**` hot-reload the SPA.
 
 If you do not have Make:
 
 ```bash
-# Terminal 1
-RATE_LIMIT_DISABLED=1 python main.py
-
-# Terminal 2
 cd frontend && npm run dev
 ```
-
-`RATE_LIMIT_DISABLED=1` is recommended for local dev so a flurry
-of requests during manual testing does not get cut off. **Do not**
-set it in any deployed environment.
 
 ---
 
@@ -65,8 +52,7 @@ set it in any deployed environment.
 - One logical change per commit. If a refactor is required before
   a feature, the refactor is its own commit.
 - If the change is user-visible, add a `CHANGELOG.md` entry under
-  `[Unreleased]` in the **same** commit. The CI changelog check
-  will fail otherwise (see `.github/workflows/lint.yml`).
+  `[Unreleased]` in the **same** commit.
 
 ---
 
@@ -75,9 +61,9 @@ set it in any deployed environment.
 The minimum bar to get a green CI:
 
 ```bash
-make test           # pytest
-make lint           # ruff + black --check + isort --check + eslint + secret-scan
-make typecheck      # mypy (backend) + tsc --noEmit (frontend)
+make test           # pytest (tools/) + vitest (frontend/)
+make lint           # eslint + secret-scan
+make build          # vite build
 ```
 
 `make ci` runs all three in order, with the same flags the
@@ -87,15 +73,12 @@ GitHub Action uses.
 
 | Check | Workflow | Trigger |
 |---|---|---|
-| Backend tests | `ci.yml` | every push, every PR |
 | Frontend tests + build | `ci.yml` | every push, every PR |
-| Ruff / black / isort / eslint | `lint.yml` | every push, every PR |
-| mypy / tsc --noEmit | `lint.yml` | every push, every PR |
-| Secret scan | `lint.yml` | every push, every PR |
-| Container build | `ci.yml` (matrix) | PRs that touch `Dockerfile*`, `docker-compose*`, `requirements.txt`, `pyproject.toml` |
-| Frontend deploy | `frontend-deploy.yml` | push to `main` |
-| Daily catalog sync | `sync.yml` | cron: `0 6 * * *` |
-| Release drafter | `release.yml` | push of `v*.*.*` tag |
+| Python tests (tools/) | `ci.yml` | every push, every PR |
+| eslint | `ci.yml` | every push, every PR |
+| Secret scan | `gitleaks.yml` | every push, every PR |
+| Frontend deploy | `deploy-pages.yml` | push to `main` |
+| Daily catalog sync | `sync-data.yml` | cron: `0 4 * * *` |
 
 If a check fails, the workflow logs link to the exact line; fix
 the code, do not silence the check.
@@ -104,22 +87,15 @@ the code, do not silence the check.
 
 ## 4. Writing a new test
 
-- Backend: place it in `tests/test_<module>.py`. If the test needs
-  a running server, use the `live_server` fixture in
-  `tests/conftest.py` — it boots a real uvicorn in a background
-  thread and tears it down.
-- Frontend: place it next to the code it tests, in
-  `frontend/src/test/`. Component tests use `@testing-library/react`
-  with `happy-dom`. Network calls are intercepted by MSW
-  (`frontend/src/test/mocks/handlers.ts`).
-- For both, prefer **behavioural** assertions over snapshot tests.
-  Snapshots rot.
+- **Python (tools/)**: place it in `tests/test_<module>.py`. Prefer
+  **behavioural** assertions over snapshot tests. Snapshots rot.
+- **Frontend**: place it in `frontend/src/test/`. Component tests use
+  `@testing-library/react` with `happy-dom`. No MSW mocks — the tests
+  exercise `localStorage` + the static index directly.
 
-A new endpoint should add **at least**:
-
-1. One happy-path test (200, payload shape).
-2. One failure-path test (404 or 422, error envelope shape).
-3. One rate-limit test if it is a write path.
+A new adapter should add **at least**:
+1. One happy-path test (install script runs, prints JSON).
+2. One failure-path test (missing Python/Node, prints install hint).
 
 ---
 
@@ -127,14 +103,12 @@ A new endpoint should add **at least**:
 
 ### Python
 
-1. Add it to `pyproject.toml` under `[project.dependencies]` (or
-   `[project.optional-dependencies.<group>]` for test/dev only).
-2. Run `pip install -e ".[dev]"` to regenerate `requirements.txt`
-   if you use `pip-tools`. Otherwise just `pip freeze | grep <pkg>`
-   and append.
-3. Mention the new dep in the `CHANGELOG.md` "Added" section.
-4. Verify it does not pull in a runtime-only dep that is unused
-   at import time — `python -c "import main"` should still work.
+1. Add it to `pyproject.toml` under `[tool.black]` or `[tool.isort]`
+   (the only Python deps are test/dev tools).
+2. Mention the new dep in the `CHANGELOG.md` "Added" section.
+3. Verify it does not pull in a runtime-only dep that is unused
+   at import time — `python -c "import tools.sync_index"` should
+   still work with stdlib only.
 
 ### npm
 
@@ -157,37 +131,51 @@ The reviewer checklist is in `CONTRIBUTING.md`. The short version:
 - Is there a CHANGELOG entry? Is it accurate?
 - Is there a test for the new behaviour? Did CI go green?
 - Did the author run `make lint` locally? (Check the CI log.)
-- Any new env vars, new endpoints, new dependencies? Are they
-  mentioned in `docs/API.md` / `docs/ARCHITECTURE.md`?
+- Any new env vars, new dependencies? Are they mentioned in
+  `docs/ARCHITECTURE.md`?
 - Anything in `docs/SECURITY-MODEL.md` that needs a new TM
   entry?
 
 For non-trivial changes, the reviewer should pull the branch
-and run `make dev` themselves before approving.
+and run `make frontend` themselves before approving.
 
 ---
 
 ## 7. Releasing
 
-`AGENTS.md` has the short version. The full version:
+The short version:
 
 1. Pick a version: `MAJOR.MINOR.PATCH`. The current is in
-   `pyproject.toml` and `frontend/package.json` and
-   `core/_version.py`. Bump all three in one commit.
+   `frontend/package.json`. Bump it in one commit.
 2. Update `CHANGELOG.md`: move `[Unreleased]` items under a new
    heading with the version and today's date.
 3. `git commit -am "chore(release): vX.Y.Z"`
 4. `git tag vX.Y.Z && git push --tags`
-5. The `release.yml` workflow will draft a GitHub Release from
-   the changelog section.
-6. `frontend-deploy.yml` will re-deploy the SPA on the next push
-   to `main` (typically done right after the release commit).
-7. Verify:
+5. The `deploy-pages.yml` workflow will re-deploy the SPA on the
+   next push to `main` (typically done right after the release commit).
+6. Verify:
    - `https://github.com/badhope/MCP-HUB/releases` shows the new
      release with notes
-   - `https://pypi.org/project/mcp-hub/#history` shows it (after
-     the manual `twine upload dist/*` if you have PyPI access)
+   - `https://badhope.github.io/MCP-HUB/` shows the new version
 
 If something goes wrong mid-release, **never rewrite published
 tags** — cut a follow-up patch. Tags are immutable from the
 consumer's point of view.
+
+---
+
+## 8. Adding a new adapter
+
+See [`REFACTOR_PLAN.md`](../REFACTOR_PLAN.md) §9 for the full spec.
+The short version:
+
+1. Create `frontend/public/adapters/<name>/` with 4 files:
+   - `adapter.json` — manifest (upstream, status, platforms, install_universal,
+     tested_clients, gotchas, notes)
+   - `install.sh` — one-line installer (idempotent, self-checking)
+   - `README.md` —改造说明 (what this adapter does, how to install, known gotchas)
+   - `tests/README.md` — install verification log (smoke test results on each client)
+2. Run `python3 tools/_our_signal.py` to verify the scanner picks it up.
+3. Run `python3 tools/gen_static_data.py` to regenerate the static index.
+4. Verify the server's `our_signal` field is now 1.0 in `frontend/public/servers-index.json`.
+5. Commit: `feat(adapter): add <name> universal adapter`.

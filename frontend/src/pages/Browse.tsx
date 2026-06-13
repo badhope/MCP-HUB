@@ -1,6 +1,6 @@
 /**
  * Browse — full list of all categories. Sits behind the "All categories"
- * link in the Home page footer and the Navbar.
+ * link in the IconHome page footer and the Navbar.
  *
  * Two views:
  *   - "All categories" tab: a list of every category with the server
@@ -14,7 +14,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Search, Tag, Code2, ArrowRight } from 'lucide-react';
+import { IconSearch, IconTag, IconCode, IconArrowRight } from '@tabler/icons-react';
 import { useStats } from '../hooks/useStats';
 
 type Tab = 'categories' | 'languages';
@@ -36,7 +36,7 @@ const Browse = React.memo(() => {
   const totalLanguages = Object.keys(stats?.languages || {}).length;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-background">
       <Helmet>
         <title>Browse — MCP Hub</title>
         <meta
@@ -47,10 +47,10 @@ const Browse = React.memo(() => {
 
       <div className="container mx-auto px-4 py-10 sm:py-14">
         <div className="max-w-3xl mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
             Browse
           </h1>
-          <p className="text-slate-500 dark:text-slate-400">
+          <p className="text-muted-foreground">
             {totalCategories.toLocaleString()} categories · {totalLanguages.toLocaleString()} languages.
             Click any tag to filter the full server list.
           </p>
@@ -61,32 +61,32 @@ const Browse = React.memo(() => {
           <TabButton
             active={tab === 'categories'}
             onClick={() => setTab('categories')}
-            icon={<Tag size={14} />}
+            icon={<IconTag size={14} />}
             label="Categories"
             count={totalCategories}
           />
           <TabButton
             active={tab === 'languages'}
             onClick={() => setTab('languages')}
-            icon={<Code2 size={14} />}
+            icon={<IconCode size={14} />}
             label="Languages"
             count={totalLanguages}
           />
         </div>
 
-        {/* Search */}
+        {/* IconSearch */}
         <div className="relative max-w-md mb-6">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <IconSearch size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="search"
-            placeholder={`Filter ${tab}…`}
+            placeholder={`IconFilter ${tab}…`}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-card border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
-        {/* Tag grid */}
+        {/* IconTag grid */}
         {items.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {items.map(([name, count]) => {
@@ -95,10 +95,10 @@ const Browse = React.memo(() => {
                 <Link
                   key={name}
                   to={`/servers?${qp}`}
-                  className="group inline-flex items-center gap-2 px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-primary-300 hover:text-primary-600 dark:hover:border-primary-500 dark:hover:text-primary-400 transition-colors"
+                  className="group inline-flex items-center gap-2 px-3.5 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:border-primary-300 hover:text-foreground transition-colors"
                 >
                   {name}
-                  <span className="text-xs text-slate-400 dark:text-slate-500 group-hover:text-primary-500">
+                  <span className="text-xs text-muted-foreground group-hover:text-foreground">
                     {count.toLocaleString()}
                   </span>
                 </Link>
@@ -106,16 +106,16 @@ const Browse = React.memo(() => {
             })}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-10 text-center">
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
+          <div className="rounded-2xl border border-dashed border-border bg-card px-6 py-10 text-center">
+            <p className="text-sm text-muted-foreground mb-3">
               No {tab} match <code className="font-mono">{query}</code>.
             </p>
             <button
               onClick={() => setQuery('')}
-              className="inline-flex items-center gap-1.5 text-sm text-primary-600 hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
             >
               Clear search
-              <ArrowRight size={14} />
+              <IconArrowRight size={14} />
             </button>
           </div>
         )}
@@ -135,14 +135,14 @@ const TabButton: React.FC<{
     onClick={onClick}
     className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
       active
-        ? 'bg-primary-600 text-white'
-        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 hover:border-primary-300'
+        ? 'bg-primary text-primary-foreground'
+        : 'bg-card text-foreground border border-border hover:border-primary-300'
     }`}
   >
     {icon}
     {label}
     <span
-      className={`text-xs ${active ? 'text-white/80' : 'text-slate-400 dark:text-slate-500'}`}
+      className={`text-xs ${active ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}
     >
       {count.toLocaleString()}
     </span>
