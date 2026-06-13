@@ -427,7 +427,7 @@ const ServerDetail = React.memo(() => {
                       <h3 className="text-sm font-semibold text-muted-foreground">MCP Configuration</h3>
                       <div className="flex flex-wrap items-center gap-2">
                         <button
-                          onClick={() => server && config && downloadConfigJson(config, `${server.name}-config.json`)}
+                          onClick={() => server && config && downloadConfigJson(config as unknown as Record<string, unknown>, `${server.name}-config.json`)}
                           disabled={downloading || !server || !config}
                           className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-foreground hover:text-foreground hover:bg-accent rounded-lg transition-all disabled:opacity-50"
                         >
@@ -576,7 +576,7 @@ const ServerDetail = React.memo(() => {
                       <div className="grid grid-cols-2 gap-2">
                         <Button
                           variant="outline"
-                          onClick={() => server && config && downloadConfigJson(config, `${server.name}-config.json`)}
+                          onClick={() => server && config && downloadConfigJson(config as unknown as Record<string, unknown>, `${server.name}-config.json`)}
                           disabled={downloading || !server || !config}
                           className="w-full flex items-center justify-center text-sm"
                           size="sm"

@@ -17,10 +17,15 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
-
 _JS_LANGS = {
-    "javascript", "typescript", "nodejs", "node", "ts", "js",
-    "vue", "svelte",
+    "javascript",
+    "typescript",
+    "nodejs",
+    "node",
+    "ts",
+    "js",
+    "vue",
+    "svelte",
 }
 _PY_LANGS = {"python", "py"}
 _GO_LANGS = {"go", "golang"}
@@ -120,7 +125,11 @@ def build_install_hint(server: Dict[str, Any]) -> Dict[str, Any]:
         primary = ""
 
     if _is_github_source(source):
-        alts["git"] = f"git clone {source.rstrip('/')}.git" if not source.endswith(".git") else f"git clone {source}"
+        alts["git"] = (
+            f"git clone {source.rstrip('/')}.git"
+            if not source.endswith(".git")
+            else f"git clone {source}"
+        )
 
     return {
         "primary": primary,

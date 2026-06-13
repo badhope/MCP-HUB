@@ -10,6 +10,7 @@ Phase 9 caught a path bug: the original `_our_signal.py` looked at
 actually ships from `<root>/frontend/public/adapters/`. These
 tests lock down the corrected location.
 """
+
 import json
 import sys
 from pathlib import Path

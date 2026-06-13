@@ -30,7 +30,6 @@ from _install_hint import build_install_hint  # noqa: E402
 from _our_signal import scan_adapters, signal_label  # noqa: E402
 from completeness_scoring import compute_score  # noqa: E402
 
-
 _LOG = logging.getLogger("gen_static_data")
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_INDEX = REPO_ROOT / "servers-index.json"
@@ -58,7 +57,9 @@ def enrich_server(server: Dict[str, Any], our_signal: float, now: datetime) -> D
     return enriched
 
 
-def build_static_data(source: Dict[str, Any], signals: Dict[str, float], now: datetime) -> Dict[str, Any]:
+def build_static_data(
+    source: Dict[str, Any], signals: Dict[str, float], now: datetime
+) -> Dict[str, Any]:
     """Compose the final frontend-facing index."""
     servers_out = []
     our_tools_count = 0
@@ -105,8 +106,11 @@ def main() -> int:
 
     size_kb = TARGET_INDEX.stat().st_size / 1024
     _LOG.info("✅ Wrote %s (%.1f KB)", TARGET_INDEX, size_kb)
-    _LOG.info("   %d servers (%d with our_signal ≥ 0.7)",
-              payload["total_servers"], payload["our_tools_count"])
+    _LOG.info(
+        "   %d servers (%d with our_signal ≥ 0.7)",
+        payload["total_servers"],
+        payload["our_tools_count"],
+    )
     return 0
 
 

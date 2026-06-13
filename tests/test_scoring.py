@@ -1,4 +1,5 @@
 """Unit tests for the 5-factor recommendation scoring."""
+
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -6,7 +7,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "tools"))
 
 from completeness_scoring import (  # noqa: E402
-    compute_score, _norm_log, _recency, _lang_coverage, _desc_quality,
+    compute_score,
+    _norm_log,
+    _recency,
+    _lang_coverage,
+    _desc_quality,
     WEIGHTS,
 )
 

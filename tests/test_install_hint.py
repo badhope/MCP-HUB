@@ -1,4 +1,5 @@
 """Unit tests for the per-server install-hint generator."""
+
 import sys
 from pathlib import Path
 
@@ -46,15 +47,11 @@ class TestBuildInstallHint:
         assert h["alternatives"]["git"] is not None
 
     def test_pypi_url_overrides_unknown_language(self):
-        h = build_install_hint(
-            _server(language="", source="https://pypi.org/project/demo")
-        )
+        h = build_install_hint(_server(language="", source="https://pypi.org/project/demo"))
         assert h["primary"] == "uvx demo"
 
     def test_npm_url_overrides_unknown_language(self):
-        h = build_install_hint(
-            _server(language="", source="https://www.npmjs.com/package/demo")
-        )
+        h = build_install_hint(_server(language="", source="https://www.npmjs.com/package/demo"))
         assert h["primary"] == "npx -y demo"
 
     def test_zip_url_from_github(self):
@@ -78,13 +75,19 @@ class TestBuildInstallHint:
 
 class TestRepoZipUrl:
     def test_basic(self):
-        assert _repo_zip_url("https://github.com/foo/bar") == \
-            "https://codeload.github.com/foo/bar/zip/refs/heads/main"
+        assert (
+            _repo_zip_url("https://github.com/foo/bar")
+            == "https://codeload.github.com/foo/bar/zip/refs/heads/main"
+        )
 
     def test_trailing_slash(self):
-        assert _repo_zip_url("https://github.com/foo/bar/") == \
-            "https://codeload.github.com/foo/bar/zip/refs/heads/main"
+        assert (
+            _repo_zip_url("https://github.com/foo/bar/")
+            == "https://codeload.github.com/foo/bar/zip/refs/heads/main"
+        )
 
     def test_dot_git(self):
-        assert _repo_zip_url("https://github.com/foo/bar.git") == \
-            "https://codeload.github.com/foo/bar/zip/refs/heads/main"
+        assert (
+            _repo_zip_url("https://github.com/foo/bar.git")
+            == "https://codeload.github.com/foo/bar/zip/refs/heads/main"
+        )

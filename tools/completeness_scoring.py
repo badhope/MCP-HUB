@@ -15,7 +15,6 @@ import math
 from datetime import datetime, timezone
 from typing import Any, Dict
 
-
 WEIGHTS = {
     "stars": 0.30,
     "recency": 0.15,
@@ -93,7 +92,9 @@ def _desc_quality(description: str) -> float:
     return 1.0
 
 
-def compute_score(server: Dict[str, Any], our_signal: float, now: datetime | None = None) -> Dict[str, Any]:
+def compute_score(
+    server: Dict[str, Any], our_signal: float, now: datetime | None = None
+) -> Dict[str, Any]:
     """
     Return the score and its per-factor breakdown for a single server.
 

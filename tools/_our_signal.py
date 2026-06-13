@@ -17,12 +17,11 @@ import json
 from pathlib import Path
 from typing import Dict, Optional
 
-
 # Status string -> our_signal value
 _STATUS_TO_SIGNAL: Dict[str, float] = {
-    "adapted": 1.0,        # ✅ tested & ready
-    "in_progress": 0.7,    # ⚙️ adapting now
-    "researched": 0.4,     # 👀 looked at
+    "adapted": 1.0,  # ✅ tested & ready
+    "in_progress": 0.7,  # ⚙️ adapting now
+    "researched": 0.4,  # 👀 looked at
     # "new" or missing  -> 0.0 (handled below)
 }
 
