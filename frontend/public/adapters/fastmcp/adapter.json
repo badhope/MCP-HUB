@@ -1,0 +1,46 @@
+{
+  "upstream": "jlowin/fastmcp",
+  "name": "fastmcp",
+  "status": "adapted",
+  "version": "1.0.0",
+  "last_verified": "2026-06-11",
+  "description": "Build MCP servers in Python. Originally by jlowin, now maintained under PrefectHQ/fastmcp. The fastmcp framework turns a Python class into an MCP-compatible stdio server with @mcp.tool decorators. We test the install on Claude Desktop, Cursor, Cline, and Windsurf.",
+  "homepage": "https://github.com/jlowin/fastmcp",
+  "language": "Python",
+  "min_python": "3.10",
+  "install_universal": "uv tool install fastmcp",
+  "install_universal_args": [],
+  "env": {},
+  "tested_clients": [
+    "claude-desktop",
+    "cursor",
+    "cline",
+    "windsurf"
+  ],
+  "platforms": {
+    "claude-desktop": {
+      "command": "uvx",
+      "args": ["fastmcp", "run", "<server.py>"],
+      "notes": "Replace <server.py> with the path to your fastmcp server module. Claude Desktop picks the path up from the mcpServers.<name>.args list verbatim."
+    },
+    "cursor": {
+      "command": "uvx",
+      "args": ["fastmcp", "run", "<server.py>"]
+    },
+    "cline": {
+      "command": "uvx",
+      "args": ["fastmcp", "run", "<server.py>"]
+    },
+    "windsurf": {
+      "command": "uvx",
+      "args": ["fastmcp", "run", "<server.py>"]
+    }
+  },
+  "gotchas": [
+    "uvx is the canonical runner for fastmcp in 2026 (it replaced pipx + virtualenv for one-off CLIs). Install uv first: https://docs.astral.sh/uv/",
+    "fastmcp.run() expects a module path, not a script path. The install command is therefore uvx fastmcp run path/to/your/server.py — there's no separate 'install the server' step because fastmcp reads the file every boot.",
+    "If your server uses third-party Python deps, put them in a pyproject.toml next to your server.py and add --with to the args: uvx --with pandas fastmcp run ./server.py.",
+    "On macOS, uvx is at /Users/$USER/.local/bin/uvx after install. If a client can't find it, set the command to the full path or add ~/.local/bin to the client's PATH."
+  ],
+  "notes": "Universal install via uvx means there is no per-platform divergence — the mcpServers config is identical across Claude Desktop, Cursor, Cline, and Windsurf. Tested on each with the bundled examples/server.py from the upstream repo."
+}

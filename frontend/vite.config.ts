@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => {
   const base = explicitBase
     ? `/${explicitBase}/`
     : `/${REPO_NAME}/`
-  const isProd = mode === 'production'
 
   return {
     base,
@@ -22,22 +21,17 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1024,
     },
     server: {
-      proxy: {
-        '/api': {
-          target: env.VITE_API_PROXY_TARGET || 'http://localhost:8080',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      }
+      // Phase 6+: no backend. The dev server only serves the SPA + the
+      // JSON files from public/. (Vite already does this by default.)
     },
     plugins: [
-      react({
-        babel: {
-          plugins: isProd
-            ? []
-            : ['react-dev-locator'],
-        },
-      }),
+      // @vitejs/plugin-react v6 dropped Babel entirely (it now uses
+      // oxc for the JSX transform and exposes no `plugins` option).
+      // `babel-plugin-react-dev-locator` was a dev-only "click a
+      // component in the browser to jump to its source" nicety — not
+      // worth rebuilding a Babel pipeline for. Drop it; the rest of the
+      // toolchain (vite-tsconfig-paths) is unaffected.
+      react(),
       tsconfigPaths()
     ],
   }

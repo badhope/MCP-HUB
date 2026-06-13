@@ -10,22 +10,7 @@ git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
 ```
 
-## 2. Backend
-
-```bash
-pip install -r requirements.txt
-python tools/sync_index.py            # fetches the latest index from upstream
-python main.py                        # API on http://localhost:8080
-```
-
-Verify with:
-
-```bash
-curl http://localhost:8080/stats
-# → {"total_servers": 4403, ...}
-```
-
-## 3. Frontend (optional, second terminal)
+## 2. Frontend
 
 ```bash
 cd frontend
@@ -33,21 +18,35 @@ npm install
 npm run dev                           # UI on http://localhost:5173
 ```
 
-The dev server proxies `/servers`, `/config`, etc. to `http://localhost:8080`.
+The SPA loads `servers-index.json` from `frontend/public/` as a static asset.
+No backend required.
 
-## 4. Docker (alternative)
+## 3. Data pipeline (optional)
+
+If you want to regenerate the static index from upstream:
 
 ```bash
-docker compose up -d --build
+# From repo root
+python3 tools/sync_index.py            # fetches the latest index from upstream
+python3 tools/gen_static_data.py       # scores + install hints → servers-index.json
 ```
 
-This brings up the backend and the frontend together with the same ports.
+The output is `frontend/public/servers-index.json` (~4.4 MB, 4,400+ servers).
+
+## 4. Build for production
+
+```bash
+cd frontend
+npm run build                         # output in dist/
+```
+
+The `dist/` directory can be deployed to any static hosting service (GitHub Pages,
+Netlify, Vercel, S3, etc.).
 
 ## 5. Where to go next
 
-- Read [`API.md`](API.md) for the full REST reference
-- Try the agent-friendly endpoints: `GET /servers`, `GET /config/{name}`,
-  `GET /recommend/for-use-case`
-- Browse the Swagger UI at <http://localhost:8080/docs>
-- Submit your own server via `POST /submissions/submit` or the
-  [server-submission issue template](../.github/ISSUE_TEMPLATE/server_submission.md)
+- Read [`ARCHITECTURE.md`](ARCHITECTURE.md) for the 3-layer product model
+- Browse the live demo at <https://badhope.github.io/MCP-HUB/>
+- Submit your own server via the [More page](https://badhope.github.io/MCP-HUB/more)
+  or the [server-submission issue template](../.github/ISSUE_TEMPLATE/server_submission.md)
+- Add a new universal adapter: see [`REFACTOR_PLAN.md`](../REFACTOR_PLAN.md) §9

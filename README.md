@@ -1,77 +1,149 @@
 # MCP Hub
 
-Curated registry of Model Context Protocol (MCP) servers with a FastAPI
-backend, a React/Vite SPA, and a stable JSON contract for AI agents.
+> **通用适配器平台** — 上游索引 · 我们做的通用适配 · 一键添加更多
+>
+> *The universal adapter platform for Model Context Protocol servers.*
 
-> 4,403 indexed servers · 51 official · 23 categories · daily upstream sync.
-> 38 REST endpoints · open `servers-index.json` for offline use.
+4,400+ indexed MCP servers · 21 categories · daily upstream sync · zero backend.
 
-[Live demo](https://badhope.github.io/MCP-HUB/) · [API docs](docs/API.md) · [中文](README_CN.md)
+[Live demo](https://badhope.github.io/MCP-HUB/) · [中文](README_CN.md)
 
 ---
 
-## What it does
+## What it is
 
-MCP Hub indexes every public MCP server, scores it for completeness,
-and serves it through a stable API so that:
+MCP Hub is a **static single-page app** that turns the chaotic public
+MCP-server landscape into a curated, ranked, easy-to-install catalog. It
+sits on three layers:
 
-- **End users** can browse the catalog and copy ready-to-paste configs
-  for Claude Desktop, Cursor, or any stdio-based MCP client.
-- **AI agents** can call `/servers`, `/servers/{name}`, `/config/{name}`,
-  `/stats`, etc. to recommend a tool without scraping anything.
-- **Server authors** can submit a server once and reach the whole
-  ecosystem.
+| Layer | What it is | Where it lives |
+|---|---|---|
+| **1. Upstream index** | 4,400+ MCP servers mirrored from `awesome-mcp` and friends | `frontend/public/servers-index.json` (~4.4 MB, rebuilt nightly) |
+| **2. Our adapters** | A small set of servers we **personally** wrap with a universal install command — score-boosted and labelled "✅ adapted" | `frontend/public/adapters/<name>/adapter.json` |
+| **3. The "More" tab** | The entry point for adding new servers we don't yet cover (issue / PR / inline form) | `/more` route |
 
-The data layer is intentionally a single static JSON file so that
-agents can ship a snapshot of the catalog with the model if they need
-a deterministic offline view.
+We are a **mediator / hub**, not a backend: there's no FastAPI, no
+Postgres, no auth. The entire stack is a Vite SPA deployed to GitHub
+Pages, with a single nightly GitHub Action that fetches the upstream
+index, scores every server, and commits a new `servers-index.json`.
+
+---
+
+## Why this exists
+
+The MCP ecosystem is exploding — but the public catalogs are a mess:
+
+- **Install commands differ by language** (`uvx X` vs `npx -y X` vs
+  `pip install X` vs `git clone` …), and every client (Claude Desktop,
+  Cursor, Cline, Windsurf, …) re-wraps the same server in its own
+  config schema.
+- **Quality varies wildly** — toy weekend hacks next to production
+  systems from Anthropic / Stripe / Microsoft.
+- **The "50 templates" problem** — every client integration guide ships
+  a hand-maintained JSON for each server, and they all go stale.
+
+MCP Hub fixes that by:
+
+1. **Scoring** every server with a transparent 5-factor formula (see
+   [Scoring](#scoring)) so quality is comparable.
+2. **Generating the right install command** from the server's
+   language/source automatically (`tools/_install_hint.py`).
+3. **Labelling the ones we trust** (✅ adapted) so you don't have to
+   guess.
+4. **Leaving the door open** for new servers via the `/more` tab —
+   because we can't adapt everything ourselves.
 
 ---
 
 ## Quick start
 
-### Option A — Docker Compose
+There's no server. Just `npm install` and `npm run dev`.
 
 ```bash
 git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
-docker compose up -d --build
-
-# Web UI  : http://localhost:5173
-# REST API: http://localhost:8080
-# API docs: http://localhost:8080/docs
+cd frontend && npm ci && npm run dev
+# → http://localhost:5173
 ```
 
-The compose file wires the backend to a hot-reloadable dev frontend.
-First boot pulls the upstream index (~5 MB) and caches it in
-`servers-index.json` (gitignored, rebuild with `python tools/sync_index.py`).
+That's it. The catalog ships pre-built as
+`frontend/public/servers-index.json` (~4.4 MB, ~4,400 servers). No
+backend, no DB, no API keys.
 
-### Option B — Local Python
+### Regenerate the catalog
+
+A daily GitHub Action rebuilds `servers-index.json` from upstream. To
+do it locally:
 
 ```bash
-pip install -r requirements.txt
-python tools/sync_index.py          # one-time, populates servers-index.json
-python main.py                      # API on :8080
+python3 tools/sync_index.py           # pull upstream + enrich + write servers-index.json (root)
+python3 tools/gen_static_data.py      # copy + decorate to frontend/public/servers-index.json
 ```
 
-In a second terminal:
+Both scripts use only the Python standard library — no `pip install`
+needed for the data pipeline. `pytest` is the only Python dep for
+running tests:
 
 ```bash
-cd frontend
-npm install
-npm run dev                         # UI on :5173, proxies /servers to :8080
+pip install pytest
+pytest tests/ -v                     # 56 tests, ~0.3 s
 ```
 
-### Option C — REST only
+### Build for production
 
 ```bash
-curl http://localhost:8080/health
-curl "http://localhost:8080/servers?search=github&limit=5"
-curl http://localhost:8080/config/github-mcp-server
+make build                           # data + frontend
+# or
+python3 tools/gen_static_data.py
+cd frontend && npm run build
 ```
 
-`GET /health` is the only path the orchestrator needs to poll.
-Everything else is JSON.
+The output is `frontend/dist/` — a 7 MB bundle (4.4 MB of which is the
+catalog). Drop it on any static host. GitHub Pages works out of the
+box (`.github/workflows/deploy-pages.yml`).
+
+---
+
+## Scoring
+
+Every server in the catalog carries a `score` (0–100) computed at
+build time by `tools/completeness_scoring.py`:
+
+| Factor | Weight | What it measures |
+|---|---|---|
+| `stars` | 30% | `log10(stars + 1) / log10(10_000 + 1)` — diminishing returns past 10k |
+| `recency` | 15% | `exp(-Δdays / 30)` — 30-day half-life on the last commit |
+| `lang_coverage` | 15% | Whether we have first-class install support for the language |
+| `desc_quality` | 20% | Bins on description length (60 / 200 / 500 chars) |
+| `our_signal` | 20% | **The most important one.** 0.0 = "we haven't looked at it", 0.4 = "we've researched it", 0.7 = "we're building an adapter", 1.0 = "we ship the adapter" |
+
+The signal weights can be tuned in `tools/completeness_scoring.py`;
+tests in `tests/test_scoring.py` lock the formula down.
+
+---
+
+## Universal adapter format
+
+Adapted servers live in `frontend/public/adapters/<server-name>/` and
+follow this shape (see `frontend/public/adapters/.gitkeep` — first
+adapters land in Phase 9):
+
+```json
+{
+  "name": "fastmcp",
+  "platforms": {
+    "claude-desktop": { "command": "uvx", "args": ["fastmcp"] },
+    "cursor":        { "command": "uvx", "args": ["fastmcp"] },
+    "cline":         { "command": "uvx", "args": ["fastmcp"] },
+    "windsurf":      { "command": "uvx", "args": ["fastmcp"] }
+  },
+  "notes": "Universal uvx invocation; works across all stdio MCP clients."
+}
+```
+
+`_our_signal.py` walks this directory and tags each catalog server with
+its `our_signal` value, which the SPA renders as a colored badge
+(✅ adapted / ⚙️ in progress / 👀 researched / 🆕 unprocessed).
 
 ---
 
@@ -79,161 +151,79 @@ Everything else is JSON.
 
 ```
 .
-├── main.py              # FastAPI app: lifespan, CORS, GZip, rate limit
-├── api.py               # route definitions (thin layer)
-├── services.py          # search, scoring, config generation
-├── query.py             # natural-language query endpoint
-├── user_data.py         # favorites, ratings, comments, submissions
-├── core/                # in-memory indexes, hashing, server model
-├── tools/               # 19 CLI utilities (sync, score, scan, export)
-├── templates/           # 50 pre-built MCP config templates
-├── tests/               # pytest suite (9 files, 130+ tests)
-├── frontend/            # Vite + React 19 + TypeScript SPA
-├── docs/                # user-facing docs (EN + CN)
-└── docs/internal/       # maintainer-only design notes
+├── tools/                            # Python data pipeline (stdlib-only)
+│   ├── sync_index.py                 # 1. pull upstream
+│   ├── gen_static_data.py            # 2. decorate + write frontend bundle
+│   ├── completeness_scoring.py       # 5-factor score
+│   ├── _install_hint.py              # uvx/npx/pip/git/docker per language
+│   ├── _our_signal.py                # scan adapters/ → our_signal map
+│   └── secret_scanner.py             # pre-commit / CI hook
+├── tests/                            # 33 pytest tests, no external deps
+├── frontend/                         # Vite + React 19 + TypeScript SPA
+│   ├── public/
+│   │   ├── servers-index.json        # build-time catalog
+│   │   └── adapters/                 # Layer 2: our universal adapters
+│   └── src/
+│       ├── lib/api.ts                # in-memory queries + localStorage
+│       ├── pages/                    # Home, OurTools, More, ServerDetail…
+│       └── …
+├── docs/                             # user-facing docs
+├── .github/workflows/                # ci + sync-data + frontend-deploy + …
+└── (no main.py, no services.py, no core/, no Dockerfile, no docker-compose)
 ```
 
-Run `make help` for the full task list. Highlights:
-
-```bash
-make install-dev   # backend + frontend + pre-commit
-make dev           # backend + frontend, hot reload
-make test          # pytest
-make lint          # ruff + black + isort + eslint + secret-scan
-make build         # frontend production bundle
-make docker-up     # full stack
-```
-
----
-
-## REST API
-
-`main:app` is a single FastAPI process. The OpenAPI schema is served at
-`/openapi.json`; interactive UIs at `/docs` (Swagger) and `/redoc`.
-
-| Group | Endpoints |
-|---|---|
-| Health & stats | `GET /`, `GET /health`, `GET /stats` |
-| Discovery | `GET /servers`, `GET /servers/{name}`, `GET /servers/popular`, `GET /servers/recent`, `GET /servers/curated`, `GET /servers/by-category/{category}`, `GET /servers/by-quality` |
-| Configuration | `GET /config/{name}`, `GET /export/markdown/{name}`, `POST /export/batch-json`, `POST /export/batch-markdown` |
-| Recommendations | `GET /recommend/for-use-case`, `GET /recommend/similar`, `GET /compare` |
-| Validation | `GET /validate/server/{name}`, `GET /validate/all`, `GET /validate/health`, `GET /validate/low-quality` |
-| User | `POST/GET /favorites/*`, `POST/GET /ratings/*`, `POST/GET /comments/*` |
-| Submissions | `POST /submissions/submit`, `GET /submissions`, `POST /submissions/review` |
-
-`GET /servers` supports: `search`, `category`, `language`, `sort`
-(`stars` / `updated`), `min_stars`, `limit`, `offset`.
-
-Two pieces of cross-cutting behaviour worth knowing about — see
-[`docs/API.md`](docs/API.md) for the full reference:
-
-- **GZip**. Responses ≥ 1 KB are gzipped by FastAPI's built-in
-  middleware. `servers.json` drops from ~100 KB to <15 KB on the wire.
-- **Rate limit**. Per-IP token bucket, default 120 req / 60 s. Exempts
-  `/`, `/health`, `/docs`, `/redoc`, `/openapi.json`, and CORS
-  preflight. Tunable via `RATE_LIMIT_REQUESTS` / `RATE_LIMIT_WINDOW`
-  / `RATE_LIMIT_TRUST_PROXY` / `RATE_LIMIT_DISABLED`. For horizontal
-  scale, terminate the limit at a reverse proxy.
-
----
-
-## For AI agents
-
-Three things make this catalog agent-friendly:
-
-1. The **REST API** is the primary interface. Every response is JSON,
-   every input is a query parameter, no scraping required.
-2. **`servers-index.json`** ships with every release so an agent can
-   embed a snapshot of the catalog with the model for deterministic
-   offline use.
-3. **`/openapi.json`** is consumable by any OpenAPI-aware tool generator
-   (LangChain, LlamaIndex, etc.).
-
-```python
-import httpx
-
-# Discover
-r = httpx.get("https://mcp-hub.example.com/servers",
-              params={"search": "github", "limit": 5}).json()
-
-# Generate a config
-cfg = httpx.get("https://mcp-hub.example.com/config/github-mcp-server").json()
-```
-
-A coding-agent-side conventions file is at [`AGENTS.md`](AGENTS.md).
-For end-user agent integrations, see
-[`docs/internal/AGENT_GUIDE.md`](docs/internal/AGENT_GUIDE.md).
+Run `make help` for the full task list.
 
 ---
 
 ## Architecture
 
 ```
-            HTTP / JSON
-   ┌──────────────────────┐         ┌───────────────────────┐
-   │  React + Vite SPA    │ ──────► │  FastAPI app          │
-   │  (:5173 in dev,      │         │  (main.py, Pydantic   │
-   │   gh-pages in prod)  │ ◄────── │   v2, async, lifespan)│
-   └──────────────────────┘         └───────────────────────┘
-                                                │
-                                                ▼
-                                       ┌───────────────────┐
-                                       │ servers-index.json│
-                                       │ (~5 MB, in-memory │
-                                       │  + file watch)    │
-                                       └───────────────────┘
-                                                ▲
-                                                │ tools/sync_index.py
-                                                │ (daily GitHub Action)
-                                       ┌───────────────────┐
-                                       │  upstream:        │
-                                       │  awesome-mcp +    │
-                                       │  curated sources  │
-                                       └───────────────────┘
+                  nightly GitHub Action
+                          │
+                          ▼
+  ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐
+  │  upstream    │ ─► │  sync_index  │ ─► │  gen_static_data │ ─► frontend/public/
+  │  awesome-mcp │    │      .py     │    │       .py        │     servers-index.json
+  └──────────────┘    └──────────────┘    └──────────────────┘
+                                                     │
+                                                     ▼
+                       ┌─────────────────────────────────────┐
+                       │  Vite + React 19 SPA (static)        │
+                       │  · reads servers-index.json (4.4 MB) │
+                       │  · scores in memory                   │
+                       │  · user state in localStorage        │
+                       │  · deployed on GitHub Pages          │
+                       └─────────────────────────────────────┘
 ```
 
-- The catalog is **rebuilt in CI**, not at request time, so latency is
-  bounded by in-memory dict lookups.
-- The frontend is a **static SPA on GitHub Pages**. When the API is
-  unavailable it falls back to a committed `static-data/*.json` snapshot
-  with a `data_snapshot_date` banner, so demos always render.
-- All write paths (`favorites`, `ratings`, `comments`, `submissions`)
-  go to a single `user_data.py` module backed by a local JSON file
-  that is gitignored. Swap it for Postgres in
-  `core/_version.py:USER_DATA_BACKEND` without touching the routes.
-
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full design
-notes, decision log, and trade-offs.
+- **No request-time work.** The catalog is frozen at build time.
+- **No server.** GitHub Pages is enough.
+- **No tracking.** Favorites / ratings / comments live in your
+  browser's `localStorage`. Clearing site data clears them.
 
 ---
 
 ## Contributing
 
-Bug reports, feature requests, server submissions, and security
-disclosures each have a dedicated issue template — pick the right one
-from the **New issue** dropdown.
+- **Add an adapter we don't have yet.** See `frontend/public/adapters/`
+  for the format, then open a PR. Score boost is automatic.
+- **Add a new server to the catalog.** Most are picked up automatically
+  from the upstream `awesome-mcp` mirror on the next daily sync. If it
+  isn't, open a `server_submission` issue.
+- **Found a bug / have a feature idea / security disclosure?** Use the
+  matching template in `.github/ISSUE_TEMPLATE/`.
+- Coding standards and PR checklist: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-- Bug report → `.github/ISSUE_TEMPLATE/bug_report.md`
-- Feature request → `.github/ISSUE_TEMPLATE/feature_request.md`
-- Server submission → `.github/ISSUE_TEMPLATE/server_submission.md`
-  (or call `POST /submissions/submit` if you want a PR-free path)
-- Question → `.github/ISSUE_TEMPLATE/question.md`
-- Security issue → read [`SECURITY.md`](SECURITY.md) first, **do not**
-  open a public issue
-
-The dev workflow, coding standards, and PR checklist live in
-[`CONTRIBUTING.md`](CONTRIBUTING.md). The two things that will get
-your PR merged fastest are a passing `make test && make lint` and a
-[`CHANGELOG.md`](CHANGELOG.md) entry.
+The two things that will get your PR merged fastest are a passing
+`make test && make lint` and a [`CHANGELOG.md`](CHANGELOG.md) entry.
 
 ---
 
 ## License
 
-[MIT](LICENSE).
-
-Upstream data is synced from
-[awesome-mcp](https://github.com/Rodert/awesome-mcp) and from each
-curated source's public GitHub API; see
-[`docs/internal/SERVER_CATALOG.md`](docs/internal/SERVER_CATALOG.md)
-for the per-source attribution.
+[MIT](LICENSE). Upstream data is mirrored from
+[awesome-mcp](https://github.com/Rodert/awesome-mcp) and each curated
+source's public GitHub API — see
+[`docs/internal/COMPLETENESS_SCORING_GUIDE.md`](docs/internal/COMPLETENESS_SCORING_GUIDE.md)
+for the per-source attribution and scoring rationale.

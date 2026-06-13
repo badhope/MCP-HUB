@@ -1,20 +1,17 @@
-# Makefile — MCP Hub
+# Makefile — MCP Hub (Phase 6+ static SPA + build-time data pipeline)
+#
 # Single source of truth for the most common dev/CI commands.
 # `make help` for the full list.
 
 # ---------------------------------------------------------------------------
 # Meta
 # ---------------------------------------------------------------------------
-# Some recipes (e.g. `make deploy-ghpages`) use bash-only features like
-# `pipefail`. Force bash everywhere so the Makefile works on Debian/Ubuntu
-# where /bin/sh is dash.
 SHELL := /usr/bin/env bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := help
 
-# Detect the active python (prefer python3.11)
+# Prefer python3.11 if present, fall back to python3
 PY ?= python3
-PIP ?= $(PY) -m pip
 
 # ---------------------------------------------------------------------------
 # Targets
@@ -24,23 +21,15 @@ help:  ## Show this help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # --- install ---------------------------------------------------------------
-.PHONY: install install-dev install-frontend
-install:  ## Install backend runtime deps (pip install -r requirements.txt).
-	$(PIP) install -r requirements.txt
-
-install-dev:  ## Install backend + dev + test deps (editable).
-	$(PIP) install -e '.[dev,test]'
-
+.PHONY: install-frontend install-pytest
 install-frontend:  ## Install frontend deps.
 	cd frontend && npm ci
 
+install-pytest:  ## Install pytest (only needed for `make test`).
+	$(PY) -m pip install pytest
+
 # --- run -------------------------------------------------------------------
-.PHONY: dev run frontend
-dev:  ## Run the FastAPI backend on :8080 (reload on file change).
-	$(PY) main.py
-
-run: dev  ## Alias for `make dev`.
-
+.PHONY: frontend
 frontend:  ## Run the Vite dev server on :5173.
 	cd frontend && npm run dev
 
@@ -48,8 +37,7 @@ frontend:  ## Run the Vite dev server on :5173.
 .PHONY: lint lint-py lint-frontend format format-check typecheck secret-scan
 lint: lint-py lint-frontend  ## Run all linters.
 
-lint-py:  ## flake8 + black --check + isort --check (Python).
-	flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+lint-py:  ## black --check + isort --check (Python).
 	black --check --diff .
 	isort --check-only --diff --profile=black .
 
@@ -71,23 +59,23 @@ secret-scan:  ## Scan the working tree for accidentally committed secrets.
 	$(PY) tools/secret_scanner.py .
 
 # --- test ------------------------------------------------------------------
-.PHONY: test test-fast test-cov
-test:  ## Run the full pytest suite.
+.PHONY: test test-fast
+test:  ## Run the data-pipeline test suite.
 	$(PY) -m pytest tests/ -v
 
 test-fast:  ## Run pytest, stop on first failure.
 	$(PY) -m pytest tests/ -x --timeout 30
 
-test-cov:  ## Run pytest with HTML + terminal coverage report.
-	$(PY) -m pytest tests/ --cov=. --cov-report=term-missing --cov-report=html
-
-# --- static data -----------------------------------------------------------
-.PHONY: data static-data
-data static-data:  ## Regenerate frontend/public/static-data/*.json.
+# --- data ------------------------------------------------------------------
+.PHONY: data sync
+data:  ## Build frontend/public/servers-index.json from upstream.
+	$(PY) tools/sync_index.py
 	$(PY) tools/gen_static_data.py
 
+sync: data  ## Alias.
+
 # --- build & deploy --------------------------------------------------------
-.PHONY: build build-frontend build-data deploy-ghpages deploy
+.PHONY: build build-frontend build-data deploy
 build: build-data build-frontend  ## Full build: data + frontend.
 
 build-frontend:  ## Build the Vite SPA into frontend/dist.
@@ -98,33 +86,15 @@ build-frontend:  ## Build the Vite SPA into frontend/dist.
 
 build-data: data  ## Alias for `make data`.
 
-deploy-ghpages: build  ## Trigger the Pages deploy workflow (Actions tab).
-	@echo "Frontend deploy is now handled by .github/workflows/frontend-deploy.yml"
-	@echo "(actions/deploy-pages — no gh-pages branch involved)."
-	@echo "Trigger: push to main, or Actions tab → Run workflow."
-
-deploy: deploy-ghpages  ## Alias for `make deploy-ghpages`.
-
-# --- docker ----------------------------------------------------------------
-.PHONY: docker-build docker-run docker-up docker-down
-docker-build:  ## Build the production image.
-	docker build -t mcp-hub:latest .
-
-docker-run:  ## Run the image on :8080.
-	docker run --rm -p 8080:8080 --name mcp-hub mcp-hub:latest
-
-docker-up:  ## docker compose up -d (detached).
-	docker compose up -d
-
-docker-down:  ## docker compose down.
-	docker compose down
+deploy: build  ## Push to main; .github/workflows/frontend-deploy.yml handles Pages.
+	@echo "Push to main to deploy; see .github/workflows/frontend-deploy.yml."
 
 # --- cleanup ---------------------------------------------------------------
 .PHONY: clean clean-py clean-frontend clean-all
 clean: clean-py clean-frontend  ## Remove all build artefacts and caches.
 
 clean-py:  ## Remove Python build / test artefacts.
-	rm -rf .pytest_cache .mypy_cache .ruff_cache htmlcov .coverage
+	rm -rf .pytest_cache .mypy_cache .ruff_cache .coverage
 	find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
 	find . -type f -name '*.py[cod]' -delete
 

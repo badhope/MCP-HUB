@@ -1,201 +1,155 @@
 # MCP Hub Frontend
 
-> Modern React + TypeScript frontend for MCP Hub
+> **通用适配器平台** — 上游索引 · 我们做的通用适配 · 一键添加更多
 
-## Overview
+Vite + React 19 + TypeScript SPA，部署到 GitHub Pages。
 
-MCP Hub Frontend is a beautiful, responsive web interface built with React 18, TypeScript, Tailwind CSS, and Vite. It provides an intuitive way to discover, browse, and explore MCP (Model Context Protocol) servers.
+---
 
-## Features
+## 技术栈
 
-- **Modern UI** - Beautiful gradient design with glass morphism effects
-- **Responsive** - Works perfectly on desktop, tablet, and mobile
-- **Fast Performance** - Built with React 18 and Vite for instant updates
-- **Type Safe** - Full TypeScript support
-- **Dark Mode Ready** - Follows Tailwind design system
+- **React 19** — UI 框架
+- **TypeScript** — 类型安全
+- **Vite** — 构建工具
+- **Tailwind CSS v4** — 样式
+- **React Router** — 路由
+- **Zustand** — 状态管理（收藏、评分）
+- **Vitest** — 测试框架
 
-## Tech Stack
+---
 
-- React 18 - UI library
-- TypeScript - Type safety
-- Tailwind CSS - Styling
-- Vite - Build tool
-- Zustand - State management
-- React Router - Routing
-- Lucide React - Icons
+## 快速开始
 
-## Project Structure
+```bash
+cd frontend
+npm install
+npm run dev
+# → http://localhost:5173/MCP-HUB/
+```
+
+---
+
+## 项目结构
 
 ```
 frontend/
+├── public/
+│   ├── servers-index.json      # 构建时目录（~4.4 MB，4,400+ 服务器）
+│   └── adapters/               # 第 2 层：我们的通用适配器
+│       ├── fastmcp/
+│       └── playwright-mcp/
 ├── src/
-│   ├── components/      # React components
-│   │   ├── layout/     # Layout components (Navbar, Footer)
-│   │   ├── server/      # Server-related components
-│   │   ├── shared/      # Shared UI components
-│   │   └── ui/          # Base UI components
-│   ├── pages/           # Page components
-│   │   ├── Home.tsx     # Home page
-│   │   ├── ServerList.tsx    # Server listing
-│   │   ├── ServerDetail.tsx  # Server detail
-│   │   ├── Categories.tsx    # Categories page
-│   │   ├── Curated.tsx       # Curated servers
-│   │   └── Companies.tsx     # Companies page
-│   ├── store/           # Zustand stores
-│   ├── lib/             # Utilities
-│   ├── types/           # TypeScript types
-│   └── data/            # Static data
-├── public/              # Static assets
-├── package.json
-├── tailwind.config.js
-├── vite.config.ts
-└── tsconfig.json
+│   ├── components/             # 可复用 UI 组件
+│   │   ├── icons/              # 图标组件
+│   │   ├── layout/             # 布局组件（Navbar、Footer）
+│   │   ├── server/             # 服务器相关组件（ServerCard、ScoreRadar 等）
+│   │   ├── shared/             # 共享组件（CopyButton、Badge 等）
+│   │   └── ui/                 # 基础 UI 组件
+│   ├── pages/                  # 路由级页面
+│   │   ├── Home.tsx            # 首页（6 分区）
+│   │   ├── Browse.tsx          # 分类浏览
+│   │   ├── OurTools.tsx        # 我们的工具（第 2 层）
+│   │   ├── More.tsx            # 更多（第 3 层）
+│   │   ├── ServerList.tsx      # 服务器列表
+│   │   ├── ServerDetail.tsx    # 服务器详情
+│   │   ├── Favorites.tsx       # 收藏
+│   │   └── NotFound.tsx        # 404
+│   ├── hooks/                  # 自定义 React hooks
+│   ├── lib/                    # 工具模块
+│   │   ├── api.ts              # 加载 servers-index.json，内存查询
+│   │   ├── scoring.ts          # 前端实时算分（镜像后端公式）
+│   │   ├── universalConfig.ts  # 通用配置生成器
+│   │   ├── localStorage.ts     # 收藏/评分持久化
+│   │   └── ...
+│   ├── store/                  # Zustand stores
+│   │   ├── favorites.ts        # 收藏状态
+│   │   └── ratings.ts          # 评分状态
+│   └── types/                  # TypeScript 类型
+└── ...
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+## 页面路由
 
-- Node.js 18+
-- npm or pnpm
+| 路由 | 页面 | 描述 |
+|---|---|---|
+| `/` | Home | 首页，6 分区：搜索、热门、分类、精选、统计、关于 |
+| `/browse` | Browse | 分类浏览，21 个分类 |
+| `/our-tools` | OurTools | 第 2 层：我们的通用适配器 |
+| `/more` | More | 第 3 层：添加新服务器的入口 |
+| `/servers` | ServerList | 服务器列表（搜索、过滤、排序）|
+| `/servers/:name` | ServerDetail | 服务器详情（评分雷达图、安装配置）|
+| `/favorites` | Favorites | 收藏的服务器 |
 
-### Installation
+---
+
+## 核心功能
+
+### 三层产品模型
+
+1. **第 1 层：上游索引** — 4,400+ MCP 服务器，从 `awesome-mcp` 镜像
+2. **第 2 层：我们的适配器** — 我们亲自包装的服务器，提供通用安装命令
+3. **第 3 层："更多"标签页** — 添加新服务器的入口
+
+### 5 因子评分
+
+每个服务器都有一个 `score`（0-100），基于：
+- `stars`（30%）— GitHub stargazers
+- `recency`（15%）— 最后提交时间
+- `lang_coverage`（15%）— 语言支持
+- `desc_quality`（20%）— 描述质量
+- `our_signal`（20%）— 我们的信任信号
+
+### 通用配置生成
+
+服务器详情页生成通用的 `mcpServers` JSON 块，可粘贴到任何 MCP 客户端。
+
+### 本地存储
+
+用户数据（收藏、评分）存储在浏览器的 `localStorage` 中，不同步到服务器。
+
+---
+
+## 可用脚本
 
 ```bash
-# Clone the repository
-git clone https://github.com/badhope/mcp-hub.git
-cd mcp-hub/frontend
-
-# Install dependencies
-npm install
-
-# Copy environment file
-cp .env.example .env
+npm run dev          # 启动开发服务器（http://localhost:5173）
+npm run build        # 构建生产版本（输出到 dist/）
+npm run preview      # 预览生产构建
+npm run test         # 运行测试（Vitest）
+npm run lint         # 运行 ESLint
+npm run check        # 运行 TypeScript 类型检查
 ```
 
-### Development
+---
+
+## 测试
 
 ```bash
-# Start development server
-npm run dev
-
-# Access at http://localhost:5173
+npm test             # 运行所有测试
+npm run test:watch   # 监听模式
+npm run test:ui      # 浏览器 UI
 ```
 
-### Build
+测试位于 `src/test/`，使用 Vitest + @testing-library/react。
 
-```bash
-# Build for production
-npm run build
+---
 
-# Preview production build
-npm run preview
-```
+## 部署
 
-### Linting
+构建输出在 `dist/`，可以部署到任何静态托管服务。
 
-```bash
-# Run ESLint
-npm run lint
+GitHub Pages 通过 `.github/workflows/deploy-pages.yml` 自动部署。
 
-# Fix auto-fixable issues
-npm run lint:fix
-```
+---
 
-## Environment Variables
+## 环境变量
 
-Create a `.env` file based on `.env.example`:
+无。SPA 完全是静态的，不需要环境变量。
 
-```env
-# API URL (default: backend server)
-VITE_API_URL=http://localhost:8080
+---
 
-# App configuration
-VITE_APP_NAME=MCP Hub
-VITE_APP_VERSION=2.0.0
-```
+## 许可证
 
-## Pages
-
-| Page | Route | Description |
-|------|-------|-------------|
-| Home | `/` | Landing page with stats and featured servers |
-| Servers | `/servers` | Browse all servers with filtering |
-| Server Detail | `/servers/:name` | Detailed server information |
-| Categories | `/categories` | Browse by categories |
-| Curated | `/curated` | Hand-picked quality servers |
-| Companies | `/companies` | Servers by tech companies |
-
-## Components
-
-### Layout
-- **Navbar** - Top navigation with search and links
-- **Footer** - Bottom footer with links and info
-
-### Server Components
-- **ServerCard** - Server preview card
-- **ServerGrid** - Grid layout for server cards
-
-### Shared Components
-- **SearchBar** - Search input with icon
-- **FilterBar** - Filters for category, language, stars
-- **Pagination** - Page navigation
-- **StatsCard** - Statistics display card
-- **Skeleton** - Loading placeholder
-
-### UI Components
-- **Button** - Button component with variants
-- **Badge** - Badge component
-- **Card** - Card component
-
-## API Integration
-
-The frontend integrates with the FastAPI backend via REST API:
-
-```typescript
-import { apiClient } from './lib/api';
-
-// Get servers
-const servers = await apiClient.getServers({ limit: 20 });
-
-// Get single server
-const server = await apiClient.getServer('github-mcp-server');
-
-// Get stats
-const stats = await apiClient.getStats();
-```
-
-### Available API Methods
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `getHealth` | `GET /` | API health check |
-| `getStats` | `GET /stats` | Market statistics |
-| `getServers` | `GET /servers` | List servers with filters |
-| `getPopularServers` | `GET /servers/popular` | Top servers by stars |
-| `getRecentServers` | `GET /servers/recent` | Recently updated |
-| `getCuratedServers` | `GET /servers/curated` | Curated selection |
-| `getServer` | `GET /servers/:name` | Single server details |
-| `getServerConfig` | `GET /config/:name` | Server configuration |
-
-## Docker Deployment
-
-Build and run with Docker:
-
-```bash
-# Build image
-docker build -t mcp-hub-frontend .
-
-# Run container
-docker run -p 5173:80 mcp-hub-frontend
-```
-
-Or use Docker Compose (see root directory):
-
-```bash
-docker-compose up --build
-```
-
-## License
-
-MIT License - See [LICENSE](../LICENSE) in root directory
+[MIT](../LICENSE)

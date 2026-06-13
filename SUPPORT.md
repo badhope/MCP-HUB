@@ -5,11 +5,9 @@
 Most questions are answered in the project's documentation:
 
 - [README.md](README.md) — overview, features, quick start
-- [docs/internal/AGENT_GUIDE.md](docs/internal/AGENT_GUIDE.md) — for AI agents and tool builders
-- [docs/internal/FULL_SYSTEM_GUIDE.md](docs/internal/FULL_SYSTEM_GUIDE.md) — full system documentation
-- [QUICKSTART.md](docs/QUICKSTART.md) — 5-minute start guide
-- [API docs](docs/API.md) — REST + AI-query reference, plus
-  auto-generated Swagger UI at `/docs` when you run the backend
+- [docs/USER_GUIDE.md](docs/USER_GUIDE.md) — complete usage guide
+- [docs/QUICKSTART.md](docs/QUICKSTART.md) — 5-minute start guide
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — system architecture
 
 ## Community
 

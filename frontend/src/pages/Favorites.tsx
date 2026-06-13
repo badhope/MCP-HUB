@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Heart, Star, AlertCircle, Download, Info } from 'lucide-react';
+import { IconHeart, IconStar, IconAlertCircle, IconDownload, IconInfoCircle } from '@tabler/icons-react';
 import { apiClient } from '../lib/api';
 import { useServers } from '../hooks/useServers';
 import { useUserStore } from '../store/useUserStore';
 import { ServerCard } from '../components/server/ServerCard';
 import { BatchExportBar } from '../components/shared/BatchExportBar';
 import { Button } from '../components/ui/Button';
-import { Server } from '../types';
+import type { Server } from '../types';
 
 const Favorites = React.memo(() => {
   const userId = useUserStore((s) => s.userId);
@@ -73,28 +73,28 @@ const Favorites = React.memo(() => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
+      <div className="min-h-screen bg-background py-12">
         <Helmet>
           <title>My Favorites | MCP Hub</title>
           <meta name="description" content="Your collection of saved MCP servers for quick access." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse mb-3" />
-            <div className="h-5 w-96 bg-gray-200 dark:bg-slate-800 rounded-lg animate-pulse" />
+            <div className="h-8 w-64 bg-muted rounded-lg animate-pulse mb-3" />
+            <div className="h-5 w-96 bg-muted rounded-lg animate-pulse" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl p-5 animate-pulse">
+              <div key={i} className="bg-card rounded-2xl p-5 animate-pulse">
                 <div className="flex items-start mb-4">
-                  <div className="w-12 h-12 bg-gray-200 dark:bg-slate-800 rounded-xl" />
+                  <div className="w-12 h-12 bg-muted rounded-xl" />
                   <div className="ml-3 flex-1">
-                    <div className="h-4 bg-gray-200 dark:bg-slate-800 rounded w-3/4 mb-2" />
-                    <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded w-1/2" />
+                    <div className="h-4 bg-muted rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-muted rounded w-1/2" />
                   </div>
                 </div>
-                <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded mb-2" />
-                <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded w-2/3" />
+                <div className="h-3 bg-muted rounded mb-2" />
+                <div className="h-3 bg-muted rounded w-2/3" />
               </div>
             ))}
           </div>
@@ -105,18 +105,18 @@ const Favorites = React.memo(() => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
+      <div className="min-h-screen bg-background py-12">
         <Helmet>
           <title>My Favorites | MCP Hub</title>
           <meta name="description" content="Your collection of saved MCP servers for quick access." />
         </Helmet>
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">My Favorites</h1>
-            <p className="text-gray-600 dark:text-slate-300">Your collection of saved MCP servers</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">My Favorites</h1>
+            <p className="text-muted-foreground">Your collection of saved MCP servers</p>
           </div>
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center space-x-3">
-            <AlertCircle size={20} className="flex-shrink-0" />
+            <IconAlertCircle size={20} className="flex-shrink-0" />
             <span className="text-sm">{error}</span>
           </div>
         </div>
@@ -126,7 +126,7 @@ const Favorites = React.memo(() => {
 
   if (favoriteServers.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
+      <div className="min-h-screen bg-background py-12">
         <Helmet>
           <title>My Favorites | MCP Hub</title>
           <meta name="description" content="Your collection of saved MCP servers for quick access." />
@@ -134,28 +134,28 @@ const Favorites = React.memo(() => {
         <div className="container mx-auto px-4">
           <div className="mb-12">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
-              <Heart size={32} className="text-red-500" fill="currentColor" />
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">My Favorites</h1>
+              <IconHeart size={32} className="text-red-500" fill="currentColor" />
+              <h1 className="text-3xl sm:text-4xl font-bold text-foreground">My Favorites</h1>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
-                <Info size={12} className="mr-1" />
+                <IconInfoCircle size={12} className="mr-1" />
                 Saved locally on this device
               </span>
             </div>
-            <p className="text-gray-600 dark:text-slate-300">Your collection of saved MCP servers</p>
+            <p className="text-muted-foreground">Your collection of saved MCP servers</p>
           </div>
           <div className="text-center py-16">
-            <div className="w-20 h-20 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Heart size={40} className="text-gray-300" />
+            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+              <IconHeart size={40} className="text-muted-foreground" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Favorites Yet</h2>
-            <p className="text-gray-500 dark:text-slate-400 mb-6 max-w-md mx-auto">
+            <h2 className="text-2xl font-bold text-foreground mb-2">No Favorites Yet</h2>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
               Start exploring servers and tap the heart icon to save them here. Your favorites are stored on this device.
             </p>
             <Link
               to="/servers"
-              className="inline-flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
             >
-              <Star size={16} />
+              <IconStar size={16} />
               <span>Browse Servers</span>
             </Link>
           </div>
@@ -165,7 +165,7 @@ const Favorites = React.memo(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-12">
+    <div className="min-h-screen bg-background py-12">
       <Helmet>
         <title>My Favorites | MCP Hub</title>
         <meta name="description" content="Your collection of saved MCP servers for quick access." />
@@ -175,17 +175,17 @@ const Favorites = React.memo(() => {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
-                <Heart size={32} className="text-red-500" fill="currentColor" />
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">My Favorites</h1>
+                <IconHeart size={32} className="text-red-500" fill="currentColor" />
+                <h1 className="text-3xl sm:text-4xl font-bold text-foreground">My Favorites</h1>
                 <span
                   className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
                   title="Favorites are stored in this browser's local storage and sync across tabs of this device."
                 >
-                  <Info size={12} className="mr-1" />
+                  <IconInfoCircle size={12} className="mr-1" />
                   Saved locally on this device
                 </span>
               </div>
-              <p className="text-gray-600 dark:text-slate-300">
+              <p className="text-muted-foreground">
                 {favoriteServers.length} saved server{favoriteServers.length !== 1 ? 's' : ''}
               </p>
             </div>
@@ -196,7 +196,7 @@ const Favorites = React.memo(() => {
                   size="sm"
                   onClick={toggleSelectMode}
                 >
-                  <Download size={16} className="mr-1.5" />
+                  <IconDownload size={16} className="mr-1.5" />
                   {selectMode ? 'Cancel Export' : 'Batch Export'}
                 </Button>
               </div>
@@ -217,10 +217,10 @@ const Favorites = React.memo(() => {
                 <button
                   onClick={() => removeFavorite(server.name)}
                   aria-label={`Remove ${server.name} from favorites`}
-                  className="absolute top-3 right-3 p-2 bg-white dark:bg-slate-900 rounded-xl shadow-md hover:bg-red-50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                  className="absolute top-3 right-3 p-2 bg-card rounded-xl shadow-md hover:bg-red-50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
                   title="Remove from favorites"
                 >
-                  <Heart size={16} fill="currentColor" className="text-red-500" />
+                  <IconHeart size={16} fill="currentColor" className="text-red-500" />
                 </button>
               )}
             </div>

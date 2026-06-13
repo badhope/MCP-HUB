@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 interface PaginationProps {
   currentPage: number;
@@ -42,9 +42,9 @@ export const Pagination = React.memo<PaginationProps>(({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-1 flex-shrink-0"
+          className="px-3 py-2 rounded-lg border border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-1 flex-shrink-0"
         >
-          <ChevronLeft size={16} aria-hidden="true" />
+          <IconChevronLeft size={16} aria-hidden="true" />
           <span className="hidden sm:inline">Previous</span>
         </button>
 
@@ -62,10 +62,10 @@ export const Pagination = React.memo<PaginationProps>(({
             className={`
               min-w-[2.5rem] px-3 py-2 rounded-lg font-medium transition-all flex-shrink-0
               ${page === '...'
-                ? 'text-gray-400 dark:text-slate-500 cursor-default border border-transparent'
+                ? 'text-muted-foreground cursor-default border border-transparent'
                 : page === currentPage
-                  ? 'bg-gradient-to-r from-primary-600 to-accent-500 text-white shadow-md'
-                  : 'border border-gray-200 dark:border-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-950'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'border border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground'
               }
             `}
           >
@@ -76,10 +76,10 @@ export const Pagination = React.memo<PaginationProps>(({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:bg-slate-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-1 flex-shrink-0"
+          className="px-3 py-2 rounded-lg border border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-1 flex-shrink-0"
         >
           <span className="hidden sm:inline">Next</span>
-          <ChevronRight size={16} aria-hidden="true" />
+          <IconChevronRight size={16} aria-hidden="true" />
         </button>
       </div>
     </nav>

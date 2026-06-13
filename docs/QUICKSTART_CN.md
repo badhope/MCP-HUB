@@ -9,22 +9,7 @@ git clone https://github.com/badhope/MCP-HUB.git
 cd MCP-HUB
 ```
 
-## 2. 后端
-
-```bash
-pip install -r requirements.txt
-python tools/sync_index.py            # 从上游拉取最新索引
-python main.py                        # API 跑在 http://localhost:8080
-```
-
-验证：
-
-```bash
-curl http://localhost:8080/stats
-# → {"total_servers": 4403, ...}
-```
-
-## 3. 前端（可选，新开一个终端）
+## 2. 前端
 
 ```bash
 cd frontend
@@ -32,20 +17,35 @@ npm install
 npm run dev                           # Web UI 跑在 http://localhost:5173
 ```
 
-dev server 会把 `/servers`、`/config` 等路径代理到 `http://localhost:8080`。
+SPA 从 `frontend/public/` 加载 `servers-index.json` 作为静态资源。
+**无需后端**。
 
-## 4. Docker（替代方案）
+## 3. 数据管道（可选）
+
+如果你想从上游重新生成静态索引：
 
 ```bash
-docker compose up -d --build
+# 在仓库根目录
+python3 tools/sync_index.py            # 从上游拉取最新索引
+python3 tools/gen_static_data.py       # 打分 + 安装提示 → servers-index.json
 ```
 
-这样后端 + 前端会一起起来，端口和上面一致。
+输出是 `frontend/public/servers-index.json`（约 4.4 MB，4,400+ 服务器）。
+
+## 4. 构建生产版本
+
+```bash
+cd frontend
+npm run build                         # 输出到 dist/
+```
+
+`dist/` 目录可以部署到任何静态托管服务（GitHub Pages、Netlify、Vercel、S3 等）。
 
 ## 5. 下一步
 
-- 看 [`API.md`](API.md) 了解完整的 REST 接口
-- 试一下 Agent 友好的端点：`GET /servers`、`GET /config/{name}`、`GET /recommend/for-use-case`
-- 打开 Swagger UI：<http://localhost:8080/docs>
-- 提交你自己的服务器：`POST /submissions/submit` 或用 [server_submission_CN 模板](../.github/ISSUE_TEMPLATE/server_submission_CN.md)
+- 看 [`ARCHITECTURE.md`](ARCHITECTURE.md) 了解三层产品模型
+- 浏览在线演示：<https://badhope.github.io/MCP-HUB/>
+- 提交你自己的服务器：[More 页面](https://badhope.github.io/MCP-HUB/more)
+  或用 [server-submission issue 模板](../.github/ISSUE_TEMPLATE/server_submission.md)
+- 添加新的通用适配器：见 [`REFACTOR_PLAN.md`](../REFACTOR_PLAN.md) §9
 - 想了解「完整使用流程」请看 [USER_GUIDE_CN.md](USER_GUIDE_CN.md)

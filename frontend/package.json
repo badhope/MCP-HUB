@@ -23,7 +23,9 @@
     "audit:cross-browser": "tsx scripts/cross-browser-audit.ts"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.44.0",
     "@tanstack/react-query": "^5.101.0",
+    "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/postcss": "^4.3.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

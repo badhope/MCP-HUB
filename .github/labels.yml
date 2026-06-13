@@ -1,0 +1,51 @@
+---
+# Synchronize the labels on badhope/MCP-HUB with this list.
+# Run:  gh label sync -f .github/labels.yml
+# See:  https://cli.github.com/manual/gh_label
+
+# --- Area (auto-applied by labeler workflow) ---
+- name: area/backend
+  color: 1f77b4
+  description: Backend (FastAPI / Python) code
+- name: area/frontend
+  color: ff7f0e
+  description: Frontend (React / TypeScript) code
+- name: area/docs
+  color: 2ca02c
+  description: Documentation only
+- name: area/ci
+  color: 9467bd
+  description: CI / workflow / scripts
+- name: area/security
+  color: d62728
+  description: Security-relevant change
+
+# --- Dependencies (auto-applied by Dependabot) ---
+- name: dependencies
+  color: 0366d6
+  description: Pull request bumps a dependency
+
+# --- Triage / lifecycle (manual) ---
+- name: pinned
+  color: 7057ff
+  description: Keep this issue / PR open (exempt from stale bot)
+- name: stale
+  color: cccccc
+  description: Marked stale by the stale bot
+- name: discussion
+  color: 0e8a16
+  description: Open-ended topic, not actionable
+
+# --- Status / workflow (manual) ---
+- name: wontfix
+  color: ffffff
+  description: Maintainer has decided not to act on this
+- name: duplicate
+  color: cfd3d7
+  description: Already reported elsewhere
+- name: good first issue
+  color: 7057ff
+  description: Suitable for first-time contributors
+- name: help wanted
+  color: 008672
+  description: Maintainer welcomes outside contributions

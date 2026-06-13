@@ -15,11 +15,11 @@ contributors.
 1. The **integrity of the catalog**: every server in
    `servers-index.json` should be a real, publicly indexable MCP
    server. Bad entries degrade recommendations for everyone.
-2. The **availability of the catalog API**: a single noisy client
-   should not be able to knock the public instance offline.
-3. **User-generated content** (favorites, ratings, comments,
-   submissions): an attacker should not be able to mass-pollute the
-   user data layer to skew recommendations.
+2. The **availability of the static site**: GitHub Pages should
+   remain accessible to all users.
+3. **User-generated content** (favorites, ratings): an attacker
+   should not be able to mass-pollute the user data layer to skew
+   recommendations.
 4. **Secrets**: nobody should be able to exfiltrate GitHub tokens,
    API keys, or PII from the codebase or the running process.
 
@@ -33,37 +33,35 @@ not cover those.
 
 ### TM-1 — Mass pollute user-generated content
 
-- **Attacker**: anonymous, can call `POST /comments`, `POST /rate`,
-  `POST /favorites`, `POST /submissions/submit`.
+- **Attacker**: anonymous, can write to `localStorage` via the
+  browser console or a malicious script.
 - **Asset**: integrity of the user-data layer; trust in
   community ratings.
 - **Mitigations**:
-  - All write endpoints are rate-limited by the per-IP token bucket
-    in `main.py:RateLimitMiddleware` (default 120 req / 60 s).
-  - `user_data.py` validates every input through Pydantic v2 models
-    with `ge` / `le` / `max_length` constraints before persisting.
-  - Submissions are quarantined (`status: "pending"`) until a
-    maintainer approves them via `POST /submissions/review`; they
-    do not enter `servers-index.json` until then.
-  - User IDs are opaque strings; there is no password store.
-- **Known gap**: there is no captcha or proof-of-work, so a
-  determined attacker with a botnet can still pollute. For
-  production scale, terminate the limit at the edge and require
-  email-verified accounts for write paths.
+  - User data (favorites, ratings) is stored in `localStorage`,
+    which is per-browser and not synced across devices.
+  - There is no server-side persistence of user data, so mass
+    pollution is limited to a single browser instance.
+  - The SPA does not expose any write endpoints — all user data
+    is client-side only.
+- **Known gap**: a malicious browser extension or XSS attack could
+  manipulate `localStorage`. Mitigated by the fact that the SPA
+  is fully static and has no `eval`, no `dangerouslySetInnerHTML`,
+  no `Function()` constructor — see `frontend/src/lib/markdown.ts`
+  for the sanitised markdown renderer.
 
-### TM-2 — DoS the public API
+### TM-2 — DoS the static site
 
 - **Attacker**: any caller, no auth needed.
-- **Asset**: API availability.
+- **Asset**: GitHub Pages availability.
 - **Mitigations**:
-  - `RateLimitMiddleware` per IP.
-  - The catalog is in-memory — no DB connection pool to exhaust.
-  - Reads are dict scans over a 5 MB dataset; the p99 latency
-    budget on the demo instance is < 30 ms (see
-    [`BENCHMARKS.md`](BENCHMARKS.md)).
-- **Known gap**: the rate limit is in-process. Behind multiple
-  workers, multiply by the worker count. The README explicitly
-  tells operators to terminate the limit at nginx / Cloudflare.
+  - The catalog is a static JSON file served by GitHub Pages CDN.
+  - There is no backend to exhaust (no DB connection pool, no
+    in-memory state).
+  - GitHub Pages has built-in DDoS protection and rate limiting.
+- **Known gap**: a determined attacker could flood the GitHub Pages
+  CDN with requests. Mitigated by GitHub's infrastructure and the
+  fact that the static file is cacheable.
 
 ### TM-3 — Inject executable content into a generated config
 
@@ -72,13 +70,13 @@ not cover those.
 - **Asset**: trust in the generated configs that users paste into
   their Claude Desktop / Cursor.
 - **Mitigations**:
-  - `services.py` builds configs from a template; user-provided
-    strings are escaped through Pydantic's `str` type, which
-    rejects control characters in the description field.
-  - Every config snippet is rendered from the same Jinja-style
-    template, never from a free-form string the submitter gave us.
-  - The submission reviewer (`POST /submissions/review`) is gated
-    to maintainers (`@badhope` per `CODEOWNERS`).
+  - The `install_hint` is derived from the server's language/source
+    by `tools/_install_hint.py`, which uses a static template.
+    User-provided strings are not interpolated into the command.
+  - For Layer 2 adapters, the `install_universal` command is
+    hardcoded in `adapter.json` and reviewed by a maintainer.
+  - The submission reviewer is gated to maintainers (`@badhope`
+    per `CODEOWNERS`).
 - **Known gap**: a reviewer can still approve a malicious entry.
   Mitigated by `CODEOWNERS` requiring the repo owner for any
   change to the registry.
@@ -99,30 +97,16 @@ not cover those.
     positives) during scans.
   - `.gitignore` blocks `.env`, `*.pem`, `id_rsa*`,
     `.aws/`, `.gcp/`, `.kube/`, etc.
-  - The `download_manager.py` upstream fetch never embeds a
-    token in the URL — it uses `x-access-token` + `GIT_ASKPASS`
-    (see `CHANGELOG.md` 1.x entry).
 - **Known gap**: scanner is regex-based. It does not catch every
   possible encoding (base64'd keys, homoglyph tricks). Pair it
   with GitHub's built-in secret scanning on push.
 
-### TM-5 — SSRF / RCE via the natural-language query endpoint
-
-- **Attacker**: anyone who can call `GET /query?q=…`.
-- **Asset**: server process integrity.
-- **Mitigation**: `query.py` is **purely rule-based** — there is
-  no `eval`, no `subprocess`, no template engine. The input is
-  matched against a static keyword table, then handed to a
-  `services.py` function whose arguments are themselves
-  type-checked. The endpoint cannot reach the network.
-
-### TM-6 — Compromised frontend dependency
+### TM-5 — Compromised frontend dependency
 
 - **Attacker**: a malicious update to a transitive npm package.
 - **Asset**: visitor browsers, GitHub Pages integrity.
 - **Mitigations**:
-  - `dependabot.yml` opens weekly PRs for both the root
-    `package.json` and `frontend/package.json`.
+  - `dependabot.yml` opens weekly PRs for `frontend/package.json`.
   - `package-lock.json` is committed, so CI installs exact
     versions, not semver ranges.
   - Frontend code is fully static; there is no eval, no
@@ -133,21 +117,37 @@ not cover those.
   GitHub Pages CDN. Acceptable because the SPA is fully
   self-contained (no third-party `<script>` tags).
 
+### TM-6 — Data pipeline integrity
+
+- **Attacker**: a malicious upstream registry or a compromised
+  GitHub Action.
+- **Asset**: integrity of `servers-index.json`.
+- **Mitigations**:
+  - The data pipeline (`tools/sync_index.py` + `tools/gen_static_data.py`)
+    only reads from public GitHub APIs and the upstream `awesome-mcp`
+    registry.
+  - The pipeline is run by a GitHub Action with read-only permissions
+    (except for committing the updated `servers-index.json`).
+  - The `servers-index.json` file is reviewed by a maintainer before
+    merging (via the daily sync PR).
+- **Known gap**: a malicious upstream could inject bad entries.
+  Mitigated by the fact that the pipeline only reads public metadata
+  (stars, description, language) and does not execute any code from
+  the upstream repos.
+
 ---
 
 ## What we deliberately do not do
 
-- **No authentication on the public API.** There is no user
+- **No authentication on the public site.** There is no user
   concept at the read level. Adding auth would break the
-  "agent-friendly curl one-liner" promise and add a stateful
-  system to maintain.
+  "agent-friendly" promise and add a stateful system to maintain.
 - **No telemetry, no analytics, no third-party scripts.** The
-  SPA loads zero pixels. A future "improve recommendations" loop
-  must use only data the user explicitly submitted via
-  `POST /comments` etc.
-- **No persistence of the user's GitHub token.** `downloader.py`
-  passes the token in via `GIT_ASKPASS` for the duration of one
-  fetch; it is not written to disk.
+  SPA loads zero pixels. User data (favorites, ratings) is
+  stored in `localStorage` and never sent to a server.
+- **No persistence of the user's GitHub token.** The data pipeline
+  uses `GITHUB_TOKEN` for API rate limiting, but it is injected
+  via GitHub Actions secrets and never written to disk.
 
 ---
 

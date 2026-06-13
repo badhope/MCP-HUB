@@ -20,17 +20,17 @@ If you are looking for end-user documentation, see
                            │  PR / push                            │  push to main
                            ▼                                       ▼
               ┌────────────────────────┐               ┌──────────────────────┐
-              │  CI: backend tests,    │               │  CI: build & deploy  │
-              │  lint, typecheck       │               │  frontend SPA →      │
+              │  CI: frontend lint,    │               │  CI: build & deploy  │
+              │  test, typecheck       │               │  frontend SPA →      │
               │  (.github/workflows/)  │               │  gh-pages branch     │
               └────────┬───────────────┘               └──────────┬───────────┘
                        │ daily cron                                │
                        ▼                                           ▼
         ┌──────────────────────────┐                  ┌──────────────────────────┐
         │  tools/sync_index.py     │                  │  GitHub Pages CDN        │
-        │  tools/score_servers.py  │                  │  static SPA +            │
-        │  rebuilds the catalog    │                  │  static-data/*.json      │
-        │  → servers-index.json    │                  │  snapshot fallback       │
+        │  tools/gen_static_data.py│                  │  static SPA +            │
+        │  rebuilds the catalog    │                  │  servers-index.json      │
+        │  → servers-index.json    │                  │  (static asset)          │
         └──────────┬───────────────┘                  └──────────┬───────────────┘
                    │ commit                                         │
                    ▼                                                │
@@ -38,26 +38,32 @@ If you are looking for end-user documentation, see
         │  main branch             │                                │
         │  (source of truth)       │                                │
         └──────────┬───────────────┘                                │
-                   │ pip install / docker pull                      │
+                   │ fetch (static asset)                           │
                    ▼                                                ▼
         ┌──────────────────────────────────────────────────────────────────┐
-        │  Runtime                                                          │
+        │  Runtime (Browser)                                                │
         │                                                                  │
-        │   ┌─────────────┐       JSON          ┌──────────────────────┐    │
-        │   │  React SPA  │ ─────────────────► │  FastAPI process     │    │
-        │   │  (gh-pages) │                    │  (main.py)           │    │
-        │   └─────────────┘ ◄───────────────── │  - Pydantic v2       │    │
-        │                                      │  - GZip middleware   │    │
-        │                                      │  - token-bucket RL   │    │
-        │                                      │  - in-memory index   │    │
-        │                                      └──────────┬───────────┘    │
-        │                                                 │                │
-        │                                                 ▼                │
-        │                                      ┌──────────────────────┐    │
-        │                                      │  servers-index.json  │    │
-        │                                      │  user-data.json      │    │
-        │                                      │  submissions.json    │    │
-        │                                      └──────────────────────┘    │
+        │   ┌─────────────────────────────────────────────────────────┐   │
+        │   │  React 19 SPA (Vite)                                    │   │
+        │   │  - Lazy routes                                          │   │
+        │   │  - Code splitting                                       │   │
+        │   │  - localStorage for user data                           │   │
+        │   └────────────────────┬────────────────────────────────────┘   │
+        │                        │ fetch /servers-index.json              │
+        │                        ▼                                        │
+        │   ┌─────────────────────────────────────────────────────────┐   │
+        │   │  servers-index.json (~4.4 MB)                           │   │
+        │   │  - 4,400+ servers                                       │   │
+        │   │  - score + score_breakdown                              │   │
+        │   │  - install_hint                                         │   │
+        │   │  - our_signal + our_signal_label                        │   │
+        │   └─────────────────────────────────────────────────────────┘   │
+        │                                                                  │
+        │   ┌─────────────────────────────────────────────────────────┐   │
+        │   │  adapters/<name>/adapter.json                           │   │
+        │   │  - Layer 2: our universal adapters                      │   │
+        │   │  - install.sh + README.md + tests/                      │   │
+        │   └─────────────────────────────────────────────────────────┘   │
         └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -65,104 +71,94 @@ If you are looking for end-user documentation, see
 
 ## 2. Subsystems
 
-### 2.1 Data layer — `core/`, `tools/`, `servers-index.json`
+### 2.1 Data pipeline — `tools/`, `frontend/public/servers-index.json`
 
-The catalog lives in **one static JSON file**, `servers-index.json`,
-gitignored, rebuilt from upstream sources by `tools/sync_index.py`
-on a daily GitHub Action (`tools/sync_index.py` plus the workflow in
-`.github/workflows/sync.yml`).
+The catalog lives in **one static JSON file**, `frontend/public/servers-index.json`,
+rebuilt from upstream sources by `tools/sync_index.py` and `tools/gen_static_data.py`
+on a daily GitHub Action (`.github/workflows/sync-data.yml`).
 
-`core/__init__.py` defines `MCPServer`, an in-memory wrapper around
-each row. There is no ORM and no DB driver on the request path: the
-file is read once at process start (lifespan in `main.py`) and
-periodically re-read when its mtime changes — see
-`main.py:_data_refresh_thread`.
+The pipeline:
+1. `tools/sync_index.py` — pulls the upstream `awesome-mcp` mirror, enriches each
+   repo with GitHub API metadata (stars, language, topics, `updated_at`, license).
+2. `tools/gen_static_data.py` — reads the root index, runs the 5-factor scoring,
+   computes `install_hint` per language, scans `frontend/public/adapters/` for the
+   `our_signal` map, and writes the SPA-bound `frontend/public/servers-index.json`.
 
 Source of truth for individual fields:
 
 | Field | Authoritative source |
 |---|---|
-| `name`, `owner`, `full_name` | upstream `awesome-mcp` registry + manual `server_registry.json` overrides |
+| `name`, `owner`, `full_name` | upstream `awesome-mcp` registry |
 | `stars`, `updated_at`, `archived` | GitHub REST API, refreshed daily |
-| `categories` | `server_registry.json` (manually curated) + heuristic inference from topics |
-| `source_type` | `market-config.json` (`official` vs `community`) |
-| `description` | upstream registry, normalised length, no truncation |
-| `npm_package` | `server_registry.json` |
-| `completeness_score` | `services.py:get_quality_score_for_server` (recomputed on each sync) |
+| `categories` | inferred from topics + manual overrides |
+| `description` | upstream registry, normalised length |
+| `language` | GitHub API `language` field |
+| `install_hint` | `tools/_install_hint.py` (derives from language/source) |
+| `score`, `score_breakdown` | `tools/completeness_scoring.py` (5-factor formula) |
+| `our_signal`, `our_signal_label` | `tools/_our_signal.py` (scans `adapters/` dir) |
 
-### 2.2 HTTP layer — `main.py`, `api.py`
+### 2.2 Frontend — `frontend/`
 
-`main.py` is the **composition root**. It owns:
+Vite + React 19 + TypeScript SPA, lazy-routed, served as a static bundle on
+GitHub Pages. **No backend.** All data comes from the static `servers-index.json`
+asset, and user data (favorites, ratings) persists to `localStorage`.
 
-- the FastAPI `app` instance and the `lifespan` context manager
-- the middleware stack: `CORSMiddleware`, `GZipMiddleware` (1 KB
-  threshold), and the in-house `RateLimitMiddleware`
-- the CLI entry point (`cli()`) wired up to `pyproject.toml`'s
-  `[project.scripts]`
+The 3-layer product model:
+- **Layer 1**: Upstream index (4,400+ servers) — browse/search/filter/sort
+- **Layer 2**: Our universal adapters — servers we've personally wrapped with
+  a universal install command, score-boosted and labelled "✅ adapted"
+- **Layer 3**: The "More" tab — entry point for adding new servers we don't
+  yet cover (issue / PR / inline form)
 
-`api.py` is a thin router — handlers there are 5–10 lines and
-delegate to `services.py` for the actual work. This split exists so
-that `services.py` can be imported by `query.py` and the
-`tools/` scripts without dragging in FastAPI request objects.
+Key components:
+- `src/lib/api.ts` — loads `servers-index.json` once, caches in module-scope,
+  exposes the same surface (`getServers`, `getServer`, `getPopularServers`, etc.)
+- `src/lib/universalConfig.ts` — generates the universal `mcpServers` JSON from
+  a server's `install_hint` + optional adapter manifest
+- `src/lib/scoring.ts` — front-end real-time scoring (mirrors the build-time
+  5-factor formula)
+- `src/lib/localStorage.ts` — favorites/ratings persistence
 
-`query.py` exposes `GET /query`, a small natural-language router
-that picks the right service function based on keyword matching
-("search …", "compare …", "popular …", etc.). It is intentionally
-rule-based, not LLM-backed, so the response is deterministic and
-testable.
+### 2.3 Adapters — `frontend/public/adapters/`
 
-### 2.3 Write paths — `user_data.py`
+Layer 2 of the product model. Each adapter is a directory with 4 files:
+- `adapter.json` — manifest the build pipeline reads (upstream, status, platforms,
+  install_universal, tested_clients, gotchas, notes)
+- `install.sh` — one-line installer (idempotent, self-checking)
+- `README.md` —改造说明 (what this adapter does, how to install, known gotchas)
+- `tests/README.md` — install verification log (smoke test results on each client)
 
-Favorites, ratings, comments, and submissions are all funnelled
-through `user_data.py`. The current backend is a JSON file with
-an in-process write lock; this is **deliberately the bottleneck**
-for a single-node demo, and the only thing you need to swap if
-you want Postgres / Redis / SQLite-WAL is the implementation
-behind the same public functions.
+The `tools/_our_signal.py` script walks this directory at build time, reads each
+`adapter.json`, and assigns `our_signal` scores:
+- `status: "adapted"` → 1.0
+- `status: "in_progress"` → 0.7
+- `status: "researched"` → 0.4
+- unknown/missing → 0.0
 
-### 2.4 Frontend — `frontend/`
+### 2.4 Tooling — `tools/`
 
-Vite + React 19 + TypeScript SPA, lazy-routed, served as a static
-bundle on GitHub Pages. The interesting design choice is the
-**offline-first fallback**: every public route tries the live API
-first (`src/hooks/useServers.ts`) and falls back to a committed
-`static-data/*.json` snapshot. This is what makes the GitHub Pages
-demo always render even when the API is sleeping or being
-re-deployed.
+5 Python scripts, each one a `main()` that exits 0/1. They are importable but
+not coupled to each other:
+- `tools/sync_index.py` — upstream sync
+- `tools/gen_static_data.py` — scoring + install_hint + our_signal → static JSON
+- `tools/completeness_scoring.py` — 5-factor score (0-100)
+- `tools/_install_hint.py` — derives install commands from language/source
+- `tools/_our_signal.py` — scans `adapters/` dir for our signal
 
-The snapshot dates are surfaced in the UI: a `Clock` icon and
-"Data last synced …" line in the banner, a `snapshot` badge next
-to each star count, and a footnote in the Quality section.
+There is no Makefile-driven dependency graph — each script reads what it needs
+and writes its own output file.
 
-### 2.5 Tooling — `tools/`
+### 2.5 Tests — `tests/` and `frontend/src/test/`
 
-19 CLI scripts, each one a `main()` that exits 0/1. They are
-importable but not coupled to each other; `tools/sync_index.py`
-calls the others via subprocess when needed (`comprehensive_collector.py`,
-`notable_projects_navigator.py`, `completeness_scoring.py`).
-There is no Makefile-driven dependency graph — each script reads
-what it needs and writes its own output file.
+**Backend (Python)**:
+- `tests/test_install_hint.py` — 12 tests covering all 5 language branches
+- `tests/test_scoring.py` — 21 tests pinning the scoring formula
+- `tests/test_our_signal.py` — 23 tests pinning the adapter scanner
 
-### 2.6 Tests — `tests/`
-
-9 pytest files:
-
-- `test_core.py` — `MCPServer` model, indexes, hashing
-- `test_api.py` — end-to-end FastAPI tests via a fixture that
-  boots a real uvicorn process
-- `test_fastapi.py` — same surface, different test fixtures
-  (compatibility shim for the older `live_server` style)
-- `test_query.py` — `query.py` keyword router
-- `test_export.py` — markdown / JSON export endpoints
-- `test_downloader.py` — `tools/downloader.py` upstream fetch
-  (mocked)
-- `test_user_functions.py` — favourites / ratings / comments /
-  submissions
-- `test_secret_scanner.py` — pure unit, no I/O
-- `conftest.py` — shared fixtures
-
-Front-end tests live in `frontend/src/test/`, run with Vitest, and
-use MSW to intercept the API.
+**Frontend (TypeScript)**:
+- `frontend/src/test/` — 9 test files, run with Vitest
+- Component tests use `@testing-library/react` with `happy-dom`
+- No MSW mocks — the tests exercise `localStorage` + the static index directly
 
 ---
 
@@ -172,50 +168,48 @@ The notable choices, with the alternatives that were rejected.
 
 ### 3.1 Static JSON index, not Postgres
 
-- **Picked** because (a) the whole dataset is < 10 MB, fits in
-  memory, (b) it makes the catalog trivially shippable in the
-  npm / PyPI / Docker package, (c) agents can embed a snapshot
-  with the model.
-- **Rejected** SQLite / Postgres because the deployment story
-  is "one binary, one file" and we did not want to ship a DB
-  driver or a migration tool. The trade-off is no random writes
-  on the read path, which is fine — writes are user-data and
-  go through `user_data.py`.
+- **Picked** because (a) the whole dataset is < 10 MB, fits in browser memory,
+  (b) it makes the catalog trivially shippable as a static asset, (c) agents
+  can embed a snapshot with the model, (d) no backend required.
+- **Rejected** SQLite / Postgres because the deployment story is "one static
+  site, one JSON file" and we did not want to ship a DB driver or a migration
+  tool. The trade-off is no random writes on the read path, which is fine —
+  user data goes to `localStorage`.
 
-### 3.2 In-process rate limit, not Redis
+### 3.2 No backend, not FastAPI
 
-- **Picked** the token-bucket in `main.py` for zero-dep,
-  single-node correctness.
-- **Rejected** slowapi / Redis because the dependency surface
-  is bigger than the problem. For horizontal scale, terminate
-  the limit at nginx / Cloudflare — see the "Cross-cutting
-  middleware" section in `docs/API.md`.
+- **Picked** a pure static SPA because (a) 99% of requests are read-only
+  catalog browsing, (b) GitHub Pages is free and fast, (c) no server to
+  maintain, (d) user data (favorites/ratings) belongs to the user in their
+  browser, not on our server.
+- **Rejected** FastAPI because the dependency surface is bigger than the
+  problem. The old backend had 38 REST endpoints, GZip + rate-limit middlewares,
+  PyPI console scripts — overkill for a catalog browser.
 
 ### 3.3 GitHub Pages for the SPA, not Vercel / Netlify
 
-- **Picked** because the entire deliverable is already on
-  GitHub, and the Pages quota is generous for a static SPA.
-  The deploy is one workflow: `.github/workflows/frontend-deploy.yml`.
-- **Rejected** Vercel because the project does not need edge
-  functions or per-route SSR; React Router's `basename` is
-  enough to make `/MCP-HUB/…` work.
+- **Picked** because the entire deliverable is already on GitHub, and the
+  Pages quota is generous for a static SPA. The deploy is one workflow:
+  `.github/workflows/deploy-pages.yml`.
+- **Rejected** Vercel because the project does not need edge functions or
+  per-route SSR; React Router's `basename` is enough to make `/MCP-HUB/…` work.
 
 ### 3.4 CI-driven index rebuild, not request-time fetch
 
-- **Picked** so request latency is bounded by in-memory dict
-  lookups (~1 ms p50 on `GET /servers`), and so a broken
-  upstream does not propagate to the API.
-- **Rejected** fetching on demand because (a) latency would
-  spike to hundreds of ms, (b) the GitHub API rate limit
-  would force us into Redis-backed caching, (c) the catalog
-  only changes a few times a day.
+- **Picked** so the SPA loads a pre-computed JSON with all scores and install
+  hints already calculated, and so a broken upstream does not propagate to
+  the user.
+- **Rejected** fetching on demand because (a) latency would spike to hundreds
+  of ms, (b) the GitHub API rate limit would force us into Redis-backed caching,
+  (c) the catalog only changes a few times a day.
 
-### 3.5 GZip by default, not opt-in
+### 3.5 localStorage for user data, not a backend
 
-- **Picked** because `servers.json` is the only payload that
-  matters and it compresses 6–8×.
-- The 1 KB threshold prevents gzipping tiny JSON error
-  envelopes where the CPU cost is worse than the savings.
+- **Picked** because (a) user data (favorites, ratings) belongs to the user,
+  (b) no server to maintain, (c) works offline, (d) privacy-friendly.
+- **Rejected** a backend because the dependency surface is bigger than the
+  problem. The trade-off is no cross-device sync, which is fine — users can
+  export their data manually if needed.
 
 ---
 
@@ -225,12 +219,11 @@ If you change one side, the other side should be a one-line diff.
 
 | Contract | Owner | Consumer |
 |---|---|---|
-| `MCPServer` dataclass shape | `core/__init__.py` | `services.py`, `api.py`, `user_data.py` |
-| `servers-index.json` schema | `tools/sync_index.py` | `main.py:_load_data_from_disk` |
-| `user-data.json` schema | `user_data.py` | only `user_data.py` itself |
-| OpenAPI schema | FastAPI introspection | `tools/gen_api_docs.py`, agent tool generators |
+| `servers-index.json` schema | `tools/gen_static_data.py` | `frontend/src/lib/api.ts` |
+| `adapter.json` schema | `frontend/public/adapters/<name>/adapter.json` | `tools/_our_signal.py`, `frontend/src/lib/universalConfig.ts` |
+| 5-factor scoring formula | `tools/completeness_scoring.py` | `frontend/src/lib/scoring.ts` |
+| `install_hint` derivation | `tools/_install_hint.py` | `frontend/src/lib/universalConfig.ts` |
 | Static-data `*.json` | `tools/gen_static_data.py` | `frontend/src/hooks/useServers.ts` |
-| CLI flags of `main.py` | `main.py:cli` | `pyproject.toml [project.scripts]`, `Makefile`, Docker entrypoint |
 
 Tests for these contracts live next to their owners.
 
@@ -240,10 +233,10 @@ Tests for these contracts live next to their owners.
 
 | You want to … | Touch this file, not that |
 |---|---|
-| Add an endpoint | `api.py` (and the test in `tests/test_api.py`) — leave `main.py` alone |
-| Change a business rule (scoring, ranking) | `services.py` — leave `api.py` alone |
-| Add a CLI script | `tools/your_script.py` — invoke from `tools/sync_index.py` if part of the daily pipeline |
-| Change the upstream data source | `tools/sync_index.py` only — verify the schema in `core/__init__.py` still holds |
+| Add a new adapter | `frontend/public/adapters/<name>/` — create `adapter.json` + `install.sh` + `README.md` + `tests/README.md` |
+| Change the scoring formula | `tools/completeness_scoring.py` — verify `frontend/src/lib/scoring.ts` still mirrors it |
+| Change the install hint derivation | `tools/_install_hint.py` — verify `frontend/src/lib/universalConfig.ts` still consumes it |
+| Change the upstream data source | `tools/sync_index.py` only — verify the schema in `tools/gen_static_data.py` still holds |
 | Tweak the SPA | files under `frontend/src/` — do not edit files under `frontend/dist/` (they are generated) |
-| Update the changelog | `CHANGELOG.md` and `CHANGELOG_CN.md` together, same day |
-| Bump a version | `pyproject.toml` + `frontend/package.json` + `core/_version.py` |
+| Update the changelog | `CHANGELOG.md` only |
+| Bump a version | `frontend/package.json` only |

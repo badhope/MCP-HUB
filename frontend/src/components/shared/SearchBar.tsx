@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search } from 'lucide-react';
+import { IconSearch } from '@tabler/icons-react';
 
 interface SearchBarProps {
   value: string;
@@ -18,7 +18,7 @@ interface SearchBarProps {
 export const SearchBar = React.memo<SearchBarProps>(({
   value,
   onChange,
-  placeholder = 'Search servers...',
+  placeholder = 'IconSearch servers...',
   className = '',
   variant = 'page',
   debounceMs = 200,
@@ -46,13 +46,13 @@ export const SearchBar = React.memo<SearchBarProps>(({
   return (
     <div className={`relative group ${className}`}>
       <div className="absolute inset-y-0 left-0 pl-4 sm:pl-5 flex items-center pointer-events-none">
-        <Search
+        <IconSearch
           size={20}
           aria-hidden="true"
           className={`sm:size-6 transition-colors duration-200 ${
             isHero
-              ? 'text-primary-100 group-focus-within:text-white'
-              : 'text-slate-400 group-focus-within:text-primary-500'
+              ? 'text-muted-foreground group-focus-within:text-primary-foreground'
+              : 'text-muted-foreground group-focus-within:text-foreground'
           }`}
         />
       </div>
@@ -71,17 +71,17 @@ export const SearchBar = React.memo<SearchBarProps>(({
           isHero
             ? // Hero variant: translucent white over a colored background.
               'w-full pl-12 sm:pl-14 pr-4 sm:pr-5 py-3.5 sm:py-4 text-base sm:text-lg ' +
-              'border-2 border-white/20 bg-white dark:bg-slate-900/10 backdrop-blur-xl rounded-2xl ' +
-              'focus:border-white/40 focus:ring-4 focus:ring-white/10 focus:bg-white dark:bg-slate-900/15 ' +
+              'border-2 border-white/20 bg-card/10 backdrop-blur-xl rounded-2xl ' +
+              'focus:border-white/40 focus:ring-4 focus:ring-white/10 focus:bg-card/15 ' +
               'transition-all duration-300 outline-none ' +
-              'placeholder-primary-100 text-white'
+              'placeholder:text-muted-foreground text-primary-foreground'
             : // Page variant: light surface, dark text.
               'w-full pl-12 sm:pl-14 pr-4 sm:pr-5 py-3 sm:py-3.5 text-base ' +
-              'border border-slate-200 bg-white dark:bg-slate-900 rounded-2xl shadow-sm ' +
-              'focus:border-primary-400 focus:ring-4 focus:ring-primary-100 ' +
+              'border border-border bg-card rounded-2xl shadow-sm ' +
+              'focus:border-primary focus:ring-4 focus:ring-primary/10 ' +
               'transition-all duration-200 outline-none ' +
-              'placeholder-slate-400 text-slate-900 ' +
-              'hover:border-slate-300'
+              'placeholder:text-muted-foreground text-foreground ' +
+              'hover:border-border/80'
         }
       />
     </div>
