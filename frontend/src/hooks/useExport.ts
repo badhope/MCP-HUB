@@ -6,9 +6,11 @@ import { Server, ServerConfig } from '../types';
 
 export function useDownloadConfig() {
   const [downloading, setDownloading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const downloadConfigJson = useCallback(async (server: Server, config: ServerConfig | null) => {
     setDownloading(true);
+    setError(null);
     try {
       const configData = config
         ? { mcpServers: config.mcpServers || {} }
@@ -22,6 +24,8 @@ export function useDownloadConfig() {
             },
           };
       downloadJSON(configData, `${server.name}-mcp-config.json`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Download failed');
     } finally {
       setDownloading(false);
     }
@@ -29,26 +33,33 @@ export function useDownloadConfig() {
 
   const downloadConfigMd = useCallback(async (server: Server, config: ServerConfig | null) => {
     setDownloading(true);
+    setError(null);
     try {
       const markdown = generateServerMarkdown(server, config);
       downloadMarkdown(markdown, `${server.name}-mcp.md`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Download failed');
     } finally {
       setDownloading(false);
     }
   }, []);
 
-  return { downloading, downloadConfigJson, downloadConfigMd };
+  return { downloading, error, downloadConfigJson, downloadConfigMd };
 }
 
 export function useBatchExport() {
   const [exporting, setExporting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const exportBatchAsJson = useCallback(async (serverNames: string[]) => {
     if (serverNames.length === 0) return;
     setExporting(true);
+    setError(null);
     try {
       const result = await apiClient.exportBatchJson(serverNames);
       downloadJSON(result.config, 'mcp-servers-config.json');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Export failed');
     } finally {
       setExporting(false);
     }
@@ -57,13 +68,16 @@ export function useBatchExport() {
   const exportBatchAsMarkdown = useCallback(async (serverNames: string[]) => {
     if (serverNames.length === 0) return;
     setExporting(true);
+    setError(null);
     try {
       const markdown = await apiClient.exportBatchMarkdown(serverNames);
       downloadMarkdown(markdown, 'mcp-servers-config.md');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Export failed');
     } finally {
       setExporting(false);
     }
   }, []);
 
-  return { exporting, exportBatchAsJson, exportBatchAsMarkdown };
+  return { exporting, error, exportBatchAsJson, exportBatchAsMarkdown };
 }

@@ -63,15 +63,13 @@ export function useTheme() {
   }, [])
 
   const toggle = useCallback(() => {
+    // Read the *current* resolved theme from the DOM and flip it. setTheme()
+    // handles persistence + re-application, so we must NOT write localStorage
+    // here — the old code read classList before the effect applied the new
+    // class, persisting the pre-toggle value (theme never stuck across reloads).
     const root = document.documentElement
-    setThemeState(root.classList.contains('dark') ? 'light' : 'dark')
-    try {
-      const isDark = root.classList.contains('dark')
-      window.localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light')
-    } catch {
-      // ignore
-    }
-  }, [])
+    setTheme(root.classList.contains('dark') ? 'light' : 'dark')
+  }, [setTheme])
 
   return { theme, setTheme, toggle }
 }

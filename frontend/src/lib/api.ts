@@ -730,14 +730,14 @@ class ApiClient {
       const { byName } = await loadServerIndex();
       const matched = _serverNames.map((n) => byName.get(n)).filter(Boolean) as Server[];
       const config: { mcpServers: Record<string, unknown> } = { mcpServers: {} };
-      for (const s of matched) {
-        try {
-          const cfg = await this.getServerConfig(s.name);
-          if (cfg.mcpServers) {
-            Object.assign(config.mcpServers, cfg.mcpServers);
-          }
-        } catch {
-          // skip
+      // Parallelize per-server config fetches — was a serial `for...of await`
+      // that took N round-trips for N selected servers.
+      const configs = await Promise.all(
+        matched.map((s) => this.getServerConfig(s.name).catch(() => null))
+      );
+      for (const cfg of configs) {
+        if (cfg?.mcpServers) {
+          Object.assign(config.mcpServers, cfg.mcpServers);
         }
       }
       return {
@@ -758,8 +758,13 @@ class ApiClient {
     if (this.useStatic) {
       const { byName } = await loadServerIndex();
       const matched = _serverNames.map((n) => byName.get(n)).filter(Boolean) as Server[];
+      // Fetch all configs in parallel first (was serial `for...of await`),
+      // then build the markdown sections from the resolved results.
+      const configs = await Promise.all(
+        matched.map((s) => this.getServerConfig(s.name).catch(() => null))
+      );
       const lines: string[] = ['# MCP Server Batch Export', ''];
-      for (const s of matched) {
+      matched.forEach((s, i) => {
         const displayName = s.full_name || s.name;
         lines.push(`## ${displayName}`);
         lines.push('');
@@ -770,16 +775,16 @@ class ApiClient {
         lines.push('');
         lines.push(s.description);
         lines.push('');
-        try {
-          const cfg = await this.getServerConfig(s.name);
+        const cfg = configs[i];
+        if (cfg) {
           lines.push('```json');
           lines.push(JSON.stringify(cfg, null, 2));
           lines.push('```');
-        } catch {
+        } else {
           lines.push('_(config not available in static catalog)_');
         }
         lines.push('');
-      }
+      });
       return lines.join('\n');
     }
     const url = `${this.baseUrl}/api/export/batch-markdown`;

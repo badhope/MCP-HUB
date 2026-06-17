@@ -38,7 +38,7 @@ Examples (curl):
 
 import json
 import sys
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
@@ -378,7 +378,7 @@ Examples:
 Press Ctrl+C to stop.
 """)
 
-    server = HTTPServer(("", port), MCPHubAPI)
+    server = ThreadingHTTPServer(("", port), MCPHubAPI)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

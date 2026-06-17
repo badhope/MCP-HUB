@@ -236,10 +236,22 @@ class _InMemoryTokenBucket:
         self.refill_window = refill_window
         self._buckets: Dict[str, Dict[str, float]] = {}
         self._lock = threading.Lock()
+        self._last_cleanup = 0.0
 
     def take(self, key: str, cost: int = 1) -> bool:
         now = time.monotonic()
         with self._lock:
+            # Opportunistic GC: sweep stale buckets at most once per refill
+            # window so _buckets can't grow unboundedly with unique client
+            # IPs over the process lifetime. cleanup_expired() is otherwise
+            # never called.
+            if now - self._last_cleanup > self.refill_window:
+                threshold = self.refill_window * 2
+                stale = [k for k, v in self._buckets.items() if now - v["updated"] > threshold]
+                for k in stale:
+                    del self._buckets[k]
+                self._last_cleanup = now
+
             bucket = self._buckets.get(key)
             if bucket is None:
                 bucket = {"tokens": float(self.capacity), "updated": now}
@@ -263,6 +275,7 @@ class _InMemoryTokenBucket:
             stale = [k for k, v in self._buckets.items() if now - v["updated"] > threshold]
             for k in stale:
                 del self._buckets[k]
+            self._last_cleanup = now
 
 
 _RATE_LIMIT_DISABLED = os.environ.get("RATE_LIMIT_DISABLED", "").lower() in {"1", "true", "yes"}
@@ -373,6 +386,7 @@ async def list_servers(
     sort: str = Query("stars", description="Sort by 'stars' or 'updated'"),
     min_stars: int = Query(0, description="Minimum star count filter"),
     limit: int = Query(100, ge=1, le=1000, description="Max number of results per request"),
+    offset: int = Query(0, ge=0, description="Number of results to skip (for pagination)"),
 ):
     """
     Get a filtered list of MCP servers.
@@ -381,7 +395,10 @@ async def list_servers(
     """
     servers = data.get("servers", [])
 
-    filtered = servers
+    # Copy before sorting: `servers` is the shared in-memory catalog mutated by
+    # the refresh thread. Sorting it in place would race with concurrent
+    # readers and leak the sort order back into the shared state.
+    filtered = list(servers)
 
     # Search filter
     if search:
@@ -411,7 +428,7 @@ async def list_servers(
     else:
         filtered.sort(key=lambda x: x.get("stars", 0), reverse=True)
 
-    return ServerListResponse(total=len(filtered), servers=filtered[:limit])
+    return ServerListResponse(total=len(filtered), servers=filtered[offset : offset + limit])
 
 
 @app.get("/servers/popular", tags=["Servers"], summary="Get most popular servers")
@@ -421,8 +438,9 @@ async def get_popular(
 ):
     """Get the top N most starred servers"""
     servers = data.get("servers", [])
-    servers.sort(key=lambda x: x.get("stars", 0), reverse=True)
-    return ServerListResponse(total=len(servers), servers=servers[:limit])
+    # sorted() returns a new list — never sort the shared catalog in place.
+    ranked = sorted(servers, key=lambda x: x.get("stars", 0), reverse=True)
+    return ServerListResponse(total=len(ranked), servers=ranked[:limit])
 
 
 @app.get("/servers/recent", tags=["Servers"], summary="Get recently updated servers")
@@ -432,8 +450,8 @@ async def get_recent(
 ):
     """Get the N most recently updated servers"""
     servers = data.get("servers", [])
-    servers.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
-    return ServerListResponse(total=len(servers), servers=servers[:limit])
+    ranked = sorted(servers, key=lambda x: x.get("updated_at", ""), reverse=True)
+    return ServerListResponse(total=len(ranked), servers=ranked[:limit])
 
 
 @app.get("/servers/curated", tags=["Servers"], summary="Get curated popular servers")
@@ -445,7 +463,7 @@ async def get_curated(
     servers = data.get("servers", [])
 
     curated = [s for s in servers if s.get("source_type") == "official" or s.get("stars", 0) > 1000]
-    curated.sort(key=lambda x: x.get("stars", 0), reverse=True)
+    curated = sorted(curated, key=lambda x: x.get("stars", 0), reverse=True)
     return ServerListResponse(total=len(curated), servers=curated[:limit])
 
 
@@ -777,7 +795,8 @@ async def get_similar_servers(
     similar = []
 
     for server in all_servers:
-        if server.get("name") == target_name:
+        # Compare case-insensitively: target_name is already lowercased above.
+        if server.get("name", "").lower() == target_name:
             continue
 
         server_categories = set(server.get("categories", []))
@@ -1382,8 +1401,12 @@ async def export_batch_markdown(
     lines.append("")
 
     combined_mcp_servers: Dict[str, Any] = {}
+    # Generate each config once and reuse for both the combined block and the
+    # per-server sections below (was 2N calls to _generate_config_for_server).
+    configs = {}
     for server in found_servers:
         config = _generate_config_for_server(server)
+        configs[server.get("name")] = config
         if config.mcpServers:
             combined_mcp_servers.update(config.mcpServers)
 
@@ -1393,7 +1416,7 @@ async def export_batch_markdown(
     lines.append("")
 
     for server in found_servers:
-        config = _generate_config_for_server(server)
+        config = configs[server.get("name")]
         lines.append(_generate_server_markdown(server, config.model_dump()))
         lines.append("")
 

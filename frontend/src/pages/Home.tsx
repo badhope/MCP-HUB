@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Code2, Zap, BookOpen, Info } from 'lucide-react';
 import { GithubIcon } from '../components/shared/GithubIcon';
-import { useServers } from '../hooks/useServers';
+import { useServers, usePopularServers, useRecentServers } from '../hooks/useServers';
 import { useStats } from '../hooks/useStats';
 import { ServerCard } from '../components/server/ServerCard';
 
@@ -43,17 +43,12 @@ const Home = React.memo(() => {
 
   const servers = useMemo(() => serverData?.servers || [], [serverData?.servers]);
 
-  const topRatedServers = useMemo(() => {
-    return [...servers]
-      .sort((a, b) => b.stars - a.stars)
-      .slice(0, 6);
-  }, [servers]);
-
-  const recentlyUpdated = useMemo(() => {
-    return [...servers]
-      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-      .slice(0, 4);
-  }, [servers]);
+  // Use the dedicated /popular and /recent endpoints instead of pulling the
+  // full list and sorting client-side. In live-API mode this avoids
+  // transferring the whole catalog just to show 6+4 cards; the hooks were
+  // defined but unused (dead code) before.
+  const topRatedServers = usePopularServers(6).data ?? [];
+  const recentlyUpdated = useRecentServers(4).data ?? [];
 
   // Prefer the canonical totals from /stats over a recomputation against the
   // 50-server sample. The catalog is wider than what the demo surfaces, so

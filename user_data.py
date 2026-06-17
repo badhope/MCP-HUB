@@ -5,6 +5,9 @@ MCP Hub 用户数据管理
 """
 
 import json
+import os
+import tempfile
+import threading
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -13,6 +16,34 @@ from typing import Dict, List, Optional
 BASE_PATH = Path(__file__).parent
 USER_DATA_FILE = BASE_PATH / "user-data.json"
 SUBMISSIONS_FILE = BASE_PATH / "submissions.json"
+
+# Serialize all read-modify-write operations on the user-data / submissions
+# files. FastAPI endpoints run concurrently (async + threadpool), so without a
+# lock two simultaneous writes would lose one update (e.g. two users favoriting
+# at the same time — the second save overwrites the first).
+_data_lock = threading.Lock()
+_submissions_lock = threading.Lock()
+
+
+def _atomic_write_json(path: Path, data: Dict) -> None:
+    """Write JSON atomically: temp file in the same dir + os.replace.
+
+    A direct open(path, 'w') truncates the file before writing; a crash mid-write
+    leaves a partial/corrupt file. Writing to a temp file and renaming is atomic
+    on POSIX, so readers never see a half-written file.
+    """
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
+    except BaseException:
+        # Cleanup the temp file on any failure so it doesn't accumulate.
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
 
 
 def ensure_user_data_file():
@@ -24,8 +55,7 @@ def ensure_user_data_file():
             "ratings": {},  # server_name -> List[rating_info]
             "comments": {},  # server_name -> List[comment_info]
         }
-        with open(USER_DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(initial_data, f, ensure_ascii=False, indent=2)
+        _atomic_write_json(USER_DATA_FILE, initial_data)
     return USER_DATA_FILE
 
 
@@ -36,8 +66,7 @@ def ensure_submissions_file():
             "version": "1.0.0",
             "submissions": [],  # List[submission_info]
         }
-        with open(SUBMISSIONS_FILE, "w", encoding="utf-8") as f:
-            json.dump(initial_data, f, ensure_ascii=False, indent=2)
+        _atomic_write_json(SUBMISSIONS_FILE, initial_data)
     return SUBMISSIONS_FILE
 
 
@@ -49,9 +78,8 @@ def load_user_data() -> Dict:
 
 
 def save_user_data(data: Dict):
-    """保存用户数据"""
-    with open(USER_DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    """保存用户数据（原子写入，避免崩溃损坏文件）"""
+    _atomic_write_json(USER_DATA_FILE, data)
 
 
 def load_submissions() -> Dict:
@@ -62,9 +90,8 @@ def load_submissions() -> Dict:
 
 
 def save_submissions(data: Dict):
-    """保存提交数据"""
-    with open(SUBMISSIONS_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    """保存提交数据（原子写入）"""
+    _atomic_write_json(SUBMISSIONS_FILE, data)
 
 
 # ======================================
@@ -137,27 +164,28 @@ def add_rating(user_id: str, server_name: str, rating: int, comment: Optional[st
     Returns: rating info
     """
     rating = max(1, min(5, rating))  # Clamp 1-5
-    data = load_user_data()
-    ratings = data.get("ratings", {})
-    server_ratings = ratings.get(server_name, [])
+    with _data_lock:
+        data = load_user_data()
+        ratings = data.get("ratings", {})
+        server_ratings = ratings.get(server_name, [])
 
-    # Remove existing rating from this user
-    server_ratings = [r for r in server_ratings if r.get("user_id") != user_id]
+        # Remove existing rating from this user
+        server_ratings = [r for r in server_ratings if r.get("user_id") != user_id]
 
-    rating_info = {
-        "id": str(uuid.uuid4()),
-        "user_id": user_id,
-        "server_name": server_name,
-        "rating": rating,
-        "comment": comment,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    }
-    server_ratings.append(rating_info)
-    ratings[server_name] = server_ratings
-    data["ratings"] = ratings
-    save_user_data(data)
+        rating_info = {
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "server_name": server_name,
+            "rating": rating,
+            "comment": comment,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        server_ratings.append(rating_info)
+        ratings[server_name] = server_ratings
+        data["ratings"] = ratings
+        save_user_data(data)
 
-    return rating_info
+        return rating_info
 
 
 def get_ratings(server_name: str) -> List[Dict]:
@@ -196,23 +224,24 @@ def get_ratings_count(server_name: str) -> int:
 
 def add_comment(user_id: str, server_name: str, text: str) -> Dict:
     """添加评论"""
-    data = load_user_data()
-    comments = data.get("comments", {})
-    server_comments = comments.get(server_name, [])
+    with _data_lock:
+        data = load_user_data()
+        comments = data.get("comments", {})
+        server_comments = comments.get(server_name, [])
 
-    comment_info = {
-        "id": str(uuid.uuid4()),
-        "user_id": user_id,
-        "server_name": server_name,
-        "text": text,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    }
-    server_comments.append(comment_info)
-    comments[server_name] = server_comments
-    data["comments"] = comments
-    save_user_data(data)
+        comment_info = {
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "server_name": server_name,
+            "text": text,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        server_comments.append(comment_info)
+        comments[server_name] = server_comments
+        data["comments"] = comments
+        save_user_data(data)
 
-    return comment_info
+        return comment_info
 
 
 def get_comments(server_name: str) -> List[Dict]:
@@ -240,29 +269,30 @@ def submit_server(
     npm_package: Optional[str] = None,
 ) -> Dict:
     """提交新服务器"""
-    data = load_submissions()
-    submissions = data.get("submissions", [])
+    with _submissions_lock:
+        data = load_submissions()
+        submissions = data.get("submissions", [])
 
-    submission = {
-        "id": str(uuid.uuid4()),
-        "user_id": user_id,
-        "name": name,
-        "source": source,
-        "description": description,
-        "categories": categories or [],
-        "npm_package": npm_package,
-        "status": "pending",  # pending, approved, rejected
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "reviewed_at": None,
-        "reviewer": None,
-        "review_comment": None,
-    }
+        submission = {
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "name": name,
+            "source": source,
+            "description": description,
+            "categories": categories or [],
+            "npm_package": npm_package,
+            "status": "pending",  # pending, approved, rejected
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "reviewed_at": None,
+            "reviewer": None,
+            "review_comment": None,
+        }
 
-    submissions.append(submission)
-    data["submissions"] = submissions
-    save_submissions(data)
+        submissions.append(submission)
+        data["submissions"] = submissions
+        save_submissions(data)
 
-    return submission
+        return submission
 
 
 def get_submissions(status: Optional[str] = None) -> List[Dict]:
@@ -285,21 +315,22 @@ def review_submission(
     submission_id: str, status: str, reviewer: str, comment: Optional[str] = None
 ) -> Optional[Dict]:
     """审核提交 (status: approved, rejected)"""
-    data = load_submissions()
-    submissions = data.get("submissions", [])
+    with _submissions_lock:
+        data = load_submissions()
+        submissions = data.get("submissions", [])
 
-    for i, s in enumerate(submissions):
-        if s.get("id") == submission_id:
-            submissions[i]["status"] = status
-            submissions[i]["reviewed_at"] = datetime.now(timezone.utc).isoformat()
-            submissions[i]["reviewer"] = reviewer
-            submissions[i]["review_comment"] = comment
+        for i, s in enumerate(submissions):
+            if s.get("id") == submission_id:
+                submissions[i]["status"] = status
+                submissions[i]["reviewed_at"] = datetime.now(timezone.utc).isoformat()
+                submissions[i]["reviewer"] = reviewer
+                submissions[i]["review_comment"] = comment
 
-            data["submissions"] = submissions
-            save_submissions(data)
-            return submissions[i]
+                data["submissions"] = submissions
+                save_submissions(data)
+                return submissions[i]
 
-    return None
+        return None
 
 
 # ======================================
@@ -309,13 +340,26 @@ def review_submission(
 
 def get_user_stats(user_id: str) -> Dict:
     """Get statistics for a user"""
-    favorites = get_favorites(user_id)
-    ratings = get_ratings_count_for_user(user_id)
-    comments = get_comments_count_for_user(user_id)
+    # Single load: get_favorites/get_ratings_count_for_user/get_comments_count_for_user
+    # each call load_user_data() independently — 3 file reads per request.
+    data = load_user_data()
+    favorites = data.get("favorites", {}).get(user_id, [])
+    ratings_count = sum(
+        1
+        for ratings in data.get("ratings", {}).values()
+        for r in ratings
+        if r.get("user_id") == user_id
+    )
+    comments_count = sum(
+        1
+        for comments in data.get("comments", {}).values()
+        for c in comments
+        if c.get("user_id") == user_id
+    )
     return {
         "favorites_count": len(favorites),
-        "ratings_count": ratings,
-        "comments_count": comments,
+        "ratings_count": ratings_count,
+        "comments_count": comments_count,
     }
 
 
@@ -339,11 +383,23 @@ def get_comments_count_for_user(user_id: str) -> int:
 
 def get_server_stats(server_name: str) -> Dict:
     """获取服务器统计"""
+    # Single load: the four sub-functions each call load_user_data() — 4 file
+    # reads per request. Compute from one snapshot instead.
+    data = load_user_data()
+    favorites_count = sum(1 for favs in data.get("favorites", {}).values() if server_name in favs)
+    server_ratings = data.get("ratings", {}).get(server_name, [])
+    ratings_count = len(server_ratings)
+    average_rating = (
+        round(sum(r.get("rating", 0) for r in server_ratings) / ratings_count, 2)
+        if ratings_count
+        else 0.0
+    )
+    comments_count = len(data.get("comments", {}).get(server_name, []))
     return {
-        "favorites_count": get_favorites_count(server_name),
-        "average_rating": get_average_rating(server_name),
-        "ratings_count": get_ratings_count(server_name),
-        "comments_count": get_comments_count(server_name),
+        "favorites_count": favorites_count,
+        "average_rating": average_rating,
+        "ratings_count": ratings_count,
+        "comments_count": comments_count,
     }
 
 

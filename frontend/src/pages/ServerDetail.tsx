@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Star, Clock, Code2, ExternalLink, Copy, CheckCircle, MessageSquare, ThumbsUp, TrendingUp, Shield, Tag, BookOpen, ChevronRight, Loader2, Download, FileJson, FileText } from 'lucide-react';
@@ -13,10 +13,9 @@ import { FavoritesButton } from '../components/user/FavoritesButton';
 import { RatingSection } from '../components/user/RatingSection';
 import { CommentSection } from '../components/user/CommentSection';
 import { useServers } from '../hooks/useServers';
-import { useServerConfig } from '../hooks/useServerDetail';
+import { useServerConfig, useSimilarServers } from '../hooks/useServerDetail';
 import { useDownloadConfig } from '../hooks/useExport';
 import { useStats } from '../hooks/useStats';
-import { apiClient } from '../lib/api';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -32,12 +31,11 @@ const ServerDetail = React.memo(() => {
   const decodedName = decodeURIComponent(name || '');
   const { data: serverData, isLoading: loadingServer } = useServers();
   const { data: configData, isLoading: loadingConfig } = useServerConfig(decodedName);
+  const { data: similarData } = useSimilarServers(decodedName, 4);
   const { data: stats } = useStats();
 
   const [copied, setCopied] = useState(false);
-  const [config, setConfig] = useState<ServerConfig | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'config' | 'ratings' | 'comments'>('overview');
-  const [similarServers, setSimilarServers] = useState<Server[]>([]);
   const userId = 'default-user';
   const { downloading, downloadConfigJson, downloadConfigMd } = useDownloadConfig();
 
@@ -50,28 +48,18 @@ const ServerDetail = React.memo(() => {
   const qualityScore = useMemo(() => server ? getQualityScore(server) : 0, [server]);
   const qualityLevel = getQualityDisplay(qualityScore);
 
-  useEffect(() => {
-    if (configData) {
-      setConfig(configData as ServerConfig);
-    }
-  }, [configData]);
-
-  useEffect(() => {
-    if (server) {
-      const loadSimilar = async () => {
-        try {
-          const res = await apiClient.getSimilarServers(server.name, 4);
-          setSimilarServers(res.similar_servers || []);
-        } catch {
-          setSimilarServers([]);
-        }
-      };
-      loadSimilar();
-    }
-  }, [server]);
+  // Use the React Query result directly instead of mirroring it into local
+  // state — the extra useEffect caused a one-frame stale render and was the
+  // only writer to `config`.
+  const config = (configData as ServerConfig | null) ?? null;
+  const similarServers = similarData?.servers ?? [];
 
   const copyConfig = async (text?: string) => {
-    const configToCopy = text || config ? JSON.stringify(config, null, 2) : JSON.stringify({
+    // `??` not `||`: `text` is an explicit override (e.g. from getDisplayConfig),
+    // so only fall through when it's nullish, not when config is falsy. The old
+    // `text || config ? ...` parsed as `(text || config) ? ...` and could
+    // stringify `null` when text was passed but config hadn't loaded yet.
+    const configToCopy = text ?? (config ? JSON.stringify(config, null, 2) : JSON.stringify({
       mcpServers: {
         [server?.name || 'server']: {
           command: 'your-command-here',
@@ -79,7 +67,7 @@ const ServerDetail = React.memo(() => {
           env: {}
         }
       }
-    }, null, 2);
+    }, null, 2));
     try {
       await navigator.clipboard.writeText(configToCopy);
       setCopied(true);
@@ -89,7 +77,7 @@ const ServerDetail = React.memo(() => {
     }
   };
 
-  const getDisplayConfig = () => {
+  const displayConfig = useMemo(() => {
     if (config) return JSON.stringify(config, null, 2);
     if (server) {
       return JSON.stringify({
@@ -103,7 +91,7 @@ const ServerDetail = React.memo(() => {
       }, null, 2);
     }
     return '';
-  };
+  }, [config, server]);
 
   if (loadingServer) {
     return (
@@ -382,7 +370,7 @@ const ServerDetail = React.memo(() => {
                           <Download size={12} />
                         </button>
                         <button
-                          onClick={() => copyConfig(getDisplayConfig())}
+                          onClick={() => copyConfig(displayConfig)}
                           className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-slate-300 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all"
                         >
                           {copied ? (
@@ -410,11 +398,11 @@ const ServerDetail = React.memo(() => {
                             <span className="text-gray-500 dark:text-slate-400 text-xs ml-2">mcp-config.json</span>
                           </div>
                           <pre className="text-gray-100 text-sm font-mono leading-relaxed">
-                            {getDisplayConfig()}
+                            {displayConfig}
                           </pre>
                         </div>
                         <button
-                          onClick={() => copyConfig(getDisplayConfig())}
+                          onClick={() => copyConfig(displayConfig)}
                           className="absolute top-12 right-3 p-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-400 dark:text-slate-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all"
                         >
                           {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
@@ -496,11 +484,11 @@ const ServerDetail = React.memo(() => {
                 ) : (
                   <div className="relative">
                     <div className="bg-gray-950 rounded-xl p-4 mb-4 overflow-x-auto max-h-48 overflow-y-auto">
-                      <pre className="text-gray-100 text-xs font-mono">{getDisplayConfig().substring(0, 300)}{getDisplayConfig().length > 300 ? '...' : ''}</pre>
+                      <pre className="text-gray-100 text-xs font-mono">{displayConfig.substring(0, 300)}{displayConfig.length > 300 ? '...' : ''}</pre>
                     </div>
                     <div className="space-y-2">
                       <Button
-                        onClick={() => copyConfig(getDisplayConfig())}
+                        onClick={() => copyConfig(displayConfig)}
                         className="w-full flex items-center justify-center text-sm"
                         size="sm"
                       >
