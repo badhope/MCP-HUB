@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, Github, Clock, Code, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { Star, Clock, Code, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { GithubIcon } from '../shared/GithubIcon';
 import { Card, CardContent, CardFooter } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { QualityBadge } from '../shared/QualityBadge';
@@ -162,7 +163,7 @@ export const ServerCard = React.memo<ServerCardProps>(({ server, selectable = fa
             onClick={(e) => e.stopPropagation()}
             className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 dark:text-slate-500 dark:hover:text-white dark:hover:bg-slate-700 rounded-lg transition-all duration-200"
           >
-            <Github className="w-4 h-4" />
+            <GithubIcon className="w-4 h-4" />
           </a>
         </div>
       </CardFooter>

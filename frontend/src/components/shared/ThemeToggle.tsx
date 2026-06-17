@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Moon, Sun, Monitor } from 'lucide-react'
 import { useTheme, type Theme } from '../../hooks/useTheme'
 
@@ -17,23 +17,19 @@ import { useTheme, type Theme } from '../../hooks/useTheme'
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
 
-  // Avoid hydration mismatches: the SSR/initial DOM (set by the FOUC
-  // script) may disagree with React's first render of the icon.
-  useEffect(() => setMounted(true), [])
-
-  const Icon = !mounted
-    ? Sun
-    : theme === 'dark'
+  // useTheme() reads localStorage in its lazy initializer, so the first
+  // client render already has the correct theme — no mount-detection gate
+  // needed (this is a Vite SPA, there's no SSR hydration to reconcile).
+  const Icon =
+    theme === 'dark'
       ? Moon
       : theme === 'light'
         ? Sun
         : Monitor
 
-  const label = !mounted
-    ? 'Theme'
-    : theme === 'dark'
+  const label =
+    theme === 'dark'
       ? 'Dark theme (click to change)'
       : theme === 'light'
         ? 'Light theme (click to change)'

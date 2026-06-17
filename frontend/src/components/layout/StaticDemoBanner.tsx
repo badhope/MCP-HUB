@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Info, X, Github, BookOpen, Clock } from 'lucide-react';
+import { Info, X, BookOpen, Clock } from 'lucide-react';
+import { GithubIcon } from '../shared/GithubIcon';
 import { useStats } from '../../hooks/useStats';
 
 const formatSnapshotDate = (iso: string): string => {
@@ -45,7 +46,7 @@ export const StaticDemoBanner: React.FC = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-amber-800 hover:text-amber-900 dark:text-amber-200 dark:hover:text-amber-100 font-medium underline underline-offset-2"
           >
-            <Github className="w-3.5 h-3.5" />
+            <GithubIcon className="w-3.5 h-3.5" />
             <span>Source</span>
           </a>
           <a

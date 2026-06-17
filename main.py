@@ -112,6 +112,23 @@ DATA_REFRESH_INTERVAL = int(os.environ.get("DATA_REFRESH_INTERVAL", "60"))
 
 
 def _load_data_from_disk() -> Dict[str, Any]:
+    # Graceful degradation: servers-index.json is .gitignore'd and built by
+    # tools/update_index.py / tools/sync_index.py, so a fresh clone (or a CI
+    # run before the index is fetched) won't have it. Return an empty index
+    # so the FastAPI app still starts; the refresh thread will pick the file
+    # up once it's generated. Mirrors services.IndexCache.get_index().
+    if not DATA_FILE.exists():
+        return {
+            "version": "2.0.0",
+            "total_servers": 0,
+            "total_categories": 0,
+            "categories": {},
+            "servers": [],
+            "source_types": {},
+            "languages": {},
+            "last_sync": "",
+            "upstream_total": 0,
+        }
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 

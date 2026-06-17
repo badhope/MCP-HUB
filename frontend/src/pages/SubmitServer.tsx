@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Send, Github, ChevronRight, CheckCircle, AlertCircle, Loader2, Info, ExternalLink } from 'lucide-react';
+import { Send, ChevronRight, CheckCircle, AlertCircle, Loader2, Info, ExternalLink } from 'lucide-react';
+import { GithubIcon } from '../components/shared/GithubIcon';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { apiClient, isStaticDemo } from '../lib/api';
@@ -183,7 +184,7 @@ const SubmitServer = React.memo(() => {
                   rel="noreferrer noopener"
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-sm font-medium"
                 >
-                  <Github size={16} />
+                  <GithubIcon size={16} />
                   Open GitHub issue
                   <ExternalLink size={12} />
                 </a>
@@ -267,7 +268,7 @@ const SubmitServer = React.memo(() => {
                   Source URL <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Github size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
+                  <GithubIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
                   <input
                     type="url"
                     value={formData.source}

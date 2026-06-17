@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => {
   const base = explicitBase
     ? `/${explicitBase}/`
     : `/${REPO_NAME}/`
-  const isProd = mode === 'production'
 
   return {
     base,
@@ -31,13 +30,11 @@ export default defineConfig(({ mode }) => {
       }
     },
     plugins: [
-      react({
-        babel: {
-          plugins: isProd
-            ? []
-            : ['react-dev-locator'],
-        },
-      }),
+      // NOTE: @vitejs/plugin-react v6 dropped the `babel` option. The dev-only
+      // `react-dev-locator` plugin can't be wired in here anymore without a
+      // separate babel pipeline; it's a non-essential dev convenience, so we
+      // omit it rather than break the type check (`npm run check`).
+      react(),
       tsconfigPaths()
     ],
   }

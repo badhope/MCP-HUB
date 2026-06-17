@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Server, Github, Heart, Sparkles } from 'lucide-react';
+import { Server, Heart, Sparkles } from 'lucide-react';
+import { GithubIcon } from '../shared/GithubIcon';
 
 export const Footer = React.memo(() => {
   const currentYear = new Date().getFullYear();
@@ -32,7 +33,7 @@ export const Footer = React.memo(() => {
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors"
                 title="MCP on GitHub"
               >
-                <Github className="w-4 h-4" />
+                <GithubIcon className="w-4 h-4" />
               </a>
               <a
                 href="https://modelcontextprotocol.io"

@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Star, Github, Clock, Code2, ExternalLink, Copy, CheckCircle, MessageSquare, ThumbsUp, TrendingUp, Shield, Tag, BookOpen, ChevronRight, Loader2, Download, FileJson, FileText } from 'lucide-react';
+import { ArrowLeft, Star, Clock, Code2, ExternalLink, Copy, CheckCircle, MessageSquare, ThumbsUp, TrendingUp, Shield, Tag, BookOpen, ChevronRight, Loader2, Download, FileJson, FileText } from 'lucide-react';
+import { GithubIcon } from '../components/shared/GithubIcon';
 import { ServerConfig, Server } from '../types';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
@@ -240,7 +241,7 @@ const ServerDetail = React.memo(() => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center space-x-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all hover:shadow-lg text-sm font-medium"
                   >
-                    <Github size={16} />
+                    <GithubIcon size={16} />
                     <span>View on GitHub</span>
                     <ExternalLink size={14} className="opacity-60" />
                   </a>
@@ -599,7 +600,7 @@ const ServerDetail = React.memo(() => {
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all text-sm font-medium"
                 >
-                  <Github size={16} />
+                  <GithubIcon size={16} />
                   <span>View on GitHub</span>
                   <ExternalLink size={14} className="opacity-60" />
                 </a>

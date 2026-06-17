@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Server, Github, Heart, Star, Users, Shield, Code2, ExternalLink } from 'lucide-react';
+import { Server, Heart, Star, Users, Shield, Code2, ExternalLink } from 'lucide-react';
+import { GithubIcon } from '../components/shared/GithubIcon';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
 
@@ -68,7 +69,7 @@ const About = React.memo(() => {
               { icon: Shield, title: 'Smart Quality Scoring', desc: 'Every server is evaluated across four dimensions: functionality, documentation, maintenance activity, and community support. Scores range from D to S level.' },
               { icon: Code2, title: 'Auto-Generated Configs', desc: 'Get ready-to-use MCP configuration snippets for Claude Desktop, Cursor, and other AI clients. No manual configuration needed.' },
               { icon: Heart, title: 'Community Features', desc: 'Save your favorite servers, rate and review them, and contribute new server submissions to help grow the ecosystem.' },
-              { icon: Github, title: 'Open Source', desc: 'MCP Hub itself is open source. The server index is automatically synced and updated, ensuring fresh and accurate data.' },
+              { icon: GithubIcon, title: 'Open Source', desc: 'MCP Hub itself is open source. The server index is automatically synced and updated, ensuring fresh and accurate data.' },
             ].map((item, i) => {
               const Icon = item.icon;
               return (
@@ -127,7 +128,7 @@ const About = React.memo(() => {
             </Button>
             <a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="text-white border-white/30 hover:bg-white dark:bg-slate-900/20">
-                <Github className="w-5 h-5 mr-2" />
+                <GithubIcon className="w-5 h-5 mr-2" />
                 MCP on GitHub
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>

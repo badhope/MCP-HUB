@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Menu, X, Home, Server, Tag, Star, Building2,
-  Plus, Zap, Github, Heart, Info
+  Plus, Zap, Heart, Info
 } from 'lucide-react';
+import { GithubIcon } from '../shared/GithubIcon';
 import { ThemeToggle } from '../shared/ThemeToggle';
 
 const navLinks = [
@@ -110,7 +111,7 @@ export const Navbar = React.memo(() => {
               className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-white dark:hover:bg-slate-800 rounded-lg transition-colors"
               title="MCP on GitHub"
             >
-              <Github size={20} />
+              <GithubIcon size={20} />
             </a>
           </div>
 
@@ -187,7 +188,7 @@ export const Navbar = React.memo(() => {
               rel="noopener noreferrer"
               className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800/60 transition-colors"
             >
-              <Github size={18} />
+              <GithubIcon size={18} />
               <span>GitHub</span>
             </a>
           </div>

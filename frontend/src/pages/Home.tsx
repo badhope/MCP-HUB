@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Github, Code2, Zap, BookOpen, Info } from 'lucide-react';
+import { ArrowRight, Star, Sparkles, Database, Building2, Shield, ChevronRight, Code2, Zap, BookOpen, Info } from 'lucide-react';
+import { GithubIcon } from '../components/shared/GithubIcon';
 import { useServers } from '../hooks/useServers';
 import { useStats } from '../hooks/useStats';
 import { ServerCard } from '../components/server/ServerCard';
@@ -234,7 +235,7 @@ const Home = React.memo(() => {
               to="/submit"
               className="inline-flex items-center space-x-2 px-8 py-4 bg-white dark:bg-slate-900 text-primary-700 font-semibold rounded-2xl hover:bg-gray-100 dark:bg-slate-800 transition-all hover:shadow-2xl"
             >
-              <Github size={20} />
+              <GithubIcon size={20} />
               <span>Submit Your Server</span>
             </Link>
           </div>
